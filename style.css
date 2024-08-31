@@ -1,0 +1,122 @@
+html {
+    background: linear-gradient(#ffffff, #FDF6ED);
+}
+
+body {
+    color: #300600;
+    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    min-height: 100vh;
+    margin: 0;
+}
+
+nav {
+    background-color: #50535B;
+    color: #FDF6ED;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #FDF6ED;
+}
+
+nav ul li {
+    text-decoration: none;
+    list-style: none;
+}
+
+.nav-content {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.nav-sections, .nav-links {
+    display: flex;
+    gap: 20px;
+}
+
+.nav-links {
+    justify-content: end;
+}
+
+.about {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 40px;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.about-img {
+    text-align: center;
+}
+
+.about-img img {
+    width: 90%;
+}
+
+h1 {
+    color: #8D9A9C;
+    font-size: 4rem;
+    padding-bottom: 0px;
+}
+
+h2 {
+    color: #8D9A9C;
+    font-size: 3rem;
+    margin: auto;
+    padding-top: 40px;
+}
+.projects {
+    padding-left: 40px;
+    padding-right: 40px;
+}
+.project-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    justify-content: space-between;
+}
+
+.project-card {
+    background-color: #50535B;
+    color: #FDF6ED;
+    width: 400px;
+    height: 400px;
+    margin-bottom: 40px;
+    border-radius: 5px;
+    box-shadow: 3.5px 7.0px 7.0px hsl(0deg 0% 0% / 0.39);
+    transition: ease-out 0.3s;
+}
+
+.project-card:hover {
+    box-shadow: 6.4px 12.8px 12.8px hsl(0deg 0% 0% / 0.30);
+    transition: ease-in 0.3s;
+    width: 410px;
+    height: 410px;
+}
+
+.project-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    overflow: hidden;
+}
+
+@media (width <= 1000px) {
+    .about {
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-right: 40px;
+    }
+    .about-text {
+        text-align: center;
+    }
+    .about-img {
+        margin-top: 20px;
+    }
+  }
