@@ -1,5 +1,6 @@
 html {
-    background: linear-gradient(#ffffff, #FDF6ED);
+    font-size: 16px;
+    scroll-behavior: smooth;
 }
 
 body {
@@ -42,13 +43,18 @@ nav ul li {
     justify-content: end;
 }
 
+.top-content {
+    background: linear-gradient(#ffffff, #FDF6ED);
+}
+
 .about {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-left: 40px;
+    padding-left: 120px;
     margin-top: 5%;
-    margin-bottom: 5%;
+    margin-bottom: -5%;
+
 }
 
 .about-img {
@@ -59,7 +65,15 @@ nav ul li {
     width: 90%;
 }
 
-h1 {
+.divider {
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 1155" fill="%238D9A9C"><path d="M968.99 1033c-187.45.85-174.59 47.22-449 48-352 1-463-239-463-548 0-273.09 190-474 496-472 277.28 1.81 277.22 60.83 470 57 252-5 217.88-56.12 487-57 305-1 431 290 433 526s-117.08 502.4-432 507c-342 5-322-62-542-61Z"></path></svg>');
+    background-repeat: no-repeat;
+    background-size: 150%;
+    background-position: 50% 100px;
+    height: 250px;
+}
+
+.about h1 {
     color: #8D9A9C;
     font-size: 4rem;
     padding-bottom: 0px;
@@ -74,6 +88,29 @@ h2 {
 .projects {
     padding-left: 40px;
     padding-right: 40px;
+    background-color: #8D9A9C;
+}
+
+.project1 {
+    background-color: #8D9A9C;
+}
+
+.project2 {
+    background-color: #636d77;
+}
+
+.project1, .project2 {
+    padding: 120px;
+    display: grid;
+    grid-template-columns: 1fr 3fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
+h1 {
+    color: #FDF6ED;
+    font-size: 3rem;
+    margin: 0;
 }
 .project-list {
     display: flex;
@@ -83,7 +120,7 @@ h2 {
 }
 
 .project-card {
-    background-color: #50535B;
+    background-color: #fff;
     color: #FDF6ED;
     width: 400px;
     height: 400px;
@@ -105,6 +142,10 @@ h2 {
     height: 100%;
     object-fit: cover;
     overflow: hidden;
+}
+
+.project-card .project-text {
+    display: none;
 }
 
 @media (width <= 1000px) {
