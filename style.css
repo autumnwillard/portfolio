@@ -86,25 +86,73 @@ h2 {
     padding-top: 40px;
 }
 .projects {
-    padding-left: 40px;
-    padding-right: 40px;
     background-color: #8D9A9C;
 }
 
-.project1 {
-    background-color: #8D9A9C;
-}
-
-.project2 {
-    background-color: #636d77;
-}
-
-.project1, .project2 {
-    padding: 120px;
+.project-item {
+    padding-top: 120px;
+    margin: 0px 120px 0px 120px;
     display: grid;
-    grid-template-columns: 1fr 3fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 40px;
     align-items: center;
+}
+  
+  .readMore{
+    position:relative;
+    max-width: 200px;
+    min-width: 150px;
+    flex: 20%;
+  }
+  
+  button{
+    width:100%;
+    height:80px;
+    position:relative;
+    background:rgba(255, 255, 255, .27);
+    text-transform:uppercase;
+    color:white;
+    font-weight:700;
+    letter-spacing:1px;
+    border:none;
+    font-size:16px;
+    outline:none;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+    cursor: pointer;
+  }
+  
+  .border{
+      position:absolute;
+      background:none;
+      transition:all .5s ease-in-out;
+  }
+  
+  #btn>.border:nth-of-type(1){
+    top:0;
+    left:0;
+    border-left:1px solid white;
+    border-top:1px solid white;
+    width:30px;
+    height:30px;
+  }
+  
+  #btn>.border:nth-of-type(2){
+    bottom:0;
+    right:0;
+    border-right:1px solid white;
+    border-bottom:1px solid white;
+    width:30px;
+    height:30px;
+  }
+  
+  #btn:hover .border{
+    width:102%;
+    height:105%;
+  }
+  
+
+.project-item img {
+    width: 100%;
 }
 
 h1 {
@@ -112,47 +160,13 @@ h1 {
     font-size: 3rem;
     margin: 0;
 }
-.project-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    justify-content: space-between;
-}
-
-.project-card {
-    background-color: #fff;
-    color: #FDF6ED;
-    width: 400px;
-    height: 400px;
-    margin-bottom: 40px;
-    border-radius: 5px;
-    box-shadow: 3.5px 7.0px 7.0px hsl(0deg 0% 0% / 0.39);
-    transition: ease-out 0.3s;
-}
-
-.project-card:hover {
-    box-shadow: 6.4px 12.8px 12.8px hsl(0deg 0% 0% / 0.30);
-    transition: ease-in 0.3s;
-    width: 410px;
-    height: 410px;
-}
-
-.project-card img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    overflow: hidden;
-}
-
-.project-card .project-text {
-    display: none;
-}
 
 @media (width <= 1000px) {
     .about {
         flex-wrap: wrap;
         justify-content: center;
-        margin-right: 40px;
+        padding-right: 60px;
+        padding-left: 60px;
     }
     .about-text {
         text-align: center;
@@ -161,3 +175,5 @@ h1 {
         margin-top: 20px;
     }
   }
+
+  
