@@ -52,6 +52,7 @@ nav ul li {
     align-items: center;
     justify-content: space-between;
     padding-left: 120px;
+    padding-right: 60px;
     margin-top: 5%;
     margin-bottom: -5%;
 
@@ -62,7 +63,7 @@ nav ul li {
 }
 
 .about-img img {
-    width: 90%;
+    width: 100%;
 }
 
 .divider {
@@ -173,7 +174,9 @@ h1 {
     }
     .about-img {
         margin-top: 20px;
+        width: 80%;
     }
+    
   }
 
   
