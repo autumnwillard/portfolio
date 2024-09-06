@@ -4,29 +4,40 @@ html {
 }
 
 body {
-    color: #300600;
+    color: #50535B;
     font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
     min-height: 100vh;
     margin: 0;
 }
 
 nav {
-    background-color: #50535B;
-    color: #FDF6ED;
+    background-color: #fff;
+    color: #50535B;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px;
+    padding: 0.5em 5em;
+}
+
+.logo {
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    font-size: 2rem;
+}
+
+.logo a {
+    color: #a94634;
 }
 
 nav a {
     text-decoration: none;
-    color: #FDF6ED;
+    color: #50535B;
 }
 
 nav ul li {
     text-decoration: none;
     list-style: none;
+    font-weight: 600;
 }
 
 .nav-content {
@@ -34,13 +45,31 @@ nav ul li {
     flex-direction: column-reverse;
 }
 
-.nav-sections, .nav-links {
+.nav-sections, ul.icon-links {
     display: flex;
     gap: 20px;
 }
 
-.nav-links {
-    justify-content: end;
+ul.icon-links li{
+    text-decoration: none;
+    list-style: none;
+}
+
+ul.icon-links li a{
+    text-decoration: none;
+    color: #8D9A9C;
+    font-size: 1.5rem;
+    transition: ease-in 0.2s;
+}
+
+ul.icon-links a:hover{
+    color: #300600;
+    font-size: 1.6rem;
+    transition: ease-in 0.2s;
+}
+
+ul.icon-links {
+    padding: 0;
 }
 
 .top-content {
@@ -51,8 +80,8 @@ nav ul li {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding-left: 120px;
-    padding-right: 60px;
+    padding-left: 5em;
+    padding-right: 2.5em;
     margin-top: 5%;
     margin-bottom: -5%;
 
@@ -176,7 +205,10 @@ h1 {
         margin-top: 20px;
         width: 80%;
     }
-    
+    ul.icon-links {
+        text-align: center;
+        justify-content: center;
+    }
   }
 
   
