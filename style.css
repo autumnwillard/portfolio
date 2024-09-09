@@ -100,6 +100,8 @@ ul.icon-links {
     background-size: 150%;
     background-position: 50% 100px;
     height: 250px;
+    margin-top: -80px;
+    padding-bottom: 60px;
 }
 
 .about h1 {
@@ -119,7 +121,7 @@ h2 {
 }
 
 .project-item {
-    padding-top: 120px;
+    padding-bottom: 80px;
     margin: 0px 120px 0px 120px;
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -191,7 +193,6 @@ h1 {
 }
 
 .back-to-top {
-    padding-top: 40px;
     padding-bottom: 40px;
     text-align: center;
 }
@@ -214,6 +215,11 @@ h1 {
         padding-right: 60px;
         padding-left: 60px;
     }
+    .about h1 {
+    font-size: 3rem;
+    line-height: 1em;
+    }
+
     .about-text {
         text-align: center;
     }
@@ -224,6 +230,19 @@ h1 {
     ul.icon-links {
         text-align: center;
         justify-content: center;
+    }
+
+    .divider {
+        padding-bottom: 0;
+    }
+    .project-item {
+        display: block;
+        margin: 0px 60px 0px 60px;
+        text-align: center;
+    }
+    .readMore {
+            margin-left: auto;
+            margin-right: auto;
     }
   }
 
