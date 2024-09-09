@@ -236,6 +236,37 @@ h1 {
         padding-bottom: 0;
     }
     .project-item {
+        margin: 0px 60px 0px 60px;
+    }
+  }
+  @media (width <= 575px) {
+    nav {
+        display: block;
+        background-color: #8D9A9C5d;
+        padding-top: 30px;
+        padding-bottom: 20px;
+    }
+    .logo {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .nav-sections {
+        display: block;
+        text-align: center;
+    }
+
+    ul.nav-sections {
+        padding: 0;
+        margin: 0;
+    }
+
+    nav ul li {
+        padding-bottom: 10px
+    }
+    .about {
+        padding-top: 20px;
+    }
+    .project-item {
         display: block;
         margin: 0px 60px 0px 60px;
         text-align: center;
@@ -245,5 +276,4 @@ h1 {
             margin-right: auto;
     }
   }
-
   
