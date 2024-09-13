@@ -137,51 +137,29 @@ h2 {
   }
   
   button{
-    width:100%;
-    height:80px;
+    width:110px;
+    height:40px;
     position:relative;
-    background:#fdf6ed5d;
+    background:#fdf6edcf;
     text-transform:uppercase;
-    color:#FDF6ED;
-    font-weight:700;
+    color:#50535B;
     letter-spacing:1px;
     border:none;
-    font-size:16px;
+    font-size:12px;
     outline:none;
-    font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
     cursor: pointer;
+    font-weight: 600;
+    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    margin-right: 15px;
+    border-radius: 5px;
+    transition: 300ms;
+    margin-top: 15px;
   }
-  
-  .border{
-      position: absolute;
-      background: none;
-      transition: all .5s ease-in-out;
-  }
-  
-  #btn>.border:nth-of-type(1){
-    top:0;
-    left:0;
-    border-left:1px solid #FDF6ED;
-    border-top:1px solid #FDF6ED;
-    width:30px;
-    height:30px;
-  }
-  
-  #btn>.border:nth-of-type(2){
-    bottom:0;
-    right:0;
-    border-right:1px solid #FDF6ED;
-    border-bottom:1px solid #FDF6ED;
-    width:30px;
-    height:30px;
-  }
-  
-  #btn:hover .border{
-    width:102%;
-    height:105%;
-  }
-  
 
+  button:hover {
+    background: #fdf6ed6b;
+  }
+  
 .project-item img {
     width: 100%;
 }
@@ -270,10 +248,6 @@ h1 {
         display: block;
         margin: 0px 60px 0px 60px;
         text-align: center;
-    }
-    .readMore {
-            margin-left: auto;
-            margin-right: auto;
     }
   }
   
