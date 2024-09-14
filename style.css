@@ -26,7 +26,7 @@ nav {
 }
 
 .logo a {
-    color: #a94634;
+    color: #c45640;
 }
 
 nav a {
@@ -101,7 +101,6 @@ ul.icon-links {
     background-position: 50% 100px;
     height: 250px;
     margin-top: -80px;
-    padding-bottom: 60px;
 }
 
 .about h1 {
@@ -116,25 +115,33 @@ h2 {
     margin: auto;
     padding-top: 40px;
 }
-.projects {
-    background-color: #8D9A9C;
-}
 
 .project-item {
-    padding-bottom: 80px;
-    margin: 0px 120px 0px 120px;
+    padding: 60px 120px;
+    margin: 0;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 40px;
     align-items: center;
+    background-color: #8D9A9C;
 }
-  
-  .readMore{
-    position:relative;
-    max-width: 200px;
-    min-width: 150px;
-    flex: 20%;
-  }
+
+.project-item:nth-child(even) {
+    background-color: #FDF6ED;
+}
+
+.project-item:nth-child(even) h1 {
+    color: #8D9A9C;
+}
+
+.project-item:nth-child(even) button {
+    background-color: #8d9a9cb8;
+    color: #FDF6ED;
+}
+
+.project-item:nth-child(even) button:hover {
+    background-color: #8d9a9c7d;
+}
   
   button{
     width:110px;
@@ -160,7 +167,7 @@ h2 {
     background: #fdf6ed6b;
   }
   
-.project-item img {
+.project-item img, .project-item-even img {
     width: 100%;
 }
 
@@ -173,6 +180,7 @@ h1 {
 .back-to-top {
     padding-bottom: 40px;
     text-align: center;
+    background-color: #8D9A9C;
 }
 
 .back-to-top a {
@@ -214,15 +222,16 @@ h1 {
         padding-bottom: 0;
     }
     .project-item {
-        margin: 0px 60px 0px 60px;
+        padding: 60px;
     }
   }
   @media (width <= 575px) {
     nav {
         display: block;
-        background-color: #8D9A9C5d;
+        background-color: #51545b;
         padding-top: 30px;
         padding-bottom: 20px;
+        color: #fff;
     }
     .logo {
         text-align: center;
@@ -239,14 +248,17 @@ h1 {
     }
 
     nav ul li {
-        padding-bottom: 10px
+        padding-bottom: 10px;
+    }
+    nav ul li a{
+        color: #fff;
     }
     .about {
         padding-top: 20px;
     }
     .project-item {
         display: block;
-        margin: 0px 60px 0px 60px;
+        padding: 60px;
         text-align: center;
     }
   }
