@@ -197,6 +197,7 @@ h1 {
     color: #fdf6ed9c;
 }
 
+
 @media (width <= 1000px) {
     .about {
         flex-wrap: wrap;
