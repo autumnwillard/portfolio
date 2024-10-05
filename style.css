@@ -128,19 +128,26 @@ h2 {
 
 .project-item:nth-child(even) {
     background-color: #FDF6ED;
-}
 
-.project-item:nth-child(even) h1 {
-    color: #8D9A9C;
-}
+    .project-img {
+    order: 2;
+    }
 
-.project-item:nth-child(even) button {
-    background-color: #8d9a9cb8;
-    color: #FDF6ED;
-}
+    .project-text {
+        order: 1;
+    }
+    h1 {
+        color: #8D9A9C;
+    }
 
-.project-item:nth-child(even) button:hover {
-    background-color: #8d9a9c7d;
+    button {
+        background-color: #8d9a9cb8;
+        color: #FDF6ED;
+    }
+
+    button:hover {
+        background-color: #8d9a9c7d;
+    }
 }
   
   button{
@@ -303,6 +310,9 @@ h1 {
         display: block;
         padding: 60px;
         text-align: center;
+    }
+    .mousey {
+        display: none;
     }
   }
   
