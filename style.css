@@ -251,11 +251,14 @@ h1 {
         padding-right: 60px;
         padding-left: 60px;
     }
+    h1 {
+        font-size: 2rem;
+        margin-top: 20px;
+    }
     .about h1 {
     font-size: 3rem;
     line-height: 1em;
     }
-
     .about-text {
         text-align: center;
     }
@@ -270,6 +273,7 @@ h1 {
 
     .divider {
         padding-bottom: 0;
+        height: 200px;
     }
     .project-item {
         padding: 60px;
@@ -305,6 +309,9 @@ h1 {
     }
     .about {
         padding-top: 20px;
+    }
+    .divider {
+        height: 170px;
     }
     .project-item {
         display: block;
