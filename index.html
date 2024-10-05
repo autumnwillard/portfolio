@@ -9,23 +9,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-    <title>My Portfolio</title>
+    <title>Autumn Willard's Portfolio</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
     <div class="content">
-        <nav>
-            <div class="logo">
-                <a href="index.html">AW</a>
-            </div>
-                <div class="sections">
-                    <ul class="nav-sections">
-                        <li><a href="">About</a></li>
-                        <li><a href="">Projects</a></li>
-                        <li><a href="">Contact</a></li>
-                    </ul>
-                </div>
-
-        </nav>
+        <div id="nav-placeholder"></div>
         <main>
         <div class="top-content">
         <section class="about">
@@ -54,10 +43,10 @@
             <div class="project-text">
                 <h1>Room Reserve</h1>
                 <p>A room reservation web app. Designed for event spaces that rent out rooms with an hourly rate pay model. Designed from the ground up.</p>
-                <p class="tech-stack">C# | ASP.NET MVC | Docker | AWS | SQL</p>
+                <p class="tech-stack">Figma | C# | ASP.NET MVC | Docker | AWS | SQL</p>
                     <div id="btn" class="project-links">
                         <a href="https://roomreserve-cvb3cacge0c4hvgk.centralus-01.azurewebsites.net/" target="_blank"><button>View Live</button></a>
-                      <button>Read More</button>
+                      <a href="roomreserve-details.html"><button>Read More</button></a>
                 </div>
             </div>
         </article>
@@ -69,7 +58,7 @@
                 <p class="tech-stack">Figma | Excel | Word</p>    
                 <div id="btn" class="project-links">
                         <a href="https://www.figma.com/proto/8uSrUg0jQzhLfK7AkWLTM1/D479?node-id=19-2&starting-point-node-id=19%3A2&t=tJtIEdJW3V8fyocw-1" target="_blank"><button>View Live</button></a>
-                      <button>Read More</button>
+                        <a href=""><button>Read More</button></a>
                 </div>
             </div>
             </article>
@@ -80,7 +69,7 @@
                         <p>Full branding package done for a small business. Logo and style guide made in Illustrator, with mockup designs for merchendise done in Photoshop.</p>
                         <p class="tech-stack">Illustrator | Photoshop</p>
                             <div id="btn" class="project-links">
-                              <button>Read More</button>
+                                <a href=""><button>Read More</button></a>
                         </div>
                     </div>
                 </article>
@@ -89,6 +78,10 @@
 </main>
     </div>
     <script src="https://kit.fontawesome.com/7b2250a56b.js" crossorigin="anonymous"></script>
-    <script src="script.js"></script>
+    <script>
+        $(function(){
+          $("#nav-placeholder").load("nav.html");
+        });
+        </script>
 </body>
 </html>
