@@ -58,19 +58,43 @@
             </div>
             </article>
     </section>
+
     <section class="graphic-design" id="graphic-design">
-        <article class="project-item">
-            <div class="project-img"><img src="assets/schwab-shirt.jpg" alt=""></div>
-                <div class="project-text">
+        <div class="gallery">
+            <article class="gallery-item">
+                <img src="assets/schwab-shirt.jpg" alt="Schwab's Hauling and Excavation T-shirt design">
+                <div class="item-details" hidden>
                     <h1>Schwab's Hauling and Excavation</h1>
                     <p>Full branding package done for a small business. Logo and style guide made in Illustrator, with mockup designs for merchendise done in Photoshop.</p>
                     <p class="tech-stack">Illustrator | Photoshop</p>
-                        <div id="btn" class="project-links">
-                            <a href=""><button>Read More</button></a>
-                    </div>
                 </div>
             </article>
+            <article class="gallery-item">
+                <img src="assets/Pickup_Truck_Mock_Up_Right_Front_View.png" alt="Schwab's Hauling and Excavation car magnet design">
+                <div class="item-details" hidden>
+                    <h1>Schwab's Hauling and Excavation</h1>
+                    <p>Full branding package done for a small business. Logo and style guide made in Illustrator, with mockup designs for merchendise done in Photoshop.</p>
+                    <p class="tech-stack">Illustrator | Photoshop</p>
+                </div>
+            </article>
+        </div>
+    
+        <!-- Lightbox -->
+        <div class="lightbox">
+            <div class="lightbox-content">
+                <span class="close">&times;</span>
+                <button class="nav-button prev">&lt;</button>
+                <img class="lightbox-img" src="" alt="Lightbox image">
+                <button class="nav-button next">&gt;</button>
+                <div class="lightbox-text">
+                    <h2></h2>
+                    <p></p>
+                    <p class="tech-stack"></p>
+                </div>
+            </div>
+        </div>
     </section>
+    
     <div class="back-to-top"><a href="#top"><i class="fa-solid fa-circle-chevron-up"></i></a></div>
 </main>
     </div>
@@ -80,5 +104,6 @@
           $("#nav-placeholder").load("nav.html");
         });
         </script>
+        <script src="script.js"></script>
 </body>
 </html>
