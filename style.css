@@ -1,6 +1,7 @@
 html {
     font-size: 16px;
     scroll-behavior: smooth;
+    background-color: #fff;
 }
 
 body {
@@ -11,7 +12,6 @@ body {
 }
 
 nav {
-    background-color: #fff;
     color: #50535B;
     display: flex;
     align-items: center;
@@ -32,7 +32,29 @@ nav {
 nav a {
     text-decoration: none;
     color: #50535B;
+    transition: all 0.3s ease-in-out;
+    position: relative;
 }
+
+nav a:before{
+    content: '';
+    background: #c45640;
+    display: block;
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    transition: all 0.3s ease-in-out;
+  }
+  
+ nav a:hover {
+   background-position: 0;
+  }
+  
+  nav a:hover::before{
+    width: 100%;
+  }
 
 nav ul li {
     text-decoration: none;
@@ -72,10 +94,9 @@ ul.icon-links {
 }
 
 .top-content {
-    background: linear-gradient(#ffffff, #FDF6ED);
     display: flex;
     flex-direction: column;
-    min-height: fit-content;
+    min-height: 90vh;
     position: relative;
 }
 
@@ -92,16 +113,6 @@ ul.icon-links {
 }
 
 .about-img img {
-    width: 100%;
-}
-
-.divider {
-    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 1155" fill="%238D9A9C"><path d="M968.99 1033c-187.45.85-174.59 47.22-449 48-352 1-463-239-463-548 0-273.09 190-474 496-472 277.28 1.81 277.22 60.83 470 57 252-5 217.88-56.12 487-57 305-1 431 290 433 526s-117.08 502.4-432 507c-342 5-322-62-542-61Z"></path></svg>');
-    background-repeat: no-repeat;
-    background-size: 150%;
-    background-position: 50% 100px;
-    height: 250px;
-    margin-top: -80px;
     width: 100%;
 }
 
@@ -122,15 +133,13 @@ h2 {
     padding: 120px;
     margin: 0;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 2fr 1fr;
     gap: 40px;
     align-items: center;
-    background-color: #8D9A9C;
 }
 
 .project-item:nth-child(even) {
-    background-color: #FDF6ED;
-
+    grid-template-columns: 1fr 2fr;
     .project-img {
     order: 2;
     }
@@ -138,27 +147,16 @@ h2 {
     .project-text {
         order: 1;
     }
-    h1 {
-        color: #8D9A9C;
-    }
 
-    button {
-        background-color: #8d9a9cb8;
-        color: #FDF6ED;
-    }
-
-    button:hover {
-        background-color: #8d9a9c7d;
-    }
 }
   
   button{
     width:110px;
     height:40px;
+    background-color: #c45640;
+    color: #fff;
     position:relative;
-    background:#fdf6edcf;
     text-transform:uppercase;
-    color:#50535B;
     letter-spacing:1px;
     border:none;
     font-size:12px;
@@ -167,24 +165,23 @@ h2 {
     font-weight: 600;
     font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
     margin-right: 15px;
-    border-radius: 5px;
+    border-radius: 10px;
     transition: 300ms;
     margin-top: 15px;
   }
 
   button:hover {
-    background: #fdf6ed6b;
+    background: #f0664a;
+    color: #fff;
   }
   
 .project-item img {
     width: 100%;
     border-radius: 5px;
-    box-shadow: 8px 5px 20px -9px rgba(0,0,0,0.5);
 }
 
 
 h1 {
-    color: #FDF6ED;
     font-size: 3rem;
     margin: 0;
 }
@@ -192,19 +189,18 @@ h1 {
 .back-to-top {
     padding-bottom: 40px;
     text-align: center;
-    background-color: #8D9A9C;
     margin-top: -1px;
 }
 
 .back-to-top a {
     text-decoration: none;
-    color: #FDF6ED;
     transition: 300ms;
     font-size: 2em;
+    color: #8d9a9c;
 }
 
 .back-to-top a:hover {
-    color: #fdf6ed9c;
+    color: #50535B;
 }
 
 .scroll-downs {
@@ -217,33 +213,6 @@ h1 {
     
     width :34px;
     height: 55px;
-  }
-  .mousey {
-    position: relative;
-    width: 3px;
-    padding: 10px 15px;
-    height: 35px;
-    border: 2px solid #50535B;
-    border-radius: 25px;
-    opacity: 0.75;
-    box-sizing: content-box;
-    margin: 40px auto 0;
-    z-index: 1;
-  }
-  .scroller {
-    width: 3px;
-    height: 10px;
-    border-radius: 25%;
-    background-color: #50535B;
-    animation-name: scroll;
-    animation-duration: 2.2s;
-    animation-timing-function: cubic-bezier(.15,.41,.69,.94);
-    animation-iteration-count: infinite;
-  }
-  @keyframes scroll {
-    0% { opacity: 0; }
-    10% { transform: translateY(0); opacity: 1; }
-    100% { transform: translateY(15px); opacity: 0;}
   }
 
 
