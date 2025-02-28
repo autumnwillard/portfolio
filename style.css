@@ -104,7 +104,7 @@ ul.icon-links {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 5% 2.5em 0 5em;
+    padding: 5% 5.5em 0 8em;
 
 }
 
@@ -215,102 +215,11 @@ h1 {
     height: 55px;
   }
 
-
-@media (width <= 1000px) {
-    .about {
-        flex-wrap: wrap;
-        justify-content: center;
-        padding-right: 60px;
-        padding-left: 60px;
-    }
-    h1 {
-        font-size: 2rem;
-        margin-top: 20px;
-    }
-    .about h1 {
-    font-size: 3rem;
-    line-height: 1em;
-    }
-    .about-text {
-        text-align: center;
-    }
-    .about-img {
-        margin-top: 20px;
-        width: 80%;
-    }
-    ul.icon-links {
-        text-align: center;
-        justify-content: center;
-    }
-
-    .divider {
-        padding-bottom: 0;
-        height: 200px;
-    }
-    .project-item {
-        padding: 60px;
-    }
-    .mousey {
-        display: none;
-    }
-  }
-  @media (width <= 575px) {
-    nav {
-        display: block;
-        background-color: #51545b;
-        padding-top: 30px;
-        padding-bottom: 20px;
-        color: #fff;
-        padding-right: 0;
-        padding-left: 0;
-    }
-    .logo {
-        text-align: center;
-        margin-bottom: 15px;
-    }
-    .nav-sections {
-        display: block;
-        text-align: center;
-    }
-
-    ul.nav-sections {
-        padding: 0;
-        margin: 0;
-    }
-
-    nav ul li {
-        padding-bottom: 10px;
-        padding-top: 15px;
-        border-bottom: solid 1px rgba(255, 255, 255, 0.5);
-        padding-bottom: 15px;
-    }
-
-    nav ul li:first-child {
-        border-top: solid 1px rgba(255, 255, 255, 0.5);
-    }
-    nav ul li:last-child {
-        border-bottom: none;
-        padding-bottom: 0;
-    }
-    nav ul li a{
-        color: #fff;
-    }
-    .about {
-        padding-top: 20px;
-    }
-
-    .project-item {
-        display: block;
-        padding: 60px;
-        text-align: center;
-    }
-  }
-  
   .gallery {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 2rem;
-    padding: 2rem;
+    padding: 120px;
 }
 
 .gallery-item {
@@ -352,6 +261,7 @@ h1 {
     max-width: 90%;
     max-height: 90vh;
     color: white;
+    text-align: center;
 }
 
 .lightbox-img {
@@ -376,25 +286,34 @@ h1 {
     margin: 0.5rem 0;
 }
 
+
 .nav-button {
-    position: absolute;
+    position: fixed; /* Change from absolute to fixed */
     top: 50%;
     transform: translateY(-50%);
-    background: white;
+    background: none;
+    color: #fff;
     border: none;
     border-radius: 50%;
     width: 40px;
     height: 40px;
     cursor: pointer;
-    font-size: 1.2rem;
+    font-size: 4rem;
+    font-weight: light;
+    font-family: monospace;
+    z-index: 1001; /* Ensure buttons are above lightbox content */
 }
 
-.prev { 
-    left: -50px; 
+.prev {
+    left: 2rem; /* Fixed distance from left edge of viewport */
 }
 
-.next { 
-    right: -50px; 
+.next {
+    right: 2rem; /* Fixed distance from right edge of viewport */
+}
+
+.nav-button:hover {
+    background: none;
 }
 
 .close {
@@ -408,3 +327,110 @@ h1 {
     border: none;
 }
 
+
+
+@media (width <= 1000px) {
+    .about {
+        flex-wrap: wrap;
+        justify-content: center;
+        padding-right: 60px;
+        padding-left: 60px;
+        flex-direction: column-reverse;
+    }
+    h1 {
+        font-size: 2rem;
+        margin-top: 20px;
+    }
+    .about h1 {
+    font-size: 3rem;
+    line-height: 1em;
+    }
+    .about-text {
+        text-align: center;
+    }
+    .about-img {
+        margin-top: 20px;
+        width: 80%;
+        max-width: 400px;
+    }
+    ul.icon-links {
+        text-align: center;
+        justify-content: center;
+    }
+
+    .divider {
+        padding-bottom: 0;
+        height: 200px;
+    }
+    .project-item {
+        padding: 60px;
+    }
+    .gallery {
+        padding: 60px;
+    }
+  }
+  @media (width <= 575px) {
+    nav {
+        display: block;
+        background-color: #c45640;
+        padding-top: 30px;
+        padding-bottom: 20px;
+        color: #fff;
+        padding-right: 0;
+        padding-left: 0;
+    }
+    .logo {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .logo a {
+        color: #fff;
+    }
+    .nav-sections {
+        display: block;
+        text-align: center;
+    }
+
+    ul.nav-sections {
+        padding: 0;
+        margin: 0;
+    }
+
+    nav ul li {
+        padding-bottom: 10px;
+        padding-top: 15px;
+        border-bottom: solid 1px rgba(255, 255, 255, 0.5);
+        padding-bottom: 15px;
+    }
+
+    nav ul li:first-child {
+        border-top: solid 1px rgba(255, 255, 255, 0.5);
+    }
+    nav ul li:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+    nav ul li a{
+        color: #fff;
+    }
+    .about {
+        padding-top: 20px;
+    }
+
+    .project-item {
+        display: block;
+        padding: 60px;
+        text-align: center;
+    }
+    .gallery {
+        display: block;
+    }
+    .gallery-item {
+        margin-bottom: 20px;
+    }
+    .lightbox-content {
+        max-width: 70%;
+    }
+  }
+  
+ 

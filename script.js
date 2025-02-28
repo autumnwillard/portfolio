@@ -47,3 +47,22 @@ lightbox.addEventListener('click', (e) => {
         lightbox.classList.remove('active');
     }
 });
+
+// Add keyboard navigation
+document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('active')) return; // Only work when lightbox is open
+
+    switch(e.key) {
+        case 'ArrowLeft':
+            currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
+            updateLightbox();
+            break;
+        case 'ArrowRight':
+            currentIndex = (currentIndex + 1) % galleryItems.length;
+            updateLightbox();
+            break;
+        case 'Escape':
+            lightbox.classList.remove('active');
+            break;
+    }
+});
