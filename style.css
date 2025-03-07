@@ -12,7 +12,7 @@ body {
 }
 
 .content {
-    width: 85vw;
+    width: 70vw;
     margin: auto;
     padding-top: 2rem;
     padding-bottom: 2rem;
@@ -139,7 +139,7 @@ h2 {
     grid-template-columns: 2fr 1fr;
     gap: 40px;
     align-items: center;
-    min-height: 85vh;
+    min-height: 80vh;
 }
 
 .project-item:nth-child(even) {
@@ -330,17 +330,23 @@ h2 {
 
 
 
-@media (width <= 1000px) {
+@media (width <= 1200px) {
+    .content {
+        width: 85vw;
+    }
     .about {
         flex-wrap: wrap;
         justify-content: center;
-        padding-right: 60px;
-        padding-left: 60px;
         flex-direction: column-reverse;
+        margin-bottom: 8rem;
     }
     h1 {
         font-size: 2rem;
         margin-top: 20px;
+    }
+
+    h2 {
+        font-size: 1.5rem;
     }
     .about h1 {
     font-size: 3rem;
@@ -364,11 +370,12 @@ h2 {
         height: 200px;
     }
     .project-item {
-        padding: 60px;
+        display: block;
+        text-align: center;
+        min-height: 60vh;
+        margin-bottom: 4rem;
     }
-    .gallery {
-        padding: 60px;
-    }
+    
   }
   @media (width <= 575px) {
     nav {
@@ -416,12 +423,6 @@ h2 {
     }
     .about {
         padding-top: 20px;
-    }
-
-    .project-item {
-        display: block;
-        padding: 60px;
-        text-align: center;
     }
     .gallery {
         display: block;
@@ -646,7 +647,6 @@ h2 {
 .subtitle {
     font-size: 1.5rem;
     margin: -1rem 0 1rem 0;  /* Negative top margin to pull it closer to h1 */
-    font-weight: 500;
 }
 
 /* Media queries */
