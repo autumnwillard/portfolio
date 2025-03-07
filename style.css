@@ -135,12 +135,18 @@ h2 {
     margin: auto;
 }
 
+.projects {
+    display: flex;
+    gap: 8em;
+    flex-direction: column;
+    margin-bottom: 10em;
+}
+
 .project-item {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 40px;
     align-items: center;
-    min-height: 80vh;
 }
 
 .project-item:nth-child(even) {
