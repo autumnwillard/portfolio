@@ -11,12 +11,18 @@ body {
     margin: 0;
 }
 
+.content {
+    width: 85vw;
+    margin: auto;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
 nav {
     color: #50535B;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0.5em 5em;
 }
 
 .logo {
@@ -96,7 +102,7 @@ ul.icon-links {
 .top-content {
     display: flex;
     flex-direction: column;
-    min-height: 90vh;
+    min-height: 85vh;
     position: relative;
 }
 
@@ -104,7 +110,7 @@ ul.icon-links {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 5% 5.5em 0 8em;
+    padding-top: 5.5em;
 
 }
 
@@ -116,26 +122,24 @@ ul.icon-links {
     width: 100%;
 }
 
-.about h1 {
+h1 {
     color: #8D9A9C;
     font-size: 4rem;
-    padding-bottom: 0px;
+    margin-bottom: 0px;
 }
 
 h2 {
     color: #8D9A9C;
     font-size: 3rem;
     margin: auto;
-    padding-top: 40px;
 }
 
 .project-item {
-    padding: 120px;
-    margin: 0;
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 40px;
     align-items: center;
+    min-height: 85vh;
 }
 
 .project-item:nth-child(even) {
@@ -180,16 +184,10 @@ h2 {
     border-radius: 5px;
 }
 
-
-h1 {
-    font-size: 3rem;
-    margin: 0;
-}
-
 .back-to-top {
-    padding-bottom: 40px;
+    padding-bottom: 2rem;
     text-align: center;
-    margin-top: -1px;
+    margin-top: 3rem;
 }
 
 .back-to-top a {
@@ -217,9 +215,8 @@ h1 {
 
   .gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 2rem;
-    padding: 120px;
 }
 
 .gallery-item {
@@ -325,6 +322,10 @@ h1 {
     cursor: pointer;
     background: none;
     border: none;
+}
+
+.details img {
+    max-width: 90%;
 }
 
 
@@ -434,3 +435,261 @@ h1 {
   }
   
  
+/* Case Study Specific Styles */
+.details {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.case-study {
+    margin-bottom: 4rem;
+}
+
+.case-study section {
+    margin: 6rem 0;  /* Increased spacing */
+}
+
+.case-study h1 {
+    color: #8D9A9C;
+    font-size: 4rem;
+    margin-bottom: 2rem;
+    margin-top: 0;
+}
+
+.case-study h2 {
+    color: #50535B;
+    font-size: 3rem;
+    margin: 2rem 0 1rem;
+}
+
+.case-study h3 {
+    color: #8D9A9C;
+    font-size: 2rem;
+    margin: 1.5rem 0 1rem;
+}
+
+.case-study h4 {
+    color: #50535B;
+    font-size: 1.5rem;
+    margin: 1.5rem 0 0.75rem;
+}
+
+.case-study p {
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+/* Disclaimer styling - enhanced */
+.disclaimer {
+    background: rgba(141, 154, 156, 0.1);
+    padding: 2rem;
+    border-radius: 8px;
+    margin: 3rem 0;
+    border-left: 4px solid #8D9A9C;
+}
+
+/* Image handling - improved */
+.case-study figure {
+    margin: 3rem 0;
+}
+
+.case-study figure img {
+    max-width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.case-study figcaption {
+    margin-top: 1rem;
+    color: #8D9A9C;
+    font-size: 0.9rem;
+}
+
+/* Class diagram specific */
+.class-diagram img {
+    max-width: 100%;
+    width: auto;
+    margin: 2rem auto;
+    display: block;
+}
+
+/* Wireframe gallery - fixed height and spacing issues */
+.wireframe-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 3rem;
+    margin: 3rem 0 4rem 0;  /* Added bottom margin to prevent overlap */
+}
+
+.wireframe {
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.wireframe:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.wireframe img {
+    width: 100%;
+    height: auto;  /* Changed from fixed height to auto */
+    max-height: 300px;  /* Added max-height instead of fixed height */
+    object-fit: contain;  /* Changed from cover to contain to show full image */
+    border-bottom: 1px solid rgba(141, 154, 156, 0.2);
+    background-color: #f8f8f8;  /* Optional: adds a light background if image doesn't fill space */
+}
+
+.wireframe figcaption {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+
+/* Lists */
+.case-study ul {
+    margin: 1rem 0 2rem 1.5rem;
+}
+
+.case-study li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+}
+
+/* Core features section - enhanced */
+.core-features {
+    background: rgba(141, 154, 156, 0.1);
+    padding: 3rem;
+    border-radius: 8px;
+    margin: 3rem 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Quality assurance section */
+.quality-assurance ul {
+    list-style-type: none;
+    margin-left: 0;
+}
+
+.quality-assurance li {
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.quality-assurance li::before {
+    content: "•";
+    color: #c45640;
+    position: absolute;
+    left: 0;
+}
+
+/* Demo link - enhanced */
+.demo-link {
+    margin: 3rem 0 0 0;
+}
+
+.demo-link a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: #c45640;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.demo-link a:hover {
+    color: #f0664a;
+}
+
+.demo-link i {
+    font-size: 0.9rem;
+}
+
+/* Back to main styling */
+
+.back-link {
+    margin-bottom: 3rem;
+    margin-top: 3rem;
+}
+
+.back-link a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: #8D9A9C;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.back-link a:hover {
+    color: #50535B;
+}
+
+.back-link i {
+    font-size: 0.9rem;
+}
+
+
+
+/* Subtitle styling */
+.subtitle {
+    font-size: 1.5rem;
+    margin: -1rem 0 1rem 0;  /* Negative top margin to pull it closer to h1 */
+    font-weight: 500;
+}
+
+/* Media queries */
+@media (width <= 1000px) {
+    .case-study h1 {
+        font-size: 3rem;
+    }
+
+    .case-study h2 {
+        font-size: 2.5rem;
+    }
+
+    .case-study h3 {
+        font-size: 1.8rem;
+    }
+
+    .core-features {
+        padding: 2rem;
+    }
+}
+
+@media (width <= 575px) {
+    .case-study h1 {
+        font-size: 2rem;
+    }
+
+    .case-study h2 {
+        font-size: 1.8rem;
+    }
+
+    .case-study h3 {
+        font-size: 1.5rem;
+    }
+
+    .wireframe-gallery {
+        grid-template-columns: 1fr;
+    }
+
+    .core-features {
+        padding: 1.5rem;
+    }
+
+    .demo-link a {
+        padding: 0.5rem 1rem;
+    }
+}

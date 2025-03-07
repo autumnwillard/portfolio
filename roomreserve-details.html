@@ -15,10 +15,168 @@
 <body>
     <div class="content">
         <div id="nav-placeholder"></div>
-    </div>
+    <main class="details">
+        <article class="case-study">
+            
+<div class="back-link">
+    <a href="index.html">
+        <i class="fas fa-arrow-left"></i>
+        Back to Projects
+    </a>
+</div>
+            <div class="demo-link">
+                <a href="https://roomreserve-cvb3cacge0c4hvgk.centralus-01.azurewebsites.net/" target="_blank">
+                    <i class="fas fa-external-link-alt"></i>
+                    View Live Demo
+                </a>
+            </div>            
+            <h1>Room Reservation</h1>
+            <p class="subtitle">A .NET Core MVC application for managing hourly room rentals</p>
+            <section class="problem">
+                <h2>Problem Statement</h2>
+                <div class="disclaimer">
+                    <p>Note: This case study is based on research into local businesses that manage hourly room rentals. The solution addresses the gap between typical hotel management software and the needs of businesses operating on an hourly rental model.</p>
+                </div>
+                <p>After researching local businesses that manage hourly room rentals, a significant gap emerged in the software market. While numerous property management solutions exist, they predominantly cater to hotel operations with daily booking models. This misalignment creates substantial operational challenges for businesses managing hourly rentals for events such as conferences, receptions, and community gatherings.</p>
+        
+                <div class="current-state">
+                    <h3>Analysis of Existing Solutions</h3>
+                    <p>Current businesses in this space typically rely on a combination of paper ledgers, third-party CRM systems, and basic websites. This fragmented approach creates several critical operational inefficiencies: manual data entry increases error rates, double bookings occur frequently, and generating accurate utilization reports becomes nearly impossible. As these businesses expand to multiple locations, these challenges compound, creating a significant barrier to growth.</p>
+                </div>
+            </section>
+        
+            <section class="solution-design">
+                <h2>System Design</h2>
+        
+                <div class="architecture">
+                    <h3>Technical Architecture</h3>
+                    <p>The solution implements an MVC (Model-View-Controller) architecture using the .NET framework. The controllers contain methods that inform the CRUD operations of their respective models, with base functionality defined in a BaseController that other controllers inherit from - demonstrating effective use of polymorphism.</p>
+        
+                    <p>The core models include Rooms, Reservations, and Customers, each with specific attributes designed for hourly booking management. The Reservation class inherits from a base Booking class, allowing for future expansion of booking types while maintaining consistent core functionality. Reports are implemented as view models, generating data from other models to provide comprehensive business insights.</p>
+        
+                    <figure class="class-diagram">
+                        <img src="assets/roomReserve-ERD.png" alt="Class ERD showing system relationships">
+                        <figcaption>Entity Relationship Diagram demonstrating the system's data structure and relationships</figcaption>
+                    </figure>
+                </div>
+        
+                <div class="user-interface">
+                    <h3>User Interface Design</h3>
+                    <p>The interface design prioritizes efficiency and error prevention. Key screens were designed in Figma, focusing on consistent layout patterns across the application. The main views implement a table-like layout for data display, with intuitive controls for editing and deleting items. Search parameters are consistently positioned, making the interface immediately familiar as users navigate between sections.</p>
+        
+                    <p>The reporting interface was specifically designed to provide clear metrics about room utilization and income generation, with built-in date range selection and export capabilities. Create/edit interfaces maintain consistency across different data types while adapting to specific requirements of each entity.</p>
+        
+                    <div class="wireframe-gallery">
+                        <figure class="wireframe">
+                            <img src="assets/roomReserve-roomWireframe.png" alt="Rooms management interface wireframe">
+                            <figcaption>
+                                <h4>Rooms Interface</h4>
+                                <p>Features a table-like layout displaying room details including capacity, pricing, and availability status. Includes search filters and quick-action buttons for managing room records.</p>
+                            </figcaption>
+                        </figure>
+                        <figure class="wireframe">
+                            <img src="assets/roomReserve-bookingWireframe.png" alt="Reservations management interface wireframe">
+                            <figcaption>
+                                <h4>Reservations Interface</h4>
+                                <p>Displays current and upcoming reservations with filtering options for date ranges and room types. Provides clear visibility of booking status and conflict prevention.</p>
+                            </figcaption>
+                        </figure>
+                        <figure class="wireframe">
+                            <img src="assets/roomReserve-customerWireframe.png" alt="Customer management interface wireframe">
+                            <figcaption>
+                                <h4>Customers Interface</h4>
+                                <p>Manages customer information with searchable fields and booking history. Maintains consistent layout with other interfaces while displaying customer-specific data.</p>
+                            </figcaption>
+                        </figure>
+                        <figure class="wireframe">
+                            <img src="assets/roomReserve-reportWireframe.png" alt="Reports interface wireframe">
+                            <figcaption>
+                                <h4>Reports Interface</h4>
+                                <p>Provides comprehensive reporting tools with date range selection and metric visualization. Includes export functionality for detailed analysis.</p>
+                            </figcaption>
+                        </figure>
+                        <figure class="wireframe">
+                            <img src="assets/roomReserve-roomCreateWireframe.png" alt="Room creation interface wireframe">
+                            <figcaption>
+                                <h4>Create/Edit Room Interface</h4>
+                                <p>Form-based interface for adding and editing room details, featuring input validation and clear feedback mechanisms. Maintains consistency with the system's design language.</p>
+                            </figcaption>
+                        </figure>
+                    </div>
+        
+                    <figure class="color-palette">
+                        <img src="assets/roomReserve-colors.png" alt="Color palette">
+                        <figcaption>Systematic color scheme ensuring consistent visual experience</figcaption>
+                    </figure>
+                </div>
+            </section>
+        
+            <section class="technical-implementation">
+                <h2>Implementation</h2>
+        
+                <div class="core-features">
+                    <h3>Key Technical Features</h3>
+                    <p>The system implements several sophisticated features to address critical business needs:</p>
+        
+                    <h4>Reservation Management</h4>
+                    <p>Implements comprehensive CRUD operations with automated conflict detection. The system validates reservations against existing bookings, preventing double-bookings while handling edge cases such as recurring events and cross-timezone bookings.</p>
+        
+                    <h4>Room Management</h4>
+                    <p>Provides dynamic room configuration with capacity tracking and flexible pricing models. The system prevents deletion of rooms with existing reservations, maintaining data integrity while allowing for business growth.</p>
+        
+                    <h4>Search and Availability</h4>
+                    <p>Implements real-time availability checking with sophisticated filtering capabilities. The search function considers capacity requirements, date ranges, and existing reservations to provide accurate availability information.</p>
+        
+                    <h4>Reporting Engine</h4>
+                    <p>Generates detailed insights into room utilization and revenue generation. The reporting system processes reservation data to provide metrics on booking percentages, income per room, and utilization trends.</p>
+                </div>
+        
+                <div class="quality-assurance">
+                    <h3>Testing Strategy</h3>
+                    <p>The testing implementation focuses on ensuring data integrity and system reliability. Using xUnit, the testing framework validates model attributes and controller actions, with particular emphasis on reservation validation and conflict prevention.</p>
+        
+                    <p>The testing environment includes:</p>
+                    <ul>
+                        <li>Visual Studio with .NET Core SDK</li>
+                        <li>xUnit testing framework</li>
+                        <li>Moq library for dependency mocking</li>
+                        <li>In-memory database for integration testing</li>
+                    </ul>
+        
+                    <p>Test coverage includes validation of sample data, reservation creation, business logic verification, and error handling. The testing framework ensures proper error messages are displayed and logs test results for analysis.</p>
+        
+                    <figure class="test-results">
+                        <img src="assets/roomReserve-unitTests.png" alt="Unit test results">
+                        <figcaption>Successful test execution demonstrating system reliability</figcaption>
+                    </figure>
+                </div>
+            </section>
+        
+            <section class="results">
+                <h2>Outcome</h2>
+                <p>The implemented solution successfully bridges the gap between traditional property management systems and the specific needs of hourly rental businesses. Key achievements include:</p>
+                <ul>
+                    <li>Elimination of double-bookings through automated conflict detection</li>
+                    <li>Centralized management system supporting multi-location operations</li>
+                    <li>Real-time availability checking and booking capabilities</li>
+                    <li>Comprehensive reporting system for business intelligence</li>
+                    <li>Scalable architecture supporting business growth</li>
+                </ul>
+        
+                <p>The system demonstrates how thoughtful architecture and user-centered design can solve complex business challenges while maintaining simplicity for end-users. The implementation provides a foundation for future enhancements while delivering immediate operational improvements for businesses managing hourly rentals.</p>
+            </section>
+            <div class="back-to-top">
+                <a href="#" title="Back to top">
+                    <i class="fas fa-chevron-up"></i>
+                </a>
+            </div>
+        </article>
+    </main>
+</div>
     <script>
         $(function(){
           $("#nav-placeholder").load("nav.html");
         });
         </script>
+        <script src="script.js"></script>
 </body>
