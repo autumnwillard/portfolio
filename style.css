@@ -33,16 +33,17 @@ nav {
 
 .logo a {
     color: #c45640;
+    text-decoration: none;
 }
 
-nav a {
+nav .nav-sections a {
     text-decoration: none;
     color: #50535B;
     transition: all 0.3s ease-in-out;
     position: relative;
 }
 
-nav a:before{
+nav .nav-sections a:before {
     content: '';
     background: #c45640;
     display: block;
@@ -52,15 +53,15 @@ nav a:before{
     width: 0;
     height: 2px;
     transition: all 0.3s ease-in-out;
-  }
-  
- nav a:hover {
+}
+
+nav .nav-sections a:hover {
    background-position: 0;
-  }
-  
-  nav a:hover::before{
+}
+
+nav .nav-sections a:hover::before {
     width: 100%;
-  }
+}
 
 nav ul li {
     text-decoration: none;
