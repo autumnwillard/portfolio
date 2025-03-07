@@ -448,7 +448,7 @@ h2 {
 }
 
 .case-study section {
-    margin: 6rem 0;  /* Increased spacing */
+    margin: 4rem 0; 
 }
 
 .case-study h1 {
@@ -520,7 +520,7 @@ h2 {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 3rem;
-    margin: 3rem 0 4rem 0;  /* Added bottom margin to prevent overlap */
+    margin: 3rem 0 4rem 0;
 }
 
 .wireframe {
@@ -529,7 +529,6 @@ h2 {
     overflow: hidden;
     transition: transform 0.3s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    height: 100%;
     display: flex;
     flex-direction: column;
 }
@@ -541,11 +540,14 @@ h2 {
 
 .wireframe img {
     width: 100%;
-    height: auto;  /* Changed from fixed height to auto */
-    max-height: 300px;  /* Added max-height instead of fixed height */
-    object-fit: contain;  /* Changed from cover to contain to show full image */
-    border-bottom: 1px solid rgba(141, 154, 156, 0.2);
-    background-color: #f8f8f8;  /* Optional: adds a light background if image doesn't fill space */
+    height: auto;
+    max-height: 300px;
+    object-fit: contain;
+}
+
+.wireframe-gallery figure img {
+    border-radius: 0;
+    box-shadow: none;
 }
 
 .wireframe figcaption {
