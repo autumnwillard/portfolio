@@ -384,7 +384,7 @@ h2 {
     }
     
   }
-  @media (width <= 575px) {
+  @media (width <= 670px) {
     nav {
         display: block;
         padding-top: 30px;
@@ -432,6 +432,12 @@ h2 {
     }
     .projects {
         gap: 4em;
+    }
+    .next {
+        right: -0.3rem;
+    }
+    .prev {
+        left: 0rem;
     }
   }
   
