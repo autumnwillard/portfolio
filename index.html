@@ -30,7 +30,9 @@
                     <ul class="icon-links">
                         <li><a href="https://github.com/autumnwillard" target="_blank"><i class="fa-brands fa-github"></i></a></li>
                         <li><a href="https://www.linkedin.com/in/autumn-willard/" target="_blank"><i class="fa-brands fa-linkedin"></i></a></li>
-                        <li><a href=""><i class="fa-solid fa-file"></i></a></li>
+                        <li><a id="email-icon" href="#" aria-label="Email me">
+                            <i class="fa fa-envelope"></i>
+                        </a></li>
                     </ul>
                 </div>
             </div>
@@ -213,7 +215,16 @@
         $(function(){
           $("#nav-placeholder").load("nav.html");
         });
+        
+    function createEmailLink() {
+        var username = "autumn";
+        var domain = "hey.com";
+        var element = document.getElementById("email-icon");
+        element.href = "mailto:" + username + "@" + domain;
+    }
+    window.onload = createEmailLink;
         </script>
-        <script src="script.js"></script>
+        <script src="script.js">
+        </script>
 </body>
 </html>
