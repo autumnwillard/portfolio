@@ -135,6 +135,11 @@ h2 {
     margin: auto;
 }
 
+.tech-stack {
+    font-size: .8rem;
+    color: #8d9a9c;
+}
+
 .projects {
     display: flex;
     gap: 8em;
