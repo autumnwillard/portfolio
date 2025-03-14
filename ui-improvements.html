@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <title>Autumn Willard | UI Optimization Initiative</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="content">
+        <div id="nav-placeholder"></div>
+        <main class="details">
+            <article class="case-study">
+                <div class="back-link">
+                    <a href="index.html#projects">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Projects
+                    </a>
+                </div>
+
+                <h1>UI Optimization Initiative</h1>
+                <p class="subtitle">Enhancing enterprise system usability through targeted improvements</p>
+
+                <section class="problem">
+                    <h2>Problem Statement</h2>
+                    <div class="disclaimer">
+                        <p>Note: This case study involves work on proprietary enterprise systems. Information has been generalized to protect confidentiality, and all images are recreations that demonstrate the core concepts without revealing the original system details.</p>
+                    </div>
+
+                    <p>Our enterprise document management system's user interface was creating significant usability challenges across the organization. Users frequently encountered confusion and inefficiencies, leading to errors in document processing and increased support requests. While we had identified numerous opportunities for improvement, implementation was constrained by limited developer resources, resulting in a growing backlog of necessary system enhancements.</p>
+                </section>
+
+                <section class="constraints">
+                    <h2>Constraints</h2>
+                    <p>Working within an enterprise environment presented several key challenges. We needed to implement improvements within strict budget limitations while maintaining system stability. Our development resources were shared across multiple departments, often leading to delayed improvements as other projects took priority. Additionally, any system modifications required careful coordination through established approval and deployment processes.</p>
+                </section>
+
+                <section class="process">
+                    <h2>Process</h2>
+                    <p>Our approach to addressing these interface challenges began with a comprehensive review of user feedback and support tickets. We consolidated this information to create a prioritized improvement backlog, focusing on changes that would have the most significant impact on daily workflows.</p>
+
+                    <p>With my background in software engineering, I saw an opportunity to bridge the gap between identifying problems and implementing solutions. I initiated a partnership with our development team, beginning by shadowing senior developers to understand the system architecture and development processes. This collaborative approach allowed me to gain the necessary access and knowledge to contribute directly to system improvements.</p>
+
+                    <div class="call-out">
+                        <p>Through systematic analysis and user feedback, we identified several critical areas for improvement:</p>
+                        <ul>
+                            <li>Interface elements that required excessive scrolling</li>
+                            <li>Lack of integrated help resources</li>
+                            <li>Complex processes requiring administrator intervention</li>
+                            <li>Inefficient document management workflows</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="solution">
+                    <h2>Solution</h2>
+                    <p>Using C#, JavaScript, and modern development tools, I implemented a series of targeted improvements that addressed key user pain points while maintaining system stability.</p>
+
+                    <div class="solution-components">
+                        <div class="component">
+                            <h3>Navigation Improvements</h3>
+                            <p>The first set of changes focused on making the interface more intuitive and accessible. I repositioned critical action buttons to ensure they remained visible without requiring excessive scrolling. To support new users, I integrated help resources directly into the main navigation bar, providing immediate access to guidance when needed. Additionally, I implemented a new feature allowing users to reverse certain actions independently, reducing the need for administrator intervention.</p>
+                            <figure class="solution-image">
+                                <img src="assets/ui-navigation.png" alt="Navigation improvements demonstration">
+                                <figcaption>Optimized navigation layout and accessibility</figcaption>
+                            </figure>
+                        </div>
+
+                        <div class="component">
+                            <h3>System Optimization</h3>
+                            <p>To address technical limitations and improve system reliability, I implemented several backend improvements. This included optimizing file upload restrictions to prevent common errors and adding modification tracking capabilities that enabled users to better manage their records. The addition of enhanced sorting and filtering options made it significantly easier for users to locate and manage their documents efficiently.</p>
+                            <figure class="solution-image">
+                                <img src="assets/ui-optimization.png" alt="System optimization features">
+                                <figcaption>Enhanced system functionality and efficiency</figcaption>
+                            </figure>
+                        </div>
+
+                        <div class="component">
+                            <h3>User Experience Enhancements</h3>
+                            <p>The final phase of improvements focused on streamlining workflows and enhancing security. I implemented document verification checkpoints to ensure accuracy and compliance, while also refining role-based access controls to prevent common user errors. These changes were complemented by enhanced reporting capabilities that provided better visibility into document status and system usage.</p>
+                            <figure class="solution-image">
+                                <img src="assets/ui-ux.png" alt="User experience improvements">
+                                <figcaption>Improved user workflow and system security</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="results">
+                    <h2>Results</h2>
+                    <p>The implementation of these improvements led to significant positive outcomes across the organization. Users reported spending less time navigating the system, and upload-related errors were virtually eliminated. The streamlined review processes reduced the need for administrator intervention, while enhanced reporting capabilities provided better visibility into document status and system usage.</p>
+
+                    <p>Perhaps most importantly, the improvements resulted in a marked decrease in user-reported issues and support requests. The combination of intuitive navigation, reliable system operations, and streamlined workflows created a more efficient and user-friendly environment for document management.</p>
+                </section>
+
+                <div class="back-to-top">
+                    <a href="#" title="Back to top">
+                        <i class="fas fa-chevron-up"></i>
+                    </a>
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <script>
+        $(function(){
+            $("#nav-placeholder").load("nav.html");
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

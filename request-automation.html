@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <title>Autumn Willard | Request Automation System</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="content">
+        <div id="nav-placeholder"></div>
+        <main class="details">
+            <article class="case-study">
+                <div class="back-link">
+                    <a href="index.html#projects">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Projects
+                    </a>
+                </div>
+
+                <h1>Request Automation System</h1>
+                <p class="subtitle">Streamlining priority request handling through intelligent automation</p>
+
+                <section class="problem">
+                    <h2>Problem Statement</h2>
+                    <div class="disclaimer">
+                        <p>Note: This case study involves work on internal business processes. Information has been generalized to protect confidentiality, and all images are recreations that demonstrate the core concepts without revealing sensitive details.</p>
+                    </div>
+
+                    <p>Our team regularly received numerous emails from users requesting expedited processing of their documents. These requests typically lacked critical information, creating a time-consuming cycle of back-and-forth communication to gather necessary details. Once complete, we still needed to manually compile this information into a standardized format before forwarding it to the appropriate review teams. This inefficient process created delays, increased the risk of errors, and consumed valuable team resources.</p>
+                </section>
+
+                <section class="constraints">
+                    <h2>Constraints</h2>
+                    <p>We needed to develop a solution that could be implemented quickly using existing tools and without requiring significant resources or system changes. The solution needed to be user-friendly for requesters while ensuring all necessary information was captured consistently. Additionally, it needed to integrate seamlessly with our existing workflow and communication channels.</p>
+                </section>
+
+                <section class="process">
+                    <h2>Process</h2>
+                    <p>After analyzing our current workflow and identifying the key pain points, I determined that we needed a standardized intake process that would capture all required information upfront. By examining past expedite requests, I identified the essential data points needed for processing and the common reasons for follow-up questions.</p>
+
+                    <p>I evaluated several potential solutions and determined that Microsoft Forms offered the ideal balance of accessibility, customization, and integration capabilities. To ensure the solution would address all stakeholder needs, I consulted with both our internal team and the review offices to understand their information requirements.</p>
+
+                    <div class="call-out">
+                        <p>The key requirements identified for the new process included:</p>
+                        <ul>
+                            <li>Capturing complete document identification information</li>
+                            <li>Recording current document status</li>
+                            <li>Documenting justification for expedited processing</li>
+                            <li>Collecting relevant deadline information</li>
+                            <li>Automating information delivery to processing teams</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="solution">
+                    <h2>Solution</h2>
+                    <p>I designed a comprehensive solution using Microsoft Forms and Power Automate to streamline the entire expedite request process from submission to delivery.</p>
+
+                    <div class="solution-components">
+                        <div class="component">
+                            <h3>Standardized Request Form</h3>
+                            <p>The Microsoft Form I created was carefully structured to guide users through providing all necessary information. Each field included clear instructions and validation rules to ensure data quality. The form captured document identifiers, current status information, justification for expedited processing, and any relevant deadlines. This structured approach eliminated the need for follow-up questions in most cases.</p>
+                            <figure class="solution-image">
+                                <img src="assets/expedite-form.png" alt="Screenshot of the expedite request form">
+                                <figcaption>Standardized form capturing all essential request information</figcaption>
+                            </figure>
+                        </div>
+
+                        <div class="component">
+                            <h3>Automated Workflow</h3>
+                            <p>Using Power Automate, I created a workflow that processed form submissions and delivered the information to our team's shared inbox in a standardized format. The automation extracted all form fields, formatted them into a consistent layout, and delivered them immediately upon submission. This eliminated manual data entry and ensured that all team members had access to the same information.</p>
+                            <figure class="solution-image">
+                                <img src="assets/expedite-flow.png" alt="Power Automate workflow diagram">
+                                <figcaption>Automated workflow processing form submissions</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="results">
+                    <h2>Results</h2>
+                    <p>The implementation of this automated solution has had a significant positive impact on our operations. To date, the form has been used over 800 times, demonstrating strong user adoption. When we receive email inquiries about expediting document reviews, we now simply direct users to the form, eliminating the need for lengthy email exchanges.</p>
+
+                    <p>This streamlined process has significantly reduced the time and effort required to handle expedite requests. The consistent format of incoming information has improved communication with review teams and reduced processing errors. An unexpected benefit has been the ability to analyze the collected data, which has helped us identify patterns in request volume and better forecast busy periods.</p>
+                </section>
+
+                <div class="back-to-top">
+                    <a href="#" title="Back to top">
+                        <i class="fas fa-chevron-up"></i>
+                    </a>
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <script>
+        $(function(){
+            $("#nav-placeholder").load("nav.html");
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>

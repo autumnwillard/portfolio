@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <title>Autumn Willard | Knowledge Base Development</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="content">
+        <div id="nav-placeholder"></div>
+        <main class="details">
+            <article class="case-study">
+                <div class="back-link">
+                    <a href="index.html#projects">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Projects
+                    </a>
+                </div>
+
+                <h1>Knowledge Base Development</h1>
+                <p class="subtitle">Creating intuitive documentation for complex systems</p>
+
+                <section class="problem">
+                    <h2>Problem Statement</h2>
+                    <div class="disclaimer">
+                        <p>Note: This case study involves work on enterprise systems. Information has been generalized to protect confidentiality, and all images are recreations that demonstrate the core concepts without revealing the original system details.</p>
+                    </div>
+
+                    <p>Multiple enterprise systems lacked comprehensive user documentation, leading to confusion among users, particularly new employees. This resulted in repeated support requests, decreased user confidence, and inefficient system utilization. The need for immediate solutions was critical, as formal training materials would take months to develop through official channels.</p>
+                </section>
+
+                <section class="constraints">
+                    <h2>Constraints</h2>
+                    <p>To provide resources quickly, we had to utilize existing tools and platforms available within the organization. While long-term training solutions were being developed through official channels, users needed immediate access to system guidance. We needed to create and implement solutions using current resources while ensuring the information remained accurate and maintainable.</p>
+                </section>
+
+                <section class="process">
+                    <h2>Process</h2>
+                    <p>My team and I started keeping track of the recurring questions we received. We discussed the questions we were receiving in our daily meetings and reached out to other departments as needed to find answers. As we did this, we began to lay out a detailed FAQ document which tracked the questions and the corresponding answers.</p>
+
+                    <div class="call-out">
+                        <p>We implemented a systematic process to collect and address user needs:</p>
+                        <ul>
+                            <li>Tracked recurring support questions in daily team meetings</li>
+                            <li>Collaborated with other departments to verify accurate solutions</li>
+                            <li>Developed comprehensive FAQ documentation</li>
+                            <li>Created step-by-step system walkthroughs</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="solution">
+                    <h2>Solution</h2>
+                    <p>We reached out to gain access to the company website editor, which required a training session. After that I took point on updating our program's home page to include links to both enterprise systems that we were over, several ways to access a new FAQ page, and additional helpful information such as a link to our expedited review form.</p>
+
+                    <div class="solution-components">
+                        <div class="component">
+                            <h3>Centralized Information Hub</h3>
+                            <p>Redesigned the department homepage to serve as a central resource, featuring quick links, contact information, process overviews, and system updates.</p>
+                            <figure class="solution-image">
+                                <img src="assets/kb-homepage.png" alt="Screenshot of redesigned homepage">
+                                <figcaption>Redesigned homepage providing centralized access to resources</figcaption>
+                            </figure>
+                        </div>
+
+                        <div class="component">
+                            <h3>Interactive FAQ System</h3>
+                            <p>Created an HTML-based FAQ with linked table of contents, enabling users to quickly locate specific information without scrolling through extensive documentation.</p>
+                            <figure class="solution-image">
+                                <img src="assets/kb-faq.png" alt="FAQ page with table of contents">
+                                <figcaption>FAQ page featuring quick-navigation table of contents</figcaption>
+                            </figure>
+                        </div>
+
+                        <div class="component">
+                            <h3>Video Tutorials</h3>
+                            <p>Developed system walkthrough videos demonstrating common processes, providing users with visual step-by-step guidance.</p>
+                            <figure class="solution-image">
+                                <img src="assets/kb-video.png" alt="Screenshot of video tutorial interface">
+                                <figcaption>Video tutorials showing step-by-step system processes</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="results">
+                    <h2>Results</h2>
+                    <p>The number of questions decreased by approximately 50%, and the walkthrough videos were adopted by multiple research departments for training new users. This also allowed us to direct lost and confused users to a resource that they could refer back to, which increased user confidence and decreased the amount of time users spent on the systems (especially new users).</p>
+                </section>
+
+                <div class="back-to-top">
+                    <a href="#" title="Back to top">
+                        <i class="fas fa-chevron-up"></i>
+                    </a>
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <script>
+        $(function(){
+            $("#nav-placeholder").load("nav.html");
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
