@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simple-line-icons/2.4.1/css/simple-line-icons.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <title>Abandoned Records</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="content">
+        <div id="nav-placeholder"></div>
+        <main class="details">
+            <article class="case-study">
+                <div class="back-link">
+                    <a href="index.html#projects">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Projects
+                    </a>
+                </div>
+
+                <h1>Abandoned Records</h1>
+                <p class="subtitle">Redesigning document submission for users</p>
+
+                <section class="problem">
+                    <h2>Problem Statement</h2>
+                    <p>In a critical enterprise document management system, users were unknowingly abandoning hundreds of records annually due to unclear submission indicators. This created a significant backlog of incomplete documentation and frustrated users who believed their work had been properly submitted. The issue not only impacted individual users but also created downstream problems for managers trying to track genuine document statuses and maintain accurate organizational records.</p>
+                </section>
+                
+
+                    <section class="constraints">
+                        <h2>Constraints</h2>
+                        <p>This was a preexisting system. We had to operate within a strict budget and keep the changes as straightforward and minimal as possible. The developers working with us were also a shared resource with limited time to allocate to our department.</p>
+                    </section>
+
+                <section class="process">
+                    <h2>Process</h2>
+                    <p>To solve the problem of incomplete records, I began by using the test site and running through the system as a user. I continually asked myself, “If this were my first time using this, how would I know what to do next?” </p>
+                    
+                    <p>Through this experience I realized that there was no indication to the user that a record was not ready to submit. In the original system, it was set up so that the button to submit did not appear until all the required fields had been filled out. As a new user, there was no indication that a button was meant to appear, and no message to show that you were leaving the record incomplete if you navigated to another page. In addition to all this, the record would be created and show a status of “New”, leading many users to assume that they had been successful in submitting their record.</p>
+                    
+
+                    <div class="call-out">
+                        <p>Using the test environment, I switched from my admin role to a standard user role to experience the system's constraints firsthand. This role-based testing revealed several critical UX issues:</p>
+                        <ul>
+                            <li>No indication that a record was not ready for review</li>
+                            <li>Hidden submission buttons with no context for their appearance</li>
+                            <li>No warning when navigating away from incomplete work</li>
+                            <li>Misleading status labels giving false confidence of completion</li>
+                        </ul>
+                    </div>
+                </section>
+                <section class="solution">
+                    <h2>Solution</h2>
+                    <p>Several changes were made to the system to prevent the unintended abandonment of incomplete records:</p>
+
+                    <div class="solution-components">
+                        <div class="component">
+                            <h3>Submit Button Visibility</h3>
+                            <p>The button to submit the document was made visible and then greyed out until all the required information had been added.</p>
+                            <figure class="solution-image">
+                                <img src="assets/button-visibility.png" alt="Before and after comparison of review button visibility">
+                                <figcaption>Submit button redesign showing disabled and enabled states</figcaption>
+                            </figure>
+                        </div>
+
+                        <div class="component">
+                            <h3>Status Clarity</h3>
+                            <p>The status of the record was changed from "New" to "Unsubmitted Draft" to better communicate to the user the incomplete state of the record.</p>
+                            <figure class="solution-image">
+                                <img src="assets/status-update.png" alt="Status label change demonstration">
+                                <figcaption>Updated status labels providing clearer user feedback</figcaption>
+                            </figure>
+                        </div>
+
+                        <div class="component">
+                            <h3>Navigation Warning</h3>
+                            <p>A pop-up message was added to the page warning the user that the record had not been submitted and that their changes may not save. This helped to prevent accidental clicks out of the incomplete record.</p>
+                            <figure class="solution-image">
+                                <img src="assets/warning-dialog.png" alt="Navigation warning dialog">
+                                <figcaption>Warning dialog preventing accidental navigation</figcaption>
+                            </figure>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="results">
+                    <h2>Results</h2>
+                    <p>The number of unintentionally abandoned incomplete records dropped from hundreds per year to nearly zero. We also saw a dramatic reduction in the number of helpdesk emails related to the submission process. Department managers reported significant improvement in their ability to track genuine document statuses, eliminating the noise of unintentionally abandoned records.</p>
+                </section>
+
+                <div class="back-to-top">
+                    <a href="#" title="Back to top">
+                        <i class="fas fa-chevron-up"></i>
+                    </a>
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <script>
+        $(function(){
+            $("#nav-placeholder").load("nav.html");
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
