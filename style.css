@@ -578,7 +578,6 @@ h2 {
     line-height: 1.6;
 }
 
-/* Disclaimer styling - enhanced */
 .disclaimer {
     background: rgba(141, 154, 156, 0.1);
     padding: 2rem;
@@ -587,7 +586,6 @@ h2 {
     border-left: 4px solid #8D9A9C;
 }
 
-/* Image handling - improved */
 .case-study figure {
     margin: 3rem 0;
 }
@@ -604,7 +602,6 @@ h2 {
     font-size: 0.9rem;
 }
 
-/* Class diagram specific */
 .class-diagram img {
     max-width: 100%;
     width: auto;
@@ -612,7 +609,6 @@ h2 {
     display: block;
 }
 
-/* Wireframe gallery - fixed height and spacing issues */
 .wireframe-gallery {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -655,8 +651,6 @@ h2 {
     gap: 0.5rem;
 }
 
-
-/* Lists */
 .case-study ul {
     margin: 1rem 0 2rem 1.5rem;
 }
@@ -666,7 +660,6 @@ h2 {
     line-height: 1.6;
 }
 
-/* Core features section - enhanced */
 .call-out {
     background: rgba(141, 154, 156, 0.1);
     padding: 3rem;
@@ -675,7 +668,6 @@ h2 {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
-/* Quality assurance section */
 .quality-assurance ul {
     list-style-type: none;
     margin-left: 0;
@@ -693,7 +685,6 @@ h2 {
     left: 0;
 }
 
-/* Demo link - enhanced */
 .demo-link {
     margin: 3rem 0 0 0;
 }
@@ -715,6 +706,36 @@ h2 {
 .demo-link i {
     font-size: 0.9rem;
 }
+
+.results-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+}
+
+.metric {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.metric h3 {
+    color: #2A4E6E;
+    margin-top: 0;
+    font-size: 1.25rem;
+    border-bottom: 2px solid #c45640;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .results-metrics {
+        grid-template-columns: 1fr;
+    }
+}
+
 
 /* Back to main styling */
 
@@ -743,10 +764,9 @@ h2 {
 
 
 
-/* Subtitle styling */
 .subtitle {
     font-size: 1.5rem;
-    margin: -1rem 0 1rem 0;  /* Negative top margin to pull it closer to h1 */
+    margin: -1rem 0 1rem 0;
 }
 
 /* Media queries */
