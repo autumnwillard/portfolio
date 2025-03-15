@@ -6,7 +6,7 @@ html {
 
 body {
     color: #50535B;
-    font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    font-family: "Montserrat", sans-serif;
     min-height: 100vh;
     margin: 0;
 }
@@ -126,12 +126,15 @@ h1 {
     color: #8D9A9C;
     font-size: 4rem;
     margin-bottom: 0px;
+    font-family: "Alegreya Sans", sans-serif;
 }
 
 h2 {
     color: #8D9A9C;
     font-size: 3rem;
     margin: auto;
+    font-family: "Alegreya Sans", sans-serif;
+
 }
 
 .tech-stack {
@@ -155,7 +158,7 @@ h2 {
 
 .interactive-demo {
     margin: 2rem 0;
-    padding: 1rem;
+    padding: 2rem;
     background-color: #f8f9fa;
     border-radius: 8px;
 }
@@ -266,11 +269,15 @@ h2 {
     cursor: pointer;
     font-weight: 600;
     font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
-    margin-right: 15px;
     border-radius: 10px;
     transition: 300ms;
     margin-top: 15px;
   }
+
+  
+  #btn a:nth-child(2) button {
+    margin-left: 15px;
+}
 
   button:hover {
     background: #f0664a;
@@ -439,15 +446,14 @@ h2 {
         margin-bottom: 8rem;
     }
     h1 {
-        font-size: 2rem;
+        font-size: 2.5rem;
         margin-top: 20px;
     }
 
     h2 {
-        font-size: 1.5rem;
+        font-size: 2rem;
     }
     .about h1 {
-    font-size: 3rem;
     line-height: 1em;
     }
     .about-text {
@@ -549,7 +555,6 @@ h2 {
 
 .case-study h1 {
     color: #8D9A9C;
-    font-size: 4rem;
     margin-bottom: 2rem;
     margin-top: 0;
 }
@@ -581,7 +586,7 @@ h2 {
     background: rgba(141, 154, 156, 0.1);
     padding: 2rem;
     border-radius: 8px;
-    margin: 3rem 0;
+    margin: 2rem 0;
     border-left: 4px solid #8D9A9C;
 }
 
