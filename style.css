@@ -25,15 +25,14 @@ nav {
     justify-content: space-between;
 }
 
-.logo {
-    font-family: "Bebas Neue", sans-serif;
-    font-weight: 400;
-    font-size: 2rem;
-}
-
 .logo a {
     color: #c45640;
     text-decoration: none;
+}
+
+.logo img {
+    width: 2rem;
+    height: auto;
 }
 
 nav .nav-sections a {
