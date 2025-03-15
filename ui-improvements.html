@@ -66,11 +66,121 @@
                         <div class="component">
                             <h3>Navigation Improvements</h3>
                             <p>The first set of changes focused on making the interface more intuitive and accessible. I repositioned critical action buttons to ensure they remained visible without requiring excessive scrolling. To support new users, I integrated help resources directly into the main navigation bar, providing immediate access to guidance when needed. Additionally, I implemented a new feature allowing users to reverse certain actions independently, reducing the need for administrator intervention.</p>
-                            <figure class="solution-image">
-                                <img src="assets/ui-navigation.png" alt="Navigation improvements demonstration">
-                                <figcaption>Optimized navigation layout and accessibility</figcaption>
-                            </figure>
+                    
+                            <p>The horizontal scrolling issue was caused by the title field, which would expand to display the full text regardless of length. While the ideal solution would have been implementing text wrapping or a condensed view with expandable ellipses, the application's template structure made these seemingly simple fixes quite complex to implement. Moving the action buttons provided a quicker alternative to help users while the more comprehensive title field solution remains a long-term goal.</p>
+                    
+                            <div class="interactive-demo">
+                                <h4>Experience the UI Improvement</h4>
+                                <p>Scroll horizontally in both examples to see how moving the action buttons improved usability.</p>
+                                <p>If you have a large enough monitar to see the entire table, try shrinking your browser window.</p>
+                            
+                                <div class="demo-container">
+                                    <div class="scrollable-demo before-demo">
+                                        <table class="demo-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>TITLE</th>
+                                                    <th>OWNER</th>
+                                                    <th>STATUS</th>
+                                                    <th>DATE MODIFIED</th>
+                                                    <th>ACTIONS</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>DOC/PRE-24-78392</td>
+                                                    <td>Annual Equipment Report</td>
+                                                    <td>Autumn Willard</td>
+                                                    <td>Unsubmitted Draft</td>
+                                                    <td>2025-03-10</td>
+                                                    <td>
+                                                        <button class="demo-btn view-btn"><i class="fas fa-eye"></i> View</button>
+                                                        <button class="demo-btn edit-btn"><i class="fas fa-pencil-alt"></i> Edit</button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>DOC/PRE-25-14506</td>
+                                                    <td>Standard Operating Procedure Review for Warehouse Equipment Calibration and Maintenance Protocols</td>
+                                                    <td>Autumn Willard</td>
+                                                    <td>Under Review</td>
+                                                    <td>2025-03-12</td>
+                                                    <td>
+                                                        <button class="demo-btn view-btn"><i class="fas fa-eye"></i> View</button>
+                                                        <button class="demo-btn edit-btn"><i class="fas fa-pencil-alt"></i> Edit</button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>DOC/PRE-24-90123</td>
+                                                    <td>Quarterly Project Status Update</td>
+                                                    <td>Autumn Willard</td>
+                                                    <td>Approved</td>
+                                                    <td>2025-03-01</td>
+                                                    <td>
+                                                        <button class="demo-btn view-btn"><i class="fas fa-eye"></i> View</button>
+                                                        <button class="demo-btn edit-btn"><i class="fas fa-pencil-alt"></i> Edit</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="scrollable-demo after-demo">
+                                        <table class="demo-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>ACTIONS</th>
+                                                    <th>ID</th>
+                                                    <th>TITLE</th>
+                                                    <th>OWNER</th>
+                                                    <th>STATUS</th>
+                                                    <th>DATE MODIFIED</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <button class="demo-btn view-btn"><i class="fas fa-eye"></i> View</button>
+                                                        <button class="demo-btn edit-btn"><i class="fas fa-pencil-alt"></i> Edit</button>
+                                                    </td>
+                                                    <td>DOC/PRE-24-78392</td>
+                                                    <td>Annual Equipment Report</td>
+                                                    <td>Autumn Willard</td>
+                                                    <td>Unsubmitted Draft</td>
+                                                    <td>2025-03-10</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <button class="demo-btn view-btn"><i class="fas fa-eye"></i> View</button>
+                                                        <button class="demo-btn edit-btn"><i class="fas fa-pencil-alt"></i> Edit</button>
+                                                    </td>
+                                                    <td>DOC/PRE-25-14506</td>
+                                                    <td>Standard Operating Procedure Review for Warehouse Equipment Calibration and Maintenance Protocols</td>
+                                                    <td>Autumn Willard</td>
+                                                    <td>Under Review</td>
+                                                    <td>2025-03-12</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <button class="demo-btn view-btn"><i class="fas fa-eye"></i> View</button>
+                                                        <button class="demo-btn edit-btn"><i class="fas fa-pencil-alt"></i> Edit</button>
+                                                    </td>
+                                                    <td>DOC/PRE-24-90123</td>
+                                                    <td>Quarterly Project Status Update</td>
+                                                    <td>Autumn Willard</td>
+                                                    <td>Approved</td>
+                                                    <td>2025-03-01</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            
+                                <p>The horizontal scrolling issue was caused by the title field, which would expand to display the full text regardless of length. By moving the action buttons to the left side, users could immediately see and access them without needing to scroll horizontally, even when titles were exceptionally long.</p>
+                            </div>
+                            
                         </div>
+                    
 
                         <div class="component">
                             <h3>System Optimization</h3>
