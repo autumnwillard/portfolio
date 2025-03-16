@@ -157,11 +157,22 @@
     </div>
 </main>
     </div>
+    <div id="footer-placeholder"></div>
+    <script src="https://kit.fontawesome.com/7b2250a56b.js" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/7b2250a56b.js" crossorigin="anonymous"></script>
     <script>
         $(function(){
           $("#nav-placeholder").load("nav.html");
+          $("#footer-placeholder").load("footer.html");
         });
+        
+    function createEmailLink() {
+        var username = "autumn";
+        var domain = "hey.com";
+        var element = document.getElementById("email-icon");
+        element.href = "mailto:" + username + "@" + domain;
+    }
+    window.onload = createEmailLink;
         </script>
         <script src="script.js">
         </script>

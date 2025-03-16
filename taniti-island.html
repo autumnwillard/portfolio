@@ -19,7 +19,7 @@
         <main class="details">
             <article class="case-study">
                 <div class="back-link">
-                    <a href="index.html#tanitiIsland">
+                    <a href="index.html#taniti-island">
                         <i class="fas fa-arrow-left"></i>
                         Back to Projects
                     </a>
@@ -232,11 +232,23 @@
             </article>
         </main>
     </div>
+    <div id="footer-placeholder"></div>
+    <script src="https://kit.fontawesome.com/7b2250a56b.js" crossorigin="anonymous"></script>
     <script>
         $(function(){
           $("#nav-placeholder").load("nav.html");
+          $("#footer-placeholder").load("footer.html");
         });
-    </script>
-    <script src="script.js"></script>
+        
+    function createEmailLink() {
+        var username = "autumn";
+        var domain = "hey.com";
+        var element = document.getElementById("email-icon");
+        element.href = "mailto:" + username + "@" + domain;
+    }
+    window.onload = createEmailLink;
+        </script>
+        <script src="script.js">
+        </script>
 </body>
 </html>
