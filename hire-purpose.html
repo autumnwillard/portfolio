@@ -14,130 +14,169 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
-    <div class="content">
-        <div id="nav-placeholder"></div>
+<div class="content">
+    <div id="nav-placeholder"></div>
     <main class="details">
         <article class="case-study">
-            
-<div class="back-link">
-    <a href="index.html#hire-purpose">
-        <i class="fas fa-arrow-left"></i>
-        Back to Projects
-    </a>
-</div>
+
+            <div class="back-link">
+                <a href="index.html#hire-purpose">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Projects
+                </a>
+            </div>
             <div class="demo-link">
                 <a href="https://hirepurpose.app/" target="_blank">
                     <i class="fas fa-external-link-alt"></i>
                     View Live Demo
                 </a>
-            </div>            
+            </div>
             <h1>HirePurpose</h1>
             <p class="subtitle">A Ruby on Rails application for deciding who to hire</p>
+
             <section class="problem">
                 <h2>Problem Statement</h2>
                 <p>My dream company, 37signals, posted a junior Rails developer position. While I had planned to learn Rails eventually and apply to 37signals in a few years, I was currently focused on .NET at my job. Seeing this position was a wake-up call that motivated me to improve my chances before the application window closed.</p>
             </section>
-        
+
             <section class="solution-design">
                 <h2>Figuring Out What to Build</h2>
                 <p>I knew I needed a Rails project for this job application, even if simple and basic. I wanted to show I was serious. I also wanted to get hands-on experience with Rails to confirm I'd actually enjoy it. Everything I'd read suggested I would, but my only previous brief experience hadn't been positive, and you never truly know until you try.</p>
 
                 <div class="architecture">
                     <h3>First Idea</h3>
-                    <p>I've wanted to build a proficiency tracker for homeschooling families - something to display state standards by grade level and let parents track their child's progress.</p>
-                    
+                    <p>I've wanted to build a proficiency tracker for homeschooling families—something to display state standards by grade level and let parents track their child's progress.</p>
+
                     <p>This seemed perfect for Rails, but as I started, I realized I was in over my head. Not that I couldn't build it eventually, but I wouldn't have enough time. I'd already spent days on my cover letter, and the application window was shrinking fast.</p>
-                    
+
                     <h3>Take Two</h3>
                     <p>With less than a week left, I pivoted. After going through the Rails Guide once, I thought about how to use what I knew, build on it slightly, and create something unique.</p>
-                    
-                    <p>I decided to build something tailored to the job application itself - a candidate management application. It was:</p>
 
-                        <ul>
-                            <li>Directly relevant to what the 37signals team would be doing</li>
-                            <li>Simple enough to complete quickly</li>
-                            <li>Complex enough to learn more about Rails</li>
-                            <li>A chance to add some personality</li>
-                        </ul>
+                    <p>I decided to build something tailored to the job application itself—a candidate management application. It was:</p>
+
+                    <ul>
+                        <li>Directly relevant to what the 37signals team would be doing</li>
+                        <li>Simple enough to complete quickly</li>
+                        <li>Complex enough to learn more about Rails</li>
+                        <li>A chance to add some personality</li>
+                    </ul>
                 </div>
             </section>
-                <section class="user-interface">
-                    <h2>User Interface Design</h2>
-                    <p>I sketched the app during a meeting (one I didn't need to pay attention to) on the back of a handout.</p>
-                    <div class="wireframe-gallery">
-                        <figure class="wireframe">
-                            <img src="assets/hirePurpose-sketchIndex.jpg" alt="Pencil sketch for home page">
-                            <figcaption>
-                                <h4>Index View</h4>
-                                <p>The home view of the app where all candidates would be shown.</p>
-                            </figcaption>
-                        </figure>
-                        <figure class="wireframe">
-                            <img src="assets/hirePurpose-sketchShow.jpg" alt="Pencil sketch for candidate details page">
-                            <figcaption>
-                                <h4>Show View</h4>
-                                <p>The details view of the app where you can see more about each candidate.</p>
-                            </figcaption>
-                        </figure>
-                        <figure class="wireframe">
-                            <img src="assets/hirePurpose-sketchAdd.jpg" alt="Pencil sketch for adding or editing">
-                            <figcaption>
-                                <h4>New/Edit View</h4>
-                                <p>The create/edit view of the app.</p>
-                            </figcaption>
-                        </figure>
+
+            <section class="user-interface">
+                <h2>User Interface Design</h2>
+                <p>I sketched the app during a meeting (one I didn't need to pay attention to) on the back of a handout.</p>
+
+                <div class="wireframe-gallery">
+                    <figure class="wireframe">
+                        <img src="assets/hirePurpose-sketchIndex.jpg" alt="Pencil sketch for home page">
+                        <figcaption>
+                            <h4>Index View</h4>
+                            <p>The home view of the app where all candidates would be shown.</p>
+                        </figcaption>
+                    </figure>
+                    <figure class="wireframe">
+                        <img src="assets/hirePurpose-sketchShow.jpg" alt="Pencil sketch for candidate details page">
+                        <figcaption>
+                            <h4>Show View</h4>
+                            <p>The details view of the app where you can see more about each candidate.</p>
+                        </figcaption>
+                    </figure>
+                    <figure class="wireframe">
+                        <img src="assets/hirePurpose-sketchAdd.jpg" alt="Pencil sketch for adding or editing">
+                        <figcaption>
+                            <h4>New/Edit View</h4>
+                            <p>The create/edit view of the app.</p>
+                        </figcaption>
+                    </figure>
+                </div>
+
+                <section class="design-decisions">
+                    <h2>Design Decisions</h2>
+                    <div class="component">
+                        <h3>Status-Driven Interface</h3>
+                        <p>I originally planned typical statuses like "reviewing" and "phone interview," based on the job posting's process. But that felt ordinary. Instead, I changed it to reflect how someone might <em>feel</em> about a candidate. The hiring process is far more subjective than we like to admit, and I wanted to embrace that.</p>
                     </div>
-                    <p>I originally planned typical statuses like "reviewing" and "phone interview," based on the job posting's process. But that felt ordinary. Instead, I changed it to reflect how someone might <em>feel</em> about a candidate. The hiring process is far more subjective than we like to admit and I wanted to embrace that.</p>
-        
-                    <p>Since the status is the main utility of the app, it is displayed and editable in three different places. The index view sorts candidates from most to least likely to hire (with "undecided" at the bottom).</p>
 
-                    <p>I took advantage of Simple.css to give me a solid style base to build on.</p>
-
-                    <p>For the logo, I used InkScape, found a font I liked, and then manually edited the "i" to look like a tie. Quick, simple, effective.</p>
-
-                    <div class="call-out">
-                        <h3>Resources</h3>
-                        <p>During the development of this app I utilized two amazing resources (I used the typical StackOverflow and such as well). Definitely take a look at them if you haven't seen them before.</p>
-                        <ul>
-                            <li><a href="https://guides.rubyonrails.org/getting_started.html" target="_blank">Rails Guide: Getting Started with Rails</a></li>
-                            <li><a href="https://simplecss.org/" target="_blank">Simple.css</a></li>
-                        </ul>                  
+                    <div class="component">
+                        <h3>Multi-Point Status Updates</h3>
+                        <p>Since the status is the main utility of the app, it is displayed and editable in three different places. The index view sorts candidates from most to least likely to hire (with "undecided" at the bottom). This reduces friction in the primary user workflow—quickly categorizing candidates.</p>
                     </div>
+
+                    <div class="component">
+                        <h3>Visual Design</h3>
+                        <p>I took advantage of Simple.css to give me a solid style base to build on. For the logo, I used Inkscape, found a font I liked, and then manually edited the "i" to look like a tie. Quick, simple, effective.</p>
+                    </div>
+                </section>
+
+                <div class="call-out">
+                    <h3>Resources</h3>
+                    <p>During the development of this app, I utilized two amazing resources (I used the typical StackOverflow and such as well). Definitely take a look at them if you haven't seen them before.</p>
+                    <ul>
+                        <li><a href="https://guides.rubyonrails.org/getting_started.html" target="_blank">Rails Guide: Getting Started with Rails</a></li>
+                        <li><a href="https://simplecss.org/" target="_blank">Simple.css</a></li>
+                    </ul>
+                </div>
             </section>
-        
-            <section class="technical-implementation">
-                <h2>Technical Challenges</h2>
+
+            <section class="learning-journey">
+                <h2>Learning Journey</h2>
                 <p>Building this application provided the perfect level of challenge for a project with a one-week timeline. I focused on a single model—candidates—to ensure I could deliver core functionality before the deadline.</p>
 
-                    <h3>Overcoming Initial Resistance</h3>
-                    <p>I actually had one previous attempt at learning Rails which had ended in frustration with routing errors, leaving me skeptical about the framework. But I found that using the right learning resources makes all the difference. The official Rails Guide taught in a more concrete manner that helped me understand Rails' convention-over-configuration philosophy, turning what seemed complicated into something elegantly simple. And I had no routing issues this time.</p>
+                <div class="challenge">
+                    <h3>From Skeptic to Convert</h3>
+                    <p>I actually had one previous attempt at learning Rails that had ended in frustration with routing errors, leaving me skeptical about the framework. But I found that using the right learning resources makes all the difference. The official Rails Guide taught in a more concrete manner that helped me understand Rails' convention-over-configuration philosophy, turning what seemed complicated into something elegantly simple. And I had no routing issues this time.</p>
+                </div>
 
-                    <h3>Status Selection</h3>
+                <div class="challenge">
+                    <h3>Enum Integration</h3>
                     <p>I knew that I wanted statuses to be a set list. Since .NET has enumerables, I decided to see if Rails had something similar. Turns out they do, but much better. Working with enums in Rails was so satisfying—I appreciated how seamlessly they integrated with models and views, making it effortless to rename status options later in development.</p>
-            
-                    <h3>Real-time Status Updates</h3>
-                    <p>I wanted to make it so that users could update the candidate status from multiple views without requiring a form submission. I wanted a drop-down that would update automatically. The Rails Guide covered displaying data and basic form editing, but not this specific interaction. After searching around online, I implemented a solution using partials with Turbo. This resulted in status updates without page refreshes—a small feature that I viewed as the bedrock of this app.</p>
-            
-                    <h3>Deployment Hurdles</h3>
+                </div>
+
+                <div class="challenge">
+                    <h3>Real-time Updates Without Complex JavaScript</h3>
+                    <p>I wanted to make it so that users could update the candidate status from multiple views without requiring a form submission. I wanted a dropdown that would update automatically. The Rails Guide covered displaying data and basic form editing, but not this specific interaction. After searching around online, I implemented a solution using partials with Turbo. This resulted in status updates without page refreshes—a small feature that I viewed as the bedrock of this app.</p>
+                </div>
+
+                <div class="challenge">
+                    <h3>Deployment Reality Check</h3>
                     <p>Deploying to production presented the most significant challenge. My Windows environment with WSL consistently produced the error "<code>E: Unable to locate package docker-buildx-plugin</code>" despite following the Rails deployment guide. After multiple failed troubleshooting attempts, I borrowed a friend's Linux machine and successfully deployed the application, confirming my suspicion that the issue was Windows-specific.</p>
+                </div>
             </section>
+
+            <section class="key-learnings">
+                <h2>What I Learned</h2>
+                <ul>
+                    <li><strong>Rails Philosophy:</strong> Convention over configuration reduces decision fatigue and speeds development</li>
+                    <li><strong>Turbo Power:</strong> Modern Rails can create dynamic interfaces without complex JavaScript frameworks</li>
+                    <li><strong>Rapid Prototyping:</strong> Sometimes constraints force better decisions and clearer focus</li>
+                    <li><strong>Development Environment Differences:</strong> What works in development doesn't always translate smoothly to production</li>
+                    <li><strong>Learning Resources Matter:</strong> The right tutorial can transform frustration into understanding</li>
+                </ul>
+            </section>
+
             <section class="results">
                 <h2>Outcome</h2>
                 <p>In just 5 days, I went from essentially no Rails knowledge to deploying a functional application with:</p>
                 <ul>
                     <li>Complete CRUD operations for managing job candidates</li>
+                    <li>User authentication with login and registration</li>
                     <li>Real-time status updates using Turbo</li>
                     <li>Responsive design with dark mode support</li>
                     <li>Production deployment on Digital Ocean</li>
-                </ul> 
+                </ul>
+
                 <p>For continuing development, I want to work on adding these features:</p>
-            <ol>
-                <li><strong>User Registration:</strong> Complete the authentication process with a registration view.</li>
-                <li><strong>Candidate Evaluation Metrics:</strong> Add numerical scales for communication, technical, and cultural fit.</li>
-                <li><strong>Easier Attachment Access:</strong> Allow users to add and delete attachments from show view. Being able to see the file name if something is attached and an option to remove it from the edit screen.</li>
-            </ol>         
-                <p>Perhaps most importantly, this project taught me that I love Rails. Regardless of whether I get this position, I will continue to learn and code with it. It was so fun. I know I'm barely getting started with it, but that's half the excitement. I can't wait to see what else I can build with it. I'll definitely be building that proficiency tracker in it here soon.</p>
+                <ol>
+                    <li><strong>Multi-user Support:</strong> Allow multiple hiring managers to collaborate on candidate evaluation</li>
+                    <li><strong>Candidate Evaluation Metrics:</strong> Add numerical scales for communication, technical, and cultural fit</li>
+                    <li><strong>Easier Attachment Access:</strong> Allow users to add and delete attachments from the show view, with visible file names and removal options from the edit screen</li>
+                </ol>
+
+                <p>Perhaps most importantly, this project taught me that I love Rails. Regardless of whether I get this position, I will continue to learn and code with it. It was so much fun. I know I'm barely getting started with it, but that's half the excitement. I can't wait to see what else I can build with it.</p>
             </section>
+
+
             <div class="back-to-top">
                 <a href="#" title="Back to top">
                     <i class="fas fa-chevron-up"></i>
@@ -153,7 +192,7 @@
       $("#nav-placeholder").load("nav.html");
       $("#footer-placeholder").load("footer.html");
     });
-    
+
 function createEmailLink() {
     var username = "autumn";
     var domain = "hey.com";
