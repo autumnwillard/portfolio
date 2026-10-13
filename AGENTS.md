@@ -12,6 +12,7 @@ Guidelines for anyone (human or AI agent) writing copy, making assets, or buildi
 - **Voice on the page:** all site copy is first person ("I"). Third-person text should rarely be needed; when it is (alt text, meta descriptions, notes, briefs), Autumn uses she/her.
 - **Audience:** hiring managers and product leaders hiring for product manager roles, skimming between meetings. They decide in about 30 seconds whether to keep reading. Every page has to survive a skim.
 - **Positioning:** a **product manager** with real technical depth as a bonus. Autumn is moving further onto the product side. The site sells product judgment first: finding the real problem, deciding what to build and why, getting buy-in, and proving it worked. The technical skills (reading the codebase, writing SQL, building AI workflows) are the differentiator that makes her a stronger PM, not the headline. Resume summary for reference: *"Technical product manager and hands-on builder."*
+- **The site is not a work history.** It showcases what Autumn can do and how she thinks. No career timeline, job-history section, education list, or HR-title explanations; the résumé PDF covers that. Roles and employers appear only as context inside a case study ("At a glance").
 - **Never position Autumn as** a developer, a UX designer, or a delivery/project manager who happens to do some product work.
 
 ## Working files
@@ -159,7 +160,7 @@ Plan of record lives in `.notes/portfolio-brief.md`; the brief wins over this su
   5. Expedite request intake (compact)
   Supporting work and a Tech Handoff strategy card appear as short cards.
 - **Side Projects:** HirePurpose, Room Reserve (labeled as a capstone), this site, a small strip of design work.
-- **About:** story, career timeline (incl. Tech Handoff), how I work, AI principles, photo.
+- **About:** who I am and how I think, how I work, AI principles, a little personality (NWA; hiking, the outdoors, time with her kids, reading), photo. No timeline or job history; never name her city.
 - **Contact:** simple and direct.
 - Retired: Taniti Island, Graphic Design page, dollar figures in the hero, tool-tag lists, old flat illustrations, unused assets.
 
