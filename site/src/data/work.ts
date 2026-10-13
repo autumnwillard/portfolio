@@ -68,19 +68,6 @@ export const pattern = [
   { said: '"Our clients can\'t afford us." (about three paid late or stopped paying)', wrong: 'Small clients took just as much work as bigger ones (brand talks, iteration, outlining, building) for a fraction of the pay.', bet: 'Fewer, bigger clients: mid-size firms with budget but no in-house design or dev team.', link: 'Tech Handoff pivot →', href: '/work/tech-handoff/' },
 ];
 
-// One line per featured case study, for the short work list on About (home).
-// Names follow microcopy short titles; hooks are each case file's headline.
-export interface WorkLine { name: string; hook: string; href: string; badge?: string }
-
-export const workList: WorkLine[] = [
-  { name: 'Release risk review', hook: 'Four hotfixes a week is not a release schedule.', href: '/work/release-risk-review/' },
-  { name: 'AI review routing', hook: 'Everything gets reviewed twice. Does it need to?', href: '/work/ai-review-routing/', badge: 'Approved · in build when I left' },
-  { name: 'AI toolkit', hook: '"Which team has room?" shouldn\'t take four data pulls.', href: '/work/ai-toolkit/' },
-  { name: 'Lab review system', hook: 'What do you mean it was never submitted?', href: '/work/lab-review-system/' },
-  { name: 'Expedite intake', hook: 'You get an email, you get an email, everyone gets an email!', href: '/work/expedite-intake/' },
-  { name: 'Tech Handoff', hook: "Our clients can't afford us.", href: '/work/tech-handoff/' },
-];
-
 export interface MoreCard { hook: string; tag: string; body: string; extra?: boolean }
 
 export const analyses: MoreCard[] = [

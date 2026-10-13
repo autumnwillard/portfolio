@@ -52,15 +52,37 @@ h4 { font-size: var(--step-1); }
 p { margin: 0 0 var(--s1); max-width: var(--measure); text-wrap: pretty; }
 strong { font-weight: 800; }
 
-a {
-  color: var(--ink);
-  text-decoration-line: underline;
-  text-decoration-color: var(--accent);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.22em;
-  transition: text-decoration-thickness 160ms ease, color 160ms ease;
+/* ---------- Links ----------
+   Every inline/body link gets a thin hand-drawn wavy underline (tiled SVG, so it wraps
+   across lines). On hover/focus a light coral marker swipe sweeps in behind the words,
+   left to right on each line. Components that draw their own links opt out below. */
+a { color: var(--ink); text-decoration: none; }
+a:where(:not(.btn, .tab, .logo, .skip-link, .card__link, .scrap__link)),
+.card__link:hover,
+.card__link:focus-visible {
+  background-image:
+    linear-gradient(100deg, transparent 0.05em, var(--link-swipe) 0.3em, var(--link-swipe) calc(100% - 0.3em), transparent calc(100% - 0.05em)),
+    var(--squiggle);
+  background-repeat: no-repeat, repeat-x;
+  background-size: 0% 72%, 22px 6px;
+  background-position: 0 70%, 0 100%;
+  padding-bottom: 5px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: background-size 420ms var(--ease-pen);
 }
-a:hover { text-decoration-thickness: 4px; }
+a:where(:not(.btn, .tab, .logo, .skip-link, .card__link, .scrap__link)):hover,
+a:where(:not(.btn, .tab, .logo, .skip-link, .card__link, .scrap__link)):focus-visible,
+.card__link:hover,
+.card__link:focus-visible {
+  background-size: 100% 72%, 22px 6px;
+  background-image:
+    linear-gradient(100deg, transparent 0.05em, var(--link-swipe) 0.3em, var(--link-swipe) calc(100% - 0.3em), transparent calc(100% - 0.05em)),
+    var(--squiggle-strong);
+}
+@media (prefers-reduced-motion: reduce) {
+  a { transition: none !important; }
+}
 
 /* Hand-drawn focus ring, everywhere */
 :focus-visible {
@@ -112,11 +134,13 @@ mark.hl {
 }
 
 /* ---------- Sticky note paper (asides, proof strip) ----------
-   The face is painted by ::before and the lifted-corner shadow by ::after, both
-   behind the content inside the note's own stacking context, so the shadow can
-   only ever show below the paper, never across its face. */
+   One corner curls: the bottom-right lifts off the page. The face is painted by ::before
+   and the curl's shadow by ::after, both behind the content inside the note's own
+   stacking context, so the shadow only shows below the lifted corner, never on the face.
+   The bottom-left corner sits flat. Gradients only (no filter), so it renders everywhere. */
 .sticky {
   --sticky: var(--sticky-yellow);
+  --curl-shadow: 0.42;
   position: relative;
   isolation: isolate;
   background: none;
@@ -127,31 +151,43 @@ mark.hl {
   inset: 0;
   z-index: -1;
   background:
+    /* the lifted corner: a soft fold highlight with a little shade just inside it */
+    radial-gradient(120% 120% at 100% 100%, rgb(255 255 255 / 0.5) 0, rgb(255 255 255 / 0.18) 22%, rgb(90 70 40 / 0.08) 38%, transparent 60%) right bottom / 38% 30% no-repeat,
     /* adhesive strip along the top */
     linear-gradient(rgb(0 0 0 / 0.04), rgb(0 0 0 / 0.04)) top / 100% 1.05rem no-repeat,
-    /* the bottom third lifts off the page a little, so it catches less light */
-    linear-gradient(180deg, transparent 62%, rgb(90 70 40 / 0.07) 100%),
     var(--sticky);
-  border-radius: 1px 1px 4px 4px / 1px 1px 8px 8px;
-  box-shadow: 0 1px 1.5px rgb(60 50 40 / 0.16), 0 3px 6px -3px rgb(60 50 40 / 0.18);
+  border-radius: 1px 1px 34px 2px / 1px 1px 9px 2px;
+  box-shadow: 0 1px 1.5px rgb(60 50 40 / 0.16);
   pointer-events: none;
 }
-/* soft shadow under the two lifted lower corners, fainter in the middle.
-   Pure gradients (no filter), so it renders the same everywhere. */
+/* shadow under the curled bottom-right corner only: skewed, offset down and right */
 .sticky::after {
   content: '';
   position: absolute;
-  left: -3%;
-  right: -3%;
-  bottom: -14px;
+  right: -10px;
+  bottom: -10px;
+  width: 58%;
   height: 30px;
   z-index: -2;
-  /* every gradient fades out before the box edge, so there are no hard sides */
-  background:
-    radial-gradient(18% 48% at 19% 50%, rgb(60 45 25 / 0.42), rgb(60 45 25 / 0.14) 55%, transparent 100%),
-    radial-gradient(18% 48% at 81% 50%, rgb(60 45 25 / 0.42), rgb(60 45 25 / 0.14) 55%, transparent 100%),
-    radial-gradient(45% 40% at 50% 45%, rgb(60 45 25 / 0.14), transparent 100%);
+  background: radial-gradient(48% 48% at 52% 50%, rgb(60 45 25 / var(--curl-shadow)), rgb(60 45 25 / calc(var(--curl-shadow) * 0.35)) 50%, transparent 100%);
+  transform: rotate(3.5deg) skewX(-14deg);
+  transform-origin: right bottom;
   pointer-events: none;
+  transition: transform 220ms ease, bottom 220ms ease;
+}
+/* Hover/focus: the note lifts a few px, turns a hair, and the curl's shadow grows. */
+@media (prefers-reduced-motion: no-preference) {
+  .sticky.sticky { transition: transform 220ms ease; }
+  .sticky.sticky:hover,
+  .sticky.sticky:focus-within {
+    transform: translateY(-4px) rotate(calc(var(--tilt, 0deg) - 0.7deg));
+  }
+  .sticky:hover::after,
+  .sticky:focus-within::after {
+    bottom: -13px;
+    transform: rotate(4.5deg) skewX(-16deg) scale(1.08, 1.25);
+    --curl-shadow: 0.5;
+  }
 }
 .sticky--yellow { --sticky: var(--sticky-yellow); }
 .sticky--rose { --sticky: var(--sticky-rose); }
@@ -249,9 +285,9 @@ ol.ink-steps > li::before {
 }
 
 /* ---------- Sketched buttons (markup: components/Button.astro) ----------
-   A wobbly ink outline from the pen helper on a scrap of paper. Primary gets a coral
-   marker scribble fill and a second coral pen pass. On hover/focus a coral underline
-   draws in under the label; under reduced motion it simply appears. */
+   Default: a wobbly ink outline on a scrap of paper. Primary gets a heavier outline and
+   a second coral pen pass offset behind it. On hover/focus a coral marker scribble
+   sweeps in left to right behind the label; under reduced motion it simply appears. */
 .btn-row { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s2); align-items: center; margin-top: var(--s2); }
 .btn {
   position: relative;
@@ -274,38 +310,26 @@ ol.ink-steps > li::before {
 .btn__ink path { fill: none; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .btn__paper { fill: var(--card) !important; stroke: none; }
 .btn__outline { stroke: var(--ink); stroke-width: 2.2; }
-.btn__echo { stroke: var(--accent); stroke-width: 2; }
-.btn__fill { stroke: var(--accent); stroke-opacity: 0.26; stroke-width: 5; }
-.btn__label { position: relative; display: inline-flex; flex-direction: column; align-items: stretch; }
-.btn__under { display: block; width: 0; min-width: 100%; height: 7px; margin-top: 1px; margin-bottom: -8px; overflow: visible; }
-.btn__under path {
-  fill: none;
+.btn--primary .btn__outline { stroke-width: 3; }
+.btn__echo { stroke: var(--accent); stroke-width: 2.2; }
+.btn__fill {
   stroke: var(--accent);
-  stroke-width: 2.6;
-  stroke-linecap: round;
-  stroke-dasharray: 1 1;
-  stroke-dashoffset: 1;
-  opacity: 0;            /* hides the round-cap dot while undrawn */
-  transition: stroke-dashoffset 340ms var(--ease-pen), opacity 0s linear 340ms;
+  stroke-opacity: 0.3;
+  stroke-width: 6;
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 420ms var(--ease-pen);
 }
+.btn__label { position: relative; }
 .btn:hover, .btn:focus-visible { transform: rotate(-0.8deg); }
-.btn:hover .btn__under path, .btn:focus-visible .btn__under path { stroke-dashoffset: 0; opacity: 1; transition: stroke-dashoffset 340ms var(--ease-pen), opacity 0s; }
-.btn:hover .btn__outline, .btn:focus-visible .btn__outline { stroke-width: 2.8; }
+.btn:hover .btn__fill, .btn:focus-visible .btn__fill { clip-path: inset(0 0 0 0); }
 .btn:active { transform: translate(1px, 2px); }
 .btn:focus-visible { outline: 2.5px dashed var(--accent-ink); outline-offset: 5px; border-radius: var(--wobble-radius); }
 @media (prefers-reduced-motion: reduce) {
-  .btn, .btn__under path { transition: none !important; }
+  .btn, .btn__fill { transition: none !important; }
   .btn:hover, .btn:focus-visible, .btn:active { transform: none; }
 }
 
-.text-link {
-  font-weight: 700;
-  text-decoration: none;
-  background: linear-gradient(var(--accent), var(--accent)) no-repeat 0 100% / 100% 2px;
-  padding-bottom: 2px;
-  transition: background-size 200ms ease;
-}
-.text-link:hover { background-size: 100% 5px; }
+.text-link { font-weight: 700; }
 
 /* ---------- Ink drawings that draw themselves on scroll ---------- */
 .ink { fill: none; stroke: var(--ink); stroke-width: var(--stroke); stroke-linecap: round; stroke-linejoin: round; }

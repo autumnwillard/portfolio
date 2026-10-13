@@ -1,28 +1,36 @@
 ---
 // "The short version": four headline numbers, each on its own sticky note with its
 // status chips and a plain-text caption (so it survives a skim and works with images off).
+// Each whole note links to its case study: the link wraps the number and label (its
+// accessible name, plus the case name) and stretches over the note.
+import { arrow } from '../lib/ink';
 import Highlight from './Highlight.astro';
 import StatusBadge from './StatusBadge.astro';
 
 const proof = [
-  { num: '~85%', hl: true, label: 'fewer severe defects', chips: ['In use'], caption: 'Severe = breaks core function, triggers a SEV call. Dec 2025 to ~Sept 2026.' },
-  { num: '~70–80%', label: 'fewer manual reviews (projected)', chips: ['Projected (estimate)', 'Approved · in build when I left'], caption: 'Estimated from reviewer comments flagging wrong screening answers.' },
-  { num: '10 workflows · 7 dashboards', small: true, label: 'used daily by four engineering teams', chips: ['In daily use'], caption: 'An internal product I built for my own teams.' },
-  { num: 'Hundreds per year → nearly zero', small: true, label: 'abandoned records', chips: ['Shipped'], caption: 'Three small UI changes, not a redesign.' },
+  { num: '~85%', hl: true, label: 'fewer severe defects', chips: ['In use'], caption: 'Severe = breaks core function, triggers a SEV call. Dec 2025 to ~Sept 2026.', href: '/work/release-risk-review/', case: 'Release risk review' },
+  { num: '~70–80%', label: 'fewer manual reviews (projected)', chips: ['Projected (estimate)', 'Approved · in build when I left'], caption: 'Estimated from reviewer comments flagging wrong screening answers.', href: '/work/ai-review-routing/', case: 'AI review routing' },
+  { num: '10 workflows · 7 dashboards', small: true, label: 'used daily by four engineering teams', chips: ['In daily use'], caption: 'An internal product I built for my own teams.', href: '/work/ai-toolkit/', case: 'AI toolkit' },
+  { num: 'Hundreds per year → nearly zero', small: true, label: 'abandoned records', chips: ['Shipped'], caption: 'Three small UI changes, not a redesign.', href: '/work/lab-review-system/', case: 'Lab review system' },
 ];
 const tilts = [-1.6, 1.2, -0.8, 1.7];
 const colors = ['blue', 'yellow', 'sage', 'rose'];
+const cue = (seed: number) => { const a = arrow([[3, 9], [16, 5], [30, 10], [44, 7]], seed, 7); return `${a.shaft} ${a.head}`; };
 ---
 <h2 id="proof-h" class="proof__h">The short version</h2>
 <ul class="proof__grid" role="list">
   {proof.map((p, i) => (
     <li class={`scrap sticky sticky--${colors[i]}`} style={`--tilt:${tilts[i]}deg`}>
-      <p class:list={['scrap__num', p.small && 'scrap__num--small']}>
-        {p.hl ? <Highlight>{p.num}</Highlight> : p.num}
-      </p>
-      <p class="scrap__label">{p.label}</p>
+      <a class="scrap__link" href={p.href}>
+        <span class:list={['scrap__num', p.small && 'scrap__num--small']}>
+          {p.hl ? <Highlight>{p.num}</Highlight> : p.num}
+        </span>
+        <span class="scrap__label">{p.label}</span>
+        <span class="visually-hidden">. Case study: {p.case}</span>
+      </a>
       <p class="scrap__chips">{p.chips.map((c) => <StatusBadge status={c} size="sm" />)}</p>
       <p class="scrap__caption">{p.caption}</p>
+      <p class="scrap__cue" aria-hidden="true">see how <svg viewBox="0 0 48 16" focusable="false"><path class="ink ink--accent" d={cue(900 + i)} /></svg></p>
     </li>
   ))}
 </ul>
@@ -40,6 +48,17 @@ const colors = ['blue', 'yellow', 'sage', 'rose'];
     gap: 0.45rem;
   }
   .scrap p { margin: 0; }
+  .scrap__link { display: flex; flex-direction: column; gap: 0.45rem; color: var(--ink); text-decoration: none; }
+  .scrap__link::after { content: ''; position: absolute; inset: 0; z-index: 1; }
+  .scrap__link:focus-visible { outline: none; }
+  .scrap:has(.scrap__link:focus-visible) { outline: 2.5px dashed var(--accent-ink); outline-offset: 6px; }
+  .scrap__num, .scrap__label { display: block; }
+  .scrap__cue { display: flex; align-items: center; gap: 0.3rem; font-family: var(--font-hand); font-size: 1.2rem; line-height: 1; color: var(--ink); margin-top: 0.35rem !important; }
+  .scrap__cue svg { width: 2.6rem; height: auto; overflow: visible; }
+  .scrap__cue .ink { stroke-width: 2; }
+  .scrap:hover .scrap__cue svg, .scrap:focus-within .scrap__cue svg { transform: translateX(3px); }
+  @media (prefers-reduced-motion: no-preference) { .scrap__cue svg { transition: transform 200ms ease; } }
+  .scrap { cursor: pointer; }
   .scrap__num { font-family: var(--font-hand); font-size: clamp(2.2rem, 1.8rem + 1.4vw, 3rem); line-height: 1.05; color: var(--accent-ink); }
   .scrap__num :global(mark) { color: var(--accent-ink); }
   .scrap__num--small { font-size: clamp(1.55rem, 1.3rem + 0.8vw, 1.95rem); }
@@ -51,7 +70,18 @@ const colors = ['blue', 'yellow', 'sage', 'rose'];
   @media (max-width: 420px) {
     .proof__grid { gap: var(--s1); }
     .scrap { padding: 1.4rem 0.8rem 0.9rem; }
-    .scrap__num { font-size: 1.75rem; }
+    .scrap__link { display: flex; flex-direction: column; gap: 0.45rem; color: var(--ink); text-decoration: none; }
+  .scrap__link::after { content: ''; position: absolute; inset: 0; z-index: 1; }
+  .scrap__link:focus-visible { outline: none; }
+  .scrap:has(.scrap__link:focus-visible) { outline: 2.5px dashed var(--accent-ink); outline-offset: 6px; }
+  .scrap__num, .scrap__label { display: block; }
+  .scrap__cue { display: flex; align-items: center; gap: 0.3rem; font-family: var(--font-hand); font-size: 1.2rem; line-height: 1; color: var(--ink); margin-top: 0.35rem !important; }
+  .scrap__cue svg { width: 2.6rem; height: auto; overflow: visible; }
+  .scrap__cue .ink { stroke-width: 2; }
+  .scrap:hover .scrap__cue svg, .scrap:focus-within .scrap__cue svg { transform: translateX(3px); }
+  @media (prefers-reduced-motion: no-preference) { .scrap__cue svg { transition: transform 200ms ease; } }
+  .scrap { cursor: pointer; }
+  .scrap__num { font-size: 1.75rem; }
     .scrap__num:not(.scrap__num--small) { white-space: nowrap; }
     .scrap__num--small { overflow-wrap: anywhere; }
     .scrap__num--small { font-size: 1.35rem; }
