@@ -120,7 +120,16 @@ Rules:
 
 ## Visual design: the sketchbook
 
-The concept comes from Autumn's theme brief (`.notes/sources/Website theme.txt`). The specific direction will be chosen from several drafts, but these rules hold for every draft:
+The concept comes from Autumn's theme brief (`.notes/sources/Website theme.txt`). **Chosen direction (2026-10-13): the "ink sketchbook"**, with tweaks:
+
+- **Base:** loose near-black ink line art with a slight wobble (one seeded wobbly-pen helper so every drawing matches); hand-drawn marker headings; numbered sections in the left margin, end-credits style; generous whitespace.
+- **Signature motion:** SVG line art draws itself on scroll; coral arrows connect problem → cause → fix → result in case studies; the active tab is circled in marker and the circle slides to the new tab while the page turns. All motion is off under `prefers-reduced-motion`.
+- **Accent:** one coral-red marker color for underlines, arrows, key numbers, the active tab and annotations.
+- **Highlighter:** classic yellow, used only for `==highlighted==` phrases. Red never stands in for highlighter.
+- **Paper:** faint graph-grid paper for the page background; lined paper inside index cards. Lines stay subtle enough that body text reads cleanly.
+- **Asides:** a mix of square sticky notes (short, punchy asides; yellow and a couple of muted colors, slightly rotated) and lined index cards (longer asides or explanations).
+
+These rules hold for every page:
 
 - **Paper everywhere.** Content sits on paper: sheets, notebook pages, index cards. Subtle texture, never noisy enough to hurt reading.
 - **Scroll-first.** Each page reads top to bottom like a sketchbook flipped through, or like movie end credits. **Not** center-aligned text; keep a strong left reading edge.
@@ -143,7 +152,7 @@ The concept comes from Autumn's theme brief (`.notes/sources/Website theme.txt`)
 
 ## Tech
 
-- **Stack (proposed):** Astro, static output, deployed to GitHub Pages. Case studies are Markdown/MDX content files using shared layouts and components (sticky note, taped image, highlight, callout, metric). Final stack is confirmed when a design direction is chosen.
+- **Stack:** Astro 7.3.5 (exact pins for every dependency), static output, deployed to GitHub Pages. The site lives in `site/`. Case studies are Markdown/MDX content (a content collection) rendered through shared layouts and components (sticky note, index card, taped image, highlight, status badge, metric, callout).
 - Keep JavaScript light. Animations should be CSS-first, with small islands only where needed (tab transitions). No jQuery.
 - Design tokens (colors, fonts, spacing, paper textures) live in one place as CSS custom properties.
 - Performance budget: Lighthouse ≥ 95 for performance and accessibility; fonts subset with `font-display: swap`; textures as small tiled images or CSS/SVG.
@@ -152,8 +161,8 @@ The concept comes from Autumn's theme brief (`.notes/sources/Website theme.txt`)
 ## Site structure
 
 Plan of record lives in `.notes/portfolio-brief.md`; the brief wins over this summary.
-- **Nav order:** About · Work · Contact · Side Projects (Side Projects is the optional appendix). The site still opens on Work.
-- **Work** (landing page). Featured case studies, in order:
+- **Nav order:** About · Work · Contact · Side Projects (Side Projects is the optional appendix). **About is the home page (`/`)**; Work lives at `/work/`, case studies at `/work/<slug>/`.
+- **Work** (`/work/`): the full portfolio. It opens straight into the work (no intro or portrait; those live on About). Featured case studies, in order:
   1. Release risk review: ~85% fewer severe defects (current role; source `.notes/sources/release-risk-review.md`)
   2. AI review routing → compliance AI roadmap (INL; "Approved · in build when I left")
   3. The internal AI toolkit, framed as a product for internal users (current role)
@@ -161,7 +170,7 @@ Plan of record lives in `.notes/portfolio-brief.md`; the brief wins over this su
   5. Expedite request intake (compact)
   Supporting work and a Tech Handoff strategy card appear as short cards.
 - **Side Projects:** HirePurpose, Room Reserve (labeled as a capstone), this site, a small strip of design work.
-- **About:** who I am and how I think, how I work, AI principles, a little personality (NWA; hiking, the outdoors, time with her kids, reading), photo. No timeline or job history; never name her city.
+- **About** (home, `/`): the intro ("Hi there! I'm Autumn", "Product manager. Hands-on builder.") and taped-in portrait; a short list of work (one line per case study, each linking to its case-study page, plus a "See all" link to `/work/`); who I am and how I think, how I work, AI principles, a little personality (NWA; hiking, the outdoors, time with her kids, reading). No timeline or job history; never name her city.
 - **Contact:** simple and direct.
 - Retired: Taniti Island, Graphic Design page, dollar figures in the hero, tool-tag lists, old flat illustrations, unused assets.
 
