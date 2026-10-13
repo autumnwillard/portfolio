@@ -1,0 +1,30 @@
+---
+// Wobbly hand-drawn rule with a small flourish at the end. Decorative.
+import { line, rng } from '../lib/ink';
+interface Props { seed?: number; flourish?: 'star' | 'arrow' | 'none' }
+const { seed = 7, flourish = 'star' } = Astro.props;
+const r = rng(seed);
+const len = 520 + Math.round(r() * 140);
+const rule = line(4, 12, len, 12 + (r() - 0.5) * 6, seed, 2.2);
+const end = len + 22;
+const star = [
+  line(end - 9, 12, end + 9, 12, seed + 3, 0.8),
+  line(end, 3, end, 21, seed + 4, 0.8),
+  line(end - 7, 5, end + 7, 19, seed + 5, 0.8),
+].join(' ');
+const arrowHead = `M${end - 14} 4 L${end} 12 L${end - 13} 20`;
+---
+<div class="divider" aria-hidden="true">
+  <svg class="draw" viewBox={`0 0 ${end + 16} 24`} width={end + 16} height="24" focusable="false">
+    <path class="ink ink--faint" d={rule} pathLength="1" />
+    {flourish === 'star' && <path class="ink ink--accent" style="--i:4" d={star} pathLength="1" />}
+    {flourish === 'arrow' && <path class="ink ink--faint" style="--i:4" d={arrowHead} pathLength="1" />}
+  </svg>
+</div>
+
+<style>
+  .divider { padding-left: var(--margin-col); }
+  .divider svg { width: min(100%, 40rem); height: auto; overflow: visible; }
+  .divider .ink { stroke-width: 2; }
+  @media (max-width: 760px) { .divider { padding-left: 0; } }
+</style>

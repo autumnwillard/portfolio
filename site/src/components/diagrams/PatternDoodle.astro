@@ -1,0 +1,17 @@
+---
+// pattern-arrow-doodle: speech bubble → curving arrow → magnifying glass. Decorative.
+import InkSvg from '../InkSvg.astro';
+import { arrow, loop, line } from '../../lib/ink';
+const a = arrow([[96, 52], [140, 20], [190, 30], [214, 66]], 501, 11);
+---
+<InkSvg viewBox="0 0 300 130" class="pattern-doodle">
+  <path class="ink" style="--i:0" d="M14 40 C14 22 30 14 52 14 C78 14 96 22 96 40 C96 58 80 66 56 66 L40 66 L26 84 L30 64 C20 60 14 52 14 40 Z" pathLength="1" />
+  <path class="ink" style="--i:0.6" d={`${line(36, 34, 74, 34, 502, 0.6)} ${line(36, 46, 64, 46, 503, 0.6)}`} pathLength="1" />
+  <path class="ink ink--accent ink--bold" style="--i:1.4" d={`${a.shaft} ${a.head}`} pathLength="1" />
+  <path class="ink ink--bold" style="--i:2.4" d={loop(244, 82, 26, 26, 504, 1.04)} pathLength="1" />
+  <path class="ink ink--bold" style="--i:3" d={line(263, 101, 288, 124, 505, 0.6)} pathLength="1" />
+</InkSvg>
+
+<style>
+  :global(svg.ink-svg.pattern-doodle) { width: 9rem; }
+</style>

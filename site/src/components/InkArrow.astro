@@ -1,0 +1,40 @@
+---
+// The thread through a case study: problem → cause → fix → result.
+// A loose arrow drops from one section to the next, drawing itself on scroll.
+import { arrow } from '../lib/ink';
+interface Props { from: string; to: string; seed?: number; flip?: boolean }
+const { from, to, seed = 1, flip = false } = Astro.props;
+const pts: [number, number][] = flip
+  ? [[30, 8], [60, 40], [44, 86], [70, 128]]
+  : [[60, 8], [26, 44], [48, 88], [28, 128]];
+const a = arrow(pts, seed, 13);
+---
+<div class="thread" aria-hidden="true">
+  <svg class="draw" viewBox="0 0 96 140" focusable="false">
+    <path class="ink ink--accent ink--bold" d={a.shaft} pathLength="1" />
+    <path class="ink ink--accent ink--bold" style="--i:6" d={a.head} pathLength="1" />
+  </svg>
+  <p class="thread__label"><span>{from}</span> <span class="thread__to">→ {to}</span></p>
+</div>
+
+<style>
+  .thread {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: var(--s2) 0 var(--s1) -0.4rem;
+    color: var(--accent-ink);
+  }
+  .thread svg { width: 4.6rem; height: auto; overflow: visible; flex: none; }
+  .thread__label {
+    font-family: var(--font-hand);
+    font-size: 1.75rem;
+    line-height: 1.1;
+    margin: 0;
+    transform: rotate(-2deg);
+  }
+  .thread__to { color: var(--ink); }
+  @media (min-width: 1180px) {
+    .thread { margin-left: calc(-1 * var(--margin-col) + 1rem); }
+  }
+</style>
