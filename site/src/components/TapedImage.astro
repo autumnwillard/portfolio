@@ -1,0 +1,67 @@
+---
+// A photo "taped in" with a single strip of masking tape (or two corner strips).
+// Tape is pure CSS, so the image itself stays clean.
+interface Source { srcset: string; type: string }
+interface Props {
+  src: string;              // fallback <img> src
+  sources?: Source[];       // e.g. webp srcset
+  srcset?: string;          // fallback srcset (jpg)
+  sizes?: string;
+  alt: string;
+  width: number;
+  height: number;
+  tilt?: number;
+  tape?: 'top' | 'corners';
+  caption?: string;
+  loading?: 'eager' | 'lazy';
+  fetchpriority?: 'high' | 'auto';
+  class?: string;
+  frame?: boolean;          // white border, like a print
+}
+const {
+  src, sources = [], srcset, sizes, alt, width, height,
+  tilt = -1.5, tape = 'top', caption, loading = 'lazy', fetchpriority = 'auto',
+  class: cls = '', frame = true,
+} = Astro.props;
+---
+<figure class:list={['taped', `taped--${tape}`, frame && 'taped--frame', cls]} style={`--tilt:${tilt}deg`}>
+  <div class="taped__body">
+    <picture>
+      {sources.map((s) => <source srcset={s.srcset} type={s.type} sizes={sizes} />)}
+      <img src={src} srcset={srcset} sizes={sizes} alt={alt} width={width} height={height}
+        loading={loading} decoding="async" fetchpriority={fetchpriority} />
+    </picture>
+    <span class="tape tape--a" aria-hidden="true"></span>
+    {tape === 'corners' && <span class="tape tape--b" aria-hidden="true"></span>}
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .taped { margin: 0; position: relative; }
+  .taped__body {
+    position: relative;
+    transform: rotate(var(--tilt));
+    box-shadow: var(--lift);
+    background: var(--paper-scrap);
+  }
+  .taped--frame .taped__body { padding: clamp(6px, 1.2vw, 12px); }
+  .taped img { width: 100%; height: auto; }
+  .tape {
+    position: absolute;
+    width: clamp(70px, 34%, 150px);
+    height: clamp(22px, 3.2vw, 34px);
+    background:
+      repeating-linear-gradient(90deg, transparent 0 5px, rgb(255 255 255 / 0.12) 5px 6px),
+      var(--tape);
+    border-top: 1px solid var(--tape-edge);
+    border-bottom: 1px solid var(--tape-edge);
+    /* torn ends */
+    clip-path: polygon(2% 0, 98% 4%, 100% 22%, 97% 41%, 100% 62%, 97% 83%, 99% 100%, 1% 96%, 3% 78%, 0 58%, 2% 37%, 0 17%);
+    box-shadow: 0 1px 2px rgb(60 50 40 / 0.12);
+  }
+  .taped--top .tape--a { top: clamp(-14px, -1.6vw, -10px); left: 50%; transform: translateX(-50%) rotate(-3deg); }
+  .taped--corners .tape--a { top: -10px; left: -18px; width: clamp(60px, 28%, 120px); transform: rotate(-38deg); }
+  .taped--corners .tape--b { bottom: -8px; right: -18px; width: clamp(60px, 28%, 120px); transform: rotate(-38deg); }
+  figcaption { margin-top: var(--s1); }
+</style>

@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import StickyNote from '../components/StickyNote.astro';
+import InkSvg from '../components/InkSvg.astro';
+import { arrow } from '../lib/ink';
+const trail = arrow([[20, 150], [70, 120], [60, 70], [110, 60], [130, 110], [100, 120], [150, 50], [210, 40]], 701, 0);
+---
+<BaseLayout
+  title="Contact · Autumn Willard"
+  description="Get in touch with Autumn Willard, a technical product manager and hands-on builder. Email, LinkedIn and résumé."
+  active="contact"
+>
+  <div class="page contact">
+    <div class="contact__head">
+      <h1>Let's talk.</h1>
+      <InkSvg viewBox="0 0 300 170" class="plane">
+        <path class="ink ink--faint ink--dash" d={trail.shaft} />
+        <path class="ink" style="--i:2" d="M212 40 L292 12 L246 78 L236 56 Z M236 56 L292 12" pathLength="1" />
+        <path class="ink" style="--i:3" d="M236 56 L232 72 L246 64" pathLength="1" />
+      </InkSvg>
+    </div>
+    <p class="lede">I'm looking for a product manager role, ideally one that's AI-related. I'm not hung up on the exact title. I want to own the what and the why, with a hand in the how and the when.</p>
+    <p>If that sounds like your team, email me. Tell me what you're building and what's hard about it right now. That's my favorite kind of first message.</p>
+
+    <dl class="ways">
+      <div>
+        <dt>Email</dt>
+        <dd>
+          <span class="addr">autumn<span>@</span>hey.com</span>
+          <span class="ways__btns">
+            <a class="btn btn--primary js-email" href="#" data-u="autumn" data-d="hey.com">Email me</a>
+            <button class="btn btn--quiet js-copy-email" type="button" data-u="autumn" data-d="hey.com" hidden>Copy address</button>
+          </span>
+        </dd>
+      </div>
+      <div>
+        <dt>LinkedIn</dt>
+        <dd>
+          <span class="addr">linkedin.com/in/autumn-willard</span>
+          <a class="btn" href="https://www.linkedin.com/in/autumn-willard">Connect on LinkedIn</a>
+        </dd>
+      </div>
+      <div>
+        <dt>Résumé</dt>
+        <dd><a class="btn" href="/autumn-willard-resume.pdf">Download résumé (PDF)</a></dd>
+      </div>
+    </dl>
+
+    <StickyNote tilt={-1.8} seed={71}>
+      My dream company is hiring? Crap. If that's you: hi. The email's right there.
+    </StickyNote>
+  </div>
+</BaseLayout>
+
+<style>
+  .contact { padding: var(--s3) var(--gutter) var(--s4) calc(var(--gutter) + var(--margin-col)); }
+  .contact__head { display: flex; align-items: flex-end; gap: var(--s2); flex-wrap: wrap; }
+  .contact__head :global(.plane) { width: 13rem; }
+  .lede { font-size: var(--step-1); font-weight: 600; }
+  .ways { margin: var(--s3) 0; display: grid; gap: var(--s2); max-width: 44rem; }
+  .ways > div { border-top: 2px solid var(--ink); padding-top: 0.6rem; }
+  .ways dt { font: 800 0.8rem/1.2 var(--font-body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); }
+  .ways dd { margin: 0.4rem 0 0; display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem; align-items: center; }
+  .addr { font-weight: 800; font-size: var(--step-1); overflow-wrap: anywhere; }
+  .ways__btns { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  @media (max-width: 760px) { .contact { padding-left: var(--gutter); } .contact__head :global(.plane) { width: 9rem; } }
+</style>

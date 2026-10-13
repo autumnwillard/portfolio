@@ -1,0 +1,64 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TapedImage from '../components/TapedImage.astro';
+import StickyNote from '../components/StickyNote.astro';
+import Highlight from '../components/Highlight.astro';
+import InkDivider from '../components/InkDivider.astro';
+---
+<BaseLayout
+  title="About · Autumn Willard"
+  description="How Autumn Willard thinks and works: finding the problem behind the complaint, sizing it with data, and using AI with a human in the loop."
+  active="about"
+>
+  <div class="page">
+    <section class="about-hero">
+      <div class="about-hero__photo">
+        <TapedImage
+          src="/images/hero-640.jpg"
+          sources={[{ type: 'image/webp', srcset: '/images/hero-640.webp 640w, /images/hero-960.webp 960w' }]}
+          srcset="/images/hero-640.jpg 640w, /images/hero-960.jpg 960w"
+          sizes="(max-width: 760px) 50vw, 340px"
+          alt="Autumn Willard"
+          width={640}
+          height={640}
+          tilt={-2.4}
+          tape="corners"
+          loading="eager"
+        />
+      </div>
+      <div>
+        <h1>Hi, I'm Autumn.</h1>
+        <p class="about-hero__sub">Professional translator. (Business to engineering. Not French.)</p>
+        <p>I'm a technical product manager and hands-on builder. I find the problem behind the complaint, decide what's worth building, get people on board, and measure whether it worked.</p>
+        <p>Some of what that's looked like: I designed a national lab's first AI review product and got it approved for build (it was in build when I left). More recently, I cut severe defects ~85% on a B2B SaaS document management platform.</p>
+      </div>
+    </section>
+
+    <InkDivider seed={44} />
+
+    <section class="sheet-section" aria-labelledby="think-h">
+      <span class="margin-mark" aria-hidden="true">01</span>
+      <div class="section-body">
+        <h2 id="think-h">How I think</h2>
+        <h3>The complaint tells you where it hurts. Not why.</h3>
+        <p>Most of my best work started with somebody annoyed. At the lab, it was "reviews take forever." The reviewers weren't slow. The screening answers that decided who reviewed what were too unreliable to route on, so every item got reviewed twice. <Highlight>I fixed the input instead of blaming the reviewers.</Highlight></p>
+        <p>So when someone brings me a problem, I take the complaint seriously and then go find out what's actually causing it. Usually that means walking the system as a brand-new user, reading the code or querying the data. It rarely means building the first thing someone asked for.</p>
+        <h3>I'd rather be honest than impressive.</h3>
+        <p>If a number is projected, I say projected. If a project hadn't shipped when I left, I say that up front, because a hiring manager who catches one inflated claim stops trusting the rest. Same goes for credit: I say "we" when it was we.</p>
+        <StickyNote tilt={1.5} seed={61}>
+          The lab's self-serve help site was built by a co-worker and me, and it's credited that way.
+        </StickyNote>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .about-hero { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: var(--s4); align-items: center; padding: var(--s3) 0 var(--s4) var(--margin-col); }
+  .about-hero__sub { font-family: var(--font-hand); font-size: var(--step-2); line-height: 1.2; color: var(--accent-ink); }
+  .about-hero__photo { padding-top: var(--s1); }
+  @media (max-width: 760px) {
+    .about-hero { grid-template-columns: 1fr; padding-left: 0; gap: var(--s2); }
+    .about-hero__photo { max-width: 220px; }
+  }
+</style>

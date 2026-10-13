@@ -1,0 +1,121 @@
+---
+// release-risk-review-claude-vs-team: sketched review spreadsheet with
+// "Claude says" and "We decided" columns; the disagreement is circled.
+// Placeholder IDs and titles only.
+import InkSvg from '../InkSvg.astro';
+import { rect, line, loop, arrow, swoosh } from '../../lib/ink';
+
+const label =
+  'Sketch of the review spreadsheet with a column for Claude’s recommendation and a separate column for the team’s decision. Where the two disagree, the difference is fed back to improve the rules.';
+
+const rows = [
+  { id: 'TICKET-101', title: 'Update export settings', claude: ['Revert: dependency', 'not merged'], we: ['No action: dependency', 'ships same release'] },
+  { id: 'TICKET-102', title: 'Rename a status label', claude: ['No action'], we: ['No action'] },
+  { id: 'TICKET-103', title: 'Add a search filter', claude: ['Untag: no code', 'on the branch'], we: ['Untag'] },
+];
+
+/* wide: 4 columns */
+const W = { x: [20, 140, 318, 490, 660], head: 70, rowH: [62, 42, 58] };
+const wideRowY = [W.head + 38];
+for (const h of W.rowH) wideRowY.push(wideRowY[wideRowY.length - 1] + h);
+const wideLoop = loop(489, wideRowY[0] + 31, 186, 36, 61, 1.08);
+const wideArrow = arrow([[600, wideRowY[0] + 68], [624, 250], [600, 300], [548, 322]], 62, 11);
+
+/* narrow: 3 columns (no title) */
+const N = { x: [12, 116, 246, 372], head: 64, rowH: [80, 44, 62] };
+const nRows = [
+  { claude: ['Revert:', 'dependency', 'not merged'], we: ['No action:', 'dependency ships', 'same release'] },
+  { claude: ['No action'], we: ['No action'] },
+  { claude: ['Untag: no code', 'on the branch'], we: ['Untag'] },
+];
+const narrowRowY = [N.head + 38];
+for (const h of N.rowH) narrowRowY.push(narrowRowY[narrowRowY.length - 1] + h);
+const narrowLoop = loop(244, narrowRowY[0] + 40, 140, 48, 63, 1.08);
+const narrowArrow = arrow([[300, narrowRowY[0] + 88], [334, 352], [300, 384], [262, 392]], 64, 11);
+
+const hdr = (cls = '') => `ink-sans ink-fade ${cls}`;
+---
+<div class="cvt">
+  <InkSvg viewBox="0 0 680 410" label={label} class="only-wide">
+    <!-- tabs -->
+    <path class="ink" style="--i:0" d={`M20 64 L24 34 Q26 26 34 26 L118 26 Q126 26 128 34 L134 64`} pathLength="1" />
+    <text class="ink-sans ink-fade" style="--i:0" x="77" y="52" font-size="15" font-weight="800" text-anchor="middle">Summary</text>
+    <path class="ink ink--accent" style="--i:1" d={swoosh(38, 58, 80, 4, 1.5)} pathLength="1" />
+    <path class="ink ink--faint" style="--i:1" d={`M136 64 L140 40 Q142 33 149 33 L214 33 Q221 33 223 40 L228 64`} pathLength="1" />
+    <text class="ink-sans ink-fade" style="--i:1" x="182" y="55" font-size="15" text-anchor="middle" fill="#57524c">Tickets</text>
+
+    <!-- highlighted columns -->
+    <rect class="ink-fade" style="--i:2" x={W.x[2] + 4} y={W.head + 4} width={W.x[3] - W.x[2] - 8} height={wideRowY[3] - W.head - 8} rx="8" fill="rgb(224 74 50 / 0.16)" />
+    <rect class="ink-fade" style="--i:2" x={W.x[3] + 4} y={W.head + 4} width={W.x[4] - W.x[3] - 8} height={wideRowY[3] - W.head - 8} rx="8" fill="rgb(224 74 50 / 0.16)" />
+
+    <!-- grid -->
+    <path class="ink" style="--i:2" d={rect(20, W.head, 640, wideRowY[3] - W.head, 70, 1.2)} pathLength="1" />
+    {wideRowY.slice(0, 3).map((y, i) => <path class="ink ink--faint" style={`--i:${3 + i * 0.3}`} d={line(22, y, 658, y + (i - 1), 71 + i, 1)} pathLength="1" />)}
+    {W.x.slice(1, 4).map((x, i) => <path class="ink ink--faint" style={`--i:${3 + i * 0.3}`} d={line(x, W.head + 2, x + 1, wideRowY[3] - 2, 75 + i, 1)} pathLength="1" />)}
+
+    <text class={hdr()} style="--i:4" x={W.x[0] + 12} y={W.head + 25} font-size="15" font-weight="800">Ticket</text>
+    <text class={hdr()} style="--i:4" x={W.x[1] + 12} y={W.head + 25} font-size="15" font-weight="800">Title</text>
+    <text class={hdr()} style="--i:4" x={W.x[2] + 12} y={W.head + 25} font-size="15" font-weight="800">Claude says</text>
+    <text class={hdr()} style="--i:4" x={W.x[3] + 12} y={W.head + 25} font-size="15" font-weight="800">We decided</text>
+
+    {rows.map((r, i) => {
+      const y = wideRowY[i] + 25;
+      return (
+        <g>
+          <text class={hdr()} style={`--i:${5 + i * 0.3}`} x={W.x[0] + 12} y={y} font-size="14">{r.id}</text>
+          <text class={hdr()} style={`--i:${5 + i * 0.3}`} x={W.x[1] + 12} y={y} font-size="14">{r.title}</text>
+          {r.claude.map((t, k) => <text class={hdr()} style={`--i:${5 + i * 0.3}`} x={W.x[2] + 12} y={y + k * 19} font-size="14">{t}</text>)}
+          {r.we.map((t, k) => <text class={hdr()} style={`--i:${5 + i * 0.3}`} x={W.x[3] + 12} y={y + k * 19} font-size="14">{t}</text>)}
+        </g>
+      );
+    })}
+
+    <!-- circle the disagreement, arrow to the note -->
+    <path class="ink ink--accent ink--bold" style="--i:7" d={wideLoop} pathLength="1" />
+    <path class="ink ink--accent" style="--i:8" d={wideArrow.shaft + ' ' + wideArrow.head} pathLength="1" />
+    <g transform="translate(276 298) rotate(-2.5)">
+      <path class="paper-scrap ink-fade" style="--i:9" d="M0 4 L258 0 L262 54 L2 58 Z" />
+      <path class="ink ink--faint" style="--i:9" d={rect(0, 2, 260, 54, 81, 1)} pathLength="1" />
+      <text class="ink-text ink-fade" style="--i:9" x="16" y="37" font-size="22">this goes back into the rules</text>
+    </g>
+  </InkSvg>
+
+  <InkSvg viewBox="0 0 384 440" label={label} class="only-narrow">
+    <path class="ink" style="--i:0" d={`M12 58 L16 30 Q18 22 26 22 L104 22 Q112 22 114 30 L120 58`} pathLength="1" />
+    <text class="ink-sans ink-fade" style="--i:0" x="66" y="47" font-size="15" font-weight="800" text-anchor="middle">Summary</text>
+    <path class="ink ink--faint" style="--i:1" d={`M122 58 L126 34 Q128 28 135 28 L194 28 Q201 28 203 34 L208 58`} pathLength="1" />
+    <text class="ink-sans ink-fade" style="--i:1" x="165" y="50" font-size="15" text-anchor="middle" fill="#57524c">Tickets</text>
+
+    <rect class="ink-fade" style="--i:2" x={N.x[1] + 4} y={N.head + 4} width={N.x[2] - N.x[1] - 8} height={narrowRowY[3] - N.head - 8} rx="8" fill="rgb(224 74 50 / 0.16)" />
+    <rect class="ink-fade" style="--i:2" x={N.x[2] + 4} y={N.head + 4} width={N.x[3] - N.x[2] - 8} height={narrowRowY[3] - N.head - 8} rx="8" fill="rgb(224 74 50 / 0.16)" />
+    <path class="ink" style="--i:2" d={rect(12, N.head, 360, narrowRowY[3] - N.head, 90, 1.2)} pathLength="1" />
+    {narrowRowY.slice(0, 3).map((y, i) => <path class="ink ink--faint" style="--i:3" d={line(14, y, 370, y, 91 + i, 1)} pathLength="1" />)}
+    {N.x.slice(1, 3).map((x, i) => <path class="ink ink--faint" style="--i:3" d={line(x, N.head + 2, x, narrowRowY[3] - 2, 95 + i, 1)} pathLength="1" />)}
+
+    <text class={hdr()} style="--i:4" x={N.x[0] + 10} y={N.head + 25} font-size="14" font-weight="800">Ticket</text>
+    <text class={hdr()} style="--i:4" x={N.x[1] + 10} y={N.head + 25} font-size="14" font-weight="800">Claude says</text>
+    <text class={hdr()} style="--i:4" x={N.x[2] + 10} y={N.head + 25} font-size="14" font-weight="800">We decided</text>
+    {rows.map((r, i) => {
+      const y = narrowRowY[i] + 25;
+      return (
+        <g>
+          <text class={hdr()} style="--i:5" x={N.x[0] + 10} y={y} font-size="13">{r.id}</text>
+          {nRows[i].claude.map((t, k) => <text class={hdr()} style="--i:5" x={N.x[1] + 10} y={y + k * 18} font-size="13">{t}</text>)}
+          {nRows[i].we.map((t, k) => <text class={hdr()} style="--i:5" x={N.x[2] + 10} y={y + k * 18} font-size="13">{t}</text>)}
+        </g>
+      );
+    })}
+    <path class="ink ink--accent ink--bold" style="--i:7" d={narrowLoop} pathLength="1" />
+    <path class="ink ink--accent" style="--i:8" d={narrowArrow.shaft + ' ' + narrowArrow.head} pathLength="1" />
+    <g transform="translate(20 370) rotate(-2)">
+      <path class="paper-scrap ink-fade" style="--i:9" d="M0 4 L232 0 L236 54 L2 58 Z" />
+      <path class="ink ink--faint" style="--i:9" d={rect(0, 2, 234, 54, 99, 1)} pathLength="1" />
+      <text class="ink-text ink-fade" style="--i:9" x="14" y="37" font-size="22">this goes back into the rules</text>
+    </g>
+  </InkSvg>
+</div>
+
+<style>
+  .cvt { max-width: 760px; }
+  .cvt :global(.paper-scrap) { fill: #fff; }
+</style>

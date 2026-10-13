@@ -1,0 +1,93 @@
+---
+// An aside. In this direction it is a torn scrap of sketch paper (default)
+// or a marker-bordered box. Text stays live HTML in the body font.
+import { rng } from '../lib/ink';
+
+interface Props {
+  variant?: 'scrap' | 'box';
+  tilt?: number;      // degrees
+  seed?: number;
+  class?: string;
+  float?: boolean;    // float into the right margin on wide case-study pages
+}
+const { variant = 'scrap', tilt = -1.2, seed = 3, class: cls = '', float = false } = Astro.props;
+
+// Torn top and bottom edges as a polygon clip-path.
+const r = rng(seed);
+const top: string[] = [];
+const bottom: string[] = [];
+for (let x = 0; x <= 100; x += 3.4) {
+  const xx = Math.min(100, x).toFixed(1);
+  top.push(`${xx}% ${(r() * 5).toFixed(1)}px`);
+  bottom.push(`${xx}% calc(100% - ${(r() * 6).toFixed(1)}px)`);
+}
+top.push(`100% ${(r() * 4).toFixed(1)}px`);
+bottom.push(`100% calc(100% - ${(r() * 4).toFixed(1)}px)`);
+const clip = `polygon(${[...top, ...bottom.reverse()].join(', ')})`;
+---
+<aside
+  class:list={['note', `note--${variant}`, float && 'note--float', cls]}
+  style={`--tilt:${tilt}deg; --clip:${clip}`}
+  aria-label="Aside"
+>
+  <div class="note__paper">
+    <div class="note__text"><slot /></div>
+  </div>
+</aside>
+
+<style>
+  .note {
+    --pad: 1.15rem 1.35rem 1.25rem;
+    position: relative;
+    max-width: 30rem;
+    margin: var(--s3) 0;
+    transform: rotate(var(--tilt));
+  }
+  .note__text { font-size: 1.05rem; line-height: 1.55; font-weight: 600; color: var(--ink); }
+  .note__text :global(p) { margin: 0; }
+  .note__text :global(p + p) { margin-top: 0.6rem; }
+  .note__text :global(a) { font-weight: 700; }
+
+  /* Torn scrap of paper */
+  .note--scrap { filter: drop-shadow(0 1px 1px rgb(60 50 40 / 0.1)) drop-shadow(0 6px 8px rgb(60 50 40 / 0.12)); }
+  .note--scrap .note__paper {
+    background: var(--paper-scrap);
+    padding: var(--pad);
+    padding-top: 1.45rem;
+    clip-path: var(--clip);
+    position: relative;
+  }
+  /* a pencil-scribbled margin tick so it reads as a note, not a card */
+  .note--scrap .note__paper::before {
+    content: '';
+    position: absolute;
+    left: 0.65rem;
+    top: 1.3rem;
+    bottom: 1.2rem;
+    width: 3px;
+    border-radius: 3px;
+    background: var(--accent);
+    opacity: 0.85;
+  }
+
+  /* Marker-bordered box */
+  .note--box .note__paper {
+    padding: var(--pad);
+    border: 2.5px solid var(--ink);
+    border-radius: var(--wobble-radius);
+    background: transparent;
+  }
+
+  @media (min-width: 1180px) {
+    .note--float {
+      float: right;
+      clear: right;
+      width: 17.5rem;
+      margin: 0.3rem calc(-1 * (17.5rem + var(--s3))) var(--s2) var(--s3);
+    }
+  }
+  @media (max-width: 520px) {
+    .note { --pad: 1rem 1.05rem 1.1rem; transform: rotate(calc(var(--tilt) * 0.5)); }
+    .note__text { font-size: 1rem; }
+  }
+</style>

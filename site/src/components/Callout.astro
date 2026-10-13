@@ -1,0 +1,38 @@
+---
+// A marker-bordered box for the one thing a skimmer must not miss.
+interface Props { label?: string; class?: string }
+const { label, class: cls = '' } = Astro.props;
+---
+<div class:list={['callout', cls]}>
+  {label && <p class="callout__label">{label}</p>}
+  <div class="callout__body"><slot /></div>
+</div>
+
+<style>
+  .callout {
+    position: relative;
+    max-width: calc(var(--measure) + 3rem);
+    margin: var(--s3) 0;
+    padding: var(--s2) var(--s2) calc(var(--s2) - 0.4rem);
+    border: 2.5px solid var(--ink);
+    border-radius: var(--wobble-radius);
+  }
+  .callout::after {
+    /* second, offset pen pass: makes the border read as drawn twice by hand */
+    content: '';
+    position: absolute;
+    inset: 4px -5px -4px 3px;
+    border: 1.5px solid var(--ink-faint);
+    border-radius: var(--wobble-radius-2);
+    pointer-events: none;
+  }
+  .callout__label {
+    font-family: var(--font-hand);
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--accent-ink);
+    margin: 0 0 0.5rem;
+  }
+  .callout__body :global(p:last-child) { margin-bottom: 0.4rem; }
+  .callout__body { font-size: var(--step-1); line-height: 1.55; }
+</style>

@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TapedImage from '../components/TapedImage.astro';
+import StatusBadge from '../components/StatusBadge.astro';
+import InkDivider from '../components/InkDivider.astro';
+---
+<BaseLayout
+  title="Side Projects · Autumn Willard"
+  description="What Autumn Willard builds on her own time, from a Rails app made in 5 days to a senior capstone, and why building makes her a better product manager."
+  active="side-projects"
+>
+  <div class="page">
+    <section class="intro">
+      <h1>Side projects</h1>
+      <p class="intro__sub">I build things, so I know what I'm asking engineers for.</p>
+      <p>My day job is deciding what gets built. On my own time, I build things myself. Partly because it's fun, and partly because it keeps me honest about what "just add a button" actually costs.</p>
+    </section>
+
+    <InkDivider seed={81} />
+
+    <section class="sheet-section" aria-labelledby="hp-h">
+      <span class="margin-mark" aria-hidden="true">01</span>
+      <div class="section-body hp">
+        <div>
+          <h2 id="hp-h">My dream company is hiring? Crap.</h2>
+          <p class="hp__tag">A tale of wanting to impress while under great distress. How hard could it be to build a Rails app in 5 days?</p>
+          <p class="hp__meta"><StatusBadge status="Personal project" size="sm" /> <span>Ruby on Rails · 5 days</span> <a class="text-link" href="https://github.com/autumnwillard/HirePurpose">View the code on GitHub</a></p>
+          <p>37signals posted a junior Rails developer role. I'd planned to learn Rails <em>eventually</em> and apply in a few years. I was working in .NET at the time, and my only previous run at Rails had ended in a pile of routing errors. Then the posting went up, and "eventually" turned into "this week."</p>
+          <p><strong>The constraint.</strong> 5 days, close to zero Rails knowledge, and an application window that was closing fast. I'd already spent days on the cover letter.</p>
+        </div>
+        <TapedImage
+          src="/images/hirepurpose-sketch-560.jpg"
+          sources={[{ type: 'image/webp', srcset: '/images/hirepurpose-sketch-560.webp' }]}
+          alt="Autumn's pencil sketches of the HirePurpose app screens."
+          width={560}
+          height={996}
+          tilt={2.5}
+          class="hp__sketch"
+        />
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .intro { padding: var(--s3) 0 var(--s3) var(--margin-col); }
+  .intro__sub { font-family: var(--font-hand); font-size: var(--step-2); line-height: 1.2; color: var(--accent-ink); max-width: 30ch; }
+  .hp { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 240px); gap: var(--s4); align-items: start; }
+  .hp__tag { font-size: var(--step-1); font-weight: 600; }
+  .hp__meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; color: var(--ink-soft); font-weight: 700; }
+  @media (max-width: 760px) {
+    .intro { padding-left: 0; }
+    .hp { grid-template-columns: 1fr; }
+    .hp :global(.hp__sketch) { max-width: 200px; }
+  }
+</style>

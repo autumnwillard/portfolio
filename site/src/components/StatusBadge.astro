@@ -1,0 +1,28 @@
+---
+// Rubber-stamp status chip. Not-yet-real statuses (projected, approved-not-shipped)
+// get a dashed outline so they never look like shipped results.
+interface Props { status: string; size?: 'sm' | 'md' }
+const { status, size = 'md' } = Astro.props;
+const tentative = /projected|approved|estimate/i.test(status);
+---
+<span class:list={['stamp', `stamp--${size}`, tentative && 'stamp--tentative']}>
+  <span class="visually-hidden">Status: </span>{status}
+</span>
+
+<style>
+  .stamp {
+    display: inline-block;
+    font: 800 0.78rem/1.2 var(--font-body);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink);
+    padding: 0.32rem 0.6rem 0.28rem;
+    border: 2px solid var(--ink);
+    border-radius: var(--wobble-radius-2);
+    transform: rotate(-1.5deg);
+    white-space: normal;
+    background: var(--paper-scrap);
+  }
+  .stamp--sm { font-size: 0.72rem; padding: 0.22rem 0.5rem 0.2rem; }
+  .stamp--tentative { border-style: dashed; color: var(--ink-soft); }
+</style>

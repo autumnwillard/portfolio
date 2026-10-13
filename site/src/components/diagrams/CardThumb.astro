@@ -1,0 +1,147 @@
+---
+// Small ink sketches used as card thumbnails. All on the same 400×260 sheet.
+import InkSvg from '../InkSvg.astro';
+import { rect, line, arrow, loop, scribble } from '../../lib/ink';
+
+type Kind = 'routing' | 'toolkit' | 'review-system' | 'intake' | 'tech-handoff' | 'room-reserve';
+interface Props { kind: Kind; label?: string }
+const { kind } = Astro.props;
+
+const labels: Record<Kind, string> = {
+  routing: 'Before: every item went to both reviews. After (planned): AI-answered screening sends each item only to the reviews it needs.',
+  toolkit: 'In one release, the triage workflow reviewed 114 items and recommended 16.',
+  'review-system': 'Redesigned record panel: a visible greyed-out submit button and an ‘Unsubmitted Draft’ status.',
+  intake: 'Before: requests bounced around email. After: one form routed them automatically.',
+  'tech-handoff': 'A two-by-two chart of budget versus having an in-house team. The pivot moved from small businesses with little budget to mid-size businesses with budget but no in-house team, skipping large companies that already have IT.',
+  'room-reserve': 'Sketched data model for Room Reserve: rooms, reservations and customers.',
+};
+const label = Astro.props.label ?? labels[kind];
+const A = (pts: [number, number][], s: number, h = 9) => { const a = arrow(pts, s, h); return `${a.shaft} ${a.head}`; };
+---
+<InkSvg viewBox="0 0 400 260" label={label} class={`thumb thumb--${kind}`}>
+  {kind === 'routing' && (
+    <>
+      <text class="ink-text ink-fade" x="14" y="28" font-size="21">Before</text>
+      <path class="ink" style="--i:0" d={rect(20, 52, 80, 40, 401)} pathLength="1" />
+      <text class="ink-text ink-fade" x="60" y="78" font-size="19" text-anchor="middle">item</text>
+      <path class="ink" style="--i:1" d={A([[104, 66], [190, 46], [262, 40]], 402)} pathLength="1" />
+      <path class="ink" style="--i:1" d={A([[104, 78], [190, 92], [262, 100]], 403)} pathLength="1" />
+      <path class="ink" style="--i:2" d={rect(268, 22, 104, 36, 404)} pathLength="1" />
+      <path class="ink" style="--i:2" d={rect(268, 84, 104, 36, 405)} pathLength="1" />
+      <text class="ink-text ink-fade" x="320" y="46" font-size="19" text-anchor="middle">review</text>
+      <text class="ink-text ink-fade" x="320" y="108" font-size="19" text-anchor="middle">review</text>
+      <path class="ink ink--faint" style="--i:3" d={line(14, 136, 386, 134, 406, 1.4)} pathLength="1" />
+      <text class="ink-text ink-fade" x="14" y="164" font-size="21">After (planned)</text>
+      <path class="ink" style="--i:4" d={rect(20, 192, 64, 40, 407)} pathLength="1" />
+      <text class="ink-text ink-fade" x="52" y="218" font-size="19" text-anchor="middle">item</text>
+      <path class="ink" style="--i:4" d={A([[88, 212], [100, 211], [112, 212]], 408, 7)} pathLength="1" />
+      <path class="ink ink--bold" style="--i:5" d={rect(116, 190, 112, 44, 409)} pathLength="1" />
+      <text class="ink-text ink-fade" x="172" y="210" font-size="17" text-anchor="middle">AI-answered</text>
+      <text class="ink-text ink-fade" x="172" y="228" font-size="17" text-anchor="middle">screening</text>
+      <path class="ink ink--accent ink--bold" style="--i:6" d={A([[232, 208], [250, 196], [262, 188]], 410)} pathLength="1" />
+      <path class="ink" style="--i:6" d={rect(268, 166, 104, 36, 411)} pathLength="1" />
+      <text class="ink-text ink-fade" x="320" y="190" font-size="19" text-anchor="middle">review</text>
+      <rect class="ink-fade" x="268" y="214" width="104" height="36" rx="4" fill="none" stroke="#a49d93" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round" />
+      <text class="ink-text ink-text--soft ink-fade" x="320" y="238" font-size="19" text-anchor="middle">not needed</text>
+    </>
+  )}
+
+  {kind === 'toolkit' && (
+    <>
+      <text class="ink-text ink-text--accent ink-fade" x="200" y="40" font-size="34" text-anchor="middle">114 items</text>
+      <path class="ink ink--bold" style="--i:0" d={`${line(48, 62, 352, 60, 421, 1.6)} ${line(352, 60, 232, 168, 422, 1.4)} ${line(232, 168, 230, 196, 423, 1)} ${line(168, 196, 170, 168, 424, 1)} ${line(170, 168, 48, 62, 425, 1.4)}`} pathLength="1" />
+      {Array.from({ length: 22 }, (_, i) => {
+        const x = 80 + (i % 11) * 24 + (i > 10 ? 12 : 0);
+        const y = 78 + Math.floor(i / 11) * 18;
+        return <circle class="ink-fade" style={`--i:${1 + i * 0.05}`} cx={x} cy={y} r="3.4" fill="#57524c" />;
+      })}
+      {Array.from({ length: 3 }, (_, i) => <circle class="ink-fade" style="--i:3" cx={188 + i * 12} cy={150} r="3.4" fill="#e04a32" />)}
+      <path class="ink ink--accent" style="--i:3" d={A([[200, 200], [202, 212], [200, 222]], 426, 8)} pathLength="1" />
+      <text class="ink-text ink-text--accent ink-fade" x="200" y="252" font-size="30" text-anchor="middle">16 recommended</text>
+    </>
+  )}
+
+  {kind === 'review-system' && (
+    <>
+      <path class="ink" style="--i:0" d={rect(26, 16, 348, 228, 431, 1.4)} pathLength="1" />
+      <path class="ink ink--faint" style="--i:1" d={line(28, 46, 372, 46, 432, 1)} pathLength="1" />
+      {[0, 1, 2].map((k) => <circle class="ink-fade" cx={44 + k * 14} cy="31" r="4" fill="none" stroke="#a49d93" stroke-width="1.6" />)}
+      <path class="ink ink--faint" style="--i:2" d={line(48, 78, 160, 78, 433, 1.2)} pathLength="1" />
+      <path class="ink ink--faint" style="--i:2" d={line(48, 100, 132, 100, 434, 1.2)} pathLength="1" />
+      <path class="ink ink--faint" style="--i:2" d={line(48, 122, 150, 122, 435, 1.2)} pathLength="1" />
+      <text class="ink-sans ink-fade" x="200" y="74" font-size="13" font-weight="700" fill="#57524c">Status</text>
+      <rect class="ink-fade" style="--i:3" x="196" y="84" width="164" height="34" rx="7" fill="rgb(224 74 50 / 0.26)" transform="rotate(-1.5 278 101)" />
+      <text class="ink-text ink-fade" x="278" y="109" font-size="22" text-anchor="middle">Unsubmitted Draft</text>
+      <rect class="ink-fade" x="48" y="168" width="128" height="44" rx="10" fill="#ece9e2" stroke="#a49d93" stroke-width="2" stroke-dasharray="5 5" />
+      <text class="ink-sans ink-fade" x="112" y="196" font-size="16" font-weight="700" text-anchor="middle" fill="#6b655e">Submit</text>
+      <path class="ink ink--accent" style="--i:5" d={A([[226, 222], [206, 214], [186, 198]], 436, 9)} pathLength="1" />
+      <text class="ink-text ink-text--accent ink-fade" x="232" y="236" font-size="19">visible, greyed out</text>
+    </>
+  )}
+
+  {kind === 'intake' && (
+    <>
+      <text class="ink-text ink-fade" x="14" y="28" font-size="21">Before</text>
+      {[[60, 90], [160, 70], [110, 190]].map(([x, y], i) => (
+        <>
+          <path class="ink" style={`--i:${i * 0.4}`} d={loop(x, y, 16, 16, 441 + i, 1.02)} pathLength="1" />
+          <path class="ink" style={`--i:${i * 0.4}`} d={line(x - 22, y + 38, x + 22, y + 38, 444 + i, 1)} pathLength="1" />
+        </>
+      ))}
+      <path class="ink ink--accent" style="--i:2" d={A([[82, 80], [110, 60], [138, 66]], 447, 8)} pathLength="1" />
+      <path class="ink ink--accent" style="--i:2.4" d={A([[168, 112], [160, 160], [132, 182]], 448, 8)} pathLength="1" />
+      <path class="ink ink--accent" style="--i:2.8" d={A([[88, 184], [52, 160], [56, 132]], 449, 8)} pathLength="1" />
+      <path class="ink ink--accent" style="--i:3.2" d={A([[150, 96], [118, 118], [80, 112]], 450, 8)} pathLength="1" />
+      <path class="ink ink--faint" style="--i:3" d={line(208, 20, 210, 244, 451, 1.6)} pathLength="1" />
+      <text class="ink-text ink-fade" x="226" y="28" font-size="21">After</text>
+      <path class="ink" style="--i:4" d={rect(232, 52, 62, 82, 452, 1.2)} pathLength="1" />
+      <path class="ink ink--faint" style="--i:4" d={`${line(242, 72, 284, 72, 453, 0.6)} ${line(242, 90, 278, 90, 454, 0.6)} ${line(242, 108, 284, 108, 455, 0.6)}`} pathLength="1" />
+      <text class="ink-text ink-fade" x="263" y="156" font-size="18" text-anchor="middle">form</text>
+      <path class="ink ink--bold" style="--i:5" d={A([[300, 94], [322, 120], [334, 150]], 456, 10)} pathLength="1" />
+      <path class="ink" style="--i:6" d={`${line(300, 176, 310, 220, 457, 1)} ${line(310, 220, 380, 220, 458, 1)} ${line(380, 220, 388, 176, 459, 1)} ${line(300, 176, 330, 178, 460, 1)} ${line(358, 178, 388, 176, 461, 1)} ${line(330, 178, 336, 192, 462, 0.6)} ${line(336, 192, 352, 192, 463, 0.6)} ${line(352, 192, 358, 178, 464, 0.6)}`} pathLength="1" />
+      <text class="ink-text ink-fade" x="344" y="246" font-size="18" text-anchor="middle">routed</text>
+    </>
+  )}
+
+  {kind === 'tech-handoff' && (
+    <>
+      <path class="ink ink--faint" style="--i:1" d={line(222, 22, 220, 214, 471, 1.2)} pathLength="1" />
+      <path class="ink ink--faint" style="--i:1" d={line(56, 120, 388, 118, 472, 1.2)} pathLength="1" />
+      <path class="ink ink--bold" style="--i:0" d={A([[52, 216], [220, 218], [390, 214]], 473, 10)} pathLength="1" />
+      <path class="ink ink--bold" style="--i:0" d={A([[52, 216], [50, 120], [52, 14]], 474, 10)} pathLength="1" />
+      <text class="ink-sans ink-fade" x="372" y="244" font-size="14" font-weight="700" text-anchor="end">budget</text>
+      <text class="ink-sans ink-fade" x="0" y="0" font-size="12.5" font-weight="700" transform="translate(36 214) rotate(-90)">has an in-house IT / design team</text>
+      <text class="ink-text ink-fade" x="66" y="186" font-size="18">small local</text>
+      <text class="ink-text ink-fade" x="66" y="204" font-size="18">businesses</text>
+      <text class="ink-text ink-fade" x="236" y="54" font-size="18">large companies</text>
+      <text class="ink-sans ink-fade" x="236" y="74" font-size="12.5" fill="#57524c">“they don’t need us”</text>
+      <path class="ink ink--accent ink--bold" style="--i:3" d={loop(304, 176, 86, 34, 475, 1.1)} pathLength="1" />
+      <text class="ink-text ink-fade" x="304" y="172" font-size="17" text-anchor="middle">mid-size businesses:</text>
+      <text class="ink-text ink-fade" x="304" y="192" font-size="17" text-anchor="middle">has budget, no team</text>
+      <path class="ink ink--accent" style="--i:4" d={A([[150, 168], [180, 150], [210, 160]], 476, 9)} pathLength="1" />
+    </>
+  )}
+
+  {kind === 'room-reserve' && (
+    <>
+      {[
+        { x: 18, y: 30, w: 116, t: 'Rooms', s: 481 },
+        { x: 142, y: 150, w: 136, t: 'Reservations', s: 482 },
+        { x: 266, y: 30, w: 116, t: 'Customers', s: 483 },
+      ].map((b, i) => (
+        <>
+          <path class="ink" style={`--i:${i}`} d={rect(b.x, b.y, b.w, 88, b.s, 1.2)} pathLength="1" />
+          <path class="ink" style={`--i:${i}`} d={line(b.x + 2, b.y + 32, b.x + b.w - 2, b.y + 32, b.s + 10, 0.8)} pathLength="1" />
+          <text class="ink-text ink-fade" x={b.x + b.w / 2} y={b.y + 24} font-size="22" text-anchor="middle">{b.t}</text>
+          <path class="ink ink--faint" style={`--i:${i + 0.5}`} d={`${line(b.x + 12, b.y + 50, b.x + b.w * 0.7, b.y + 50, b.s + 20, 0.8)} ${line(b.x + 12, b.y + 70, b.x + b.w * 0.55, b.y + 70, b.s + 21, 0.8)}`} pathLength="1" />
+        </>
+      ))}
+      <path class="ink" style="--i:3" d={`${line(76, 116, 76, 196, 490, 1)} ${line(76, 196, 140, 196, 491, 1)} M128 184 L140 196 L128 208`} pathLength="1" />
+      <path class="ink" style="--i:3.5" d={`${line(324, 116, 324, 196, 492, 1)} ${line(324, 196, 280, 196, 493, 1)} M292 184 L280 196 L292 208`} pathLength="1" />
+    </>
+  )}
+</InkSvg>
+
+<style>
+  :global(.thumb) { display: block; width: 100%; height: auto; }
+</style>

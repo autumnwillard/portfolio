@@ -1,0 +1,67 @@
+---
+import NavTabs from './NavTabs.astro';
+import { swoosh } from '../lib/ink';
+interface Props { active?: string }
+const { active } = Astro.props;
+---
+<header class="masthead page" transition:name="masthead" transition:animate="none">
+  <a class="logo" href="/" aria-label="Autumn Willard, home">
+    <span aria-hidden="true">Autumn Willard</span>
+    <svg viewBox="0 0 180 12" aria-hidden="true" focusable="false"><path class="ink ink--accent" d={swoosh(2, 7, 172, 9, 2.4)} /></svg>
+  </a>
+  <NavTabs active={active} />
+  <a class="resume" href="/autumn-willard-resume.pdf">Résumé (PDF)</a>
+</header>
+
+<style>
+  .masthead {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s1) var(--s3);
+    padding-top: clamp(1rem, 2.5vw, 1.75rem);
+    padding-bottom: var(--s1);
+  }
+  .logo {
+    font-family: var(--font-hand);
+    font-size: clamp(1.7rem, 1.4rem + 1vw, 2.15rem);
+    line-height: 1;
+    color: var(--ink);
+    text-decoration: none;
+    margin-right: auto;
+    display: inline-flex;
+    flex-direction: column;
+  }
+  .logo svg { width: 100%; height: 10px; margin-top: 2px; overflow: visible; }
+  .logo .ink { stroke-width: 2.6; }
+  .resume {
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 0.5rem 0.85rem;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+    background: var(--paper-scrap);
+    box-shadow: var(--lift);
+    transform: rotate(2deg);
+    clip-path: polygon(0 4%, 12% 0, 30% 3%, 55% 0, 78% 4%, 100% 1%, 98% 30%, 100% 62%, 97% 100%, 70% 96%, 44% 100%, 20% 96%, 2% 100%, 0 70%, 3% 38%);
+  }
+  .resume:hover { transform: rotate(0deg); text-decoration: underline; text-decoration-color: var(--accent); }
+
+  @media (max-width: 400px) {
+    .logo { font-size: 1.5rem; }
+    .resume { font-size: 0.82rem; padding: 0.4rem 0.6rem; }
+    .masthead { gap: 0.75rem 0.5rem; }
+  }
+  /* Desktop: name · tabs · résumé on one line */
+  @media (min-width: 900px) {
+    .masthead { flex-wrap: nowrap; }
+    .logo { margin-right: var(--s2); }
+    .masthead :global(.tabs) { margin-right: auto; }
+  }
+  /* Phones: name + résumé on row 1, tabs on row 2 */
+  @media (max-width: 899px) {
+    .masthead :global(.tabs) { order: 3; width: 100%; }
+  }
+</style>

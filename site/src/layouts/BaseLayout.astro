@@ -1,0 +1,57 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import '@fontsource/caveat-brush/400.css';
+import '@fontsource/nunito-sans/400.css';
+import '@fontsource/nunito-sans/600.css';
+import '@fontsource/nunito-sans/700.css';
+import '@fontsource/nunito-sans/800.css';
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import { pageTurn } from '../lib/transitions';
+
+interface Props {
+  title: string;
+  description: string;
+  active?: 'about' | 'work' | 'contact' | 'side-projects';
+}
+const { title, description, active = 'work' } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta name="theme-color" content="#fcfbf7" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      document.addEventListener('astro:after-swap', function () {
+        document.documentElement.classList.add('js');
+      });
+    </script>
+    <ClientRouter />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <SiteHeader active={active} />
+    <div class="sheet" transition:name="sheet" transition:animate={pageTurn}>
+      <main id="main" tabindex="-1">
+        <slot />
+      </main>
+      <SiteFooter />
+    </div>
+    <script>
+      import '../scripts/site.ts';
+    </script>
+  </body>
+</html>
+
+<style>
+  .sheet { background-color: var(--paper); background-image: var(--tooth); }
+  main:focus { outline: none; }
+</style>

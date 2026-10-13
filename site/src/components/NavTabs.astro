@@ -1,0 +1,72 @@
+---
+// Sketched-button tabs, drawn in ink. The active tab gets circled with the
+// marker; the circle carries a view-transition-name so it slides between tabs.
+import { rect, loop } from '../lib/ink';
+
+const tabs = [
+  { href: '/about/', label: 'About', key: 'about' },
+  { href: '/', label: 'Work', key: 'work' },
+  { href: '/contact/', label: 'Contact', key: 'contact' },
+  { href: '/side-projects/', label: 'Side Projects', key: 'side-projects' },
+];
+interface Props { active?: string }
+const { active = 'work' } = Astro.props;
+---
+<nav class="tabs" aria-label="Main">
+  <ul role="list">
+    {tabs.map((t, i) => {
+      const isActive = t.key === active;
+      return (
+        <li>
+          <a href={t.href} class:list={['tab', isActive && 'is-active']} aria-current={isActive ? 'page' : undefined}>
+            <svg class="tab__box" viewBox="0 0 160 52" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <path class="ink" d={rect(6, 6, 148, 40, 11 + i * 5, 1.4)} vector-effect="non-scaling-stroke" />
+            </svg>
+            {isActive && (
+              <svg class="tab__loop" viewBox="0 0 160 52" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+                <path class="ink ink--accent" d={loop(80, 27, 74, 22, 4 + i)} vector-effect="non-scaling-stroke" />
+              </svg>
+            )}
+            <span class="tab__label">{t.label}</span>
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+</nav>
+
+<style>
+  .tabs ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem 0.65rem; margin: 0; padding: 0; }
+  .tab {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    min-height: 46px;
+    padding: 0.45rem 1.05rem 0.5rem;
+    font: 700 1rem/1.1 var(--font-body);
+    color: var(--ink-soft);
+    text-decoration: none;
+    white-space: nowrap;
+    border-radius: var(--wobble-radius);
+    transition: color 150ms ease, transform 150ms ease;
+  }
+  .tab__box, .tab__loop { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+  .tab__box .ink { stroke: var(--ink-faint); stroke-width: 1.8; transition: stroke 150ms ease; }
+  .tab__label { position: relative; }
+  .tab:hover { color: var(--ink); transform: rotate(-1deg); }
+  .tab:hover .tab__box .ink { stroke: var(--ink); }
+
+  .tab.is-active { color: var(--ink); font-weight: 800; }
+  .tab.is-active .tab__box .ink { stroke: var(--ink); stroke-width: 2.2; }
+  .tab__loop { inset: -7px -10px; width: calc(100% + 20px); height: calc(100% + 14px); view-transition-name: tab-ink; }
+  .tab__loop .ink { stroke-width: 2.6; }
+
+  @media (max-width: 420px) {
+    .tabs ul { gap: 0.4rem 0.3rem; }
+    .tab { padding: 0.4rem 0.5rem 0.45rem; font-size: 0.9rem; min-height: 44px; }
+  }
+  @media (max-width: 380px) {
+    .tabs ul { gap: 0.35rem 0.2rem; }
+    .tab { padding: 0.4rem 0.36rem 0.45rem; font-size: 0.82rem; }
+  }
+</style>
