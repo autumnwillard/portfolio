@@ -1,0 +1,61 @@
+---
+// "The work, one line each": a table of contents for the case studies. Each row is the
+// case's short name plus its hook headline and links to its case-study page.
+import StatusBadge from './StatusBadge.astro';
+import { workList } from '../data/work';
+import { arrow } from '../lib/ink';
+const rowArrow = (s: number) => { const a = arrow([[4, 14], [22, 8], [40, 15], [56, 12]], s, 9); return `${a.shaft} ${a.head}`; };
+---
+<h2 id="worklist-h" class="worklist__h">The work, one line each</h2>
+<ol class="worklist__list" role="list">
+  {workList.map((w, i) => (
+    <li class="worklist__row draw">
+      <a class="worklist__link" href={w.href}>
+        <span class="worklist__name">{w.name}</span>
+        <span class="worklist__hook">{w.hook}</span>
+      </a>
+      {w.badge && <span class="worklist__badge"><StatusBadge status={w.badge} size="sm" /></span>}
+      <svg class="worklist__arrow" viewBox="0 0 60 26" aria-hidden="true" focusable="false"><path class="ink ink--accent" d={rowArrow(700 + i)} pathLength="1" /></svg>
+    </li>
+  ))}
+</ol>
+
+<style>
+  /* ---------- The work, one line each ---------- */
+  .worklist__h { font-size: var(--step-2); margin-bottom: var(--s1); }
+  .worklist__list { list-style: none; margin: 0; padding: 0; max-width: 54rem; border-top: 2.5px solid var(--ink); counter-reset: work; }
+  .worklist__row {
+    counter-increment: work;
+    position: relative;
+    display: grid;
+    grid-template-columns: 2.4rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.15rem 0.75rem;
+    padding: 0.85rem 0.25rem 0.9rem 0;
+    border-bottom: 1.5px dashed var(--rule);
+  }
+  .worklist__row::before {
+    content: counter(work, decimal-leading-zero);
+    font-family: var(--font-hand);
+    font-size: 1.25rem;
+    color: var(--ink-soft);
+    align-self: start;
+    padding-top: 0.15rem;
+  }
+  .worklist__link { display: flex; flex-direction: column; gap: 0.1rem; text-decoration: none; color: var(--ink); min-width: 0; }
+  .worklist__link::after { content: ''; position: absolute; inset: 0; }
+  .worklist__name { font: 800 0.8rem/1.25 var(--font-body); letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-soft); }
+  .worklist__hook { font-family: var(--font-hand); font-size: clamp(1.4rem, 1.2rem + 0.8vw, 1.8rem); line-height: 1.15; }
+  .worklist__link:hover .worklist__hook { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 0.18em; }
+  .worklist__row:has(.worklist__link:focus-visible) { outline: 2.5px solid var(--accent-ink); outline-offset: 4px; border-radius: var(--wobble-radius); }
+  .worklist__link:focus-visible { outline: none; }
+  .worklist__badge { grid-column: 2; grid-row: 2; justify-self: start; position: relative; }
+  .worklist__arrow { grid-column: 3; grid-row: 1 / span 2; width: 2.6rem; overflow: visible; transition: transform 160ms ease; }
+  .worklist__row:hover .worklist__arrow { transform: translateX(4px); }
+  @media (max-width: 520px) {
+    .worklist__row { grid-template-columns: 1.9rem minmax(0, 1fr) 1.8rem; gap: 0.15rem 0.5rem; }
+    .worklist__arrow { width: 1.8rem; }
+    .worklist__row::before { font-size: 1.1rem; }
+  }
+
+</style>

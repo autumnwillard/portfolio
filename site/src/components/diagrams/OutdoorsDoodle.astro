@@ -1,0 +1,74 @@
+---
+// about-off-the-clock: a small Ozarks scene for "A little more about me": hills,
+// pines, a trail winding up, the sun, and an open book in the grass. Decorative.
+import InkSvg from '../InkSvg.astro';
+import { line, loop, smooth } from '../../lib/ink';
+
+// Rolling ridgeline (Ozark hills are more rounded than jagged)
+const ridge = smooth([[8, 150], [40, 112], [72, 92], [104, 112], [128, 100], [168, 58], [206, 96], [236, 84], [270, 108], [312, 146]]);
+const ground = line(4, 168, 316, 166, 801, 1.4);
+// Two far-off birds
+const birds = `${smooth([[196, 34], [201, 30], [205, 34]])} ${smooth([[205, 34], [209, 30], [214, 33]])} ${smooth([[220, 48], [224, 45], [227, 48]])} ${smooth([[227, 48], [230, 45], [234, 47]])}`;
+
+// Trail: winds from the foreground up toward the saddle between the hills
+const trail = smooth([[118, 196], [140, 182], [112, 170], [134, 154], [154, 140], [146, 126], [164, 112]]);
+
+// Sun with a few short rays
+const sun = loop(262, 38, 14, 14, 803, 1.08);
+const rays = [0, 1, 2, 3, 4, 5, 6, 7]
+  .map((k) => {
+    const a = (k / 8) * Math.PI * 2 + 0.2;
+    return line(262 + Math.cos(a) * 20, 38 + Math.sin(a) * 20, 262 + Math.cos(a) * 28, 38 + Math.sin(a) * 28, 810 + k, 0.4);
+  })
+  .join(' ');
+
+// Pines: one zigzag outline (three tiers) plus a short trunk, drawn as straight pen strokes
+function pine(x: number, base: number, h: number, seed: number) {
+  const w = h * 0.36;
+  const top = base - h;
+  const pts: [number, number][] = [
+    [x, top],
+    [x - w * 0.5, top + h * 0.32], [x - w * 0.2, top + h * 0.3],
+    [x - w * 0.78, top + h * 0.6], [x - w * 0.36, top + h * 0.58],
+    [x - w, top + h * 0.86], [x + w, top + h * 0.86],
+    [x + w * 0.36, top + h * 0.58], [x + w * 0.78, top + h * 0.6],
+    [x + w * 0.2, top + h * 0.3], [x + w * 0.5, top + h * 0.32],
+    [x, top],
+  ];
+  const tree = pts.slice(1).map((p, i) => line(pts[i][0], pts[i][1], p[0], p[1], seed + i, 0.5)).join(' ');
+  // paper-coloured silhouette under the outline, so the hills pass behind the tree
+  const mask = `M${pts.map((p) => p.join(' ')).join(' L')} Z`;
+  return { tree, mask, trunk: line(x, top + h * 0.86, x, base, seed + 30, 0.3) };
+}
+const p1 = pine(52, 166, 62, 820);
+const p2 = pine(80, 166, 44, 840);
+const p3 = pine(214, 166, 52, 860);
+
+// Open book lying in the grass
+const book = [
+  'M262 186 C252 179 240 178 228 181 L228 196 C240 193 252 194 262 200 Z',
+  'M262 186 C272 179 284 178 296 181 L296 196 C284 193 272 194 262 200',
+].join(' ');
+const bookLines = [line(236, 186, 254, 187, 870, 0.4), line(236, 191, 252, 192, 871, 0.4), line(270, 187, 288, 186, 872, 0.4), line(271, 192, 286, 191, 873, 0.4)].join(' ');
+---
+<InkSvg viewBox="0 0 320 206" class="outdoors-doodle">
+  <path class="ink ink--bold" style="--i:0.4" d={ridge} pathLength="1" />
+  <path class="ink ink--faint" style="--i:1" d={ground} pathLength="1" />
+  <path class="ink ink--accent" style="--i:1.6" d={`${sun} ${rays}`} pathLength="1" />
+  <path class="ink ink--faint" style="--i:2" d={birds} pathLength="1" />
+  {[p1, p2, p3].map((p) => <path class="pine-mask" d={p.mask} />)}
+  <path class="ink" style="--i:2.2" d={p1.tree} pathLength="1" />
+  <path class="ink" style="--i:2.4" d={p1.trunk} pathLength="1" />
+  <path class="ink" style="--i:2.6" d={p2.tree} pathLength="1" />
+  <path class="ink" style="--i:2.8" d={p2.trunk} pathLength="1" />
+  <path class="ink" style="--i:3" d={p3.tree} pathLength="1" />
+  <path class="ink" style="--i:3.2" d={p3.trunk} pathLength="1" />
+  <path class="ink ink--dash" style="--i:3.6" d={trail} />
+  <path class="ink" style="--i:4.2" d={book} pathLength="1" />
+  <path class="ink ink--faint" style="--i:4.8" d={bookLines} pathLength="1" />
+</InkSvg>
+
+<style>
+  .pine-mask { fill: var(--paper); stroke: none; }
+  :global(svg.ink-svg.outdoors-doodle) { width: 100%; max-width: 22rem; }
+</style>

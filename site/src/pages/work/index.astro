@@ -4,6 +4,8 @@ import TapedImage from '../../components/TapedImage.astro';
 import StickyNote from '../../components/StickyNote.astro';
 import StatusBadge from '../../components/StatusBadge.astro';
 import Highlight from '../../components/Highlight.astro';
+import WorkList from '../../components/WorkList.astro';
+import Button from '../../components/Button.astro';
 import InkDivider from '../../components/InkDivider.astro';
 import HotfixWeeks from '../../components/diagrams/HotfixWeeks.astro';
 import CardThumb from '../../components/diagrams/CardThumb.astro';
@@ -12,14 +14,6 @@ import { featured, pattern, analyses, tools } from '../../data/work';
 import { arrow } from '../../lib/ink';
 
 
-const proof = [
-  { num: '~85%', hl: true, label: 'fewer severe defects', chips: ['In use'], caption: 'Severe = breaks core function, triggers a SEV call. Dec 2025 to ~Sept 2026.' },
-  { num: '~70–80%', label: 'fewer manual reviews (projected)', chips: ['Projected (estimate)', 'Approved · in build when I left'], caption: 'Estimated from reviewer comments flagging wrong screening answers.' },
-  { num: '10 workflows · 7 dashboards', small: true, label: 'used daily by four engineering teams', chips: ['In daily use'], caption: 'An internal product I built for my own teams.' },
-  { num: 'Hundreds per year → nearly zero', small: true, label: 'abandoned records', chips: ['Shipped'], caption: 'Three small UI changes, not a redesign.' },
-];
-const tilts = [-1.6, 1.2, -0.8, 1.7];
-const colors = ['blue', 'yellow', 'sage', 'rose'];
 const rowArrow = (s: number) => { const a = arrow([[4, 14], [22, 8], [40, 15], [56, 12]], s, 9); return `${a.shaft} ${a.head}`; };
 const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], [12, 42]], s, 8); return `${a.shaft} ${a.head}`; };
 ---
@@ -31,23 +25,11 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
   <div class="page">
     <h1 class="visually-hidden">Work</h1>
 
-    <!-- 1. Proof strip -->
-    <section class="sheet-section proof" aria-labelledby="proof-h">
+    <!-- 1. The work, one line each (table of contents) -->
+    <section class="sheet-section worklist" aria-labelledby="worklist-h">
       <span class="margin-mark" aria-hidden="true">01</span>
       <div class="section-body">
-        <h2 id="proof-h" class="proof__h">The short version</h2>
-        <ul class="proof__grid" role="list">
-          {proof.map((p, i) => (
-            <li class={`scrap sticky sticky--${colors[i]}`} style={`--tilt:${tilts[i]}deg`}>
-              <p class:list={['scrap__num', p.small && 'scrap__num--small']}>
-                {p.hl ? <Highlight>{p.num}</Highlight> : p.num}
-              </p>
-              <p class="scrap__label">{p.label}</p>
-              <p class="scrap__chips">{p.chips.map((c) => <StatusBadge status={c} size="sm" />)}</p>
-              <p class="scrap__caption">{p.caption}</p>
-            </li>
-          ))}
-        </ul>
+        <WorkList />
       </div>
     </section>
 
@@ -75,7 +57,7 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
                 <ul class="card__numbers" role="list">
                   {c.numbers.map((n, k) => <li class:list={[k > 1 && 'hide-mobile']}>{n}</li>)}
                 </ul>
-                <a class="btn" href={c.href} aria-hidden="true" tabindex="-1">Read the case study</a>
+                <Button href={c.href} aria-hidden="true" tabindex="-1">Read the case study</Button>
               </div>
             </li>
           ))}
@@ -194,7 +176,7 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
             Yes, I've built a hiring app before. That one had a "Hell no" status. This one is more professional. <a href="/side-projects/">See HirePurpose →</a>
           </StickyNote>
         </div>
-        <button class="btn js-more-toggle" type="button" hidden>Show more work</button>
+        <Button class="js-more-toggle" hidden>Show more work</Button>
       </div>
     </section>
 
@@ -242,9 +224,9 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
         <h2 id="cta-h">Let's talk before one of us closes this tab.</h2>
         <p>I'm looking for a product manager role, ideally one that's AI-related. I want to own the what and the why, with a hand in the how and the when. The exact title matters less to me than that. If that sounds like your team, I'd love to hear about it.</p>
         <div class="btn-row">
-          <a class="btn btn--primary js-email" href="/contact/" data-u="autumn" data-d="hey.com">Email me</a>
-          <a class="btn" href="https://www.linkedin.com/in/autumn-willard">LinkedIn</a>
-          <a class="btn btn--quiet" href="/autumn-willard-resume.pdf">Résumé (PDF)</a>
+          <Button variant="primary" class="js-email" href="/contact/" data-u="autumn" data-d="hey.com">Email me</Button>
+          <Button href="https://www.linkedin.com/in/autumn-willard">LinkedIn</Button>
+          <Button href="/autumn-willard-resume.pdf">Résumé (PDF)</Button>
         </div>
       </div>
     </section>
@@ -252,36 +234,6 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
 </BaseLayout>
 
 <style>
-  /* ---------- Proof strip ---------- */
-  .proof__h { font-size: var(--step-1); color: var(--ink-soft); margin-bottom: var(--s2); }
-  .proof__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s2); }
-  /* each number sits on its own sticky note (paper styles in global.css) */
-  .scrap {
-    padding: 1.6rem 1.15rem 1.2rem;
-    transform: rotate(var(--tilt));
-    display: flex;
-    flex-direction: column;
-    gap: 0.45rem;
-  }
-  .scrap p { margin: 0; }
-  .scrap__num { font-family: var(--font-hand); font-size: clamp(2.2rem, 1.8rem + 1.4vw, 3rem); line-height: 1.05; color: var(--accent-ink); }
-  .scrap__num :global(mark) { color: var(--accent-ink); }
-  .scrap__num--small { font-size: clamp(1.55rem, 1.3rem + 0.8vw, 1.95rem); }
-  .scrap__label { font-weight: 800; line-height: 1.35; }
-  .scrap__chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
-  .scrap__caption { font-size: var(--step--1); color: var(--ink-soft); line-height: 1.45; margin-top: auto !important; padding-top: 0.4rem; }
-  .scrap :global(.stamp) { background: rgb(255 255 255 / 0.55); }
-  @media (max-width: 1080px) { .proof__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (max-width: 420px) {
-    .proof__grid { gap: var(--s1); }
-    .scrap { padding: 1.4rem 0.8rem 0.9rem; }
-    .scrap__num { font-size: 1.75rem; }
-    .scrap__num:not(.scrap__num--small) { white-space: nowrap; }
-    .scrap__num--small { overflow-wrap: anywhere; }
-    .scrap__num--small { font-size: 1.35rem; }
-    .scrap__label { font-size: 0.98rem; }
-  }
-
   /* ---------- Featured cards ---------- */
   .cards { list-style: none; margin: var(--s3) 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s4) var(--s4); }
   .card { position: relative; }
@@ -307,7 +259,7 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
   .card__numbers { list-style: none; padding: 0; margin: 0 0 var(--s2); display: flex; flex-direction: column; gap: 0.35rem; }
   .card__numbers li { font-weight: 800; padding-left: 1.4rem; position: relative; line-height: 1.4; }
   .card__numbers li::before { content: ''; position: absolute; left: 0; top: 0.5em; width: 0.8rem; height: 0.35rem; border-bottom: 3px solid var(--accent); border-radius: 0 0 50% 50%; transform: rotate(-6deg); }
-  .card .btn { position: relative; z-index: 2; }
+  .card :global(.btn) { z-index: 2; }
   @media (max-width: 900px) {
     .cards { grid-template-columns: 1fr; gap: var(--s4); }
     .card--large { grid-template-columns: 1fr; gap: var(--s2); }

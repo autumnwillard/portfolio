@@ -1,0 +1,48 @@
+---
+// A sketched button: wobbly ink outline (seeded pen helper) on a scrap of paper.
+// variant="primary" adds a coral marker scribble fill and a second coral pen pass.
+// A coral underline draws in under the label on hover/focus (instant under reduced motion).
+// Renders <a> when href is given, otherwise <button>. Extra attributes pass through.
+import { rect, scribble, swoosh } from '../lib/ink';
+
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary';
+  size?: 'md' | 'sm';
+  type?: 'button' | 'submit';
+  class?: string;
+  [key: string]: unknown;
+}
+const { href, variant = 'secondary', size = 'md', type = 'button', class: cls = '', ...rest } = Astro.props;
+const label = await Astro.slots.render('default');
+
+// Seed from the label so every button wobbles a little differently, but stably.
+let seed = 7;
+for (const ch of label) seed = (seed * 31 + ch.charCodeAt(0)) % 9973;
+
+const paper = rect(5, 5, 190, 46, seed, 1.5);
+const outline = rect(4, 4, 192, 48, seed, 1.7);
+const echo = rect(8, 9, 190, 46, seed + 3, 1.7);
+const fill = scribble(12, 12, 176, 32, seed + 5, 5);
+const under = swoosh(2, 5, 196, seed + 9, 2);
+const Tag = href ? 'a' : 'button';
+---
+<Tag
+  class:list={['btn', `btn--${variant}`, size === 'sm' && 'btn--sm', cls]}
+  href={href}
+  type={href ? undefined : type}
+  {...rest}
+>
+  <svg class="btn__ink" viewBox="0 0 200 56" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+    {variant === 'primary' && <path class="btn__echo" d={echo} />}
+    <path class="btn__paper" d={paper} />
+    {variant === 'primary' && <path class="btn__fill" d={fill} />}
+    <path class="btn__outline" d={outline} />
+  </svg>
+  <span class="btn__label">
+    <span class="btn__text"><Fragment set:html={label} /></span>
+    <svg class="btn__under" viewBox="0 0 200 10" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path d={under} pathLength="1" />
+    </svg>
+  </span>
+</Tag>

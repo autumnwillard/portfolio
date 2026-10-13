@@ -2,6 +2,7 @@
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from './BaseLayout.astro';
 import Callout from '../components/Callout.astro';
+import Button from '../components/Button.astro';
 import StatusBadge from '../components/StatusBadge.astro';
 import Metric from '../components/Metric.astro';
 import InkDivider from '../components/InkDivider.astro';
@@ -51,8 +52,8 @@ const d = entry.data;
     </div>
 
     <nav class="case__next" aria-label="More">
-      {d.next && <a class="btn btn--primary" href={d.next.href}>Next case study → <span class="visually-hidden">{d.next.title}</span></a>}
-      <a class="btn" href="/contact/">Hiring a PM? Let's talk →</a>
+      {d.next && <Button variant="primary" href={d.next.href}>Next case study → <span class="visually-hidden">{d.next.title}</span></Button>}
+      <Button href="/contact/">Hiring a PM? Let's talk →</Button>
     </nav>
   </article>
 </BaseLayout>

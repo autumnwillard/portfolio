@@ -1,5 +1,6 @@
 ---
 import NavTabs from './NavTabs.astro';
+import Button from './Button.astro';
 import { swoosh } from '../lib/ink';
 interface Props { active?: string }
 const { active } = Astro.props;
@@ -10,7 +11,7 @@ const { active } = Astro.props;
     <svg viewBox="0 0 180 12" aria-hidden="true" focusable="false"><path class="ink ink--accent" d={swoosh(2, 7, 172, 9, 2.4)} /></svg>
   </a>
   <NavTabs active={active} />
-  <a class="resume" href="/autumn-willard-resume.pdf">Résumé (PDF)</a>
+  <Button size="sm" class="resume" href="/autumn-willard-resume.pdf">Résumé (PDF)</Button>
 </header>
 
 <style>
@@ -34,24 +35,9 @@ const { active } = Astro.props;
   }
   .logo svg { width: 100%; height: 10px; margin-top: 2px; overflow: visible; }
   .logo .ink { stroke-width: 2.6; }
-  .resume {
-    font-weight: 700;
-    font-size: 0.95rem;
-    padding: 0.5rem 0.85rem;
-    min-height: 44px;
-    display: inline-flex;
-    align-items: center;
-    text-decoration: none;
-    background: var(--paper-scrap);
-    box-shadow: var(--lift);
-    transform: rotate(2deg);
-    clip-path: polygon(0 4%, 12% 0, 30% 3%, 55% 0, 78% 4%, 100% 1%, 98% 30%, 100% 62%, 97% 100%, 70% 96%, 44% 100%, 20% 96%, 2% 100%, 0 70%, 3% 38%);
-  }
-  .resume:hover { transform: rotate(0deg); text-decoration: underline; text-decoration-color: var(--accent); }
-
   @media (max-width: 400px) {
     .logo { font-size: 1.5rem; }
-    .resume { font-size: 0.82rem; padding: 0.4rem 0.6rem; }
+    .masthead :global(.resume) { font-size: 0.84rem; padding-inline: 0.7rem; }
     .masthead { gap: 0.75rem 0.5rem; }
   }
   /* Desktop: name · tabs · résumé on one line */

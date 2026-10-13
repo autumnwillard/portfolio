@@ -38,8 +38,10 @@ const { title, description, active } = Astro.props;
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <SiteHeader active={active} />
+    <!-- One long sheet of graph paper; it scrolls with the content. The masthead keeps
+         its own transition name, so it stays put while the page beneath it turns. -->
     <div class="sheet paper-grid" transition:name="sheet" transition:animate={pageTurn}>
+      <SiteHeader active={active} />
       <main id="main" tabindex="-1">
         <slot />
       </main>
@@ -53,4 +55,9 @@ const { title, description, active } = Astro.props;
 
 <style>
   main:focus { outline: none; }
+  .sheet { min-height: 100vh; max-width: 1360px; margin-inline: auto; }
+  /* Wide screens: the sheet lies on the desk, with soft edges at the sides. */
+  @media (min-width: 1400px) {
+    .sheet { box-shadow: var(--sheet-edge); }
+  }
 </style>

@@ -37,9 +37,10 @@ function setupEmail() {
       const { u, d } = btn.dataset;
       try {
         await navigator.clipboard.writeText(`${u}@${d}`);
-        const label = btn.textContent;
-        btn.textContent = 'Copied!';
-        setTimeout(() => (btn.textContent = label), 2000);
+        const text = btn.querySelector('.btn__text') ?? btn;
+        const label = text.textContent;
+        text.textContent = 'Copied!';
+        setTimeout(() => (text.textContent = label), 2000);
       } catch {
         /* clipboard blocked: the address is on the page as text */
       }
@@ -58,7 +59,7 @@ function setupMore() {
     btn.addEventListener('click', () => {
       const collapsed = wrap.classList.toggle('is-collapsed');
       btn.setAttribute('aria-expanded', String(!collapsed));
-      btn.textContent = collapsed ? 'Show more work' : 'Show less';
+      (btn.querySelector('.btn__text') ?? btn).textContent = collapsed ? 'Show more work' : 'Show less';
     });
   });
 }

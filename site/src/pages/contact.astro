@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import StickyNote from '../components/StickyNote.astro';
+import Button from '../components/Button.astro';
 import InkSvg from '../components/InkSvg.astro';
 import { arrow } from '../lib/ink';
 const trail = arrow([[20, 150], [70, 120], [60, 70], [110, 60], [130, 110], [100, 120], [150, 50], [210, 40]], 701, 0);
@@ -28,8 +29,8 @@ const trail = arrow([[20, 150], [70, 120], [60, 70], [110, 60], [130, 110], [100
         <dd>
           <span class="addr">autumn<span>@</span>hey.com</span>
           <span class="ways__btns">
-            <a class="btn btn--primary js-email" href="#" data-u="autumn" data-d="hey.com">Email me</a>
-            <button class="btn btn--quiet js-copy-email" type="button" data-u="autumn" data-d="hey.com" hidden>Copy address</button>
+            <Button variant="primary" class="js-email" href="#" data-u="autumn" data-d="hey.com">Email me</Button>
+            <Button class="js-copy-email" data-u="autumn" data-d="hey.com" hidden>Copy address</Button>
           </span>
         </dd>
       </div>
@@ -37,12 +38,12 @@ const trail = arrow([[20, 150], [70, 120], [60, 70], [110, 60], [130, 110], [100
         <dt>LinkedIn</dt>
         <dd>
           <span class="addr">linkedin.com/in/autumn-willard</span>
-          <a class="btn" href="https://www.linkedin.com/in/autumn-willard">Connect on LinkedIn</a>
+          <Button href="https://www.linkedin.com/in/autumn-willard">Connect on LinkedIn</Button>
         </dd>
       </div>
       <div>
         <dt>Résumé</dt>
-        <dd><a class="btn" href="/autumn-willard-resume.pdf">Download résumé (PDF)</a></dd>
+        <dd><Button href="/autumn-willard-resume.pdf">Download résumé (PDF)</Button></dd>
       </div>
     </dl>
 

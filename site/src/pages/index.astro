@@ -4,16 +4,16 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TapedImage from '../components/TapedImage.astro';
 import StickyNote from '../components/StickyNote.astro';
-import StatusBadge from '../components/StatusBadge.astro';
+import ProofStrip from '../components/ProofStrip.astro';
+import Button from '../components/Button.astro';
 import Highlight from '../components/Highlight.astro';
 import InkDivider from '../components/InkDivider.astro';
 import AiLoop from '../components/diagrams/AiLoop.astro';
-import { workList } from '../data/work';
-import { arrow, swoosh } from '../lib/ink';
+import OutdoorsDoodle from '../components/diagrams/OutdoorsDoodle.astro';
+import { swoosh } from '../lib/ink';
 
 const heroSources = [{ type: 'image/webp', srcset: '/images/hero-640.webp 640w, /images/hero-960.webp 960w, /images/hero-1280.webp 1280w' }];
 const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /images/hero-1280.jpg 1280w';
-const rowArrow = (s: number) => { const a = arrow([[4, 14], [22, 8], [40, 15], [56, 12]], s, 9); return `${a.shaft} ${a.head}`; };
 ---
 <BaseLayout
   title="Autumn Willard · Product Manager"
@@ -33,8 +33,8 @@ const rowArrow = (s: number) => { const a = arrow([[4, 14], [22, 8], [40, 15], [
         <p>I translate between the two vastly different languages of business logic and technical implementation, so quality products get out the door without anyone wanting to kill each other.</p>
         <p class="hero__now"><strong>Right now:</strong> I own the product and release lifecycle on a B2B SaaS document management platform built by four engineering teams.</p>
         <div class="btn-row">
-          <a class="btn btn--primary" href="/work/">See the work →</a>
-          <a class="btn btn--quiet" href="/autumn-willard-resume.pdf">Résumé (PDF)</a>
+          <Button variant="primary" href="/work/">See the work →</Button>
+          <Button href="/autumn-willard-resume.pdf">Résumé (PDF)</Button>
         </div>
       </div>
       <div class="hero__art">
@@ -56,24 +56,11 @@ const rowArrow = (s: number) => { const a = arrow([[4, 14], [22, 8], [40, 15], [
       </div>
     </section>
 
-    <!-- 01. The work, one line each -->
-    <section class="sheet-section worklist" aria-labelledby="worklist-h">
+    <!-- 01. The short version (proof strip) -->
+    <section class="sheet-section proof" aria-labelledby="proof-h">
       <span class="margin-mark" aria-hidden="true">01</span>
       <div class="section-body">
-        <h2 id="worklist-h" class="worklist__h">The work, one line each</h2>
-        <ol class="worklist__list" role="list">
-          {workList.map((w, i) => (
-            <li class="worklist__row draw">
-              <a class="worklist__link" href={w.href}>
-                <span class="worklist__name">{w.name}</span>
-                <span class="worklist__hook">{w.hook}</span>
-              </a>
-              {w.badge && <span class="worklist__badge"><StatusBadge status={w.badge} size="sm" /></span>}
-              <svg class="worklist__arrow" viewBox="0 0 60 26" aria-hidden="true" focusable="false"><path class="ink ink--accent" d={rowArrow(700 + i)} pathLength="1" /></svg>
-            </li>
-          ))}
-        </ol>
-        <p class="worklist__all"><a class="btn btn--primary" href="/work/">See all the work →</a></p>
+        <ProofStrip />
       </div>
     </section>
 
@@ -156,14 +143,13 @@ const rowArrow = (s: number) => { const a = arrow([[4, 14], [22, 8], [40, 15], [
     <!-- 06. A little more about me -->
     <section class="sheet-section" aria-labelledby="me-h">
       <span class="margin-mark" aria-hidden="true">06</span>
-      <div class="section-body">
-        <h2 id="me-h">A little more about me</h2>
-        <p>I live in Northwest Arkansas. Off the clock, you'll usually find me hiking (or just outside), spending time with my kids, or reading.</p>
-        <p>I still sketch before I spec, sometimes on the back of a handout during a meeting I didn't strictly need to pay attention to. (Sorry, whoever was presenting.) And I build things on my own time. <a class="text-link" href="/side-projects/">See the side projects →</a></p>
-        <div class="btn-row">
-          <a class="btn" href="/autumn-willard-resume.pdf">Download résumé (PDF)</a>
-          <a class="btn btn--primary" href="/contact/">Get in touch →</a>
+      <div class="section-body me">
+        <div>
+          <h2 id="me-h">A little more about me</h2>
+          <p>I live in Northwest Arkansas. Off the clock, you'll usually find me hiking (or just outside), spending time with my kids, or reading.</p>
+          <p>I still sketch before I spec, sometimes on the back of a handout during a meeting I didn't strictly need to pay attention to. (Sorry, whoever was presenting.) And I build things on my own time. <a class="text-link" href="/side-projects/">See the side projects →</a></p>
         </div>
+        <div class="me__art"><OutdoorsDoodle /></div>
       </div>
     </section>
   </div>
@@ -200,45 +186,6 @@ const rowArrow = (s: number) => { const a = arrow([[4, 14], [22, 8], [40, 15], [
     .hero h1 { font-size: 2.45rem; }
   }
 
-  /* ---------- The work, one line each ---------- */
-  .worklist { padding-top: var(--s2); }
-  .worklist__h { font-size: var(--step-2); margin-bottom: var(--s1); }
-  .worklist__list { list-style: none; margin: 0; padding: 0; max-width: 54rem; border-top: 2.5px solid var(--ink); counter-reset: work; }
-  .worklist__row {
-    counter-increment: work;
-    position: relative;
-    display: grid;
-    grid-template-columns: 2.4rem minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 0.15rem 0.75rem;
-    padding: 0.85rem 0.25rem 0.9rem 0;
-    border-bottom: 1.5px dashed var(--rule);
-  }
-  .worklist__row::before {
-    content: counter(work, decimal-leading-zero);
-    font-family: var(--font-hand);
-    font-size: 1.25rem;
-    color: var(--ink-soft);
-    align-self: start;
-    padding-top: 0.15rem;
-  }
-  .worklist__link { display: flex; flex-direction: column; gap: 0.1rem; text-decoration: none; color: var(--ink); min-width: 0; }
-  .worklist__link::after { content: ''; position: absolute; inset: 0; }
-  .worklist__name { font: 800 0.8rem/1.25 var(--font-body); letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-soft); }
-  .worklist__hook { font-family: var(--font-hand); font-size: clamp(1.4rem, 1.2rem + 0.8vw, 1.8rem); line-height: 1.15; }
-  .worklist__link:hover .worklist__hook { text-decoration: underline; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 0.18em; }
-  .worklist__row:has(.worklist__link:focus-visible) { outline: 2.5px solid var(--accent-ink); outline-offset: 4px; border-radius: var(--wobble-radius); }
-  .worklist__link:focus-visible { outline: none; }
-  .worklist__badge { grid-column: 2; grid-row: 2; justify-self: start; position: relative; }
-  .worklist__arrow { grid-column: 3; grid-row: 1 / span 2; width: 2.6rem; overflow: visible; transition: transform 160ms ease; }
-  .worklist__row:hover .worklist__arrow { transform: translateX(4px); }
-  .worklist__all { margin-top: var(--s2); }
-  @media (max-width: 520px) {
-    .worklist__row { grid-template-columns: 1.9rem minmax(0, 1fr) 1.8rem; gap: 0.15rem 0.5rem; }
-    .worklist__arrow { width: 1.8rem; }
-    .worklist__row::before { font-size: 1.1rem; }
-  }
-
   /* ---------- Who / think / work / AI ---------- */
   .who__aside { display: block; font-size: 0.62em; color: var(--accent-ink); margin-top: 0.35rem; }
   .sub-h { font-size: var(--step-1); font-family: var(--font-body); font-weight: 800; color: var(--ink-soft); margin-bottom: var(--s2); }
@@ -251,4 +198,6 @@ const rowArrow = (s: number) => { const a = arrow([[4, 14], [22, 8], [40, 15], [
   }
   .ai { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: var(--s3); align-items: center; }
   @media (max-width: 900px) { .ai { grid-template-columns: 1fr; } .ai__art { max-width: 26rem; } }
+  .me { display: grid; grid-template-columns: minmax(0, var(--measure)) minmax(12rem, 22rem); gap: var(--s2) var(--s4); align-items: center; }
+  @media (max-width: 900px) { .me { grid-template-columns: minmax(0, 1fr); } .me__art { max-width: 18rem; } }
 </style>

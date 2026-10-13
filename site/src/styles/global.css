@@ -12,27 +12,17 @@ html {
   overflow-x: clip;
 }
 
-/* Graph-grid paper. The grid is pinned to the viewport so the header and the
-   page sheet (a separate layer for the page turn) line up without a seam. */
-html,
+/* The desk. On wide screens it shows at the sides of the one long sheet of paper. */
+html { background: var(--desk); }
+
+/* Graph-grid paper: one long sheet that scrolls with the content (no fixed layers).
+   The header, page and footer all sit on it, so the grid never seams. */
 .paper-grid {
   background-color: var(--paper);
-  background-image:
-    var(--tooth),
-    linear-gradient(var(--grid-major) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
-    linear-gradient(var(--grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-  background-size:
-    220px 220px,
-    calc(var(--grid) * 5) calc(var(--grid) * 5),
-    calc(var(--grid) * 5) calc(var(--grid) * 5),
-    var(--grid) var(--grid),
-    var(--grid) var(--grid);
-  background-position: 0 0, -1px -1px, -1px -1px, -1px -1px, -1px -1px;
-  background-attachment: scroll, fixed, fixed, fixed, fixed;
+  background-image: var(--tooth), var(--grid-tile);
+  background-size: 220px 220px, var(--grid) var(--grid);
+  background-position: 0 0, -1px -1px;
 }
-
 body {
   margin: 0;
   min-height: 100vh;
@@ -41,7 +31,6 @@ body {
   font-size: var(--step-0);
   line-height: var(--leading);
   font-weight: 400;
-  overflow-x: hidden;
   text-rendering: optimizeLegibility;
 }
 
@@ -122,34 +111,46 @@ mark.hl {
   box-decoration-break: clone;
 }
 
-/* ---------- Sticky note paper (asides, proof strip) ---------- */
+/* ---------- Sticky note paper (asides, proof strip) ----------
+   The face is painted by ::before and the lifted-corner shadow by ::after, both
+   behind the content inside the note's own stacking context, so the shadow can
+   only ever show below the paper, never across its face. */
 .sticky {
   --sticky: var(--sticky-yellow);
   position: relative;
-  background: var(--sticky);
-  box-shadow: var(--sticky-shadow);
-  border-bottom-right-radius: 24px 6px;
+  isolation: isolate;
+  background: none;
 }
-/* the slightly darker adhesive strip at the top */
 .sticky::before {
   content: '';
   position: absolute;
-  inset: 0 0 auto 0;
-  height: 1.05rem;
-  background: rgb(0 0 0 / 0.04);
+  inset: 0;
+  z-index: -1;
+  background:
+    /* adhesive strip along the top */
+    linear-gradient(rgb(0 0 0 / 0.04), rgb(0 0 0 / 0.04)) top / 100% 1.05rem no-repeat,
+    /* the bottom third lifts off the page a little, so it catches less light */
+    linear-gradient(180deg, transparent 62%, rgb(90 70 40 / 0.07) 100%),
+    var(--sticky);
+  border-radius: 1px 1px 4px 4px / 1px 1px 8px 8px;
+  box-shadow: 0 1px 1.5px rgb(60 50 40 / 0.16), 0 3px 6px -3px rgb(60 50 40 / 0.18);
   pointer-events: none;
 }
-/* curl shadow under the bottom-right corner */
+/* soft shadow under the two lifted lower corners, fainter in the middle.
+   Pure gradients (no filter), so it renders the same everywhere. */
 .sticky::after {
   content: '';
   position: absolute;
-  right: 5px;
-  bottom: 7px;
-  width: 46%;
-  height: 14px;
-  z-index: -1;
-  box-shadow: 7px 9px 12px rgb(60 50 40 / 0.3);
-  transform: rotate(4deg);
+  left: -3%;
+  right: -3%;
+  bottom: -14px;
+  height: 30px;
+  z-index: -2;
+  /* every gradient fades out before the box edge, so there are no hard sides */
+  background:
+    radial-gradient(18% 48% at 19% 50%, rgb(60 45 25 / 0.42), rgb(60 45 25 / 0.14) 55%, transparent 100%),
+    radial-gradient(18% 48% at 81% 50%, rgb(60 45 25 / 0.42), rgb(60 45 25 / 0.14) 55%, transparent 100%),
+    radial-gradient(45% 40% at 50% 45%, rgb(60 45 25 / 0.14), transparent 100%);
   pointer-events: none;
 }
 .sticky--yellow { --sticky: var(--sticky-yellow); }
@@ -247,31 +248,55 @@ ol.ink-steps > li::before {
   border-radius: var(--wobble-radius-2);
 }
 
-/* ---------- Sketched buttons ---------- */
-.btn-row { display: flex; flex-wrap: wrap; gap: var(--s1); align-items: center; margin-top: var(--s2); }
+/* ---------- Sketched buttons (markup: components/Button.astro) ----------
+   A wobbly ink outline from the pen helper on a scrap of paper. Primary gets a coral
+   marker scribble fill and a second coral pen pass. On hover/focus a coral underline
+   draws in under the label; under reduced motion it simply appears. */
+.btn-row { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s2); align-items: center; margin-top: var(--s2); }
 .btn {
-  --b: var(--ink);
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
+  position: relative;
+  isolation: isolate;
+  display: inline-grid;
+  place-items: center;
   min-height: 48px;
-  padding: 0.55rem 1.25rem 0.6rem;
+  padding: 0.65rem 1.35rem;
   font: 700 1.02rem/1.2 var(--font-body);
   color: var(--ink);
   text-decoration: none;
-  background: var(--paper-scrap);
-  border: 2px solid var(--b);
-  border-radius: var(--wobble-radius);
-  box-shadow: 3px 4px 0 -1px var(--ink);
-  transition: transform 140ms ease, box-shadow 140ms ease;
+  background: none;
+  border: 0;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 160ms ease;
 }
-.btn:hover { transform: translate(-1px, -1px) rotate(-0.6deg); box-shadow: 5px 6px 0 -1px var(--ink); }
-.btn:active { transform: translate(2px, 3px); box-shadow: 0 0 0 0 var(--ink); }
-.btn--primary { box-shadow: 4px 5px 0 -1px var(--accent); }
-.btn--primary:hover { box-shadow: 6px 7px 0 -1px var(--accent); }
-.btn--quiet { box-shadow: none; background: transparent; border-radius: var(--wobble-radius-2); }
-.btn--quiet:hover { box-shadow: none; }
+.btn--sm { min-height: 44px; padding: 0.45rem 0.95rem 0.55rem; font-size: 0.92rem; }
+.btn__ink { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: -1; pointer-events: none; }
+.btn__ink path { fill: none; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.btn__paper { fill: var(--card) !important; stroke: none; }
+.btn__outline { stroke: var(--ink); stroke-width: 2.2; }
+.btn__echo { stroke: var(--accent); stroke-width: 2; }
+.btn__fill { stroke: var(--accent); stroke-opacity: 0.26; stroke-width: 5; }
+.btn__label { position: relative; display: inline-flex; flex-direction: column; align-items: stretch; }
+.btn__under { display: block; width: 0; min-width: 100%; height: 7px; margin-top: 1px; margin-bottom: -8px; overflow: visible; }
+.btn__under path {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-dasharray: 1 1;
+  stroke-dashoffset: 1;
+  opacity: 0;            /* hides the round-cap dot while undrawn */
+  transition: stroke-dashoffset 340ms var(--ease-pen), opacity 0s linear 340ms;
+}
+.btn:hover, .btn:focus-visible { transform: rotate(-0.8deg); }
+.btn:hover .btn__under path, .btn:focus-visible .btn__under path { stroke-dashoffset: 0; opacity: 1; transition: stroke-dashoffset 340ms var(--ease-pen), opacity 0s; }
+.btn:hover .btn__outline, .btn:focus-visible .btn__outline { stroke-width: 2.8; }
+.btn:active { transform: translate(1px, 2px); }
+.btn:focus-visible { outline: 2.5px dashed var(--accent-ink); outline-offset: 5px; border-radius: var(--wobble-radius); }
+@media (prefers-reduced-motion: reduce) {
+  .btn, .btn__under path { transition: none !important; }
+  .btn:hover, .btn:focus-visible, .btn:active { transform: none; }
+}
 
 .text-link {
   font-weight: 700;

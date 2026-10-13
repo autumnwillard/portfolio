@@ -1,0 +1,61 @@
+---
+// "The short version": four headline numbers, each on its own sticky note with its
+// status chips and a plain-text caption (so it survives a skim and works with images off).
+import Highlight from './Highlight.astro';
+import StatusBadge from './StatusBadge.astro';
+
+const proof = [
+  { num: '~85%', hl: true, label: 'fewer severe defects', chips: ['In use'], caption: 'Severe = breaks core function, triggers a SEV call. Dec 2025 to ~Sept 2026.' },
+  { num: '~70–80%', label: 'fewer manual reviews (projected)', chips: ['Projected (estimate)', 'Approved · in build when I left'], caption: 'Estimated from reviewer comments flagging wrong screening answers.' },
+  { num: '10 workflows · 7 dashboards', small: true, label: 'used daily by four engineering teams', chips: ['In daily use'], caption: 'An internal product I built for my own teams.' },
+  { num: 'Hundreds per year → nearly zero', small: true, label: 'abandoned records', chips: ['Shipped'], caption: 'Three small UI changes, not a redesign.' },
+];
+const tilts = [-1.6, 1.2, -0.8, 1.7];
+const colors = ['blue', 'yellow', 'sage', 'rose'];
+---
+<h2 id="proof-h" class="proof__h">The short version</h2>
+<ul class="proof__grid" role="list">
+  {proof.map((p, i) => (
+    <li class={`scrap sticky sticky--${colors[i]}`} style={`--tilt:${tilts[i]}deg`}>
+      <p class:list={['scrap__num', p.small && 'scrap__num--small']}>
+        {p.hl ? <Highlight>{p.num}</Highlight> : p.num}
+      </p>
+      <p class="scrap__label">{p.label}</p>
+      <p class="scrap__chips">{p.chips.map((c) => <StatusBadge status={c} size="sm" />)}</p>
+      <p class="scrap__caption">{p.caption}</p>
+    </li>
+  ))}
+</ul>
+
+<style>
+  /* ---------- Proof strip ---------- */
+  .proof__h { font-size: var(--step-1); color: var(--ink-soft); margin-bottom: var(--s2); }
+  .proof__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s2); }
+  /* each number sits on its own sticky note (paper styles in global.css) */
+  .scrap {
+    padding: 1.6rem 1.15rem 1.2rem;
+    transform: rotate(var(--tilt));
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+  .scrap p { margin: 0; }
+  .scrap__num { font-family: var(--font-hand); font-size: clamp(2.2rem, 1.8rem + 1.4vw, 3rem); line-height: 1.05; color: var(--accent-ink); }
+  .scrap__num :global(mark) { color: var(--accent-ink); }
+  .scrap__num--small { font-size: clamp(1.55rem, 1.3rem + 0.8vw, 1.95rem); }
+  .scrap__label { font-weight: 800; line-height: 1.35; }
+  .scrap__chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .scrap__caption { font-size: var(--step--1); color: var(--ink-soft); line-height: 1.45; margin-top: auto !important; padding-top: 0.4rem; }
+  .scrap :global(.stamp) { background: rgb(255 255 255 / 0.55); }
+  @media (max-width: 1080px) { .proof__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 420px) {
+    .proof__grid { gap: var(--s1); }
+    .scrap { padding: 1.4rem 0.8rem 0.9rem; }
+    .scrap__num { font-size: 1.75rem; }
+    .scrap__num:not(.scrap__num--small) { white-space: nowrap; }
+    .scrap__num--small { overflow-wrap: anywhere; }
+    .scrap__num--small { font-size: 1.35rem; }
+    .scrap__label { font-size: 0.98rem; }
+  }
+
+</style>
