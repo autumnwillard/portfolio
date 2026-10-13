@@ -152,6 +152,7 @@ The concept comes from Autumn's theme brief (`.notes/sources/Website theme.txt`)
 ## Site structure
 
 Plan of record lives in `.notes/portfolio-brief.md`; the brief wins over this summary.
+- **Nav order:** About · Work · Contact · Side Projects (Side Projects is the optional appendix). The site still opens on Work.
 - **Work** (landing page). Featured case studies, in order:
   1. Release risk review: ~85% fewer severe defects (current role; source `.notes/sources/release-risk-review.md`)
   2. AI review routing → compliance AI roadmap (INL; "Approved · in build when I left")
