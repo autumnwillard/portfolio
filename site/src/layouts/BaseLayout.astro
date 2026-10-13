@@ -15,7 +15,7 @@ interface Props {
   description: string;
   active?: 'about' | 'work' | 'contact' | 'side-projects';
 }
-const { title, description, active = 'work' } = Astro.props;
+const { title, description, active } = Astro.props;
 ---
 <!doctype html>
 <html lang="en">
@@ -39,7 +39,7 @@ const { title, description, active = 'work' } = Astro.props;
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <SiteHeader active={active} />
-    <div class="sheet" transition:name="sheet" transition:animate={pageTurn}>
+    <div class="sheet paper-grid" transition:name="sheet" transition:animate={pageTurn}>
       <main id="main" tabindex="-1">
         <slot />
       </main>
@@ -52,6 +52,5 @@ const { title, description, active = 'work' } = Astro.props;
 </html>
 
 <style>
-  .sheet { background-color: var(--paper); background-image: var(--tooth); }
   main:focus { outline: none; }
 </style>

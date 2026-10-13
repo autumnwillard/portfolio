@@ -26,7 +26,7 @@ export const featured: FeaturedCard[] = [
     blurb: "Slow reviews were the lab's top complaint. The real problem was screening answers too unreliable to route on. I designed the lab's first AI review product to fix them, and got it approved for build.",
     badge: 'Approved · in build when I left',
     numbers: ['~70–80% fewer manual reviews (projected)', '95% accuracy gate before anyone relies on it'],
-    href: '#',
+    href: '/work/ai-review-routing/',
     thumb: 'routing',
     size: 'large',
   },
@@ -35,7 +35,7 @@ export const featured: FeaturedCard[] = [
     blurb: 'Four engineering teams ran on hand-copied status numbers and one-by-one ticket reviews. I built them an AI toolkit, then it started finding problems leadership couldn\'t see.',
     badge: 'In daily use',
     numbers: ['10 workflows · 7 dashboards, used daily by four engineering teams', '75% less sprint reporting time', '114 items reviewed → 16 recommended for acceptance testing'],
-    href: '#',
+    href: '/work/ai-toolkit/',
     thumb: 'toolkit',
     size: 'large',
   },
@@ -44,7 +44,7 @@ export const featured: FeaturedCard[] = [
     blurb: "Two enterprise apps, 2,000+ users, a strict budget and borrowed developers. I ranked the backlog by user pain and shipped small fixes, like the one for records people thought they'd submitted.",
     badge: 'Shipped',
     numbers: ['2,000+ users', 'Abandoned records: hundreds per year → nearly zero', 'Questions down approximately 50%'],
-    href: '#',
+    href: '/work/lab-review-system/',
     thumb: 'review-system',
     size: 'small',
   },
@@ -53,7 +53,7 @@ export const featured: FeaturedCard[] = [
     blurb: 'Our highest-priority requests lived in messy email chains. I swapped them for a structured form with automated routing, and it handled 1,000+ requests by the time I left.',
     badge: 'Shipped',
     numbers: ['1,000+ requests'],
-    href: '#',
+    href: '/work/expedite-intake/',
     thumb: 'intake',
     size: 'small',
   },
@@ -61,11 +61,24 @@ export const featured: FeaturedCard[] = [
 
 export const pattern = [
   { said: '"Another hotfix this week?"', wrong: 'Nobody had a clear picture of what was going into each release, or what risk each ticket carried.', bet: 'Track it. Then a rules-based AI review, with people making the calls.', link: 'Release risk review →', href: '/work/release-risk-review/' },
-  { said: '"Reviews take forever." (the #1 complaint in a lab-wide survey)', wrong: 'Screening answers were too unreliable to route on, so every item got both reviews.', bet: 'An AI that answers the screening questions, trusted only after it clears a 95% accuracy gate.', link: 'AI review routing →', href: '#' },
-  { said: '"Which team has room?"', wrong: 'Nobody could answer quickly. My first try, a spreadsheet, needed four manual data pulls every refresh.', bet: 'Read the sources people already keep up to date instead of adding a new one.', link: 'AI toolkit →', href: '#' },
-  { said: '"My record was submitted, right?"', wrong: 'A hidden button and a "New" status that looked like success.', bet: 'Three small UI changes, not a redesign.', link: 'Review system →', href: '#' },
-  { said: '"Can you expedite this?" (by email, missing key details)', wrong: 'No standard intake and no tracking for urgent work.', bet: 'Structured intake with automated routing.', link: 'Expedite intake →', href: '#' },
-  { said: '"Our clients can\'t afford us." (about three paid late or stopped paying)', wrong: 'Small clients took just as much work as bigger ones (brand talks, iteration, outlining, building) for a fraction of the pay.', bet: 'Fewer, bigger clients: mid-size firms with budget but no in-house design or dev team.', link: 'Tech Handoff pivot →', href: '#' },
+  { said: '"Reviews take forever." (the #1 complaint in a lab-wide survey)', wrong: 'Screening answers were too unreliable to route on, so every item got both reviews.', bet: 'An AI that answers the screening questions, trusted only after it clears a 95% accuracy gate.', link: 'AI review routing →', href: '/work/ai-review-routing/' },
+  { said: '"Which team has room?"', wrong: 'Nobody could answer quickly. My first try, a spreadsheet, needed four manual data pulls every refresh.', bet: 'Read the sources people already keep up to date instead of adding a new one.', link: 'AI toolkit →', href: '/work/ai-toolkit/' },
+  { said: '"My record was submitted, right?"', wrong: 'A hidden button and a "New" status that looked like success.', bet: 'Three small UI changes, not a redesign.', link: 'Review system →', href: '/work/lab-review-system/' },
+  { said: '"Can you expedite this?" (by email, missing key details)', wrong: 'No standard intake and no tracking for urgent work.', bet: 'Structured intake with automated routing.', link: 'Expedite intake →', href: '/work/expedite-intake/' },
+  { said: '"Our clients can\'t afford us." (about three paid late or stopped paying)', wrong: 'Small clients took just as much work as bigger ones (brand talks, iteration, outlining, building) for a fraction of the pay.', bet: 'Fewer, bigger clients: mid-size firms with budget but no in-house design or dev team.', link: 'Tech Handoff pivot →', href: '/work/tech-handoff/' },
+];
+
+// One line per featured case study, for the short work list on About (home).
+// Names follow microcopy short titles; hooks are each case file's headline.
+export interface WorkLine { name: string; hook: string; href: string; badge?: string }
+
+export const workList: WorkLine[] = [
+  { name: 'Release risk review', hook: 'Four hotfixes a week is not a release schedule.', href: '/work/release-risk-review/' },
+  { name: 'AI review routing', hook: 'Everything gets reviewed twice. Does it need to?', href: '/work/ai-review-routing/', badge: 'Approved · in build when I left' },
+  { name: 'AI toolkit', hook: '"Which team has room?" shouldn\'t take four data pulls.', href: '/work/ai-toolkit/' },
+  { name: 'Lab review system', hook: 'What do you mean it was never submitted?', href: '/work/lab-review-system/' },
+  { name: 'Expedite intake', hook: 'You get an email, you get an email, everyone gets an email!', href: '/work/expedite-intake/' },
+  { name: 'Tech Handoff', hook: "Our clients can't afford us.", href: '/work/tech-handoff/' },
 ];
 
 export interface MoreCard { hook: string; tag: string; body: string; extra?: boolean }

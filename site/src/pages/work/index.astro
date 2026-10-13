@@ -1,0 +1,409 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import TapedImage from '../../components/TapedImage.astro';
+import StickyNote from '../../components/StickyNote.astro';
+import StatusBadge from '../../components/StatusBadge.astro';
+import Highlight from '../../components/Highlight.astro';
+import InkDivider from '../../components/InkDivider.astro';
+import HotfixWeeks from '../../components/diagrams/HotfixWeeks.astro';
+import CardThumb from '../../components/diagrams/CardThumb.astro';
+import PatternDoodle from '../../components/diagrams/PatternDoodle.astro';
+import { featured, pattern, analyses, tools } from '../../data/work';
+import { arrow } from '../../lib/ink';
+
+
+const proof = [
+  { num: '~85%', hl: true, label: 'fewer severe defects', chips: ['In use'], caption: 'Severe = breaks core function, triggers a SEV call. Dec 2025 to ~Sept 2026.' },
+  { num: '~70–80%', label: 'fewer manual reviews (projected)', chips: ['Projected (estimate)', 'Approved · in build when I left'], caption: 'Estimated from reviewer comments flagging wrong screening answers.' },
+  { num: '10 workflows · 7 dashboards', small: true, label: 'used daily by four engineering teams', chips: ['In daily use'], caption: 'An internal product I built for my own teams.' },
+  { num: 'Hundreds per year → nearly zero', small: true, label: 'abandoned records', chips: ['Shipped'], caption: 'Three small UI changes, not a redesign.' },
+];
+const tilts = [-1.6, 1.2, -0.8, 1.7];
+const colors = ['blue', 'yellow', 'sage', 'rose'];
+const rowArrow = (s: number) => { const a = arrow([[4, 14], [22, 8], [40, 15], [56, 12]], s, 9); return `${a.shaft} ${a.head}`; };
+const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], [12, 42]], s, 8); return `${a.shaft} ${a.head}`; };
+---
+<BaseLayout
+  title="Work · Autumn Willard"
+  description="Case studies from Autumn Willard, a technical product manager: the problem behind each complaint, what she decided to build, and what changed."
+  active="work"
+>
+  <div class="page">
+    <h1 class="visually-hidden">Work</h1>
+
+    <!-- 1. Proof strip -->
+    <section class="sheet-section proof" aria-labelledby="proof-h">
+      <span class="margin-mark" aria-hidden="true">01</span>
+      <div class="section-body">
+        <h2 id="proof-h" class="proof__h">The short version</h2>
+        <ul class="proof__grid" role="list">
+          {proof.map((p, i) => (
+            <li class={`scrap sticky sticky--${colors[i]}`} style={`--tilt:${tilts[i]}deg`}>
+              <p class:list={['scrap__num', p.small && 'scrap__num--small']}>
+                {p.hl ? <Highlight>{p.num}</Highlight> : p.num}
+              </p>
+              <p class="scrap__label">{p.label}</p>
+              <p class="scrap__chips">{p.chips.map((c) => <StatusBadge status={c} size="sm" />)}</p>
+              <p class="scrap__caption">{p.caption}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <InkDivider seed={3} />
+
+    <!-- 2. Featured work -->
+    <section class="sheet-section" id="work" aria-labelledby="work-h">
+      <span class="margin-mark" aria-hidden="true">02</span>
+      <div class="section-body">
+        <h2 id="work-h">The good stuff</h2>
+        <p class="section-lede">Five projects, biggest first. Each one starts with somebody's complaint and ends with what actually changed.</p>
+        <ol class="cards" role="list">
+          {featured.map((c, i) => (
+            <li class:list={['card', `card--${c.size}`]}>
+              <div class="card__thumb">
+                {c.thumb === 'hotfix'
+                  ? <HotfixWeeks variant="thumb" label="Off-cycle hotfix releases: 4+ per week before, 0–1 after." />
+                  : <CardThumb kind={c.thumb} />}
+              </div>
+              <div class="card__text">
+                <p class="card__num" aria-hidden="true">#{i + 1}</p>
+                <h3><a href={c.href} class="card__link">{c.hook}</a></h3>
+                <StatusBadge status={c.badge} />
+                <p class="card__blurb">{c.blurb}</p>
+                <ul class="card__numbers" role="list">
+                  {c.numbers.map((n, k) => <li class:list={[k > 1 && 'hide-mobile']}>{n}</li>)}
+                </ul>
+                <a class="btn" href={c.href} aria-hidden="true" tabindex="-1">Read the case study</a>
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+
+    <InkDivider seed={9} flourish="arrow" />
+
+    <!-- 3. The pattern -->
+    <section class="sheet-section" aria-labelledby="pattern-h">
+      <span class="margin-mark" aria-hidden="true">03</span>
+      <div class="section-body">
+        <div class="pattern__head">
+          <h2 id="pattern-h">The complaint is rarely the problem.</h2>
+          <PatternDoodle />
+        </div>
+        <p class="section-lede">Every project here started with someone telling me what was wrong. They were right that it hurt. The cause was usually somewhere else, so I go find it, then pick the smallest bet that fixes it.</p>
+
+        <div class="pattern__cols" aria-hidden="true">
+          <span>What people said</span><span>What was actually wrong</span><span>What I bet on</span>
+        </div>
+        <ol class="pattern" role="list">
+          {pattern.map((row, i) => (
+            <li class="pattern__row draw">
+              <div class="pattern__cell pattern__said">
+                <span class="visually-hidden">What people said: </span>{row.said}
+              </div>
+              <svg class="pattern__arrow" viewBox="0 0 60 26" aria-hidden="true" focusable="false"><path class="ink ink--accent" d={rowArrow(600 + i)} pathLength="1" /></svg>
+              <svg class="pattern__down" viewBox="0 0 28 46" aria-hidden="true" focusable="false"><path class="ink ink--accent" d={downArrow(620 + i)} pathLength="1" /></svg>
+              <div class="pattern__cell" style="--i:3">
+                <span class="visually-hidden">What was actually wrong: </span>{row.wrong}
+              </div>
+              <svg class="pattern__arrow" viewBox="0 0 60 26" aria-hidden="true" focusable="false"><path class="ink ink--accent" style="--i:5" d={rowArrow(640 + i)} pathLength="1" /></svg>
+              <svg class="pattern__down" viewBox="0 0 28 46" aria-hidden="true" focusable="false"><path class="ink ink--accent" style="--i:5" d={downArrow(660 + i)} pathLength="1" /></svg>
+              <div class="pattern__cell pattern__bet">
+                <span class="visually-hidden">What I bet on: </span>{row.bet}
+                <a class="text-link pattern__read" href={row.href}>{row.link}</a>
+              </div>
+            </li>
+          ))}
+        </ol>
+
+        <p class="habit"><strong>The other habit: I check the code, not just the ticket.</strong> Reading the codebase and the database is how I write sharper specs. It's also how I found <Highlight>3 features marked complete in the tracker that had never been built</Highlight>.</p>
+      </div>
+    </section>
+
+    <InkDivider seed={15} />
+
+    <!-- 4. More work -->
+    <section class="sheet-section" aria-labelledby="more-h">
+      <span class="margin-mark" aria-hidden="true">04</span>
+      <div class="section-body more" data-more>
+        <h2 id="more-h">Smaller stories, same habit</h2>
+        <p class="section-lede">Not everything needs a full case study. These are the short versions.</p>
+
+        <h3 class="more__group">Strategy</h3>
+        <div class="more__strategy">
+          <article class="index-card index-card--lead">
+            <div class="index-card__grid">
+              <div>
+                <h4>Our clients can't afford us.</h4>
+                <p class="index-card__tag">Strategy · Tech Handoff · 2021–22</p>
+                <p>Small clients kept paying late or not at all. I pitched a pivot to mid-size firms with budget but no in-house design or dev team. <Highlight>The company still targets them.</Highlight></p>
+                <p class="index-card__result">Pivot adopted; still the company's target segment</p>
+                <p class="index-card__foot"><StatusBadge status="Adopted · still the target segment" size="sm" /> <a class="text-link" href="#">Read the case study</a></p>
+              </div>
+              <div class="index-card__art"><CardThumb kind="tech-handoff" /></div>
+            </div>
+          </article>
+          <StickyNote tilt={2.2} color="rose" class="lead-note">
+            My first real product decision was "who is this for?" It's still my favorite question.
+          </StickyNote>
+          <article class="index-card truck-card">
+            <div class="index-card__grid index-card__grid--photo">
+              <div>
+                <h4>They asked for a brand guide. I pitched truck magnets.</h4>
+                <p class="index-card__tag">Tech Handoff client work</p>
+                <p>A snow-plow client came to us for a brand guide. I pitched truck magnets on top of it, and they went with the magnets.</p>
+              </div>
+              <TapedImage
+                src="/images/tech-handoff-truck-magnet-720.jpg"
+                sources={[{ type: 'image/webp', srcset: '/images/tech-handoff-truck-magnet-720.webp' }]}
+                alt="Truck magnet design for Schwab's Hauling and Excavation, a Tech Handoff client, on a pickup truck mockup."
+                width={720}
+                height={257}
+                tilt={-1.8}
+              />
+            </div>
+          </article>
+        </div>
+
+        <h3 class="more__group">Analyses that changed decisions</h3>
+        <ul class="index-grid" role="list">
+          {analyses.map((c) => (
+            <li class:list={['index-card', c.extra && 'is-extra']}>
+              <h4>{c.hook}</h4>
+              <p class="index-card__tag">{c.tag}</p>
+              <p>{c.body}</p>
+            </li>
+          ))}
+        </ul>
+
+        <h3 class="more__group is-extra">Tools from the internal toolkit</h3>
+        <ul class="index-grid" role="list">
+          {tools.map((c) => (
+            <li class:list={['index-card', c.extra && 'is-extra']}>
+              <h4>{c.hook}</h4>
+              <p class="index-card__tag">{c.tag}</p>
+              <p>{c.body}</p>
+            </li>
+          ))}
+        </ul>
+        <div class="is-extra">
+          <StickyNote tilt={-1.8} color="sage" class="hp-note">
+            Yes, I've built a hiring app before. That one had a "Hell no" status. This one is more professional. <a href="/side-projects/">See HirePurpose →</a>
+          </StickyNote>
+        </div>
+        <button class="btn js-more-toggle" type="button" hidden>Show more work</button>
+      </div>
+    </section>
+
+    <InkDivider seed={21} flourish="arrow" />
+
+    <!-- How I work with AI lives on About; one line here -->
+    <p class="ai-line">
+      <span class="ai-line__hook">The tools recommend. I decide.</span>
+      <a class="text-link" href="/#ai-h">More about how I work →</a>
+    </p>
+
+    <!-- 5. Side projects teaser -->
+    <section class="sheet-section" aria-labelledby="side-h">
+      <span class="margin-mark" aria-hidden="true">05</span>
+      <div class="section-body side">
+        <div>
+          <h2 id="side-h">I build things on my own time, too.</h2>
+          <p>So I know what I'm asking engineers for. A Rails app in 5 days, a senior capstone that isn't a Pokémon card inventory, and this site.</p>
+          <p><a class="text-link" href="/side-projects/">See the side projects →</a></p>
+        </div>
+        <div class="side__art">
+          <TapedImage
+            src="/images/hirepurpose-sketch-560.jpg"
+            sources={[{ type: 'image/webp', srcset: '/images/hirepurpose-sketch-560.webp' }]}
+            alt="Autumn's pencil sketches of the HirePurpose app screens."
+            width={560}
+            height={996}
+            tilt={-3}
+            class="side__sketch"
+          />
+          <figure class="side__erd">
+            <div class="side__erd-paper"><CardThumb kind="room-reserve" /></div>
+            <span class="tape-strip" aria-hidden="true"></span>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <InkDivider seed={33} />
+
+    <!-- 6. Contact CTA -->
+    <section class="sheet-section cta" aria-labelledby="cta-h">
+      <span class="margin-mark" aria-hidden="true">06</span>
+      <div class="section-body">
+        <h2 id="cta-h">Let's talk before one of us closes this tab.</h2>
+        <p>I'm looking for a product manager role, ideally one that's AI-related. I want to own the what and the why, with a hand in the how and the when. The exact title matters less to me than that. If that sounds like your team, I'd love to hear about it.</p>
+        <div class="btn-row">
+          <a class="btn btn--primary js-email" href="/contact/" data-u="autumn" data-d="hey.com">Email me</a>
+          <a class="btn" href="https://www.linkedin.com/in/autumn-willard">LinkedIn</a>
+          <a class="btn btn--quiet" href="/autumn-willard-resume.pdf">Résumé (PDF)</a>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  /* ---------- Proof strip ---------- */
+  .proof__h { font-size: var(--step-1); color: var(--ink-soft); margin-bottom: var(--s2); }
+  .proof__grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--s2); }
+  /* each number sits on its own sticky note (paper styles in global.css) */
+  .scrap {
+    padding: 1.6rem 1.15rem 1.2rem;
+    transform: rotate(var(--tilt));
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+  .scrap p { margin: 0; }
+  .scrap__num { font-family: var(--font-hand); font-size: clamp(2.2rem, 1.8rem + 1.4vw, 3rem); line-height: 1.05; color: var(--accent-ink); }
+  .scrap__num :global(mark) { color: var(--accent-ink); }
+  .scrap__num--small { font-size: clamp(1.55rem, 1.3rem + 0.8vw, 1.95rem); }
+  .scrap__label { font-weight: 800; line-height: 1.35; }
+  .scrap__chips { display: flex; flex-wrap: wrap; gap: 0.35rem; }
+  .scrap__caption { font-size: var(--step--1); color: var(--ink-soft); line-height: 1.45; margin-top: auto !important; padding-top: 0.4rem; }
+  .scrap :global(.stamp) { background: rgb(255 255 255 / 0.55); }
+  @media (max-width: 1080px) { .proof__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 420px) {
+    .proof__grid { gap: var(--s1); }
+    .scrap { padding: 1.4rem 0.8rem 0.9rem; }
+    .scrap__num { font-size: 1.75rem; }
+    .scrap__num:not(.scrap__num--small) { white-space: nowrap; }
+    .scrap__num--small { overflow-wrap: anywhere; }
+    .scrap__num--small { font-size: 1.35rem; }
+    .scrap__label { font-size: 0.98rem; }
+  }
+
+  /* ---------- Featured cards ---------- */
+  .cards { list-style: none; margin: var(--s3) 0 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s4) var(--s4); }
+  .card { position: relative; }
+  .card--large { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: var(--s3); align-items: center; }
+  .card--large .card__text { order: -1; }
+  .card__thumb {
+    background: var(--paper-scrap);
+    padding: var(--s1);
+    border: 2px solid var(--ink);
+    border-radius: var(--wobble-radius-2);
+    box-shadow: 6px 7px 0 -2px var(--paper-shade);
+  }
+  .card--small .card__thumb { margin-bottom: var(--s2); max-width: 30rem; }
+  .card__num { font-family: var(--font-hand); color: var(--ink-soft); font-size: 1.3rem; margin: 0; }
+  .card h3 { margin: 0.1rem 0 0.7rem; }
+  .card--small h3 { font-size: clamp(1.5rem, 1.3rem + 0.8vw, 1.85rem); }
+  .card__link { text-decoration: none; color: var(--ink); }
+  .card__link::after { content: ''; position: absolute; inset: 0; z-index: 1; }
+  .card__link:hover { text-decoration: underline; text-decoration-color: var(--accent); }
+  .card:has(.card__link:focus-visible) { outline: 2.5px solid var(--accent-ink); outline-offset: 10px; border-radius: var(--wobble-radius); }
+  .card__link:focus-visible { outline: none; }
+  .card__blurb { margin-top: 0.9rem; }
+  .card__numbers { list-style: none; padding: 0; margin: 0 0 var(--s2); display: flex; flex-direction: column; gap: 0.35rem; }
+  .card__numbers li { font-weight: 800; padding-left: 1.4rem; position: relative; line-height: 1.4; }
+  .card__numbers li::before { content: ''; position: absolute; left: 0; top: 0.5em; width: 0.8rem; height: 0.35rem; border-bottom: 3px solid var(--accent); border-radius: 0 0 50% 50%; transform: rotate(-6deg); }
+  .card .btn { position: relative; z-index: 2; }
+  @media (max-width: 900px) {
+    .cards { grid-template-columns: 1fr; gap: var(--s4); }
+    .card--large { grid-template-columns: 1fr; gap: var(--s2); }
+    .card--large .card__text { order: 0; }
+    .card__thumb { max-width: 30rem; }
+  }
+  @media (max-width: 600px) { .hide-mobile { display: none; } }
+
+  /* ---------- Pattern: problem → cause → fix ---------- */
+  .pattern__head { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0 var(--s3); }
+  .pattern__head :global(.pattern-doodle) { margin-bottom: var(--s1); }
+  .pattern__cols, .pattern__row { display: grid; grid-template-columns: minmax(0, 0.9fr) 3.2rem minmax(0, 1.15fr) 3.2rem minmax(0, 1.15fr); align-items: start; }
+  .pattern__cols { margin-top: var(--s3); padding-bottom: 0.4rem; border-bottom: 2.5px solid var(--ink); font: 800 0.8rem/1.2 var(--font-body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); }
+  .pattern__cols span:nth-child(2) { grid-column: 3; }
+  .pattern__cols span:nth-child(3) { grid-column: 5; }
+  .pattern { list-style: none; margin: 0; padding: 0; }
+  .pattern__row { padding: var(--s2) 0; border-bottom: 1.5px dashed var(--rule); }
+  .pattern__said { font-family: var(--font-hand); font-size: 1.45rem; line-height: 1.2; }
+  .pattern__bet { font-weight: 700; }
+  .pattern__read { display: table; margin-top: 0.5rem; font-size: 0.95rem; }
+  .pattern__arrow { width: 2.7rem; margin-top: 0.4rem; overflow: visible; }
+  .pattern__down { display: none; }
+  .habit { margin-top: var(--s3); max-width: 62ch; }
+  @media (max-width: 900px) {
+    .pattern__cols { display: none; }
+    .pattern__row { grid-template-columns: 1fr; }
+    .pattern__arrow { display: none; }
+    .pattern__down { display: block; width: 1.4rem; height: 2.2rem; margin: 0.3rem 0 0.3rem 0.6rem; overflow: visible; }
+  }
+
+  /* ---------- More work: index cards ---------- */
+  .more__group { font-size: var(--step-1); font-family: var(--font-body); font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); margin: var(--s3) 0 var(--s1); }
+  .more__strategy { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: var(--s3); align-items: start; }
+  /* lined paper comes from the shared .index-card in global.css */
+  /* The hook is written above the card's coral rule; the lines run underneath. */
+  .index-card { --card-head: 0px; padding-top: 0; }
+  .index-card h4 {
+    font-size: clamp(1.4rem, 1.25rem + 0.6vw, 1.7rem);
+    margin: 0 -1.3rem 0.7rem;
+    padding: 1.05rem 1.3rem 0.45rem;
+    background: var(--card);
+    border-bottom: 2px solid rgb(224 74 50 / 0.6);
+  }
+  .index-card__grid h4 { margin-right: 0; padding-right: 0; }
+  .index-card p { font-size: 1.02rem; }
+  .index-card__tag { font: 800 0.78rem/1.3 var(--font-body) !important; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); }
+  .index-card__result { font-weight: 800; }
+  .index-card__foot { display: flex; flex-wrap: wrap; gap: 0.6rem 1rem; align-items: center; margin-bottom: 0; }
+  .index-card--lead .index-card__grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: var(--s2); align-items: center; }
+  .index-card__grid--photo { display: flex; flex-direction: column; gap: var(--s2); }
+  .index-card--lead { grid-column: 1; grid-row: 1 / span 2; }
+  .truck-card { grid-column: 2; grid-row: 1; }
+  .more__strategy :global(.lead-note) { grid-column: 2; grid-row: 2; --note-size: 13.5rem; margin: calc(-1 * var(--s2)) 0 0 var(--s1); z-index: 2; }
+  .index-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: var(--s2); }
+  .index-grid .index-card:nth-child(odd) { transform: rotate(-0.4deg); }
+  .index-grid .index-card:nth-child(even) { transform: rotate(0.5deg); }
+  .more :global(.js-more-toggle) { margin-top: var(--s2); }
+  @media (max-width: 1000px) {
+    .more__strategy { grid-template-columns: 1fr; }
+    .index-card--lead, .truck-card, .more__strategy :global(.lead-note) { grid-column: 1; grid-row: auto; }
+    .more__strategy :global(.lead-note) { margin: -1rem 0.5rem 0 auto; }
+  }
+  @media (max-width: 600px) {
+    .index-card--lead .index-card__grid { grid-template-columns: 1fr; }
+    .more.is-collapsed .is-extra { display: none; }
+  }
+  @media (min-width: 601px) {
+    .more :global(.js-more-toggle) { display: none; }
+  }
+
+  /* ---------- AI: one line, pointing to About ---------- */
+  .ai-line {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.3rem 1.1rem;
+    max-width: none;
+    margin: var(--s3) 0;
+    padding-left: var(--margin-col);
+  }
+  .ai-line__hook { font-family: var(--font-hand); font-size: var(--step-2); line-height: 1.15; }
+  @media (max-width: 760px) { .ai-line { padding-left: 0; } }
+
+  /* ---------- Side projects ---------- */
+  .side { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--s3); align-items: center; }
+  .side__art { display: grid; grid-template-columns: 0.75fr 1fr; gap: var(--s2); align-items: center; }
+  .side__art :global(.side__sketch) { max-width: 200px; }
+  .side__erd { position: relative; margin: 0; transform: rotate(2.5deg); }
+  .side__erd-paper { background: var(--paper-scrap); padding: 10px; box-shadow: var(--lift); }
+  .tape-strip {
+    position: absolute; top: -12px; left: 50%; width: 38%; height: 26px;
+    transform: translateX(-50%) rotate(4deg);
+    background: var(--tape);
+    clip-path: polygon(2% 0, 98% 4%, 100% 22%, 97% 41%, 100% 62%, 97% 83%, 99% 100%, 1% 96%, 3% 78%, 0 58%, 2% 37%, 0 17%);
+  }
+  @media (max-width: 900px) { .side { grid-template-columns: 1fr; } }
+
+  .cta h2 { max-width: 22ch; }
+</style>

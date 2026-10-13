@@ -8,6 +8,10 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'always',
   integrations: [mdx()],
+  // About moved to the home page; keep old links working.
+  redirects: {
+    '/about': '/',
+  },
   markdown: {
     remarkPlugins: [remarkHighlight],
   },

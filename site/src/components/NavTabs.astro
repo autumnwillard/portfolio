@@ -4,13 +4,13 @@
 import { rect, loop } from '../lib/ink';
 
 const tabs = [
-  { href: '/about/', label: 'About', key: 'about' },
-  { href: '/', label: 'Work', key: 'work' },
+  { href: '/', label: 'About', key: 'about' },
+  { href: '/work/', label: 'Work', key: 'work' },
   { href: '/contact/', label: 'Contact', key: 'contact' },
   { href: '/side-projects/', label: 'Side Projects', key: 'side-projects' },
 ];
 interface Props { active?: string }
-const { active = 'work' } = Astro.props;
+const { active } = Astro.props;
 ---
 <nav class="tabs" aria-label="Main">
   <ul role="list">
@@ -61,12 +61,20 @@ const { active = 'work' } = Astro.props;
   .tab__loop { inset: -7px -10px; width: calc(100% + 20px); height: calc(100% + 14px); view-transition-name: tab-ink; }
   .tab__loop .ink { stroke-width: 2.6; }
 
-  @media (max-width: 420px) {
-    .tabs ul { gap: 0.4rem 0.3rem; }
-    .tab { padding: 0.4rem 0.5rem 0.45rem; font-size: 0.9rem; min-height: 44px; }
+  /* Phones: the tabs get their own row and share it, so all four always fit on one line
+     (360px and up) while each stays at least 44px tall. */
+  @media (max-width: 899px) {
+    .tabs ul { flex-wrap: nowrap; gap: 0.4rem; }
+    .tabs li { flex: 1 1 auto; display: flex; }
+    .tab { flex: 1 1 auto; }
   }
-  @media (max-width: 380px) {
-    .tabs ul { gap: 0.35rem 0.2rem; }
-    .tab { padding: 0.4rem 0.36rem 0.45rem; font-size: 0.82rem; }
+  @media (max-width: 440px) {
+    .tabs ul { gap: 0.3rem; }
+    .tab { padding: 0.4rem 0.3rem 0.45rem; font-size: 0.9rem; min-height: 44px; }
+    .tab__loop { inset: -6px -4px; width: calc(100% + 8px); height: calc(100% + 12px); }
+  }
+  @media (max-width: 374px) {
+    .tabs ul { gap: 0.2rem; }
+    .tab { padding-inline: 0.2rem; font-size: 0.84rem; }
   }
 </style>

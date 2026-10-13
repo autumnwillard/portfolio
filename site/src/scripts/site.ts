@@ -63,6 +63,30 @@ function setupMore() {
   });
 }
 
+/**
+ * Page-turn direction follows the tab order (About · Work · Contact · Side Projects):
+ * moving right turns the page forward, moving left turns it back. A case study sits
+ * just after Work, so "← All work" turns back. Browser back/forward keeps Astro's
+ * own history-based direction.
+ */
+function pagePosition(path: string): number {
+  const p = path.endsWith('/') ? path : `${path}/`;
+  if (p === '/') return 0;
+  if (p === '/work/') return 1;
+  if (p.startsWith('/work/')) return 1.5;
+  if (p.startsWith('/contact/')) return 2;
+  if (p.startsWith('/side-projects/')) return 3;
+  return 1;
+}
+
+document.addEventListener('astro:before-preparation', (e) => {
+  if (e.navigationType === 'traverse') return;
+  const from = pagePosition(e.from.pathname);
+  const to = pagePosition(e.to.pathname);
+  if (to < from) e.direction = 'back';
+  else if (to > from) e.direction = 'forward';
+});
+
 document.addEventListener('astro:page-load', () => {
   setupDraw();
   setupEmail();

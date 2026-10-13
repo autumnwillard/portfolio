@@ -15,8 +15,20 @@
   /* The one marker color: warm coral-red, after Autumn's hair */
   --accent: #e04a32;           /* marker strokes, loops, large numbers (≥24px) */
   --accent-ink: #c03a23;       /* accent used as small text: 5.2:1 on paper */
-  --hl: rgb(224 74 50 / 0.24); /* highlighter wash; ink on it stays ≥ 11:1 */
-  --hl-strong: rgb(224 74 50 / 0.34);
+
+  /* Highlighter: classic yellow, only for ==highlighted== phrases. Red never stands in for it.
+     Ink on full yellow is 13.2:1, ink-soft 6.1:1; accent-ink 4.25:1 (large numbers only). */
+  --hl: #fbe55c;
+  --hl-soft: rgb(251 229 92 / 0.8);
+  --hl-fade: rgb(251 229 92 / 0);
+
+  /* Sticky notes: yellow plus a few muted colors. Ink on any of them is ≥ 12.8:1,
+     ink-soft ≥ 5.9:1; accent-ink ≥ 4.1:1, so it is used there only for large numbers. */
+  --sticky-yellow: #fdec94;
+  --sticky-rose: #f5dcd3;
+  --sticky-sage: #dce8d3;
+  --sticky-blue: #d9e5f0;
+  --sticky-shadow: 0 1px 1px rgb(60 50 40 / 0.1), 0 10px 16px -10px rgb(60 50 40 / 0.45);
 
   /* Tape */
   --tape: rgb(233 222 196 / 0.82);
@@ -56,6 +68,16 @@
   /* Lines */
   --stroke: 2.2;
   --stroke-bold: 3;
+
+  /* Graph-grid page paper: hairlines kept faint (even the major lines are only 1.14:1
+     against the paper), so text stays ≥ 14:1 (ink) and ≥ 6.5:1 (ink-soft) where it crosses one. */
+  --grid: 24px;
+  --grid-line: rgb(84 120 156 / 0.075);
+  --grid-major: rgb(84 120 156 / 0.11);
+  /* Lined index cards: white card, coral header rule, pale blue writing lines */
+  --card: #ffffff;
+  --card-line: rgb(84 130 176 / 0.2);
+  --card-pitch: 1.75rem;
 
   /* Paper tooth: a tiny tiled noise tile, kept faint so text contrast is unaffected */
   --tooth: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.31 0 0 0 0 0.26 0 0 0 0.075 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");

@@ -22,7 +22,7 @@ metrics:
 description: "How Autumn Willard made each release visible, then built a rules-driven AI risk review that runs every release. Severe defects fell ~85%."
 next:
   title: "AI review routing"
-  href: "#"
+  href: "/work/ai-review-routing/"
 ---
 import StickyNote from '../../components/StickyNote.astro';
 import InkArrow from '../../components/InkArrow.astro';
@@ -35,7 +35,7 @@ import DefectStudy from '../../components/diagrams/DefectStudy.astro';
 
 We ship a monthly release. When I started in December 2025, we were also shipping off-cycle hotfix releases 4+ times a week. Severe defects were reaching customers, and the monthly release had become more of a suggestion.
 
-<StickyNote float tilt={2} seed={11}>
+<StickyNote float tilt={2} color="yellow">
 On paper we had one release a month. In practice we had a release every time someone said "uh oh."
 </StickyNote>
 
@@ -87,7 +87,7 @@ Then I went wider. I studied ~200 defects across ~2,100 code changes, sorted the
   <DefectStudy />
 </figure>
 
-<StickyNote float tilt={-2} seed={21}>
+<StickyNote float tilt={-2.2} color="sage">
 The best time to start tracking a metric is before your manager asks for it. The second-best time is right after.
 </StickyNote>
 
@@ -97,7 +97,7 @@ The best time to start tracking a metric is before your manager asks for it. The
   <ClaudeVsTeam />
 </figure>
 
-<StickyNote variant="box" tilt={1.2} seed={31}>
+<StickyNote tilt={1.6} color="blue" size="sm">
 Yes, I built a spreadsheet so I could grade a robot's homework.
 </StickyNote>
 
