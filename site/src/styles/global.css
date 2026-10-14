@@ -316,8 +316,8 @@ ol.ink-steps > li::before {
 /* ---------- Buttons: index flags (markup: components/Button.astro) ----------
    A Post-it page flag. The translucent film on the left end is the sticky part and stays
    put; on hover/focus the free right end lifts toward the viewer (rotateY about the left
-   edge), catches a little light, and its shadow grows and drops. Press snaps it flat.
-   Ink on either flag colour is ≥ 10.9:1. */
+   edge) and its shadow grows and drops. Press snaps it flat.
+   Ink on either flag colour is ≥ 8:1. */
 .btn-row { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s2); align-items: center; margin-top: var(--s2); }
 .btn {
   --flag: var(--flag-secondary);
@@ -338,8 +338,6 @@ ol.ink-steps > li::before {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   background:
-    /* sheen on the free end, only visible once it lifts */
-    linear-gradient(90deg, transparent 45%, rgb(255 255 255 / calc(var(--pull) * 0.5)) 100%),
     /* film strip · hairline divider · flag */
     linear-gradient(90deg,
       color-mix(in srgb, var(--flag) 38%, transparent) 0 var(--film),
