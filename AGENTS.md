@@ -127,7 +127,7 @@ The concept comes from Autumn's theme brief (`.notes/sources/Website theme.txt`)
 - **Accent:** one coral-red marker color for underlines, arrows, key numbers, the active tab and annotations.
 - **Highlighter:** classic yellow, used only for `==highlighted==` phrases. Red never stands in for highlighter.
 - **Paper:** faint graph-grid paper for the page background; lined paper inside index cards. Lines stay subtle enough that body text reads cleanly.
-- **Asides:** a mix of square sticky notes (short, punchy asides; yellow and a couple of muted colors, slightly rotated) and lined index cards (longer asides or explanations).
+- **Asides:** a mix of square sticky notes (short, punchy asides; yellow and a couple of muted colors, slightly rotated; they stick on their own: no tape or pins, a lifted bottom edge drawn with shadows, no cartoon curls) and lined index cards (longer asides or explanations).
 
 These rules hold for every page:
 
