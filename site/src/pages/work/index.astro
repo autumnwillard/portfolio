@@ -14,6 +14,8 @@ import { featured, pattern, analyses, tools } from '../../data/work';
 import { arrow } from '../../lib/ink';
 
 
+// Many flags on this page, so they cycle through the flag colours.
+const flagColors = ['coral', 'blue', 'green', 'yellow'] as const;
 const rowArrow = (s: number) => { const a = arrow([[4, 14], [22, 8], [40, 15], [56, 12]], s, 9); return `${a.shaft} ${a.head}`; };
 const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], [12, 42]], s, 8); return `${a.shaft} ${a.head}`; };
 ---
@@ -57,7 +59,7 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
                 <ul class="card__numbers" role="list">
                   {c.numbers.map((n, k) => <li class:list={[k > 1 && 'hide-mobile']}>{n}</li>)}
                 </ul>
-                <Button href={c.href} aria-hidden="true" tabindex="-1">Read the case study</Button>
+                <Button href={c.href} color={flagColors[i % flagColors.length]} aria-hidden="true" tabindex="-1">Read the case study</Button>
               </div>
             </li>
           ))}
@@ -176,7 +178,7 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
             Yes, I've built a hiring app before. That one had a "Hell no" status. This one is more professional. <a href="/side-projects/">See HirePurpose →</a>
           </StickyNote>
         </div>
-        <Button class="js-more-toggle" hidden>Show more work</Button>
+        <Button class="js-more-toggle" color="yellow" hidden>Show more work</Button>
       </div>
     </section>
 
@@ -224,8 +226,8 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
         <p>I'm looking for a product manager role, ideally one that's AI-related. I want to own the what and the why, with a hand in the how and the when. The exact title matters less to me than that. If that sounds like your team, I'd love to hear about it.</p>
         <div class="btn-row">
           <Button variant="primary" class="js-email" href="/contact/" data-u="autumn" data-d="hey.com">Email me</Button>
-          <Button href="https://www.linkedin.com/in/autumn-willard">LinkedIn</Button>
-          <Button href="/autumn-willard-resume.pdf">Résumé (PDF)</Button>
+          <Button href="https://www.linkedin.com/in/autumn-willard" color="green">LinkedIn</Button>
+          <Button href="/autumn-willard-resume.pdf" color="yellow">Résumé (PDF)</Button>
         </div>
       </div>
     </section>

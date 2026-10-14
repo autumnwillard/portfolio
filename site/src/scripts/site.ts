@@ -65,6 +65,43 @@ function setupMore() {
 }
 
 /**
+ * Flag buttons that are links flip all the way over on click, like they were used to
+ * turn the page, and then the browser goes where the link points. Modified clicks,
+ * new-tab links and reduced motion skip it.
+ */
+const FLIP_MS = 380;
+document.addEventListener(
+  'click',
+  (e) => {
+    const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a.btn[href]');
+    if (!a || reduce.matches || e.defaultPrevented || e.button !== 0) return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || a.target || a.hasAttribute('download')) return;
+    const href = a.getAttribute('href');
+    if (!href || href.startsWith('#')) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    a.classList.add('is-flipping');
+    window.setTimeout(async () => {
+      const url = new URL(a.href, location.href);
+      const isPage = url.origin === location.origin && !/\.[a-z0-9]+$/i.test(url.pathname);
+      if (isPage) {
+        const { navigate } = await import('astro:transitions/client');
+        navigate(url.href);
+      } else {
+        location.assign(url.href);
+        // mailto: and the like don't leave the page, so put the flag back
+        window.setTimeout(() => a.classList.remove('is-flipping'), 600);
+      }
+    }, FLIP_MS);
+  },
+  true,
+);
+// coming back via the back button (bfcache) shouldn't leave a flag flipped
+window.addEventListener('pageshow', () => {
+  document.querySelectorAll('.btn.is-flipping').forEach((el) => el.classList.remove('is-flipping'));
+});
+
+/**
  * Page-turn direction follows the tab order (About · Work · Contact · Side Projects):
  * moving right turns the page forward, moving left turns it back. A case study sits
  * just after Work, so "← All work" turns back. Browser back/forward keeps Astro's
