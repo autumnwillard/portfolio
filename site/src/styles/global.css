@@ -509,6 +509,30 @@ figcaption {
 [data-astro-transition='back']::view-transition-old(sheet) { z-index: 1; }
 [data-astro-transition='back']::view-transition-new(sheet) { z-index: 2; }
 
+/* Flag handoff: the clicked flag is captured on its own (site.ts names it `flag`) so it
+   doesn't freeze into the page snapshot. Its group rides the turning page: the same
+   spine, vanishing point, timing and easing as page-turn-out, worked out in viewport
+   pixels (--hand-*). Inside that, the flag itself keeps lifting from the pose the click
+   left it in, fast at first, so its motion runs straight on into the turn. It shades
+   and fades with the page. Forward turns only. */
+@keyframes flag-ride {
+  from { transform: translate(var(--hand-ox), var(--hand-oy)) perspective(280vw) translateX(calc(-1 * var(--hand-hw))) rotateY(0deg) translateX(var(--hand-hw)) translate(var(--hand-fx), var(--hand-fy)); }
+  to { transform: translate(var(--hand-ox), var(--hand-oy)) perspective(280vw) translateX(calc(-1 * var(--hand-hw))) rotateY(-90deg) translateX(var(--hand-hw)) translate(var(--hand-fx), var(--hand-fy)); }
+}
+@keyframes flag-carry {
+  from { transform: var(--hand-pose); }
+  to { transform: perspective(600px) rotate(var(--hand-tilt)) translateY(-6px) rotateY(-82deg) rotateZ(-3deg) scale(1.04); }
+}
+@keyframes flag-shade {
+  from { filter: brightness(1); }
+  85% { opacity: 1; }
+  to { filter: brightness(0.7); opacity: 0; }
+}
+/* The static styles match the first keyframes: they show while the turn is being set up. */
+::view-transition-group(flag) { transform-origin: 0 0; transform: translate(calc(var(--hand-ox) + var(--hand-fx)), calc(var(--hand-oy) + var(--hand-fy))); animation: flag-ride 0.42s cubic-bezier(0.2, 0.45, 0.25, 1) both; }
+::view-transition-image-pair(flag) { transform-origin: 0 50%; transform: var(--hand-pose); animation: flag-carry 0.3s cubic-bezier(0.15, 0.6, 0.35, 1) both; }
+::view-transition-old(flag) { animation: flag-shade 0.42s cubic-bezier(0.2, 0.45, 0.25, 1) both; }
+
 /* The marker circle slides to the new tab on a little spring, above the turning page,
    and the two loop drawings cross-fade on the way. */
 ::view-transition-group(tab-ink) { animation-duration: 440ms; animation-timing-function: var(--ease-spring); }

@@ -68,15 +68,16 @@ function setupMore() {
  * Flag buttons that are links flip all the way over on click, like they were used to
  * turn the page. It's one gesture, and nothing waits on anything else:
  *  - pointerdown: the flag squishes flat (CSS :active) and the page starts loading;
- *  - click: the flag is pulled up and Astro's router fetches the page in parallel;
- *  - once it's up (PULL_MS) the router snapshots the old page and turns it, so the
- *    lifted flag rides over with the page instead of finishing its own flip first.
+ *  - click: the flag starts to lift, and Astro's router turns the page as soon as the
+ *    next page is in (usually at once: it was prefetched on hover or press);
+ *  - the clicked flag gets its own view-transition name, so it isn't frozen into the
+ *    page snapshot: it keeps lifting while it rides the turning page (global.css,
+ *    "Flag handoff"), starting from whatever pose the in-page lift had reached.
  * Links Astro doesn't route (PDF, mailto, other sites) flip all the way over, then go. Modified clicks,
  * new-tab links and reduced motion are left alone.
  */
-const PULL_MS = 110; // the flag is pulled up (global.css flag-pull, --pull-time)
 const FLIP_LAND_MS = 210; // the flag is past edge-on and landing (global.css flag-flip)
-const flips = new WeakMap<Element, Promise<void>>();
+const pulls = new WeakSet<Element>(); // routed flags being pulled up
 
 function isRoutedPage(url: URL) {
   return url.origin === location.origin && !/\.[a-z0-9]+$/i.test(url.pathname);
@@ -103,10 +104,10 @@ document.addEventListener(
     a.classList.remove('is-unflipping');
 
     if (isRoutedPage(url)) {
-      // Let Astro's router handle the click (it fetches now); the loader below holds the
-      // snapshot until the flag is up.
+      // Let Astro's router handle the click (it fetches now). The flag starts lifting on
+      // the page; the turn picks it up from wherever it got to (handoff below).
+      pulls.add(a);
       a.classList.add('is-pulling');
-      flips.set(a, new Promise<void>((r) => window.setTimeout(r, PULL_MS)));
       return;
     }
     a.classList.add('is-flipping');
@@ -125,14 +126,64 @@ document.addEventListener(
   true,
 );
 
-// Hold the page snapshot until the flag is up, while the fetch runs alongside.
+/** The flag's layout box in the viewport, ignoring its own (animated) transform. */
+function layoutBox(el: HTMLElement) {
+  let x = 0;
+  let y = 0;
+  for (let n: HTMLElement | null = el; n; n = n.offsetParent as HTMLElement | null) {
+    x += n.offsetLeft;
+    y += n.offsetTop;
+  }
+  return { x: x - scrollX, y: y - scrollY };
+}
+
+/**
+ * Hand the flag over to the page turn. Right before the old page is captured, name the
+ * clicked flag and tell the CSS where it sits relative to the turn's vanishing point,
+ * how wide the sheet is (the spine is its left edge), and how far the in-page lift got,
+ * so the transition carries on from that exact pose instead of freezing it.
+ * Forward turns only: on a back turn the new page falls over the old one, and a flag
+ * floating above both would show through it, so it stays in the snapshot as before.
+ */
 document.addEventListener('astro:before-preparation', (e) => {
-  const landed = e.sourceElement && flips.get(e.sourceElement);
-  if (!landed) return;
+  const a = e.sourceElement as HTMLElement | undefined;
+  if (!a || !pulls.has(a)) return;
+
   const load = e.loader;
   e.loader = async () => {
-    await Promise.all([load(), landed]);
+    await load();
+    if (e.direction === 'back' || !a.isConnected) return;
+    // Stop the in-page lift where it is, so the snapshot and the transition's first
+    // frame show the same pose, then hand that exact pose over.
+    a.getAnimations().forEach((anim) => anim.pause());
+    const pose = getComputedStyle(a).transform;
+    const sheet = document.querySelector('.sheet')?.getBoundingClientRect();
+    const ox = sheet ? sheet.left + sheet.width / 2 : innerWidth / 2;
+    const f = layoutBox(a);
+    const vars: Record<string, string> = {
+      '--hand-hw': `${(sheet?.width ?? innerWidth) / 2}px`,
+      '--hand-ox': `${ox}px`,
+      '--hand-oy': `${innerHeight / 2}px`,
+      '--hand-fx': `${f.x - ox}px`,
+      '--hand-fy': `${f.y - innerHeight / 2}px`,
+      '--hand-pose': pose === 'none' ? 'matrix(1, 0, 0, 1, 0, 0)' : pose,
+      '--hand-tilt': getComputedStyle(a).getPropertyValue('--flag-tilt').trim() || '0deg',
+    };
+    handoff = vars;
+    setHandoffVars();
+    a.style.viewTransitionName = 'flag';
   };
+});
+// Set before the capture (the flag's pseudos show while the turn is set up) and again
+// after the swap, which replaces <html>'s attributes.
+let handoff: Record<string, string> | null = null;
+function setHandoffVars() {
+  if (!handoff) return;
+  for (const [name, v] of Object.entries(handoff)) document.documentElement.style.setProperty(name, v);
+}
+document.addEventListener('astro:after-swap', () => {
+  setHandoffVars();
+  handoff = null;
 });
 
 // Start loading on press, not on release: on touch screens there's no hover prefetch.
@@ -149,7 +200,10 @@ document.addEventListener(
 
 // Coming back via the back button (bfcache) shouldn't leave a flag flipped.
 window.addEventListener('pageshow', () => {
-  document.querySelectorAll('.btn.is-flipping, .btn.is-unflipping, .btn.is-pulling').forEach((el) => el.classList.remove('is-flipping', 'is-unflipping', 'is-pulling'));
+  document.querySelectorAll<HTMLElement>('.btn.is-flipping, .btn.is-unflipping, .btn.is-pulling').forEach((el) => {
+    el.classList.remove('is-flipping', 'is-unflipping', 'is-pulling');
+    el.style.viewTransitionName = '';
+  });
 });
 
 /**
