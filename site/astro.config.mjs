@@ -8,6 +8,8 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'always',
   integrations: [mdx()],
+  // Fetch pages on hover (and on press, see scripts/site.ts) so a page turn never waits.
+  prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
   // About moved to the home page; keep old links working.
   redirects: {
     '/about': '/',

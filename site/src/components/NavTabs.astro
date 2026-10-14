@@ -55,6 +55,9 @@ const { active } = Astro.props;
   .tab__label { position: relative; }
   .tab:hover { color: var(--ink); transform: rotate(-1deg); }
   .tab:hover .tab__box .ink { stroke: var(--ink); }
+  /* pressed: a quick squish, so the click registers before the page turns */
+  .tab:active { transform: rotate(-1deg) scale(0.95); transition-duration: 60ms; }
+  @media (prefers-reduced-motion: reduce) { .tab:hover, .tab:active { transform: none; } }
 
   .tab.is-active { color: var(--ink); font-weight: 800; }
   .tab.is-active .tab__box .ink { stroke: var(--ink); stroke-width: 2.2; }

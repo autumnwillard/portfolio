@@ -316,8 +316,9 @@ ol.ink-steps > li::before {
 /* ---------- Buttons: index flags (markup: components/Button.astro) ----------
    A Post-it page flag. The translucent film on the left end is the sticky part and stays
    put; on hover/focus the free right end lifts toward the viewer (rotateY about the left
-   edge) and its shadow grows and drops. Press snaps it flat. Clicking a link flag flips
-   it all the way over, like it was used to turn the page (site.ts plays it, then navigates).
+   edge) and its shadow grows and drops. Press squishes it flat. Clicking a link flag flips
+   it all the way over, like it was used to turn the page; the page turn starts as it lands
+   (scripts/site.ts).
    Ink on either flag colour is ≥ 8:1. */
 .btn-row { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s2); align-items: center; margin-top: var(--s2); }
 .btn {
@@ -359,22 +360,61 @@ ol.ink-steps > li::before {
 .btn--sm { min-height: 44px; padding-block: 0.45rem; padding-right: 0.95rem; font-size: 0.92rem; }
 .btn__label { position: relative; }
 .btn:hover, .btn:focus-visible { --pull: 1; }
-.btn:active { --pull: 0; transform: perspective(600px) rotate(0deg); transition-duration: 70ms; }
 .btn:focus-visible { outline: 2.5px dashed var(--accent-ink); outline-offset: 6px; }
 @property --pull { syntax: '<number>'; inherits: false; initial-value: 0; }
+/* The back of the flag: a touch darker, shown once the flag has flipped past edge-on. */
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: rgb(60 50 40 / 0.16);
+  opacity: 0;
+  pointer-events: none;
+}
 @media (prefers-reduced-motion: no-preference) {
-  .btn { transition: --pull 230ms ease-out, transform 230ms ease-out; }
-  /* the page-turn: the free end swings up and over the stuck end; the label drops out
-     once the flag is edge-on, so the back of the flag shows colour only */
-  .btn.is-flipping { --pull: 1; pointer-events: none; animation: flag-flip 380ms cubic-bezier(0.5, 0, 0.25, 1) forwards; }
-  .btn.is-flipping .btn__label { animation: flag-flip-label 380ms linear forwards; }
+  /* Hover lifts the free end; letting go springs back. */
+  .btn { transition: --pull 240ms var(--ease-spring), transform 240ms var(--ease-spring); }
+  /* Press (pointerdown): the flag is pressed flat to the page and squishes a little,
+     right away, so the click feels caught before anything else happens. */
+  .btn:active {
+    --pull: 0;
+    transform: perspective(600px) rotate(var(--flag-tilt, 0deg)) translateY(1px) scale(0.95, 0.92);
+    transition-duration: 60ms;
+    transition-timing-function: ease-out;
+  }
+  /* The flip: thrown up off the press (decelerating to edge-on), falls over the stuck
+     end, and lands with a small bounce. The label drops out once it's edge-on, and the
+     darker back shows. No `from` keyframe, so it starts wherever the press left it. */
+  .btn.is-flipping { --pull: 1; pointer-events: none; animation: flag-flip var(--flip-time) linear forwards; }
+  .btn.is-flipping .btn__label { animation: flag-flip-label var(--flip-time) linear forwards; }
+  .btn.is-flipping::after { animation: flag-flip-back var(--flip-time) linear forwards; }
+  /* links that don't leave the page (mailto:) flip the flag back afterwards */
+  .btn.is-unflipping { animation: flag-unflip var(--flip-time) cubic-bezier(0.3, 0, 0.2, 1); }
+  .btn.is-unflipping .btn__label { animation: flag-unflip-label var(--flip-time) linear; }
+  .btn.is-unflipping::after { animation: flag-unflip-back var(--flip-time) linear; }
 }
 @keyframes flag-flip {
-  from { transform: perspective(600px) rotate(var(--flag-tilt, 0deg)) rotateY(-19deg) rotateZ(-0.8deg); }
-  55% { transform: perspective(600px) rotate(var(--flag-tilt, 0deg)) rotateY(-100deg) rotateZ(-3deg) translateY(-4px); }
-  to { transform: perspective(600px) rotate(var(--flag-tilt, 0deg)) rotateY(-172deg) rotateZ(-2deg) translateY(-2px); }
+  0% { animation-timing-function: cubic-bezier(0.2, 0.6, 0.35, 1); }
+  42% {
+    transform: perspective(600px) rotate(var(--flag-tilt, 0deg)) translateY(-5px) rotateY(-92deg) rotateZ(-3deg) scale(1.04);
+    animation-timing-function: cubic-bezier(0.55, 0, 0.9, 0.5);
+  }
+  78% {
+    transform: perspective(600px) rotate(var(--flag-tilt, 0deg)) translateY(-1px) rotateY(-184deg) rotateZ(-2deg);
+    animation-timing-function: cubic-bezier(0.3, 0.6, 0.4, 1);
+  }
+  100% { transform: perspective(600px) rotate(var(--flag-tilt, 0deg)) translateY(-1px) rotateY(-174deg) rotateZ(-2deg); }
 }
-@keyframes flag-flip-label { 0%, 44% { opacity: 1; } 46%, 100% { opacity: 0; } }
+@keyframes flag-flip-label { 0%, 40% { opacity: 1; } 43%, 100% { opacity: 0; } }
+@keyframes flag-flip-back { 0%, 40% { opacity: 0; } 43%, 100% { opacity: 1; } }
+@keyframes flag-unflip {
+  from { transform: perspective(600px) rotate(var(--flag-tilt, 0deg)) translateY(-1px) rotateY(-174deg) rotateZ(-2deg); }
+  50% { transform: perspective(600px) rotate(var(--flag-tilt, 0deg)) translateY(-4px) rotateY(-90deg) rotateZ(-2deg); }
+}
+@keyframes flag-unflip-label { 0%, 50% { opacity: 0; } 53%, 100% { opacity: 1; } }
+@keyframes flag-unflip-back { 0%, 50% { opacity: 1; } 53%, 100% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) {
   /* no movement: the flag just casts a bigger shadow */
   .btn, .btn:hover, .btn:focus-visible, .btn:active { transform: rotate(var(--flag-tilt, 0deg)); transition: none !important; }
@@ -427,28 +467,48 @@ figcaption {
   .only-narrow { display: block; }
 }
 
-/* ---------- Page-turn view transition ---------- */
+/* ---------- Page-turn view transition ----------
+   The sheet is a page in a sketchbook bound at the left. Forward: the old page lifts
+   toward you around the spine, darkening as it tilts away from the light, and the new
+   page is already lying underneath, coming out of its shadow. Back: the previous page
+   falls back over the spine onto the current one. Only transform, opacity and a
+   brightness filter animate (all compositor-friendly). Timing: lib/transitions.ts.
+   The hinge is the left edge; the vanishing point sits mid-sheet so the page doesn't
+   balloon, and vertically at the middle of whatever was on screen (site.ts sets
+   --turn-y-old / --turn-y-new / --turn-dy, since the sheet snapshot is the whole long page). */
 @keyframes page-turn-out {
-  from { transform: perspective(2400px) rotateY(0deg); opacity: 1; filter: none; }
-  70% { opacity: 0.85; }
-  to { transform: perspective(2400px) rotateY(-62deg) translateX(-4%); opacity: 0; filter: brightness(0.92); }
+  from { transform: translateY(var(--turn-dy, 0px)) perspective(280vw) translateX(-50%) rotateY(0deg) translateX(50%); filter: brightness(1); }
+  85% { opacity: 1; }
+  to { transform: translateY(var(--turn-dy, 0px)) perspective(280vw) translateX(-50%) rotateY(-90deg) translateX(50%); filter: brightness(0.7); opacity: 0; }
 }
 @keyframes page-turn-in {
-  from { transform: translateX(1.5%); opacity: 0; }
-  to { transform: none; opacity: 1; }
+  from { filter: brightness(0.84); }
+  to { filter: brightness(1); }
 }
 @keyframes page-back-out {
-  from { transform: none; opacity: 1; }
-  to { transform: translateX(3%); opacity: 0; }
+  from { transform: translateY(var(--turn-dy, 0px)); filter: brightness(1); }
+  to { transform: translateY(var(--turn-dy, 0px)); filter: brightness(0.84); }
 }
 @keyframes page-back-in {
-  from { transform: perspective(2400px) rotateY(-62deg) translateX(-4%); opacity: 0; }
-  to { transform: perspective(2400px) rotateY(0deg); opacity: 1; }
+  from { transform: perspective(280vw) translateX(-50%) rotateY(-90deg) translateX(50%); filter: brightness(0.7); opacity: 0; }
+  15% { opacity: 1; }
+  to { transform: perspective(280vw) translateX(-50%) rotateY(0deg) translateX(50%); filter: brightness(1); opacity: 1; }
 }
-::view-transition-old(sheet),
-::view-transition-new(sheet) { transform-origin: 0 30%; }
-::view-transition-group(sheet) { animation-duration: 0s; }
-::view-transition-old(sheet) { z-index: 2; }
+/* The group sits where the new page is; the old page keeps its own scroll position
+   (--turn-dy), so it doesn't jump to the top before it turns. */
+::view-transition-group(sheet) { animation: none; }
+::view-transition-old(sheet) { transform-origin: 50% var(--turn-y-old, 50vh); clip-path: var(--turn-clip-old, none); z-index: 2; }
+::view-transition-new(sheet) { transform-origin: 50% var(--turn-y-new, 50vh); clip-path: var(--turn-clip-new, none); }
+/* scrolled: the marker circle turns with the page instead of sliding (site.ts) */
+[data-turn-whole] .tab__loop { view-transition-name: none !important; }
+[data-astro-transition='back']::view-transition-old(sheet) { z-index: 1; }
+[data-astro-transition='back']::view-transition-new(sheet) { z-index: 2; }
+
+/* The marker circle slides to the new tab on a little spring, above the turning page,
+   and the two loop drawings cross-fade on the way. */
+::view-transition-group(tab-ink) { animation-duration: 440ms; animation-timing-function: var(--ease-spring); }
+::view-transition-old(tab-ink),
+::view-transition-new(tab-ink) { animation-duration: 220ms; animation-timing-function: ease-out; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }

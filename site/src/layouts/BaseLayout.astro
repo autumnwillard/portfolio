@@ -34,12 +34,14 @@ const { title, description, active } = Astro.props;
         document.documentElement.classList.add('js');
       });
     </script>
-    <ClientRouter />
+    <!-- Browsers without view transitions just swap pages (no half-working fallback). -->
+    <ClientRouter fallback="swap" />
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
-    <!-- One long sheet of graph paper; it scrolls with the content. The masthead keeps
-         its own transition name, so it stays put while the page beneath it turns. -->
+    <!-- One long sheet of graph paper; it scrolls with the content. The whole sheet,
+         masthead included, turns on navigation; only the marker circle around the active
+         tab rides above it and slides to the new tab (NavTabs.astro). -->
     <div class="sheet paper-grid" transition:name="sheet" transition:animate={pageTurn}>
       <SiteHeader active={active} />
       <main id="main" tabindex="-1">

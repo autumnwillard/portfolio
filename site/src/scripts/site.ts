@@ -66,39 +66,135 @@ function setupMore() {
 
 /**
  * Flag buttons that are links flip all the way over on click, like they were used to
- * turn the page, and then the browser goes where the link points. Modified clicks,
- * new-tab links and reduced motion skip it.
+ * turn the page. It's one gesture, and nothing waits on anything else:
+ *  - pointerdown: the flag squishes flat (CSS :active) and the page starts loading;
+ *  - click: the flip starts and Astro's router fetches the page in parallel;
+ *  - as the flag lands (FLIP_LAND_MS) the router snapshots the old page and turns it.
+ * Links Astro doesn't route (PDF, mailto, other sites) flip, then go. Modified clicks,
+ * new-tab links and reduced motion are left alone.
  */
-const FLIP_MS = 380;
+const FLIP_LAND_MS = 210; // the flag is past edge-on and landing (global.css flag-flip)
+const flips = new WeakMap<Element, Promise<void>>();
+
+function isRoutedPage(url: URL) {
+  return url.origin === location.origin && !/\.[a-z0-9]+$/i.test(url.pathname);
+}
+
 document.addEventListener(
   'click',
   (e) => {
     const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a.btn[href]');
-    if (!a || reduce.matches || e.defaultPrevented || e.button !== 0) return;
-    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || a.target || a.hasAttribute('download')) return;
+    if (!a || e.defaultPrevented || e.button !== 0) return;
+    if (a.classList.contains('is-flipping')) {
+      // a second click mid-flip: already on its way
+      e.preventDefault();
+      e.stopImmediatePropagation();
+      return;
+    }
+    if (reduce.matches) return;
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || (a.target && a.target !== '_self') || a.hasAttribute('download')) return;
     const href = a.getAttribute('href');
     if (!href || href.startsWith('#')) return;
+    const url = new URL(a.href, location.href);
+    if (url.origin === location.origin && url.pathname === location.pathname) return;
+
+    a.classList.remove('is-unflipping');
+    a.classList.add('is-flipping');
+    const landed = new Promise<void>((r) => window.setTimeout(r, FLIP_LAND_MS));
+
+    if (isRoutedPage(url)) {
+      // Let Astro's router handle the click (it fetches now); the loader below holds the
+      // snapshot until the flag lands.
+      flips.set(a, landed);
+      return;
+    }
     e.preventDefault();
     e.stopImmediatePropagation();
-    a.classList.add('is-flipping');
-    window.setTimeout(async () => {
-      const url = new URL(a.href, location.href);
-      const isPage = url.origin === location.origin && !/\.[a-z0-9]+$/i.test(url.pathname);
-      if (isPage) {
-        const { navigate } = await import('astro:transitions/client');
-        navigate(url.href);
-      } else {
-        location.assign(url.href);
-        // mailto: and the like don't leave the page, so put the flag back
-        window.setTimeout(() => a.classList.remove('is-flipping'), 600);
-      }
-    }, FLIP_MS);
+    landed.then(() => {
+      location.assign(url.href);
+      // mailto: and the like don't leave the page, so flip the flag back
+      window.setTimeout(() => {
+        a.classList.replace('is-flipping', 'is-unflipping');
+        a.addEventListener('animationend', () => a.classList.remove('is-unflipping'), { once: true });
+      }, 500);
+    });
   },
   true,
 );
-// coming back via the back button (bfcache) shouldn't leave a flag flipped
+
+// Hold the page snapshot until the flag has landed, while the fetch runs alongside.
+document.addEventListener('astro:before-preparation', (e) => {
+  const landed = e.sourceElement && flips.get(e.sourceElement);
+  if (!landed) return;
+  const load = e.loader;
+  e.loader = async () => {
+    await Promise.all([load(), landed]);
+  };
+});
+
+// Start loading on press, not on release: on touch screens there's no hover prefetch.
+document.addEventListener(
+  'pointerdown',
+  (e) => {
+    if (e.button !== 0) return;
+    const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a[href]');
+    if (!a || a.target || !isRoutedPage(new URL(a.href, location.href))) return;
+    import('astro:prefetch').then(({ prefetch }) => prefetch(a.href, { ignoreSlowConnection: true }));
+  },
+  { passive: true },
+);
+
+// Coming back via the back button (bfcache) shouldn't leave a flag flipped.
 window.addEventListener('pageshow', () => {
-  document.querySelectorAll('.btn.is-flipping').forEach((el) => el.classList.remove('is-flipping'));
+  document.querySelectorAll('.btn.is-flipping, .btn.is-unflipping').forEach((el) => el.classList.remove('is-flipping', 'is-unflipping'));
+});
+
+/**
+ * The page turns around its left spine, with the vanishing point in the middle of
+ * whatever is on screen. The sheet snapshot is the whole (long) page, so tell the CSS
+ * where the visible middle is on the old page and on the new one, and how far the old
+ * page sat from the new one (it keeps its scroll position while it turns).
+ */
+let oldTop = 0;
+let oldClip = 'none';
+function sheetBox() {
+  const r = document.querySelector('.sheet')?.getBoundingClientRect();
+  const top = r ? r.top : -scrollY;
+  // Only what's on screen turns: cheaper to draw, and nothing from far down the page
+  // swings into view. The bottom edge is relative to the snapshot's own height (it can
+  // still change as images settle), so the clip can never swallow the whole page.
+  const from = Math.max(0, Math.round(-top));
+  const clip = `inset(${from}px 0 max(0px, calc(100% - ${from + innerHeight}px)) 0)`;
+  return { top, clip };
+}
+document.addEventListener('astro:before-swap', (e) => {
+  ({ top: oldTop, clip: oldClip } = sheetBox());
+  e.viewTransition.finished.finally(() => document.documentElement.removeAttribute('data-turn-whole'));
+});
+
+/**
+ * The marker circle around the active tab slides to the new tab above the turning
+ * page, but only when the tabs are on screen before and after. Scrolled down (or
+ * coming back to a scrolled spot), it would fly in from off screen, so it just turns
+ * with the page instead.
+ */
+let circleSlides = false;
+document.addEventListener('astro:before-preparation', (e) => {
+  const tabs = document.querySelector('.tabs');
+  const visibleNow = !!tabs && tabs.getBoundingClientRect().bottom > 0;
+  const targetY = e.navigationType === 'traverse' ? Number(history.state?.scrollY ?? 0) : 0;
+  circleSlides = visibleNow && targetY < 80;
+  document.documentElement.toggleAttribute('data-turn-whole', !circleSlides);
+});
+document.addEventListener('astro:after-swap', () => {
+  document.documentElement.toggleAttribute('data-turn-whole', !circleSlides);
+  const { top: newTop, clip: newClip } = sheetBox();
+  const root = document.documentElement.style;
+  root.setProperty('--turn-clip-old', oldClip);
+  root.setProperty('--turn-clip-new', newClip);
+  root.setProperty('--turn-y-old', `${Math.round(innerHeight / 2 - oldTop)}px`);
+  root.setProperty('--turn-y-new', `${Math.round(innerHeight / 2 - newTop)}px`);
+  root.setProperty('--turn-dy', `${Math.round(oldTop - newTop)}px`);
 });
 
 /**

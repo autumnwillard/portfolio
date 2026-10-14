@@ -5,7 +5,7 @@ import { swoosh } from '../lib/ink';
 interface Props { active?: string }
 const { active } = Astro.props;
 ---
-<header class="masthead page" transition:name="masthead" transition:animate="none">
+<header class="masthead page">
   <a class="logo" href="/" aria-label="Autumn Willard, home">
     <span aria-hidden="true">Autumn Willard</span>
     <svg viewBox="0 0 180 12" aria-hidden="true" focusable="false"><path class="ink ink--accent" d={swoosh(2, 7, 172, 9, 2.4)} /></svg>
