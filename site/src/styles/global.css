@@ -387,6 +387,8 @@ ol.ink-steps > li::before {
   /* The flip: thrown up off the press (decelerating to edge-on), falls over the stuck
      end, and lands with a small bounce. The label drops out once it's edge-on, and the
      darker back shows. No `from` keyframe, so it starts wherever the press left it. */
+  /* Routed pages: the flag is just pulled up, fast, and the page turns with it. */
+  .btn.is-pulling { --pull: 1; pointer-events: none; animation: flag-pull var(--pull-time) cubic-bezier(0.2, 0.7, 0.3, 1) forwards; }
   .btn.is-flipping { --pull: 1; pointer-events: none; animation: flag-flip var(--flip-time) linear forwards; }
   .btn.is-flipping .btn__label { animation: flag-flip-label var(--flip-time) linear forwards; }
   .btn.is-flipping::after { animation: flag-flip-back var(--flip-time) linear forwards; }
@@ -394,6 +396,9 @@ ol.ink-steps > li::before {
   .btn.is-unflipping { animation: flag-unflip var(--flip-time) cubic-bezier(0.3, 0, 0.2, 1); }
   .btn.is-unflipping .btn__label { animation: flag-unflip-label var(--flip-time) linear; }
   .btn.is-unflipping::after { animation: flag-unflip-back var(--flip-time) linear; }
+}
+@keyframes flag-pull {
+  to { transform: perspective(600px) rotate(var(--flag-tilt, 0deg)) translateY(-4px) rotateY(-58deg) rotateZ(-3deg) scale(1.03); }
 }
 @keyframes flag-flip {
   0% { animation-timing-function: cubic-bezier(0.2, 0.6, 0.35, 1); }

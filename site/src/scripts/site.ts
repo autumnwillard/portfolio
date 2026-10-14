@@ -68,11 +68,13 @@ function setupMore() {
  * Flag buttons that are links flip all the way over on click, like they were used to
  * turn the page. It's one gesture, and nothing waits on anything else:
  *  - pointerdown: the flag squishes flat (CSS :active) and the page starts loading;
- *  - click: the flip starts and Astro's router fetches the page in parallel;
- *  - as the flag lands (FLIP_LAND_MS) the router snapshots the old page and turns it.
- * Links Astro doesn't route (PDF, mailto, other sites) flip, then go. Modified clicks,
+ *  - click: the flag is pulled up and Astro's router fetches the page in parallel;
+ *  - once it's up (PULL_MS) the router snapshots the old page and turns it, so the
+ *    lifted flag rides over with the page instead of finishing its own flip first.
+ * Links Astro doesn't route (PDF, mailto, other sites) flip all the way over, then go. Modified clicks,
  * new-tab links and reduced motion are left alone.
  */
+const PULL_MS = 110; // the flag is pulled up (global.css flag-pull, --pull-time)
 const FLIP_LAND_MS = 210; // the flag is past edge-on and landing (global.css flag-flip)
 const flips = new WeakMap<Element, Promise<void>>();
 
@@ -85,7 +87,7 @@ document.addEventListener(
   (e) => {
     const a = (e.target as Element | null)?.closest?.<HTMLAnchorElement>('a.btn[href]');
     if (!a || e.defaultPrevented || e.button !== 0) return;
-    if (a.classList.contains('is-flipping')) {
+    if (a.matches('.is-flipping, .is-pulling')) {
       // a second click mid-flip: already on its way
       e.preventDefault();
       e.stopImmediatePropagation();
@@ -99,15 +101,16 @@ document.addEventListener(
     if (url.origin === location.origin && url.pathname === location.pathname) return;
 
     a.classList.remove('is-unflipping');
-    a.classList.add('is-flipping');
-    const landed = new Promise<void>((r) => window.setTimeout(r, FLIP_LAND_MS));
 
     if (isRoutedPage(url)) {
       // Let Astro's router handle the click (it fetches now); the loader below holds the
-      // snapshot until the flag lands.
-      flips.set(a, landed);
+      // snapshot until the flag is up.
+      a.classList.add('is-pulling');
+      flips.set(a, new Promise<void>((r) => window.setTimeout(r, PULL_MS)));
       return;
     }
+    a.classList.add('is-flipping');
+    const landed = new Promise<void>((r) => window.setTimeout(r, FLIP_LAND_MS));
     e.preventDefault();
     e.stopImmediatePropagation();
     landed.then(() => {
@@ -122,7 +125,7 @@ document.addEventListener(
   true,
 );
 
-// Hold the page snapshot until the flag has landed, while the fetch runs alongside.
+// Hold the page snapshot until the flag is up, while the fetch runs alongside.
 document.addEventListener('astro:before-preparation', (e) => {
   const landed = e.sourceElement && flips.get(e.sourceElement);
   if (!landed) return;
@@ -146,7 +149,7 @@ document.addEventListener(
 
 // Coming back via the back button (bfcache) shouldn't leave a flag flipped.
 window.addEventListener('pageshow', () => {
-  document.querySelectorAll('.btn.is-flipping, .btn.is-unflipping').forEach((el) => el.classList.remove('is-flipping', 'is-unflipping'));
+  document.querySelectorAll('.btn.is-flipping, .btn.is-unflipping, .btn.is-pulling').forEach((el) => el.classList.remove('is-flipping', 'is-unflipping', 'is-pulling'));
 });
 
 /**

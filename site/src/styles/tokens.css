@@ -105,9 +105,11 @@
   /* Motion */
   --ease-pen: cubic-bezier(0.55, 0.05, 0.25, 1);
   --draw-time: 1100ms;
-  /* Click → page turn is one gesture: the flag flips over (--flip-time) and the page
-     starts to turn as the flag lands (FLIP_LAND_MS in scripts/site.ts). The turn's
-     own timing lives in lib/transitions.ts. */
+  /* Click → page turn is one gesture: the flag is pulled up (--pull-time) and the page
+     starts to turn right then, carrying the lifted flag over with it (PULL_MS in
+     scripts/site.ts). Links that don't turn the page (PDF, mailto) flip the flag all
+     the way over instead (--flip-time). The turn's own timing lives in lib/transitions.ts. */
+  --pull-time: 110ms;
   --flip-time: 270ms;
   /* A gentle spring (≈6% overshoot) for things that slide into place. Browsers without
      linear() fall back to plain `ease`. */

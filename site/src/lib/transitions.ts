@@ -3,7 +3,7 @@
 // Forward: the old page lifts off (eased so most of the new page shows in the first
 // ~200ms), the new page comes out of its shadow underneath. Back: the previous page
 // falls back over the spine and lands.
-const lift = 'cubic-bezier(0.3, 0.15, 0.25, 1)';
+const lift = 'cubic-bezier(0.2, 0.45, 0.25, 1)'; // moves from the first frame, so the turn picks up the flag's pull
 const land = 'cubic-bezier(0.4, 0, 0.2, 1)';
 
 export const pageTurn = {
