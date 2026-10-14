@@ -1,103 +1,132 @@
 ---
-// "The short version": four headline numbers on square sticky notes in a loose cluster.
-// Each note keeps only the big number, a short label, its status chip(s) and a "see how"
-// cue; the explanatory captions sit in a small footnote list beside the cluster.
-// Each whole note links to its case study: the link wraps the number and label (its
-// accessible name, plus the case name) and stretches over the note.
-import { arrow } from '../lib/ink';
-import Highlight from './Highlight.astro';
-import StatusBadge from './StatusBadge.astro';
+// "The short version": four headline numbers as real sticky notes in a loose,
+// overlapping cascade. Each note holds only the number and a short handwritten label,
+// and each one differs in size, tilt, colour and how it's stuck on: taped, lifted
+// corner, pushpin, half peeled. Statuses and captions live on the case-study pages and
+// Work cards; the routing note still says "projected" in its own label.
+// The whole note is the link; its accessible name says which case study it opens.
+import { arrow, loop } from '../lib/ink';
 
 const proof = [
-  { num: '~85%', hl: true, label: 'fewer severe defects', chips: ['In use'], caption: 'Severe = breaks core function, triggers a SEV call. Dec 2025 to ~Sept 2026.', href: '/work/release-risk-review/', case: 'Release risk review', color: 'yellow', tilt: -2.4, dx: '0rem', dy: '0rem' },
-  { num: '~70–80%', label: 'fewer manual reviews (projected)', chips: ['Projected (estimate)', 'Approved · in build when I left'], caption: 'Estimated from reviewer comments flagging wrong screening answers.', href: '/work/ai-review-routing/', case: 'AI review routing', color: 'pink', tilt: 1.8, dx: '-0.6rem', dy: '1.4rem' },
-  { num: '10 workflows · 7 dashboards', small: true, label: 'used daily by four engineering teams', chips: ['In daily use'], caption: 'An internal product I built for my own teams.', href: '/work/ai-toolkit/', case: 'AI toolkit', color: 'blue', tilt: 1.2, dx: '0.8rem', dy: '-0.4rem' },
-  { num: 'Hundreds per year → nearly zero', small: true, label: 'abandoned records', chips: ['Shipped'], caption: 'Three small UI changes, not a redesign.', href: '/work/lab-review-system/', case: 'Lab review system', color: 'green', tilt: -1.6, dx: '0rem', dy: '0.9rem' },
+  { num: '~85%', label: 'fewer severe defects', href: '/work/release-risk-review/', case: 'Release risk review', color: 'yellow', tilt: -3, kind: 'taped', size: 'sq' },
+  { num: '~70–80%', label: 'fewer manual reviews (projected)', href: '/work/ai-review-routing/', case: 'AI review routing', color: 'pink', tilt: 2, kind: 'curl', size: 'wide' },
+  { num: '10 workflows · 7 dashboards', small: true, label: 'used daily by four teams', href: '/work/ai-toolkit/', case: 'AI toolkit', color: 'blue', tilt: -1.5, kind: 'pin', size: 'sm' },
+  { num: 'Hundreds → nearly zero', small: true, label: 'abandoned records a year', href: '/work/lab-review-system/', case: 'Lab review system', color: 'green', tilt: 3.5, kind: 'peel', size: 'md' },
 ];
-const cue = (seed: number) => { const a = arrow([[3, 9], [16, 5], [30, 10], [44, 7]], seed, 7); return `${a.shaft} ${a.head}`; };
+const go = (seed: number) => { const a = arrow([[3, 10], [18, 5], [32, 11], [46, 7]], seed, 7); return `${a.shaft} ${a.head}`; };
+const pin = loop(12, 12, 7, 7, 931, 1.05);
 ---
 <h2 id="proof-h" class="proof__h">The short version</h2>
-<div class="proof">
-  <ul class="proof__cluster" role="list">
-    {proof.map((p, i) => (
-      <li class={`scrap sticky sticky--${p.color}`} style={`--tilt:${p.tilt}deg; --dx:${p.dx}; --dy:${p.dy}`}>
-        <a class="scrap__link" href={p.href}>
-          <span class:list={['scrap__num', p.small && 'scrap__num--small']}>
-            {p.hl ? <Highlight>{p.num}</Highlight> : p.num}
-          </span>
-          <span class="scrap__label">{p.label}</span>
-          <span class="visually-hidden">. Case study: {p.case}</span>
-        </a>
-        <p class="scrap__chips">{p.chips.map((c) => <StatusBadge status={c} size="sm" />)}</p>
-        <p class="scrap__cue" aria-hidden="true">see how <svg viewBox="0 0 48 16" focusable="false"><path class="ink ink--accent" d={cue(900 + i)} /></svg></p>
-      </li>
-    ))}
-  </ul>
-  <ul class="proof__notes" role="list">
-    {proof.map((p) => <li><strong>{p.num}</strong> {p.caption}</li>)}
-  </ul>
-</div>
+<ul class="cascade" role="list">
+  {proof.map((p, i) => (
+    <li class:list={['jot', 'sticky', `sticky--${p.color}`, `jot--${p.kind}`, `jot--${p.size}`]} style={`--tilt:${p.tilt}deg`}>
+      {p.kind === 'taped' && <span class="jot__tape" aria-hidden="true"></span>}
+      {p.kind === 'pin' && (
+        <svg class="jot__pin" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="12" cy="12" r="7" fill="var(--accent)" />
+          <path class="ink" d={pin} />
+          <circle cx="9.5" cy="9.5" r="2" fill="rgb(255 255 255 / 0.55)" />
+        </svg>
+      )}
+      {p.kind === 'peel' && <span class="jot__peel" aria-hidden="true"></span>}
+      <a class="scrap__link jot__link" href={p.href}>
+        <span class:list={['jot__num', p.small && 'jot__num--small']}>{p.num}</span>
+        <span class="jot__label">{p.label}</span>
+        <span class="visually-hidden">. Read the case study: {p.case}</span>
+      </a>
+      <svg class="jot__go" viewBox="0 0 50 16" aria-hidden="true" focusable="false"><path class="ink ink--accent" d={go(940 + i)} /></svg>
+    </li>
+  ))}
+</ul>
+<p class="cascade__all"><a class="text-link" href="/work/">See all the work →</a></p>
 
 <style>
   .proof__h { font-size: var(--step-1); color: var(--ink-soft); margin-bottom: var(--s2); }
-  .proof { display: grid; grid-template-columns: auto minmax(0, 22rem); gap: var(--s3) var(--s4); align-items: center; }
 
-  /* A loose 2×2 cluster: square notes, nudged and turned a little differently */
-  .proof__cluster {
+  /* A loose cascade: a wrapping row of notes at different heights, each nudged into
+     its neighbour so they overlap a little. */
+  .cascade {
     list-style: none;
     margin: 0;
-    padding: 0.5rem 0 1.5rem;
-    display: grid;
-    grid-template-columns: repeat(2, var(--note, 16.5rem));
-    gap: 1rem 0.9rem;
-  }
-  .scrap {
-    position: relative;
-    top: var(--dy);
-    left: var(--dx);
-    aspect-ratio: 1;            /* square; grows only if text ever needs it */
-    padding: 1.75rem 1.1rem 1rem;
-    transform: rotate(var(--tilt));
+    padding: 1.25rem 1.5rem 1.5rem 0.25rem;
     display: flex;
-    flex-direction: column;
-    gap: 0.4rem;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 1.5rem 0;
+  }
+  .jot {
+    position: relative;
+    flex: none;
+    width: var(--w);
+    aspect-ratio: var(--ar, 1);
+    padding: 1.5rem 1.1rem 1.2rem;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    transform: rotate(var(--tilt));
     cursor: pointer;
   }
-  .scrap p { margin: 0; }
-  .scrap__link { display: flex; flex-direction: column; gap: 0.3rem; color: var(--ink); text-decoration: none; }
-  .scrap__link::after { content: ''; position: absolute; inset: 0; z-index: 1; }
-  .scrap__link:focus-visible { outline: none; }
-  .scrap:has(.scrap__link:focus-visible) { outline: 2.5px dashed var(--accent-ink); outline-offset: 6px; }
-  .scrap__num, .scrap__label { display: block; }
-  .scrap__num { font-family: var(--font-hand); font-size: 3rem; line-height: 1; color: var(--accent-deep); }
-  .scrap__num :global(mark) { color: var(--accent-deep); }
-  .scrap__num--small { font-size: 1.75rem; line-height: 1.08; }
-  .scrap__label { font-weight: 800; font-size: 0.98rem; line-height: 1.3; }
-  .scrap__chips { display: flex; flex-wrap: wrap; gap: 0.3rem; }
-  .scrap :global(.stamp) { background: rgb(255 255 255 / 0.55); }
-  .scrap__cue { display: flex; align-items: center; gap: 0.3rem; margin-top: auto !important; font-family: var(--font-hand); font-size: 1.2rem; line-height: 1; color: var(--ink); }
-  .scrap__cue svg { width: 2.6rem; height: auto; overflow: visible; }
-  .scrap__cue .ink { stroke-width: 2; }
+  .jot:hover, .jot:focus-within { z-index: 5; }
+  .jot--sq   { --w: 13rem; margin-top: 0.5rem; }
+  .jot--wide { --w: 17rem; --ar: 17 / 12.5; margin: 3rem 0 0 -0.9rem; }
+  .jot--sm   { --w: 13rem; margin: 0 0 0 2.25rem; padding-top: 2.2rem; }
+  .jot--sm .jot__num--small { font-size: 1.8rem; }
+  .jot--md   { --w: 14rem; margin: 3.75rem 0 0 -1.1rem; }
+
+  .jot__link { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; color: var(--ink); text-decoration: none; }
+  .jot__link::after { content: ''; position: absolute; inset: 0; z-index: 1; }
+  .jot__link:focus-visible { outline: none; }
+  .jot:has(.jot__link:focus-visible) { outline: 2.5px dashed var(--accent-ink); outline-offset: 6px; }
+  .jot__num { font-family: var(--font-hand); font-size: 3.3rem; line-height: 0.95; color: var(--accent-deep); }
+  .jot__num--small { font-size: 2rem; line-height: 1.02; text-wrap: balance; }
+  .jot__label { font-family: var(--font-hand); font-size: 1.4rem; line-height: 1.12; color: var(--ink); text-wrap: balance; }
+
+  /* a small coral arrow that turns up on hover, like a scribbled "→ this way" */
+  .jot__go { position: absolute; left: 50%; bottom: 0.55rem; width: 2.6rem; translate: -50% 0; overflow: visible; opacity: 0; pointer-events: none; }
+  .jot__go .ink { stroke-width: 2.2; }
+  .jot:hover .jot__go, .jot:focus-within .jot__go { opacity: 1; }
   @media (prefers-reduced-motion: no-preference) {
-    .scrap__cue svg { transition: transform 200ms ease; }
-    .scrap:hover .scrap__cue svg, .scrap:focus-within .scrap__cue svg { transform: translateX(3px); }
+    .jot__go { transition: opacity 200ms ease, translate 200ms ease; }
+    .jot:hover .jot__go, .jot:focus-within .jot__go { translate: calc(-50% + 4px) 0; }
   }
 
-  /* The small print, kept out of the notes */
-  .proof__notes { list-style: none; margin: 0; padding: 0 0 0 1rem; border-left: 2px solid var(--rule); font-size: var(--step--1); line-height: 1.5; color: var(--ink-soft); }
-  .proof__notes li + li { margin-top: 0.6rem; }
-  .proof__notes strong { color: var(--ink); font-weight: 800; }
-
-  @media (max-width: 1000px) {
-    .proof { grid-template-columns: minmax(0, 1fr); }
+  /* Attachments ----------------------------------------------------------- */
+  /* taped: a strip of masking tape across the top; the note sits flat */
+  .jot--taped::after { display: none; }
+  .jot--taped { box-shadow: 0 2px 4px -1px rgb(60 45 25 / 0.18); }
+  .jot__tape {
+    position: absolute; top: -0.85rem; left: 50%; width: 5.5rem; height: 1.6rem; z-index: 2;
+    translate: -50% 0; rotate: 4deg;
+    background: repeating-linear-gradient(90deg, transparent 0 5px, rgb(255 255 255 / 0.14) 5px 6px), var(--tape);
+    border-block: 1px solid var(--tape-edge);
+    clip-path: polygon(2% 0, 98% 4%, 100% 22%, 97% 41%, 100% 62%, 97% 83%, 99% 100%, 1% 96%, 3% 78%, 0 58%, 2% 37%, 0 17%);
+    pointer-events: none;
   }
-  /* Phones: one column, alternating turns and a little side-to-side drift */
-  @media (max-width: 600px) {
-    .proof__cluster { grid-template-columns: minmax(0, 1fr); gap: 1.6rem; padding-right: 1.25rem; }
-    .scrap { top: 0; left: 0; width: min(100%, 17rem); }
-    .scrap:nth-child(even) { margin-left: auto; }
-    .scrap:nth-child(odd) { margin-left: 0.4rem; }
-    .scrap { width: min(100%, 16rem); }
-    .scrap__num:not(.scrap__num--small) { font-size: 2.6rem; }
+  /* pin: a coral pushpin near the top; small even shadow, no curl */
+  .jot--pin::after { display: none; }
+  .jot--pin { box-shadow: 0 3px 6px -2px rgb(60 45 25 / 0.25); }
+  .jot__pin { position: absolute; top: 0.3rem; left: 50%; width: 1.6rem; translate: -50% 0; z-index: 2; overflow: visible; filter: drop-shadow(2px 3px 1.5px rgb(60 45 25 / 0.3)); }
+  .jot__pin .ink { stroke-width: 1.4; }
+  /* peel: the bottom-right corner folds back toward the viewer */
+  .jot--peel::after { display: none; }
+  .jot--peel::before { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 3.2rem), calc(100% - 3.2rem) 100%, 0 100%); }
+  .jot__peel {
+    position: absolute; right: 0; bottom: 0; width: 3.2rem; height: 3.2rem; z-index: 0;
+    background: linear-gradient(135deg, rgb(255 255 255 / 0.6), rgb(255 255 255 / 0.15) 60%), var(--sticky);
+    clip-path: polygon(0 0, 100% 0, 0 100%);
+    filter: drop-shadow(-2px -1px 1.5px rgb(60 45 25 / 0.22));
+    pointer-events: none;
+  }
+
+  .cascade__all { margin-top: var(--s1); }
+
+  /* Phones: one column, notes alternate left and right with a light overlap */
+  @media (max-width: 640px) {
+    .cascade { flex-direction: column; flex-wrap: nowrap; gap: 0; padding-right: 1.25rem; }
+    .jot { margin: 0; }
+    .jot--sq   { --w: 12.5rem; }
+    .jot--wide { --w: min(100%, 16.5rem); margin: -0.6rem 0 0 auto; }
+    .jot--sm   { --w: 12.5rem; margin: -0.4rem 0 0 1rem; }
+    .jot--md   { --w: 13rem; margin: -0.4rem 0.5rem 0 auto; }
   }
 </style>

@@ -53,46 +53,59 @@ p { margin: 0 0 var(--s1); max-width: var(--measure); text-wrap: pretty; }
 strong { font-weight: 800; }
 
 /* ---------- Draw-in: a hand scribbling down a shape ----------
-   Every "draws in" effect sweeps diagonally from top-left to bottom-right, the way a
-   hand scribbles down and across. Under reduced motion the end state appears at once. */
+   The big "draws in" effects (CTA buttons, Work card titles) sweep diagonally from
+   top-left to bottom-right, the way a hand scribbles down and across. Under reduced
+   motion the end state appears at once. */
 @keyframes scribble-in {
-  /* links: the top layer is a 135° paper-coloured cover over the scribble; sliding it
-     from its opaque corner to its clear corner uncovers the scribble top-left first */
+  /* card titles: the middle layer is a 135° paper-coloured cover over the scribble;
+     sliding it from its opaque corner to its clear corner uncovers it top-left first */
   from { background-position: 0 100%, 100% 100%, 0 55%; }
   to { background-position: 0 100%, 0 0, 0 55%; }
 }
 
 /* ---------- Links ----------
-   Default: a thin hand-drawn wavy underline (tiled SVG, wraps across lines).
-   Hover/focus: the CTA's coral marker scribble, scaled to text, draws in per line
-   (box-decoration-break: clone gives every line its own scribble and cover). */
+   Rest: a thin hand-drawn wavy underline (tiled SVG, wraps across lines).
+   Hover/focus: a real highlighter stroke on just the text: a light coral band from about
+   x-height to just under the baseline, with soft irregular ends, dragged in left to right.
+   box-decoration-break: clone gives each wrapped line its own stroke. Nothing opaque sits
+   behind the words, so the grid shows through. Ink on the band stays ≥ 11:1. */
 a { color: var(--ink); text-decoration: none; }
-a:where(:not(.btn, .tab, .logo, .skip-link, .scrap__link)) {
+a:where(:not(.btn, .tab, .logo, .skip-link, .scrap__link, .card__link)) {
   --link-under: var(--squiggle);
-  /* layers, top to bottom: wavy underline · 135° cover · scribble (hover only) */
   background-image:
     var(--link-under),
-    linear-gradient(135deg, transparent 42%, var(--link-bg, var(--paper)) 58%),
-    none;
-  background-repeat: repeat-x, no-repeat, repeat-x;
-  background-size: 22px 6px, 300% 300%, 48px 82%;
+    linear-gradient(97deg,
+      rgb(224 74 50 / 0) 0, var(--link-hl) 0.22em, var(--link-hl-2) 45%,
+      var(--link-hl) calc(100% - 0.3em), rgb(224 74 50 / 0) 100%),
+    linear-gradient(-3deg, rgb(224 74 50 / 0) 30%, var(--link-hl-edge) 50%, rgb(224 74 50 / 0) 70%);
+  background-repeat: repeat-x, no-repeat, no-repeat;
+  background-size: 22px 6px, 0% 0.66em, 0% 0.26em;
+  background-position: 0 100%, 0 0.56em, 0.15em 0.44em;
+  padding: 0 0.12em 5px;
+  margin: 0 -0.12em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: background-size 420ms cubic-bezier(0.3, 0.6, 0.35, 1);
+}
+a:where(:not(.btn, .tab, .logo, .skip-link, .scrap__link, .card__link)):hover,
+a:where(:not(.btn, .tab, .logo, .skip-link, .scrap__link, .card__link)):focus-visible {
+  --link-under: var(--squiggle-strong);
+  background-size: 22px 6px, 100% 0.66em, 92% 0.26em;
+}
+
+/* Work card titles behave like buttons: the CTA's coral scribble draws in diagonally. */
+a.card__link {
+  background-image: none, linear-gradient(135deg, transparent 42%, var(--link-bg, var(--paper)) 58%), none;
+  background-repeat: no-repeat, no-repeat, repeat-x;
+  background-size: 22px 6px, 300% 300%, 64px 78%;
   background-position: 0 100%, 0 0, 0 55%;
-  padding-bottom: 5px;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
-a:where(:not(.btn, .tab, .logo, .skip-link, .scrap__link)):hover,
-a:where(:not(.btn, .tab, .logo, .skip-link, .scrap__link)):focus-visible {
-  --link-under: var(--squiggle-strong);
-  background-image:
-    var(--link-under),
-    linear-gradient(135deg, transparent 42%, var(--link-bg, var(--paper)) 58%),
-    var(--scribble);
+a.card__link:hover, a.card__link:focus-visible {
+  background-image: none, linear-gradient(135deg, transparent 42%, var(--link-bg, var(--paper)) 58%), var(--scribble);
   animation: scribble-in 460ms var(--ease-pen) both;
 }
-/* Big card headings: no underline at rest (they read as titles), scribble on hover. */
-a.card__link { --link-under: none !important; padding-bottom: 0; }
-a.card__link:hover, a.card__link:focus-visible { background-size: 22px 6px, 300% 300%, 64px 78%; }
 .sticky, .note--sticky { --link-bg: var(--sticky); }
 .index-card { --link-bg: var(--card); }
 @media (prefers-reduced-motion: reduce) {
