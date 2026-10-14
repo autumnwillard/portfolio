@@ -1,9 +1,8 @@
 ---
 // The top three case studies as lined index cards taped onto the page. Copy comes
-// straight from the Work cards (hook, blurb, status, first headline number). Each card
+// straight from the Work cards (hook, blurb, first headline number). Each card
 // is one link to its case study. The tape varies on purpose: length, angle, position,
 // one or two pieces, and pattern.
-import StatusBadge from './StatusBadge.astro';
 import { featured } from '../data/work';
 
 const tape = [
@@ -21,7 +20,6 @@ const cards = featured.slice(0, 3);
   {cards.map((c, i) => (
     <li class="tcard index-card" style={`--tilt:${tilts[i]}deg`}>
       {tape[i].map((t) => <span class={`washi washi--${t.kind}`} style={`--len:${t.len}; --rot:${t.rot}; ${t.pos}`} aria-hidden="true"></span>)}
-      <p class="tcard__stamp"><StatusBadge status={c.badge} size="sm" /></p>
       <h3 class="tcard__hook"><a class="card__link tcard__link" href={c.href}>{c.hook}<span class="visually-hidden">. Read the case study</span></a></h3>
       <p class="tcard__blurb">{c.blurb}</p>
       <p class="tcard__num">{c.numbers[0]}</p>
@@ -41,9 +39,9 @@ const cards = featured.slice(0, 3);
     align-items: start;
   }
   .tcard {
-    --card-head: 3.1rem;
+    --card-head: 1.6rem;
     position: relative;
-    padding: 0.8rem 1.25rem 1.3rem;
+    padding: var(--card-head) 1.25rem 1.3rem;
     /* writing lines sit just under each line of text */
     background-position: 0 0, 0 calc(var(--card-head) + 0.4rem);
     transform: rotate(var(--tilt));
@@ -51,7 +49,6 @@ const cards = featured.slice(0, 3);
   .tcard:nth-child(2) { margin-top: 1.5rem; }
   .tcard:nth-child(3) { margin-top: 0.5rem; }
   .tcard p { margin: 0; }
-  .tcard__stamp { height: calc(var(--card-head) - 0.8rem); display: flex; align-items: center; }
   .tcard__hook { font-size: clamp(1.4rem, 1.2rem + 0.5vw, 1.65rem); line-height: var(--card-pitch); margin: 0; padding-top: 0.1rem; }
   .tcard__link { color: var(--ink); }
   .tcard__link::after { content: ''; position: absolute; inset: 0; z-index: 1; }

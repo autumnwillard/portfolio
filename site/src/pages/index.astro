@@ -1,6 +1,6 @@
 ---
 // About is the home page: intro + taped-in portrait, a one-line-each list of the
-// work, then who I am, how I think, how I work, how I use AI, and a little personality.
+// work, then how I think, how I work, how I use AI, and a little personality.
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TapedImage from '../components/TapedImage.astro';
 import StickyNote from '../components/StickyNote.astro';
@@ -60,28 +60,16 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
     <section class="sheet-section" aria-labelledby="top-work-h">
       <span class="margin-mark" aria-hidden="true">01</span>
       <div class="section-body">
-        <h2 id="top-work-h" class="top-work__h">The good stuff</h2>
+        <h2 id="top-work-h">Recent work</h2>
         <TapedWorkCards />
       </div>
     </section>
 
     <InkDivider seed={44} />
 
-    <!-- 02. Who I am -->
-    <section class="sheet-section" aria-labelledby="who-h">
-      <span class="margin-mark" aria-hidden="true">02</span>
-      <div class="section-body">
-        <h2 id="who-h">Professional translator. <span class="who__aside">(Business to engineering. Not French.)</span></h2>
-        <p class="section-lede">I'm a technical product manager and hands-on builder. I find the problem behind the complaint, decide what's worth building, get people on board, and measure whether it worked.</p>
-        <p>Some of what that's looked like: I designed a national lab's first AI review product and got it approved for build (it was in build when I left). More recently, I cut severe defects ~85% on a B2B SaaS document management platform.</p>
-      </div>
-    </section>
-
-    <InkDivider seed={47} flourish="arrow" />
-
-    <!-- 03. How I think -->
+    <!-- 02. How I think -->
     <section class="sheet-section" aria-labelledby="think-h">
-      <span class="margin-mark" aria-hidden="true">03</span>
+      <span class="margin-mark" aria-hidden="true">02</span>
       <div class="section-body think">
         <h2 id="think-h">How I think</h2>
         <div class="think__grid">
@@ -99,11 +87,11 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
       </div>
     </section>
 
-    <InkDivider seed={52} />
+    <InkDivider seed={52} flourish="arrow" />
 
-    <!-- 04. How I work -->
+    <!-- 03. How I work -->
     <section class="sheet-section" aria-labelledby="work-h">
-      <span class="margin-mark" aria-hidden="true">04</span>
+      <span class="margin-mark" aria-hidden="true">03</span>
       <div class="section-body">
         <h2 id="work-h">How I work</h2>
         <h3 class="sub-h">Five habits, in the order I use them</h3>
@@ -117,11 +105,11 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
       </div>
     </section>
 
-    <InkDivider seed={58} flourish="arrow" />
+    <InkDivider seed={58} />
 
-    <!-- 05. How I use AI -->
+    <!-- 04. How I use AI -->
     <section class="sheet-section" id="ai" aria-labelledby="ai-h">
-      <span class="margin-mark" aria-hidden="true">05</span>
+      <span class="margin-mark" aria-hidden="true">04</span>
       <div class="section-body ai">
         <div>
           <h2 id="ai-h">How I use AI</h2>
@@ -139,11 +127,11 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
       </div>
     </section>
 
-    <InkDivider seed={63} />
+    <InkDivider seed={63} flourish="arrow" />
 
-    <!-- 06. A little more about me -->
+    <!-- 05. A little more about me -->
     <section class="sheet-section" aria-labelledby="me-h">
-      <span class="margin-mark" aria-hidden="true">06</span>
+      <span class="margin-mark" aria-hidden="true">05</span>
       <div class="section-body me">
         <div>
           <h2 id="me-h">A little more about me</h2>
@@ -187,8 +175,7 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
     .hero h1 { font-size: 2.45rem; }
   }
 
-  /* ---------- Who / think / work / AI ---------- */
-  .who__aside { display: block; font-size: 0.62em; color: var(--accent-ink); margin-top: 0.35rem; }
+  /* ---------- Think / work / AI ---------- */
   .sub-h { font-size: var(--step-1); font-family: var(--font-body); font-weight: 800; color: var(--ink-soft); margin-bottom: var(--s2); }
   .think h3 { margin-top: var(--s2); }
   .think__grid { display: grid; grid-template-columns: minmax(0, var(--measure)) minmax(14rem, 19rem); gap: var(--s2) var(--s4); align-items: start; }
@@ -201,5 +188,4 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
   @media (max-width: 900px) { .ai { grid-template-columns: 1fr; } .ai__art { max-width: 26rem; } }
   .me { display: grid; grid-template-columns: minmax(0, var(--measure)) minmax(12rem, 22rem); gap: var(--s2) var(--s4); align-items: center; }
   @media (max-width: 900px) { .me { grid-template-columns: minmax(0, 1fr); } .me__art { max-width: 18rem; } }
-  .top-work__h { font-size: var(--step-1); color: var(--ink-soft); margin-bottom: var(--s1); }
 </style>
