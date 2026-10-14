@@ -1,7 +1,8 @@
 ---
 // A sketched button: wobbly ink outline (seeded pen helper) on a scrap of paper.
 // variant="primary" gets a heavier outline and a second coral pen pass behind it.
-// On hover/focus a coral marker scribble sweeps in (instant under reduced motion).
+// On hover/focus a coral marker scribble draws in diagonally, top-left to bottom-right
+// (instant under reduced motion).
 // Renders <a> when href is given, otherwise <button>. Extra attributes pass through.
 import { rect, scribble } from '../lib/ink';
 
@@ -32,10 +33,14 @@ const Tag = href ? 'a' : 'button';
   type={href ? undefined : type}
   {...rest}
 >
-  <svg class="btn__ink" viewBox="0 0 200 56" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+  <svg class="btn__ink btn__ink--base" viewBox="0 0 200 56" preserveAspectRatio="none" aria-hidden="true" focusable="false">
     {variant === 'primary' && <path class="btn__echo" d={echo} />}
     <path class="btn__paper" d={paper} />
+  </svg>
+  <svg class="btn__ink btn__ink--scribble" viewBox="0 0 200 56" preserveAspectRatio="none" aria-hidden="true" focusable="false">
     <path class="btn__fill" d={fill} />
+  </svg>
+  <svg class="btn__ink" viewBox="0 0 200 56" preserveAspectRatio="none" aria-hidden="true" focusable="false">
     <path class="btn__outline" d={outline} />
   </svg>
   <span class="btn__label btn__text"><Fragment set:html={label} /></span>

@@ -52,36 +52,51 @@ h4 { font-size: var(--step-1); }
 p { margin: 0 0 var(--s1); max-width: var(--measure); text-wrap: pretty; }
 strong { font-weight: 800; }
 
+/* ---------- Draw-in: a hand scribbling down a shape ----------
+   Every "draws in" effect sweeps diagonally from top-left to bottom-right, the way a
+   hand scribbles down and across. Under reduced motion the end state appears at once. */
+@keyframes scribble-in {
+  /* links: the top layer is a 135° paper-coloured cover over the scribble; sliding it
+     from its opaque corner to its clear corner uncovers the scribble top-left first */
+  from { background-position: 0 100%, 100% 100%, 0 55%; }
+  to { background-position: 0 100%, 0 0, 0 55%; }
+}
+
 /* ---------- Links ----------
-   Every inline/body link gets a thin hand-drawn wavy underline (tiled SVG, so it wraps
-   across lines). On hover/focus a light coral marker swipe sweeps in behind the words,
-   left to right on each line. Components that draw their own links opt out below. */
+   Default: a thin hand-drawn wavy underline (tiled SVG, wraps across lines).
+   Hover/focus: the CTA's coral marker scribble, scaled to text, draws in per line
+   (box-decoration-break: clone gives every line its own scribble and cover). */
 a { color: var(--ink); text-decoration: none; }
-a:where(:not(.btn, .tab, .logo, .skip-link, .card__link, .scrap__link)),
-.card__link:hover,
-.card__link:focus-visible {
+a:where(:not(.btn, .tab, .logo, .skip-link, .scrap__link)) {
+  --link-under: var(--squiggle);
+  /* layers, top to bottom: wavy underline · 135° cover · scribble (hover only) */
   background-image:
-    linear-gradient(100deg, transparent 0.05em, var(--link-swipe) 0.3em, var(--link-swipe) calc(100% - 0.3em), transparent calc(100% - 0.05em)),
-    var(--squiggle);
-  background-repeat: no-repeat, repeat-x;
-  background-size: 0% 72%, 22px 6px;
-  background-position: 0 70%, 0 100%;
+    var(--link-under),
+    linear-gradient(135deg, transparent 42%, var(--link-bg, var(--paper)) 58%),
+    none;
+  background-repeat: repeat-x, no-repeat, repeat-x;
+  background-size: 22px 6px, 300% 300%, 48px 82%;
+  background-position: 0 100%, 0 0, 0 55%;
   padding-bottom: 5px;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
-  transition: background-size 420ms var(--ease-pen);
 }
-a:where(:not(.btn, .tab, .logo, .skip-link, .card__link, .scrap__link)):hover,
-a:where(:not(.btn, .tab, .logo, .skip-link, .card__link, .scrap__link)):focus-visible,
-.card__link:hover,
-.card__link:focus-visible {
-  background-size: 100% 72%, 22px 6px;
+a:where(:not(.btn, .tab, .logo, .skip-link, .scrap__link)):hover,
+a:where(:not(.btn, .tab, .logo, .skip-link, .scrap__link)):focus-visible {
+  --link-under: var(--squiggle-strong);
   background-image:
-    linear-gradient(100deg, transparent 0.05em, var(--link-swipe) 0.3em, var(--link-swipe) calc(100% - 0.3em), transparent calc(100% - 0.05em)),
-    var(--squiggle-strong);
+    var(--link-under),
+    linear-gradient(135deg, transparent 42%, var(--link-bg, var(--paper)) 58%),
+    var(--scribble);
+  animation: scribble-in 460ms var(--ease-pen) both;
 }
+/* Big card headings: no underline at rest (they read as titles), scribble on hover. */
+a.card__link { --link-under: none !important; padding-bottom: 0; }
+a.card__link:hover, a.card__link:focus-visible { background-size: 22px 6px, 300% 300%, 64px 78%; }
+.sticky, .note--sticky { --link-bg: var(--sticky); }
+.index-card { --link-bg: var(--card); }
 @media (prefers-reduced-motion: reduce) {
-  a { transition: none !important; }
+  a, a:hover, a:focus-visible { animation: none !important; transition: none !important; }
 }
 
 /* Hand-drawn focus ring, everywhere */
@@ -153,8 +168,8 @@ mark.hl {
   background:
     /* the lifted corner: a soft fold highlight with a little shade just inside it */
     radial-gradient(120% 120% at 100% 100%, rgb(255 255 255 / 0.5) 0, rgb(255 255 255 / 0.18) 22%, rgb(90 70 40 / 0.08) 38%, transparent 60%) right bottom / 38% 30% no-repeat,
-    /* adhesive strip along the top */
-    linear-gradient(rgb(0 0 0 / 0.04), rgb(0 0 0 / 0.04)) top / 100% 1.05rem no-repeat,
+    /* adhesive band across the top: a touch darker, fading out at its lower edge */
+    linear-gradient(rgb(70 50 20 / 0.075), rgb(70 50 20 / 0.06) 80%, rgb(70 50 20 / 0)) top / 100% 17% no-repeat,
     var(--sticky);
   border-radius: 1px 1px 34px 2px / 1px 1px 9px 2px;
   box-shadow: 0 1px 1.5px rgb(60 50 40 / 0.16);
@@ -190,8 +205,9 @@ mark.hl {
   }
 }
 .sticky--yellow { --sticky: var(--sticky-yellow); }
-.sticky--rose { --sticky: var(--sticky-rose); }
-.sticky--sage { --sticky: var(--sticky-sage); }
+.sticky--pink { --sticky: var(--sticky-pink); }
+.sticky--green { --sticky: var(--sticky-green); }
+.sticky--peach { --sticky: var(--sticky-peach); }
 .sticky--blue { --sticky: var(--sticky-blue); }
 
 /* ---------- Lined index card (shared by asides and short work cards) ---------- */
@@ -307,25 +323,33 @@ ol.ink-steps > li::before {
 }
 .btn--sm { min-height: 44px; padding: 0.45rem 0.95rem 0.55rem; font-size: 0.92rem; }
 .btn__ink { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: -1; pointer-events: none; }
+.btn__ink--base { z-index: -3; }
+.btn__ink--scribble { z-index: -2; overflow: hidden; }
 .btn__ink path { fill: none; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .btn__paper { fill: var(--card) !important; stroke: none; }
 .btn__outline { stroke: var(--ink); stroke-width: 2.2; }
 .btn--primary .btn__outline { stroke-width: 3; }
 .btn__echo { stroke: var(--accent); stroke-width: 2.2; }
-.btn__fill {
-  stroke: var(--accent);
-  stroke-opacity: 0.3;
-  stroke-width: 6;
-  clip-path: inset(0 100% 0 0);
-  transition: clip-path 420ms var(--ease-pen);
+.btn__ink--scribble {
+  /* revealed by a 135° mask that slides from its clear corner to its solid corner */
+  -webkit-mask-image: linear-gradient(135deg, #000 42%, transparent 58%);
+  mask-image: linear-gradient(135deg, #000 42%, transparent 58%);
+  -webkit-mask-size: 300% 300%;
+  mask-size: 300% 300%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: 100% 100%;
+  mask-position: 100% 100%;
+  transition: mask-position 480ms var(--ease-pen), -webkit-mask-position 480ms var(--ease-pen);
 }
+.btn__fill { stroke: var(--accent); stroke-opacity: 0.3; stroke-width: 6; }
 .btn__label { position: relative; }
 .btn:hover, .btn:focus-visible { transform: rotate(-0.8deg); }
-.btn:hover .btn__fill, .btn:focus-visible .btn__fill { clip-path: inset(0 0 0 0); }
+.btn:hover .btn__ink--scribble, .btn:focus-visible .btn__ink--scribble { -webkit-mask-position: 0 0; mask-position: 0 0; }
 .btn:active { transform: translate(1px, 2px); }
 .btn:focus-visible { outline: 2.5px dashed var(--accent-ink); outline-offset: 5px; border-radius: var(--wobble-radius); }
 @media (prefers-reduced-motion: reduce) {
-  .btn, .btn__fill { transition: none !important; }
+  .btn, .btn__ink--scribble { transition: none !important; }
   .btn:hover, .btn:focus-visible, .btn:active { transform: none; }
 }
 
