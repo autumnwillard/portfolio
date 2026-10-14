@@ -53,14 +53,16 @@ p { margin: 0 0 var(--s1); max-width: var(--measure); text-wrap: pretty; }
 strong { font-weight: 800; }
 
 /* ---------- Draw-in: a hand scribbling down a shape ----------
-   The big "draws in" effects (CTA buttons, Work card titles) sweep diagonally from
-   top-left to bottom-right, the way a hand scribbles down and across. Under reduced
-   motion the end state appears at once. */
-@keyframes scribble-in {
-  /* card titles: the middle layer is a 135° paper-coloured cover over the scribble;
-     sliding it from its opaque corner to its clear corner uncovers it top-left first */
-  from { background-position: 0 100%, 100% 100%, 0 55%; }
-  to { background-position: 0 100%, 0 0, 0 55%; }
+   The big "draws in" effects work like a hand scribbling down a shape: top to bottom,
+   each stroke dragged left to right. CTA buttons do it with a 135° mask over their SVG
+   scribble; Work card titles do it with three marker strokes per line drawn in sequence.
+   Nothing opaque is ever painted, so the grid shows through. Under reduced motion the end
+   state appears at once. */
+@keyframes scribble-rows {
+  0%   { background-size: 0% 34%, 0% 34%, 0% 34%; }
+  34%  { background-size: 100% 34%, 0% 34%, 0% 34%; }
+  67%  { background-size: 100% 34%, 100% 34%, 0% 34%; }
+  100% { background-size: 100% 34%, 100% 34%, 100% 34%; }
 }
 
 /* ---------- Links ----------
@@ -93,21 +95,21 @@ a:where(:not(.btn, .tab, .logo, .skip-link, .scrap__link, .card__link)):focus-vi
   background-size: 22px 6px, 100% 0.66em, 92% 0.26em;
 }
 
-/* Work card titles behave like buttons: the CTA's coral scribble draws in diagonally. */
+/* Work card titles behave like buttons: three coral marker strokes per line, drawn top
+   to bottom, each left to right (the CTA scribble, sized for headings). */
 a.card__link {
-  background-image: none, linear-gradient(135deg, transparent 42%, var(--link-bg, var(--paper)) 58%), none;
-  background-repeat: no-repeat, no-repeat, repeat-x;
-  background-size: 22px 6px, 300% 300%, 64px 78%;
-  background-position: 0 100%, 0 0, 0 55%;
+  --stroke: linear-gradient(98deg, rgb(224 74 50 / 0) 0, rgb(224 74 50 / 0.26) 0.25em, rgb(224 74 50 / 0.3) 50%, rgb(224 74 50 / 0.26) calc(100% - 0.35em), rgb(224 74 50 / 0) 100%);
+  background-image: var(--stroke), var(--stroke), var(--stroke);
+  background-repeat: no-repeat;
+  background-size: 0% 34%, 0% 34%, 0% 34%;
+  background-position: 0 12%, 0.15em 52%, 0 90%;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
 a.card__link:hover, a.card__link:focus-visible {
-  background-image: none, linear-gradient(135deg, transparent 42%, var(--link-bg, var(--paper)) 58%), var(--scribble);
-  animation: scribble-in 460ms var(--ease-pen) both;
+  background-size: 100% 34%, 100% 34%, 100% 34%;
+  animation: scribble-rows 520ms var(--ease-pen) both;
 }
-.sticky, .note--sticky { --link-bg: var(--sticky); }
-.index-card { --link-bg: var(--card); }
 @media (prefers-reduced-motion: reduce) {
   a, a:hover, a:focus-visible { animation: none !important; transition: none !important; }
 }
@@ -162,13 +164,19 @@ mark.hl {
 }
 
 /* ---------- Sticky note paper (asides, proof strip) ----------
-   One corner curls: the bottom-right lifts off the page. The face is painted by ::before
-   and the curl's shadow by ::after, both behind the content inside the note's own
-   stacking context, so the shadow only shows below the lifted corner, never on the face.
-   The bottom-left corner sits flat. Gradients only (no filter), so it renders everywhere. */
+   A real Post-it sits flat along its adhesive top edge and its bottom edge lifts off the
+   page. That is drawn with shadows only (no curl shape): a tight contact shadow at the
+   top, and a softer, larger shadow that grows toward the bottom and drops downward.
+   Per note:  --lift-at-rest  how far the bottom edge lifts (0 = flat, 1 = normal, 1.6 = a lot)
+              --bias  which bottom corner lifts more (-1 = left, 0 = even, 1 = right)
+   The face is painted by ::before, behind the content, inside the note's own stacking
+   context. */
+@property --lift { syntax: '<number>'; inherits: true; initial-value: 1; }
 .sticky {
   --sticky: var(--sticky-yellow);
-  --curl-shadow: 0.42;
+  --lift-at-rest: 1;
+  --lift: var(--lift-at-rest);
+  --bias: 0;
   position: relative;
   isolation: isolate;
   background: none;
@@ -179,42 +187,28 @@ mark.hl {
   inset: 0;
   z-index: -1;
   background:
-    /* the lifted corner: a soft fold highlight with a little shade just inside it */
-    radial-gradient(120% 120% at 100% 100%, rgb(255 255 255 / 0.5) 0, rgb(255 255 255 / 0.18) 22%, rgb(90 70 40 / 0.08) 38%, transparent 60%) right bottom / 38% 30% no-repeat,
     /* adhesive band across the top: a touch darker, fading out at its lower edge */
     linear-gradient(rgb(70 50 20 / 0.075), rgb(70 50 20 / 0.06) 80%, rgb(70 50 20 / 0)) top / 100% 17% no-repeat,
+    /* the lower part tips toward the viewer and catches a little less light */
+    linear-gradient(180deg, transparent 55%, rgb(90 70 40 / calc(0.025 + var(--lift) * 0.03)) 100%),
     var(--sticky);
-  border-radius: 1px 1px 34px 2px / 1px 1px 9px 2px;
-  box-shadow: 0 1px 1.5px rgb(60 50 40 / 0.16);
+  border-radius: 1px;
+  box-shadow:
+    /* contact: the stuck-down top edge */
+    0 0.5px 1px rgb(60 45 25 / 0.22),
+    /* the lifted bottom edge: offset down (and toward the lifted corner), spread pulled in
+       so it never shows above the note */
+    calc(var(--bias) * var(--lift) * 3px) calc(var(--lift) * 7px) calc(var(--lift) * 10px) calc(var(--lift) * -4px) rgb(60 45 25 / 0.32),
+    calc(var(--bias) * var(--lift) * 6px) calc(var(--lift) * 14px) calc(var(--lift) * 18px) calc(var(--lift) * -10px) rgb(60 45 25 / 0.22);
   pointer-events: none;
 }
-/* shadow under the curled bottom-right corner only: skewed, offset down and right */
-.sticky::after {
-  content: '';
-  position: absolute;
-  right: -10px;
-  bottom: -10px;
-  width: 58%;
-  height: 30px;
-  z-index: -2;
-  background: radial-gradient(48% 48% at 52% 50%, rgb(60 45 25 / var(--curl-shadow)), rgb(60 45 25 / calc(var(--curl-shadow) * 0.35)) 50%, transparent 100%);
-  transform: rotate(3.5deg) skewX(-14deg);
-  transform-origin: right bottom;
-  pointer-events: none;
-  transition: transform 220ms ease, bottom 220ms ease;
-}
-/* Hover/focus: the note lifts a few px, turns a hair, and the curl's shadow grows. */
+/* Hover/focus: the note lifts a little further and turns a hair; its shadow grows. */
 @media (prefers-reduced-motion: no-preference) {
-  .sticky.sticky { transition: transform 220ms ease; }
+  .sticky.sticky { transition: transform 220ms ease, --lift 220ms ease; }
   .sticky.sticky:hover,
   .sticky.sticky:focus-within {
+    --lift: calc(var(--lift-at-rest, 1) + 0.6);
     transform: translateY(-4px) rotate(calc(var(--tilt, 0deg) - 0.7deg));
-  }
-  .sticky:hover::after,
-  .sticky:focus-within::after {
-    bottom: -13px;
-    transform: rotate(4.5deg) skewX(-16deg) scale(1.08, 1.25);
-    --curl-shadow: 0.5;
   }
 }
 .sticky--yellow { --sticky: var(--sticky-yellow); }

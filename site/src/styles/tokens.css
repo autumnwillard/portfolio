@@ -86,9 +86,6 @@
   --link-hl: rgb(224 74 50 / 0.2);
   --link-hl-2: rgb(224 74 50 / 0.25);
   --link-hl-edge: rgb(224 74 50 / 0.08);
-  /* Card-title hover: the CTA marker scribble, scaled to text and tiled per line. Coral at 30%,
-     overlapping: ink on the darkest overlap is still 8:1. */
-  --scribble: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='24' viewBox='0 0 48 24' preserveAspectRatio='none'%3E%3Cg fill='none' stroke='rgb(224,74,50)' stroke-opacity='.3' stroke-width='6' stroke-linecap='round'%3E%3Cpath d='M-4 5.5C8 3.5 16 6.5 24 5s16-2.5 28 .5'/%3E%3Cpath d='M-4 12.5C10 14 18 10.5 26 12s16 2 26-.5'/%3E%3Cpath d='M-4 19C8 17.5 18 20.5 28 19s14-1.5 24 0'/%3E%3C/g%3E%3C/svg%3E");
   --sheet-edge: 0 0 0 1px rgb(60 50 40 / 0.07), 0 2px 4px rgb(60 50 40 / 0.06), 0 18px 48px -18px rgb(60 50 40 / 0.35);
   /* Lined index cards: white card, coral header rule, pale blue writing lines */
   --card: #ffffff;

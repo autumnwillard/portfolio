@@ -199,7 +199,6 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
           />
           <figure class="side__erd">
             <div class="side__erd-paper"><CardThumb kind="room-reserve" /></div>
-            <span class="tape-strip" aria-hidden="true"></span>
           </figure>
         </div>
       </div>
@@ -229,13 +228,8 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
   .card { position: relative; }
   .card--large { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: var(--s3); align-items: center; }
   .card--large .card__text { order: -1; }
-  .card__thumb {
-    background: var(--paper-scrap);
-    padding: var(--s1);
-    border: 2px solid var(--ink);
-    border-radius: var(--wobble-radius-2);
-    box-shadow: 6px 7px 0 -2px var(--paper-shade);
-  }
+  /* card art is drawn straight onto the graph paper: no panel, no frame */
+  .card__thumb { padding: var(--s1) 0; }
   .card--small .card__thumb { margin-bottom: var(--s2); max-width: 30rem; }
   .card__num { font-family: var(--font-hand); color: var(--ink-soft); font-size: 1.3rem; margin: 0; }
   .card h3 { margin: 0.1rem 0 0.7rem; }
@@ -337,13 +331,7 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
   .side__art { display: grid; grid-template-columns: 0.75fr 1fr; gap: var(--s2); align-items: center; }
   .side__art :global(.side__sketch) { max-width: 200px; }
   .side__erd { position: relative; margin: 0; transform: rotate(2.5deg); }
-  .side__erd-paper { background: var(--paper-scrap); padding: 10px; box-shadow: var(--lift); }
-  .tape-strip {
-    position: absolute; top: -12px; left: 50%; width: 38%; height: 26px;
-    transform: translateX(-50%) rotate(4deg);
-    background: var(--tape);
-    clip-path: polygon(2% 0, 98% 4%, 100% 22%, 97% 41%, 100% 62%, 97% 83%, 99% 100%, 1% 96%, 3% 78%, 0 58%, 2% 37%, 0 17%);
-  }
+  .side__erd-paper { padding: 10px 0; }
   @media (max-width: 900px) { .side { grid-template-columns: 1fr; } }
 
   .cta h2 { max-width: 22ch; }

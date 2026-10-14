@@ -1,33 +1,26 @@
 ---
-// "The short version": four headline numbers as real sticky notes in a loose,
-// overlapping cascade. Each note holds only the number and a short handwritten label,
-// and each one differs in size, tilt, colour and how it's stuck on: taped, lifted
-// corner, pushpin, half peeled. Statuses and captions live on the case-study pages and
-// Work cards; the routing note still says "projected" in its own label.
+// "The short version": four headline numbers on same-size square sticky notes in a loose
+// staggered row. Each note holds only the number and a short handwritten label. Variety
+// comes from rotation and from how each note's bottom edge lifts off the page (its own
+// shadow); the green one has a folded corner. Sticky notes stick on their own: no tape, no pins.
 // The whole note is the link; its accessible name says which case study it opens.
-import { arrow, loop } from '../lib/ink';
+import { arrow } from '../lib/ink';
 
 const proof = [
-  { num: '~85%', label: 'fewer severe defects', href: '/work/release-risk-review/', case: 'Release risk review', color: 'yellow', tilt: -3, kind: 'taped', size: 'sq' },
-  { num: '~70–80%', label: 'fewer manual reviews (projected)', href: '/work/ai-review-routing/', case: 'AI review routing', color: 'pink', tilt: 2, kind: 'curl', size: 'wide' },
-  { num: '10 workflows · 7 dashboards', small: true, label: 'used daily by four teams', href: '/work/ai-toolkit/', case: 'AI toolkit', color: 'blue', tilt: -1.5, kind: 'pin', size: 'sm' },
-  { num: 'Hundreds → nearly zero', small: true, label: 'abandoned records a year', href: '/work/lab-review-system/', case: 'Lab review system', color: 'green', tilt: 3.5, kind: 'peel', size: 'md' },
+  { num: '~85%', label: 'fewer severe defects', href: '/work/release-risk-review/', case: 'Release risk review', color: 'yellow', tilt: -2.4, lift: 0.45, bias: 0, kind: 'plain', dy: '0.4rem' },
+  { num: '~70–80%', label: 'fewer manual reviews (projected)', href: '/work/ai-review-routing/', case: 'AI review routing', color: 'pink', tilt: 1.7, lift: 1.25, bias: -1, kind: 'plain', dy: '2.1rem' },
+  { num: '10 workflows · 7 dashboards', small: true, label: 'used daily by four teams', href: '/work/ai-toolkit/', case: 'AI toolkit', color: 'blue', tilt: -1, lift: 1, bias: 0, kind: 'plain', dy: '0rem' },
+  { num: 'Hundreds → nearly zero', small: true, label: 'abandoned records a year', href: '/work/lab-review-system/', case: 'Lab review system', color: 'green', tilt: 2.6, lift: 1.15, bias: 1, kind: 'peel', dy: '1.6rem' },
 ];
 const go = (seed: number) => { const a = arrow([[3, 10], [18, 5], [32, 11], [46, 7]], seed, 7); return `${a.shaft} ${a.head}`; };
-const pin = loop(12, 12, 7, 7, 931, 1.05);
 ---
 <h2 id="proof-h" class="proof__h">The short version</h2>
 <ul class="cascade" role="list">
   {proof.map((p, i) => (
-    <li class:list={['jot', 'sticky', `sticky--${p.color}`, `jot--${p.kind}`, `jot--${p.size}`]} style={`--tilt:${p.tilt}deg`}>
-      {p.kind === 'taped' && <span class="jot__tape" aria-hidden="true"></span>}
-      {p.kind === 'pin' && (
-        <svg class="jot__pin" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-          <circle cx="12" cy="12" r="7" fill="var(--accent)" />
-          <path class="ink" d={pin} />
-          <circle cx="9.5" cy="9.5" r="2" fill="rgb(255 255 255 / 0.55)" />
-        </svg>
-      )}
+    <li
+      class:list={['jot', 'sticky', `sticky--${p.color}`, `jot--${p.kind}`]}
+      style={`--tilt:${p.tilt}deg; --lift-at-rest:${p.lift}; --bias:${p.bias}; --dy:${p.dy}`}
+    >
       {p.kind === 'peel' && <span class="jot__peel" aria-hidden="true"></span>}
       <a class="scrap__link jot__link" href={p.href}>
         <span class:list={['jot__num', p.small && 'jot__num--small']}>{p.num}</span>
@@ -43,43 +36,40 @@ const pin = loop(12, 12, 7, 7, 931, 1.05);
 <style>
   .proof__h { font-size: var(--step-1); color: var(--ink-soft); margin-bottom: var(--s2); }
 
-  /* A loose cascade: a wrapping row of notes at different heights, each nudged into
-     its neighbour so they overlap a little. */
+  /* One loose, staggered row of four same-size squares; each nudged up or down and
+     tucked a hair under its neighbour. */
   .cascade {
+    --size: clamp(10.5rem, 23.5%, 13.5rem);
     list-style: none;
     margin: 0;
-    padding: 1.25rem 1.5rem 1.5rem 0.25rem;
+    padding: 1.25rem 1.5rem 2rem 0.25rem;
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
     gap: 1.5rem 0;
   }
   .jot {
-    position: relative;
     flex: none;
-    width: var(--w);
-    aspect-ratio: var(--ar, 1);
-    padding: 1.5rem 1.1rem 1.2rem;
+    width: var(--size);
+    aspect-ratio: 1;
+    margin-top: var(--dy);
+    padding: 1.4rem 1rem 1.2rem;
     display: grid;
     place-items: center;
     text-align: center;
     transform: rotate(var(--tilt));
     cursor: pointer;
   }
+  .jot + .jot { margin-left: -0.5rem; }
   .jot:hover, .jot:focus-within { z-index: 5; }
-  .jot--sq   { --w: 13rem; margin-top: 0.5rem; }
-  .jot--wide { --w: 17rem; --ar: 17 / 12.5; margin: 3rem 0 0 -0.9rem; }
-  .jot--sm   { --w: 13rem; margin: 0 0 0 2.25rem; padding-top: 2.2rem; }
-  .jot--sm .jot__num--small { font-size: 1.8rem; }
-  .jot--md   { --w: 14rem; margin: 3.75rem 0 0 -1.1rem; }
 
   .jot__link { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; color: var(--ink); text-decoration: none; }
   .jot__link::after { content: ''; position: absolute; inset: 0; z-index: 1; }
   .jot__link:focus-visible { outline: none; }
   .jot:has(.jot__link:focus-visible) { outline: 2.5px dashed var(--accent-ink); outline-offset: 6px; }
-  .jot__num { font-family: var(--font-hand); font-size: 3.3rem; line-height: 0.95; color: var(--accent-deep); }
-  .jot__num--small { font-size: 2rem; line-height: 1.02; text-wrap: balance; }
-  .jot__label { font-family: var(--font-hand); font-size: 1.4rem; line-height: 1.12; color: var(--ink); text-wrap: balance; }
+  .jot__num { white-space: nowrap; font-family: var(--font-hand); font-size: 3.1rem; line-height: 0.95; color: var(--accent-deep); }
+  .jot__num--small { white-space: normal; font-size: 1.85rem; line-height: 1.02; text-wrap: balance; }
+  .jot__label { font-family: var(--font-hand); font-size: 1.35rem; line-height: 1.12; color: var(--ink); text-wrap: balance; }
 
   /* a small coral arrow that turns up on hover, like a scribbled "→ this way" */
   .jot__go { position: absolute; left: 50%; bottom: 0.55rem; width: 2.6rem; translate: -50% 0; overflow: visible; opacity: 0; pointer-events: none; }
@@ -90,43 +80,38 @@ const pin = loop(12, 12, 7, 7, 931, 1.05);
     .jot:hover .jot__go, .jot:focus-within .jot__go { translate: calc(-50% + 4px) 0; }
   }
 
-  /* Attachments ----------------------------------------------------------- */
-  /* taped: a strip of masking tape across the top; the note sits flat */
-  .jot--taped::after { display: none; }
-  .jot--taped { box-shadow: 0 2px 4px -1px rgb(60 45 25 / 0.18); }
-  .jot__tape {
-    position: absolute; top: -0.85rem; left: 50%; width: 5.5rem; height: 1.6rem; z-index: 2;
-    translate: -50% 0; rotate: 4deg;
-    background: repeating-linear-gradient(90deg, transparent 0 5px, rgb(255 255 255 / 0.14) 5px 6px), var(--tape);
-    border-block: 1px solid var(--tape-edge);
-    clip-path: polygon(2% 0, 98% 4%, 100% 22%, 97% 41%, 100% 62%, 97% 83%, 99% 100%, 1% 96%, 3% 78%, 0 58%, 2% 37%, 0 17%);
+  /* peel: the bottom-right corner folds back toward the viewer. The face is clipped, so
+     the lifted-edge shadows come from drop-shadow filters that follow the clipped shape. */
+  .jot--peel::before {
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 3rem), calc(100% - 3rem) 100%, 0 100%);
+    box-shadow: none;
+  }
+  .jot--peel {
+    filter:
+      drop-shadow(0 0.5px 0.6px rgb(60 45 25 / 0.25))
+      drop-shadow(calc(var(--lift) * 3px) calc(var(--lift) * 5px) calc(var(--lift) * 4px) rgb(60 45 25 / 0.2));
+  }
+  .jot__peel {
+    position: absolute; right: 0; bottom: 0; width: 3rem; height: 3rem; z-index: 0;
+    background: linear-gradient(135deg, rgb(255 255 255 / 0.65), rgb(255 255 255 / 0.2) 65%), var(--sticky);
+    clip-path: polygon(0 0, 100% 0, 0 100%);
     pointer-events: none;
   }
-  /* pin: a coral pushpin near the top; small even shadow, no curl */
-  .jot--pin::after { display: none; }
-  .jot--pin { box-shadow: 0 3px 6px -2px rgb(60 45 25 / 0.25); }
-  .jot__pin { position: absolute; top: 0.3rem; left: 50%; width: 1.6rem; translate: -50% 0; z-index: 2; overflow: visible; filter: drop-shadow(2px 3px 1.5px rgb(60 45 25 / 0.3)); }
-  .jot__pin .ink { stroke-width: 1.4; }
-  /* peel: the bottom-right corner folds back toward the viewer */
-  .jot--peel::after { display: none; }
-  .jot--peel::before { clip-path: polygon(0 0, 100% 0, 100% calc(100% - 3.2rem), calc(100% - 3.2rem) 100%, 0 100%); }
-  .jot__peel {
-    position: absolute; right: 0; bottom: 0; width: 3.2rem; height: 3.2rem; z-index: 0;
-    background: linear-gradient(135deg, rgb(255 255 255 / 0.6), rgb(255 255 255 / 0.15) 60%), var(--sticky);
-    clip-path: polygon(0 0, 100% 0, 0 100%);
-    filter: drop-shadow(-2px -1px 1.5px rgb(60 45 25 / 0.22));
-    pointer-events: none;
+  /* a small shadow cast by the fold onto the note */
+  .jot__peel::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 40%, rgb(60 45 25 / 0.18) 50%, transparent 58%);
   }
 
   .cascade__all { margin-top: var(--s1); }
 
-  /* Phones: one column, notes alternate left and right with a light overlap */
+  /* Phones: one column, alternating left and right with a light overlap */
   @media (max-width: 640px) {
-    .cascade { flex-direction: column; flex-wrap: nowrap; gap: 0; padding-right: 1.25rem; }
-    .jot { margin: 0; }
-    .jot--sq   { --w: 12.5rem; }
-    .jot--wide { --w: min(100%, 16.5rem); margin: -0.6rem 0 0 auto; }
-    .jot--sm   { --w: 12.5rem; margin: -0.4rem 0 0 1rem; }
-    .jot--md   { --w: 13rem; margin: -0.4rem 0.5rem 0 auto; }
+    .cascade { --size: 12.5rem; flex-direction: column; flex-wrap: nowrap; gap: 0; padding-right: 1.25rem; }
+    .jot, .jot + .jot { margin: -0.4rem 0 0; }
+    .jot:first-child { margin-top: 0; }
+    .jot + .jot:nth-child(even) { margin-left: auto; margin-right: 0.25rem; }
+    .jot + .jot:nth-child(3) { margin-left: 0.75rem; }
+    .jot__num:not(.jot__num--small) { font-size: 2.7rem; }
   }
 </style>
