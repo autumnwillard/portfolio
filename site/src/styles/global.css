@@ -217,6 +217,30 @@ mark.hl {
 .sticky--peach { --sticky: var(--sticky-peach); }
 .sticky--blue { --sticky: var(--sticky-blue); }
 
+/* ---------- Washi / masking tape ----------
+   Translucent strips with torn ends, for things taped onto the page (index cards).
+   Sticky notes never get tape. Set per piece: --len (length), --rot (angle) and the
+   position (top/left/right). Patterns: --plain (masking), --stripes, --dots, --check. */
+.washi {
+  --len: 6rem;
+  --rot: -3deg;
+  position: absolute;
+  z-index: 3;
+  width: var(--len);
+  height: 1.55rem;
+  rotate: var(--rot);
+  background-color: var(--washi-base, rgb(222 205 170 / 0.6));
+  mix-blend-mode: multiply;
+  /* torn, slightly jagged ends */
+  clip-path: polygon(2% 0, 98% 3%, 96% 18%, 99.5% 36%, 96% 54%, 99.5% 72%, 96.5% 88%, 98.5% 100%, 1.5% 97%, 4% 84%, 0.5% 66%, 4% 48%, 0.5% 30%, 3.5% 13%);
+  box-shadow: 0 1px 2px rgb(60 45 25 / 0.1);
+  pointer-events: none;
+}
+.washi--plain { --washi-base: rgb(214 194 152 / 0.62); background-image: repeating-linear-gradient(90deg, transparent 0 6px, rgb(255 255 255 / 0.12) 6px 7px); }
+.washi--stripes { --washi-base: rgb(240 190 178 / 0.55); background-image: repeating-linear-gradient(90deg, transparent 0 5px, rgb(224 74 50 / 0.22) 5px 7px); }
+.washi--dots { --washi-base: rgb(168 196 224 / 0.62); background-image: radial-gradient(circle, rgb(255 255 255 / 0.7) 1.3px, transparent 1.8px); background-size: 8px 8px; }
+.washi--check { --washi-base: rgb(178 210 178 / 0.62); background-image: linear-gradient(rgb(90 130 90 / 0.18) 1px, transparent 1px), linear-gradient(90deg, rgb(90 130 90 / 0.18) 1px, transparent 1px); background-size: 6px 6px; }
+
 /* ---------- Lined index card (shared by asides and short work cards) ---------- */
 .index-card {
   position: relative;

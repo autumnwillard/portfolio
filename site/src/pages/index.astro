@@ -4,7 +4,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TapedImage from '../components/TapedImage.astro';
 import StickyNote from '../components/StickyNote.astro';
-import ProofStrip from '../components/ProofStrip.astro';
+import TapedWorkCards from '../components/TapedWorkCards.astro';
 import Button from '../components/Button.astro';
 import Highlight from '../components/Highlight.astro';
 import InkDivider from '../components/InkDivider.astro';
@@ -56,11 +56,12 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
       </div>
     </section>
 
-    <!-- 01. The short version (proof strip) -->
-    <section class="sheet-section proof" aria-labelledby="proof-h">
+    <!-- 01. The top three case studies, taped in on index cards -->
+    <section class="sheet-section" aria-labelledby="top-work-h">
       <span class="margin-mark" aria-hidden="true">01</span>
       <div class="section-body">
-        <ProofStrip />
+        <h2 id="top-work-h" class="top-work__h">The good stuff</h2>
+        <TapedWorkCards />
       </div>
     </section>
 
@@ -200,4 +201,5 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
   @media (max-width: 900px) { .ai { grid-template-columns: 1fr; } .ai__art { max-width: 26rem; } }
   .me { display: grid; grid-template-columns: minmax(0, var(--measure)) minmax(12rem, 22rem); gap: var(--s2) var(--s4); align-items: center; }
   @media (max-width: 900px) { .me { grid-template-columns: minmax(0, 1fr); } .me__art { max-width: 18rem; } }
+  .top-work__h { font-size: var(--step-1); color: var(--ink-soft); margin-bottom: var(--s1); }
 </style>

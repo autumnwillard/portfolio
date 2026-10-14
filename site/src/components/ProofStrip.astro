@@ -12,6 +12,8 @@ const proof = [
   { num: '10 workflows · 7 dashboards', small: true, label: 'used daily by four teams', href: '/work/ai-toolkit/', case: 'AI toolkit', color: 'blue', tilt: -1, lift: 1, bias: 0, kind: 'plain', dy: '0rem' },
   { num: 'Hundreds → nearly zero', small: true, label: 'abandoned records a year', href: '/work/lab-review-system/', case: 'Lab review system', color: 'green', tilt: 2.6, lift: 1.15, bias: 1, kind: 'peel', dy: '1.6rem' },
 ];
+interface Props { seeAll?: boolean }
+const { seeAll = false } = Astro.props;
 const go = (seed: number) => { const a = arrow([[3, 10], [18, 5], [32, 11], [46, 7]], seed, 7); return `${a.shaft} ${a.head}`; };
 ---
 <h2 id="proof-h" class="proof__h">The short version</h2>
@@ -31,26 +33,25 @@ const go = (seed: number) => { const a = arrow([[3, 10], [18, 5], [32, 11], [46,
     </li>
   ))}
 </ul>
-<p class="cascade__all"><a class="text-link" href="/work/">See all the work →</a></p>
+{seeAll && <p class="cascade__all"><a class="text-link" href="/work/">See all the work →</a></p>}
 
 <style>
   .proof__h { font-size: var(--step-1); color: var(--ink-soft); margin-bottom: var(--s2); }
 
-  /* One loose, staggered row of four same-size squares; each nudged up or down and
-     tucked a hair under its neighbour. */
+  /* Four same-size squares spread across the full width, each nudged up or down. */
   .cascade {
-    --size: clamp(10.5rem, 23.5%, 13.5rem);
+    --size: 13.5rem;
     list-style: none;
     margin: 0;
-    padding: 1.25rem 1.5rem 2rem 0.25rem;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    gap: 1.5rem 0;
+    padding: 1.25rem 0.75rem 2rem;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    justify-items: center;
+    align-items: start;
+    gap: 2rem 1.5rem;
   }
   .jot {
-    flex: none;
-    width: var(--size);
+    width: min(100%, var(--size));
     aspect-ratio: 1;
     margin-top: var(--dy);
     padding: 1.4rem 1rem 1.2rem;
@@ -60,16 +61,15 @@ const go = (seed: number) => { const a = arrow([[3, 10], [18, 5], [32, 11], [46,
     transform: rotate(var(--tilt));
     cursor: pointer;
   }
-  .jot + .jot { margin-left: -0.5rem; }
   .jot:hover, .jot:focus-within { z-index: 5; }
 
   .jot__link { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; color: var(--ink); text-decoration: none; }
   .jot__link::after { content: ''; position: absolute; inset: 0; z-index: 1; }
   .jot__link:focus-visible { outline: none; }
   .jot:has(.jot__link:focus-visible) { outline: 2.5px dashed var(--accent-ink); outline-offset: 6px; }
-  .jot__num { white-space: nowrap; font-family: var(--font-hand); font-size: 3.1rem; line-height: 0.95; color: var(--accent-deep); }
-  .jot__num--small { white-space: normal; font-size: 1.85rem; line-height: 1.02; text-wrap: balance; }
-  .jot__label { font-family: var(--font-hand); font-size: 1.35rem; line-height: 1.12; color: var(--ink); text-wrap: balance; }
+  .jot__num { white-space: nowrap; font-family: var(--font-hand); font-size: clamp(2.3rem, 3.3vw, 3.1rem); line-height: 0.95; color: var(--accent-deep); }
+  .jot__num--small { white-space: normal; font-size: clamp(1.5rem, 2vw, 1.85rem); line-height: 1.02; text-wrap: balance; }
+  .jot__label { font-family: var(--font-hand); font-size: clamp(1.15rem, 1.5vw, 1.35rem); line-height: 1.12; color: var(--ink); text-wrap: balance; }
 
   /* a small coral arrow that turns up on hover, like a scribbled "→ this way" */
   .jot__go { position: absolute; left: 50%; bottom: 0.55rem; width: 2.6rem; translate: -50% 0; overflow: visible; opacity: 0; pointer-events: none; }
@@ -105,13 +105,20 @@ const go = (seed: number) => { const a = arrow([[3, 10], [18, 5], [32, 11], [46,
 
   .cascade__all { margin-top: var(--s1); }
 
+  /* Narrow tablets: two by two */
+  @media (max-width: 900px) and (min-width: 641px) {
+    .cascade { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
   /* Phones: one column, alternating left and right with a light overlap */
   @media (max-width: 640px) {
-    .cascade { --size: 12.5rem; flex-direction: column; flex-wrap: nowrap; gap: 0; padding-right: 1.25rem; }
+    .cascade { --size: 12.5rem; display: flex; flex-direction: column; flex-wrap: nowrap; align-items: flex-start; gap: 0; padding: 1.25rem 1.25rem 2rem 0.25rem; }
+    .jot { width: var(--size); }
     .jot, .jot + .jot { margin: -0.4rem 0 0; }
     .jot:first-child { margin-top: 0; }
     .jot + .jot:nth-child(even) { margin-left: auto; margin-right: 0.25rem; }
     .jot + .jot:nth-child(3) { margin-left: 0.75rem; }
     .jot__num:not(.jot__num--small) { font-size: 2.7rem; }
+    .jot__num--small { font-size: 1.85rem; }
+    .jot__label { font-size: 1.35rem; }
   }
 </style>
