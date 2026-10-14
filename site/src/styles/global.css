@@ -52,19 +52,6 @@ h4 { font-size: var(--step-1); }
 p { margin: 0 0 var(--s1); max-width: var(--measure); text-wrap: pretty; }
 strong { font-weight: 800; }
 
-/* ---------- Draw-in: a hand scribbling down a shape ----------
-   The big "draws in" effects work like a hand scribbling down a shape: top to bottom,
-   each stroke dragged left to right. CTA buttons do it with a 135° mask over their SVG
-   scribble; Work card titles do it with three marker strokes per line drawn in sequence.
-   Nothing opaque is ever painted, so the grid shows through. Under reduced motion the end
-   state appears at once. */
-@keyframes scribble-rows {
-  0%   { background-size: 0% 34%, 0% 34%, 0% 34%; }
-  34%  { background-size: 100% 34%, 0% 34%, 0% 34%; }
-  67%  { background-size: 100% 34%, 100% 34%, 0% 34%; }
-  100% { background-size: 100% 34%, 100% 34%, 100% 34%; }
-}
-
 /* ---------- Links ----------
    Rest: a thin hand-drawn wavy underline (tiled SVG, wraps across lines).
    Hover/focus: a real highlighter stroke on just the text: a light coral band from about
@@ -72,7 +59,8 @@ strong { font-weight: 800; }
    box-decoration-break: clone gives each wrapped line its own stroke. Nothing opaque sits
    behind the words, so the grid shows through. Ink on the band stays ≥ 11:1. */
 a { color: var(--ink); text-decoration: none; }
-a:where(:not(.btn, .tab, .logo, .skip-link, .scrap__link, .card__link)) {
+a:where(:not(.btn, .tab, .logo, .skip-link, .scrap__link, .card__link, .tcard__link, :has(.link-text))),
+.link-text {
   --link-under: var(--squiggle);
   background-image:
     var(--link-under),
@@ -89,27 +77,21 @@ a:where(:not(.btn, .tab, .logo, .skip-link, .scrap__link, .card__link)) {
   box-decoration-break: clone;
   transition: background-size 420ms cubic-bezier(0.3, 0.6, 0.35, 1);
 }
-a:where(:not(.btn, .tab, .logo, .skip-link, .scrap__link, .card__link)):hover,
-a:where(:not(.btn, .tab, .logo, .skip-link, .scrap__link, .card__link)):focus-visible {
+a:where(:not(.btn, .tab, .logo, .skip-link, .scrap__link, .card__link, .tcard__link, :has(.link-text))):hover,
+a:where(:not(.btn, .tab, .logo, .skip-link, .scrap__link, .card__link, .tcard__link, :has(.link-text))):focus-visible,
+a:hover > .link-text,
+a:focus-visible > .link-text {
   --link-under: var(--squiggle-strong);
   background-size: 22px 6px, 100% 0.66em, 92% 0.26em;
 }
 
-/* Work card titles behave like buttons: three coral marker strokes per line, drawn top
-   to bottom, each left to right (the CTA scribble, sized for headings). */
-a.card__link {
-  --stroke: linear-gradient(98deg, rgb(224 74 50 / 0) 0, rgb(224 74 50 / 0.26) 0.25em, rgb(224 74 50 / 0.3) 50%, rgb(224 74 50 / 0.26) calc(100% - 0.35em), rgb(224 74 50 / 0) 100%);
-  background-image: var(--stroke), var(--stroke), var(--stroke);
-  background-repeat: no-repeat;
-  background-size: 0% 34%, 0% 34%, 0% 34%;
-  background-position: 0 12%, 0.15em 52%, 0 90%;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
-}
-a.card__link:hover, a.card__link:focus-visible {
-  background-size: 100% 34%, 100% 34%, 100% 34%;
-  animation: scribble-rows 520ms var(--ease-pen) both;
-}
+/* Links that are boxes (icon + label, tall tap targets): the underline and highlighter
+   go on the label span, so the band sits on the text rather than the box. */
+.link-text { display: inline; }
+
+/* Card titles (Work cards, About index cards): no hover effect; the whole card and its
+   button carry the affordance. Keyboard focus is shown on the card itself. */
+
 @media (prefers-reduced-motion: reduce) {
   a, a:hover, a:focus-visible { animation: none !important; transition: none !important; }
 }
@@ -331,57 +313,58 @@ ol.ink-steps > li::before {
   border-radius: var(--wobble-radius-2);
 }
 
-/* ---------- Sketched buttons (markup: components/Button.astro) ----------
-   Default: a wobbly ink outline on a scrap of paper. Primary gets a heavier outline and
-   a second coral pen pass offset behind it. On hover/focus a coral marker scribble
-   sweeps in left to right behind the label; under reduced motion it simply appears. */
+/* ---------- Buttons: index flags (markup: components/Button.astro) ----------
+   A Post-it page flag. The translucent film on the left end is the sticky part and stays
+   put; on hover/focus the free right end lifts toward the viewer (rotateY about the left
+   edge), catches a little light, and its shadow grows and drops. Press snaps it flat.
+   Ink on either flag colour is ≥ 10.9:1. */
 .btn-row { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s2); align-items: center; margin-top: var(--s2); }
 .btn {
+  --flag: var(--flag-secondary);
+  --film: 0.85rem;
+  --pull: 0;
   position: relative;
   isolation: isolate;
-  display: inline-grid;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 48px;
-  padding: 0.65rem 1.35rem;
+  padding: 0.65rem 1.3rem 0.65rem calc(1.05rem + var(--film));
   font: 700 1.02rem/1.2 var(--font-body);
   color: var(--ink);
   text-decoration: none;
-  background: none;
   border: 0;
+  border-radius: 1px 4px 4px 1px;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
-  transition: transform 160ms ease;
+  background:
+    /* sheen on the free end, only visible once it lifts */
+    linear-gradient(90deg, transparent 45%, rgb(255 255 255 / calc(var(--pull) * 0.5)) 100%),
+    /* film strip · hairline divider · flag */
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--flag) 38%, transparent) 0 var(--film),
+      rgb(60 50 40 / 0.18) var(--film) calc(var(--film) + 1px),
+      var(--flag) calc(var(--film) + 1px));
+  box-shadow:
+    inset 0 0 0 1px rgb(60 50 40 / 0.07),
+    0 1px 1px rgb(60 50 40 / 0.1),
+    calc(3px + var(--pull) * 12px) calc(3px + var(--pull) * 9px) calc(6px + var(--pull) * 12px) calc(-3px - var(--pull) * 2px) rgb(60 50 40 / calc(0.28 + var(--pull) * 0.14));
+  transform: perspective(600px) rotate(var(--flag-tilt, 0deg)) rotateY(calc(var(--pull) * -19deg)) rotateZ(calc(var(--pull) * -0.8deg));
+  transform-origin: 0 50%;
 }
-.btn--sm { min-height: 44px; padding: 0.45rem 0.95rem 0.55rem; font-size: 0.92rem; }
-.btn__ink { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; z-index: -1; pointer-events: none; }
-.btn__ink--base { z-index: -3; }
-.btn__ink--scribble { z-index: -2; overflow: hidden; }
-.btn__ink path { fill: none; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
-.btn__paper { fill: var(--card) !important; stroke: none; }
-.btn__outline { stroke: var(--ink); stroke-width: 2.2; }
-.btn--primary .btn__outline { stroke-width: 3; }
-.btn__echo { stroke: var(--accent); stroke-width: 2.2; }
-.btn__ink--scribble {
-  /* revealed by a 135° mask that slides from its clear corner to its solid corner */
-  -webkit-mask-image: linear-gradient(135deg, #000 42%, transparent 58%);
-  mask-image: linear-gradient(135deg, #000 42%, transparent 58%);
-  -webkit-mask-size: 300% 300%;
-  mask-size: 300% 300%;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: 100% 100%;
-  mask-position: 100% 100%;
-  transition: mask-position 480ms var(--ease-pen), -webkit-mask-position 480ms var(--ease-pen);
-}
-.btn__fill { stroke: var(--accent); stroke-opacity: 0.3; stroke-width: 6; }
+.btn--primary { --flag: var(--flag-primary); font-weight: 800; }
+.btn--sm { min-height: 44px; padding-block: 0.45rem; padding-right: 0.95rem; font-size: 0.92rem; }
 .btn__label { position: relative; }
-.btn:hover, .btn:focus-visible { transform: rotate(-0.8deg); }
-.btn:hover .btn__ink--scribble, .btn:focus-visible .btn__ink--scribble { -webkit-mask-position: 0 0; mask-position: 0 0; }
-.btn:active { transform: translate(1px, 2px); }
-.btn:focus-visible { outline: 2.5px dashed var(--accent-ink); outline-offset: 5px; border-radius: var(--wobble-radius); }
+.btn:hover, .btn:focus-visible { --pull: 1; }
+.btn:active { --pull: 0; transform: perspective(600px) rotate(0deg); transition-duration: 70ms; }
+.btn:focus-visible { outline: 2.5px dashed var(--accent-ink); outline-offset: 6px; }
+@property --pull { syntax: '<number>'; inherits: false; initial-value: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .btn { transition: --pull 230ms ease-out, transform 230ms ease-out; }
+}
 @media (prefers-reduced-motion: reduce) {
-  .btn, .btn__ink--scribble { transition: none !important; }
-  .btn:hover, .btn:focus-visible, .btn:active { transform: none; }
+  /* no movement: the flag just casts a bigger shadow */
+  .btn, .btn:hover, .btn:focus-visible, .btn:active { transform: rotate(var(--flag-tilt, 0deg)); transition: none !important; }
 }
 
 .text-link { font-weight: 700; }

@@ -1,11 +1,9 @@
 ---
-// A sketched button: wobbly ink outline (seeded pen helper) on a scrap of paper.
-// variant="primary" gets a heavier outline and a second coral pen pass behind it.
-// On hover/focus a coral marker scribble draws in diagonally, top-left to bottom-right
-// (instant under reduced motion).
+// An index flag (a Post-it page flag): a coloured flag with a translucent film strip on
+// its left end, the part that sticks. Primary is coral-tinted, secondary is kraft.
+// On hover/focus the free right end lifts off the page as if you're about to turn a page
+// with it; on press it snaps back flat. Reduced motion: a static lifted shadow only.
 // Renders <a> when href is given, otherwise <button>. Extra attributes pass through.
-import { rect, scribble } from '../lib/ink';
-
 interface Props {
   href?: string;
   variant?: 'primary' | 'secondary';
@@ -17,31 +15,18 @@ interface Props {
 const { href, variant = 'secondary', size = 'md', type = 'button', class: cls = '', ...rest } = Astro.props;
 const label = await Astro.slots.render('default');
 
-// Seed from the label so every button wobbles a little differently, but stably.
+// A stable, slightly different tilt per label so a row of flags isn't uniform.
 let seed = 7;
 for (const ch of label) seed = (seed * 31 + ch.charCodeAt(0)) % 9973;
-
-const paper = rect(5, 5, 190, 46, seed, 1.5);
-const outline = rect(4, 4, 192, 48, seed, 1.7);
-const echo = rect(8, 9, 190, 46, seed + 3, 1.7);
-const fill = scribble(12, 12, 176, 32, seed + 5, 5);
+const tilt = (((seed % 7) - 3) * 0.35).toFixed(2);
 const Tag = href ? 'a' : 'button';
 ---
 <Tag
   class:list={['btn', `btn--${variant}`, size === 'sm' && 'btn--sm', cls]}
   href={href}
   type={href ? undefined : type}
+  style={`--flag-tilt:${tilt}deg`}
   {...rest}
 >
-  <svg class="btn__ink btn__ink--base" viewBox="0 0 200 56" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-    {variant === 'primary' && <path class="btn__echo" d={echo} />}
-    <path class="btn__paper" d={paper} />
-  </svg>
-  <svg class="btn__ink btn__ink--scribble" viewBox="0 0 200 56" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-    <path class="btn__fill" d={fill} />
-  </svg>
-  <svg class="btn__ink" viewBox="0 0 200 56" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-    <path class="btn__outline" d={outline} />
-  </svg>
   <span class="btn__label btn__text"><Fragment set:html={label} /></span>
 </Tag>
