@@ -1,0 +1,39 @@
+---
+// room-reserve-tests-checklist: three rules, each ticked, with tally marks for the unit
+// tests behind it (3 date, 3 guest count, 1 overlap = 7, from the test run).
+import InkSvg from '../InkSvg.astro';
+import { line, rect } from '../../lib/ink';
+
+const rows = [
+  { t: 'date rules', n: 3 },
+  { t: 'guest count', n: 3 },
+  { t: 'no overlaps', n: 1 },
+];
+const Y0 = 64, GAP = 50;
+const tally = (x: number, yy: number, n: number, s: number) =>
+  Array.from({ length: n }, (_, k) => line(x + k * 13, yy - 22, x + k * 13 + 2, yy + 2, s + k, 0.5)).join(' ');
+const check = (x: number, yy: number, s: number) => `${line(x + 3, yy - 8, x + 9, yy - 1, s, 0.3)} ${line(x + 9, yy - 1, x + 22, yy - 22, s + 1, 0.4)}`;
+---
+<InkSvg viewBox="0 0 360 244" label="Seven unit tests cover three rules: dates, guest count and overlapping bookings." class="sp-tests">
+  {Array.from({ length: 4 }, (_, i) => <path class="ink sp-tests__rule" d={line(0, Y0 + 8 + i * GAP, 360, Y0 + 9 + i * GAP, 1030 + i, 0.6)} />)}
+  <text class="ink-text ink-fade" x="10" y="28" font-size="24">Tests, by rule</text>
+  {rows.map((row, i) => {
+    const yy = Y0 + GAP * i;
+    return (
+      <>
+        <path class="ink" style={`--i:${i * 0.8}`} d={rect(12, yy - 20, 22, 22, 1040 + i, 0.6)} pathLength="1" />
+        <path class="ink ink--accent ink--bold" style={`--i:${i * 0.8 + 0.4}`} d={check(12, yy, 1050 + i * 2)} pathLength="1" />
+        <text class="ink-text ink-fade" style={`--i:${i * 0.8}`} x="50" y={yy} font-size="24">{row.t}</text>
+        <path class="ink" style={`--i:${i * 0.8 + 0.6}`} d={tally(230, yy, row.n, 1060 + i * 5)} pathLength="1" />
+      </>
+    );
+  })}
+  <path class="ink ink--bold" style="--i:3" d={line(220, Y0 + GAP * 2 + 16, 300, Y0 + GAP * 2 + 15, 1080, 0.6)} pathLength="1" />
+  <text class="ink-text ink-text--accent ink-fade" style="--i:3.4" x="222" y={Y0 + GAP * 3 + 2} font-size="27">= 7 tests</text>
+  <text class="ink-sans ink-fade" style="--i:3.4" x="12" y={Y0 + GAP * 3} font-size="13" font-weight="700" fill="#57524c">all passing</text>
+</InkSvg>
+
+<style>
+  :global(svg.ink-svg.sp-tests) { max-width: 21rem; }
+  :global(.sp-tests .sp-tests__rule) { stroke: rgb(84 130 176 / 0.28); stroke-width: 1.2; }
+</style>

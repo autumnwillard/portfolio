@@ -1,0 +1,77 @@
+---
+// ai-toolkit-findings-ledger: three torn-out notebook strips, each a tallied
+// number and a one-line label. Under the "3": the plan change it caused.
+import InkSvg from '../InkSvg.astro';
+import { rng, line, arrow, swoosh } from '../../lib/ink';
+
+const label =
+  'Three findings leadership had no visibility into: 68 merged items never tagged to their release, 120 in-progress items with no team assigned, and 3 features marked complete that had never been built.';
+
+/* a strip with a straight left edge and a torn, zig-zag right edge */
+function strip(x: number, y: number, w: number, h: number, seed: number) {
+  const r = rng(seed);
+  const pts: string[] = [`M${x + (r() - 0.5) * 2} ${y}`, `L${x + w} ${y + (r() - 0.5) * 2}`];
+  const n = Math.round(h / 9);
+  for (let i = 1; i <= n; i++) {
+    const yy = y + (i / n) * h;
+    pts.push(`L${(x + w + (i % 2 ? -7 - r() * 5 : r() * 3)).toFixed(1)} ${yy.toFixed(1)}`);
+  }
+  pts.push(`L${x + (r() - 0.5) * 2} ${y + h + (r() - 0.5) * 2}`, 'Z');
+  return pts.join(' ');
+}
+
+const items = [
+  { n: '68', text: ['merged items never tagged', 'to their release'] },
+  { n: '120', text: ['in-progress items', 'with no team'] },
+  { n: '3', text: ['features marked done,', 'never built'] },
+];
+const tilts = [-1.2, 0.9, -0.6];
+
+/* wide */
+const WH = 82, WG = 26;
+const wy = (i: number) => 16 + i * (WH + WG);
+const wPlan = arrow([[96, wy(2) + WH + 8], [92, wy(2) + WH + 30], [116, wy(2) + WH + 44]], 711, 9);
+
+/* narrow */
+const NH = 96, NG = 22;
+const ny = (i: number) => 12 + i * (NH + NG);
+const nPlan = arrow([[70, ny(2) + NH + 8], [66, ny(2) + NH + 28], [88, ny(2) + NH + 42]], 712, 9);
+---
+<div class="findings">
+  <InkSvg viewBox="0 0 640 400" label={label} class="only-wide">
+    {items.map((it, i) => (
+      <g transform={`rotate(${tilts[i]} 300 ${wy(i) + WH / 2})`}>
+        <path class="strip ink-fade" style={`--i:${i * 2}`} d={strip(20, wy(i), 560, WH, 700 + i)} />
+        <path class="ink" style={`--i:${i * 2}`} d={strip(20, wy(i), 560, WH, 700 + i)} pathLength="1" />
+        <path class="ink ink--faint" style={`--i:${i * 2}`} d={line(150, wy(i) + 8, 151, wy(i) + WH - 8, 704 + i, 0.6)} pathLength="1" />
+        <text class="ink-text ink-text--accent ink-fade" style={`--i:${i * 2 + 1}`} x="86" y={wy(i) + 56} font-size="50" text-anchor="middle">{it.n}</text>
+        <path class="ink ink--accent" style={`--i:${i * 2 + 1}`} d={swoosh(52, wy(i) + 66, 68, 707 + i, 2)} pathLength="1" />
+        <text class="ink-text ink-fade" style={`--i:${i * 2 + 1}`} x="172" y={wy(i) + 38} font-size="25">{it.text[0]}</text>
+        <text class="ink-text ink-fade" style={`--i:${i * 2 + 1}`} x="172" y={wy(i) + 66} font-size="25">{it.text[1]}</text>
+      </g>
+    ))}
+    <path class="ink ink--accent" style="--i:7" d={wPlan.shaft + ' ' + wPlan.head} pathLength="1" />
+    <text class="ink-text ink-text--accent ink-fade" style="--i:7.5" x="126" y={wy(2) + WH + 52} font-size="24">plan changed: verify and close → build</text>
+  </InkSvg>
+
+  <InkSvg viewBox="0 0 380 440" label={label} class="only-narrow">
+    {items.map((it, i) => (
+      <g transform={`rotate(${tilts[i]} 190 ${ny(i) + NH / 2})`}>
+        <path class="strip ink-fade" style={`--i:${i * 2}`} d={strip(8, ny(i), 352, NH, 720 + i)} />
+        <path class="ink" style={`--i:${i * 2}`} d={strip(8, ny(i), 352, NH, 720 + i)} pathLength="1" />
+        <path class="ink ink--faint" style={`--i:${i * 2}`} d={line(106, ny(i) + 8, 107, ny(i) + NH - 8, 724 + i, 0.6)} pathLength="1" />
+        <text class="ink-text ink-text--accent ink-fade" style={`--i:${i * 2 + 1}`} x="56" y={ny(i) + 62} font-size="46" text-anchor="middle">{it.n}</text>
+        <text class="ink-text ink-fade" style={`--i:${i * 2 + 1}`} x="120" y={ny(i) + 42} font-size="21">{it.text[0]}</text>
+        <text class="ink-text ink-fade" style={`--i:${i * 2 + 1}`} x="120" y={ny(i) + 68} font-size="21">{it.text[1]}</text>
+      </g>
+    ))}
+    <path class="ink ink--accent" style="--i:7" d={nPlan.shaft + ' ' + nPlan.head} pathLength="1" />
+    <text class="ink-text ink-text--accent ink-fade" style="--i:7.5" x="96" y={ny(2) + NH + 36} font-size="20">plan changed:</text>
+    <text class="ink-text ink-text--accent ink-fade" style="--i:7.5" x="96" y={ny(2) + NH + 60} font-size="20">verify and close → build</text>
+  </InkSvg>
+</div>
+
+<style>
+  .findings { max-width: 40rem; }
+  .findings :global(.strip) { fill: var(--paper-scrap); stroke: none; }
+</style>

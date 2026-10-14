@@ -1,0 +1,125 @@
+---
+title: "“Which team has room?” shouldn't take four data pulls."
+short_title: "AI toolkit"
+order: 3
+so_what: "Coordinating four engineering teams ran on one-by-one ticket reviews and hand-copied numbers. I treated that as a product problem and built an internal AI toolkit the teams use daily. Its biggest win turned out to be the problems it found."
+card_blurb: "Four engineering teams ran on hand-copied status numbers and one-by-one ticket reviews. I built them an AI toolkit, then it started finding problems leadership couldn't see."
+card_metrics:
+  - "10 workflows · 7 dashboards, used daily by four engineering teams"
+  - "75% less sprint reporting time"
+  - "114 items reviewed → 16 recommended for acceptance testing"
+status: "In daily use"
+glance:
+  role: "Technical Product Owner. I built the toolkit and I own it."
+  team: "Four engineering teams on a B2B SaaS document management platform, leadership, and the product team that runs acceptance testing. Also me."
+  timeframe: "2026, built over about three months (July to October)"
+  status: "In daily use"
+  numbers: "10 workflows · 7 dashboards, used daily by four engineering teams · 75% less sprint reporting time · 114 items reviewed → 16 recommended for acceptance testing (one release)"
+metrics:
+  - value: "10 · 7"
+    label: "workflows · dashboards, used daily by four engineering teams"
+  - value: "75%"
+    label: "less sprint reporting time"
+  - value: "114 → 16"
+    label: "items reviewed → recommended for acceptance testing (one release)"
+description: "How Autumn Willard treated coordinating four engineering teams as a product problem and built an AI toolkit that found problems leadership couldn't see."
+next:
+  title: "Lab review system"
+  href: "/work/lab-review-system/"
+---
+import StickyNote from '../../components/StickyNote.astro';
+import InkArrow from '../../components/InkArrow.astro';
+import AiToolkitWorkflowLoop from '../../components/diagrams/AiToolkitWorkflowLoop.astro';
+import AiToolkitUatFunnel from '../../components/diagrams/AiToolkitUatFunnel.astro';
+import AiToolkitFindingsLedger from '../../components/diagrams/AiToolkitFindingsLedger.astro';
+
+## The problem: coordination by hand
+
+Keeping four teams moving means answering the same questions over and over. The answers lived in hundreds of tickets, and the only way to get them was to read the tickets.
+
+Three questions hurt the most:
+
+- **"Which team has room?"** When new work came in, there was no quick, reliable answer.
+- **"Are these the real numbers?"** Status reports and engineering metrics were put together by hand at the end of every two-week sprint, copied between dashboards, spreadsheets, slides and wiki pages. Every copy was a chance for the numbers to drift out of sync.
+- **"What actually needs testing?"** Each release, someone had to decide which finished items had real user-facing changes worth sending to the product team for acceptance testing.
+
+My users were my own teams and leadership, so I treated it like any other product: who's it for, and how do I know it's right?
+
+<InkArrow from="problem" to="cause" seed={4} />
+
+## Digging in: do it by hand first
+
+Every workflow started as a task I did manually with the AI. The corrections I made along the way became the rules it follows. Doing it by hand first told me what the job actually was before I automated it.
+
+<StickyNote float tilt={2.2} color="yellow">
+Version one needed four manual data pulls per refresh. Great tool, if you love refreshing spreadsheets. I do not.
+</StickyNote>
+
+My first capacity attempt is the cautionary tale. It was a spreadsheet that needed four manual data pulls every time I refreshed it. That's not a quick answer to "which team has room?" It's homework. The fix wasn't a better spreadsheet. The managers already maintained a staffing spreadsheet, so the next version read that directly, plus live workload from the tracker.
+
+<figure>
+  <AiToolkitWorkflowLoop />
+</figure>
+
+## Constraints
+
+- **Trust.** Nobody wants an AI quietly editing their tickets. So the hard rule is ==nothing changes a ticket's status on its own.== Drafts come before anything gets written, and I set clear rules for what the AI may and may not change.
+- **The tracker fights back.** Its own automation would overwrite ticket content, so the ticket-drafting workflow had to create tickets in a way that keeps that from happening.
+- **No new chores.** A tool that needs people to maintain one more sheet is a tool that goes stale.
+- **I still had a day job.** I built this while owning the release lifecycle.
+
+<InkArrow from="cause" to="fix" seed={10} flip />
+
+## What I did
+
+I built 10 workflows and 7 dashboards across release management, capacity and routing, reporting, team rituals and hiring. The biggest one, the release risk review, [gets its own case study](/work/release-risk-review/). Here's the rest, and the calls behind it.
+
+**Use the source of truth people already keep.** The live capacity report combines the managers' staffing sheet with live tracker workload. It shows each team's load by stage (development, code review, QA, product) and by type of work, as a full report or a quick routing recommendation. The tradeoff: it's only as current as their sheet. I'll take that over a new sheet nobody updates.
+
+**Verify before trusting.** Acceptance-testing triage scans completed work and recommends the items with real user-facing changes, filtering out backend-only and test-automation work. I tested it against a no-AI baseline before anyone relied on it. I also reconcile dashboards against my own hand counts.
+
+<figure>
+  <AiToolkitUatFunnel />
+</figure>
+
+**One status, three places, checked.** Each sprint, status reporting updates the leadership slide and the wiki status page from the project's tracking sheet, then checks that all three agree. It's used across 5 initiatives.
+
+**Check the code, not just the tracker.** On one project I audited the tracker against the actual code instead of trusting what the tickets said.
+
+The small stuff matters too. A demo picker rotates presenters fairly and never picks the person who built the thing. The team sees it as fair, which is more than most rotation spreadsheets can say.
+
+For the record, the first thing I built wasn't any of this. It was a skill that turns my loose weekly recap into 1-on-1 notes for my manager. A little selfish, I know.
+
+<InkArrow from="fix" to="result" seed={16} />
+
+## What happened
+
+The numbers:
+
+- **10 reusable workflows and 7 dashboards,** used daily by four engineering teams.
+- **75% less sprint reporting time,** measured in hours spent before vs. after. Sprint metrics are now rebuilt automatically instead of copied and pasted.
+- **114 → 16.** In one release, acceptance-testing triage reviewed 114 items and recommended 16.
+
+The better outcome: ==it found problems leadership had no visibility into.==
+
+<figure>
+  <AiToolkitFindingsLedger />
+</figure>
+
+- 68 merged items in one release that were never tagged to it.
+- 120 in-progress items with no team assigned at all.
+- One team carrying several times its capacity while another had room.
+- 3 features marked complete in the tracker that had never been built. That changed the plan from "verify and close" to "build."
+- Formula errors in one project tracker that were understating the team's progress.
+
+<StickyNote float tilt={-2} color="pink">
+Three features marked done. Never built. The tracker was very confident about it.
+</StickyNote>
+
+The cycle time report showed the biggest delay was work waiting for QA, a median of 7.3 days, and only about 1 in 5 items finished within its estimate-based time budget.
+
+## Looking back
+
+The time savings are nice. ==The bigger value was finding data problems nobody knew we had.==
+
+It's still a product with a backlog. Next up: stopping double-counted work in one report, and a proposed workflow that rolls the whole release week into a single run.

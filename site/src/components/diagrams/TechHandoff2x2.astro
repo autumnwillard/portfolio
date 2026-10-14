@@ -1,0 +1,66 @@
+---
+// tech-handoff-2x2: who to go after. Budget (x) vs. has an in-house IT / design
+// team (y). The pivot: small local businesses → mid-size businesses, skipping
+// large companies that already have a team. Same drawing as the Work card thumb, larger.
+import InkSvg from '../InkSvg.astro';
+import { line, loop, arrow } from '../../lib/ink';
+
+const label =
+  'A two-by-two chart of budget versus having an in-house team. The pivot moved from small businesses with little budget to mid-size businesses with budget but no in-house team, skipping large companies that already have IT.';
+
+const A = (pts: [number, number][], s: number, h = 12) => { const a = arrow(pts, s, h); return `${a.shaft} ${a.head}`; };
+---
+<div class="th-2x2">
+  <InkSvg viewBox="0 0 540 460" label={label} class="only-wide">
+    <path class="ink ink--bold" style="--i:0" d={A([[70, 400], [290, 402], [530, 398]], 1001)} pathLength="1" />
+    <path class="ink ink--bold" style="--i:0" d={A([[70, 400], [68, 210], [70, 14]], 1002)} pathLength="1" />
+    <path class="ink ink--faint" style="--i:1" d={line(296, 24, 294, 390, 1003, 1.4)} pathLength="1" />
+    <path class="ink ink--faint" style="--i:1" d={line(78, 208, 522, 206, 1004, 1.4)} pathLength="1" />
+    <text class="ink-sans ink-fade" style="--i:1" x="522" y="434" font-size="17" font-weight="800" text-anchor="end">budget →</text>
+    <text class="ink-sans ink-fade" style="--i:1" x="0" y="0" font-size="16" font-weight="800" transform="translate(48 396) rotate(-90)">has an in-house IT / design team →</text>
+
+    <text class="ink-text ink-fade" style="--i:2" x="92" y="296" font-size="27">small local</text>
+    <text class="ink-text ink-fade" style="--i:2" x="92" y="324" font-size="27">businesses</text>
+    <text class="ink-sans ink-fade" style="--i:2" x="92" y="350" font-size="14.5" fill="#57524c">low budget, no team</text>
+
+    <text class="ink-text ink-fade" style="--i:3" x="314" y="74" font-size="27">large companies</text>
+    <text class="ink-sans ink-fade" style="--i:3" x="314" y="100" font-size="14.5" fill="#57524c">has budget, has a team</text>
+    <text class="ink-text ink-text--soft ink-fade" style="--i:3" x="314" y="134" font-size="22">“they don’t need us”</text>
+
+    <path class="ink ink--accent ink--bold" style="--i:5" d={loop(410, 304, 112, 58, 1005, 1.1)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:5" x="410" y="298" font-size="24" text-anchor="middle">mid-size businesses:</text>
+    <text class="ink-text ink-fade" style="--i:5" x="410" y="326" font-size="24" text-anchor="middle">has budget, no team</text>
+
+    <path class="ink ink--accent ink--bold" style="--i:6" d={A([[200, 262], [250, 238], [292, 258]], 1006, 12)} pathLength="1" />
+    <text class="ink-text ink-text--accent ink-fade" style="--i:6" x="198" y="236" font-size="22">the pivot</text>
+  </InkSvg>
+
+  <InkSvg viewBox="0 0 400 430" label={label} class="only-narrow">
+    <path class="ink ink--bold" style="--i:0" d={A([[44, 380], [220, 382], [394, 378]], 1011, 11)} pathLength="1" />
+    <path class="ink ink--bold" style="--i:0" d={A([[44, 380], [42, 200], [44, 12]], 1012, 11)} pathLength="1" />
+    <path class="ink ink--faint" style="--i:1" d={line(200, 22, 198, 372, 1013, 1.3)} pathLength="1" />
+    <path class="ink ink--faint" style="--i:1" d={line(52, 200, 390, 198, 1014, 1.3)} pathLength="1" />
+    <text class="ink-sans ink-fade" style="--i:1" x="392" y="414" font-size="15" font-weight="800" text-anchor="end">budget →</text>
+    <text class="ink-sans ink-fade" style="--i:1" x="0" y="0" font-size="14" font-weight="800" transform="translate(28 376) rotate(-90)">has an in-house IT / design team →</text>
+
+    <text class="ink-text ink-fade" style="--i:2" x="58" y="290" font-size="23">small local</text>
+    <text class="ink-text ink-fade" style="--i:2" x="58" y="315" font-size="23">businesses</text>
+    <text class="ink-sans ink-fade" style="--i:2" x="58" y="338" font-size="13.5" fill="#57524c">low budget, no team</text>
+
+    <text class="ink-text ink-fade" style="--i:3" x="214" y="62" font-size="23">large companies</text>
+    <text class="ink-sans ink-fade" style="--i:3" x="214" y="86" font-size="13.5" fill="#57524c">has budget, has a team</text>
+    <text class="ink-text ink-text--soft ink-fade" style="--i:3" x="214" y="116" font-size="20">“they don’t need us”</text>
+
+    <path class="ink ink--accent ink--bold" style="--i:5" d={loop(298, 300, 92, 52, 1015, 1.1)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:5" x="298" y="296" font-size="20" text-anchor="middle">mid-size businesses:</text>
+    <text class="ink-text ink-fade" style="--i:5" x="298" y="320" font-size="20" text-anchor="middle">has budget, no team</text>
+
+    <path class="ink ink--accent ink--bold" style="--i:6" d={A([[132, 256], [168, 232], [204, 254]], 1016, 10)} pathLength="1" />
+    <text class="ink-text ink-text--accent ink-fade" style="--i:6" x="124" y="228" font-size="20">the pivot</text>
+  </InkSvg>
+</div>
+
+<style>
+  .th-2x2 { max-width: 560px; }
+  .th-2x2 :global(.only-narrow) { max-width: 440px; }
+</style>

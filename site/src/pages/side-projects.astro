@@ -1,8 +1,20 @@
 ---
+// Side Projects: the page where building is the point. Each project uses the same
+// mini-format (the constraint · the call I made · what I'd build next).
 import BaseLayout from '../layouts/BaseLayout.astro';
 import TapedImage from '../components/TapedImage.astro';
+import StickyNote from '../components/StickyNote.astro';
 import StatusBadge from '../components/StatusBadge.astro';
+import Highlight from '../components/Highlight.astro';
 import InkDivider from '../components/InkDivider.astro';
+import FiveDayPath from '../components/diagrams/SideProjectsFiveDayPath.astro';
+import StatusScale from '../components/diagrams/SideProjectsStatusScale.astro';
+import RoomErd from '../components/diagrams/SideProjectsRoomErd.astro';
+import ConflictCalendar from '../components/diagrams/SideProjectsConflictCalendar.astro';
+import TestsChecklist from '../components/diagrams/SideProjectsTestsChecklist.astro';
+import TemplateCard from '../components/diagrams/SideProjectsTemplateCard.astro';
+
+const webp = (base: string) => [{ type: 'image/webp', srcset: `/images/${base}.webp` }];
 ---
 <BaseLayout
   title="Side Projects · Autumn Willard"
@@ -10,33 +22,219 @@ import InkDivider from '../components/InkDivider.astro';
   active="side-projects"
 >
   <div class="page">
-    <section class="intro">
-      <h1>Side projects</h1>
+    <section class="intro" aria-labelledby="sp-h">
+      <h1 id="sp-h">Side projects</h1>
       <p class="intro__sub">I build things, so I know what I'm asking engineers for.</p>
-      <p>My day job is deciding what gets built. On my own time, I build things myself. Partly because it's fun, and partly because it keeps me honest about what "just add a button" actually costs.</p>
+      <p class="intro__lede">My day job is deciding what gets built. On my own time, I build things myself. Partly because it's fun, and partly because it keeps me honest about what "just add a button" actually costs.</p>
     </section>
 
     <InkDivider seed={81} />
 
-    <section class="sheet-section" aria-labelledby="hp-h">
+    <!-- 01. HirePurpose -->
+    <section class="sheet-section" id="hirepurpose" aria-labelledby="hp-h">
       <span class="margin-mark" aria-hidden="true">01</span>
-      <div class="section-body hp">
-        <div>
-          <h2 id="hp-h">My dream company is hiring? Crap.</h2>
-          <p class="hp__tag">A tale of wanting to impress while under great distress. How hard could it be to build a Rails app in 5 days?</p>
-          <p class="hp__meta"><StatusBadge status="Personal project" size="sm" /> <span>Ruby on Rails · 5 days</span> <a class="text-link" href="https://github.com/autumnwillard/HirePurpose">View the code on GitHub</a></p>
-          <p>37signals posted a junior Rails developer role. I'd planned to learn Rails <em>eventually</em> and apply in a few years. I was working in .NET at the time, and my only previous run at Rails had ended in a pile of routing errors. Then the posting went up, and "eventually" turned into "this week."</p>
-          <p><strong>The constraint.</strong> 5 days, close to zero Rails knowledge, and an application window that was closing fast. I'd already spent days on the cover letter.</p>
+      <div class="section-body">
+        <div class="split split--photo">
+          <div>
+            <h2 id="hp-h">My dream company is hiring? Crap.</h2>
+            <p class="proj__tag">A tale of wanting to impress while under great distress. How hard could it be to build a Rails app in 5 days?</p>
+            <p class="proj__meta"><StatusBadge status="Personal project" size="sm" /> <span>Ruby on Rails · 5 days</span> <a class="text-link" href="https://github.com/autumnwillard/HirePurpose">View the code on GitHub</a></p>
+            <p>37signals posted a junior Rails developer role. I'd planned to learn Rails <em>eventually</em> and apply in a few years. I was working in .NET at the time, and my only previous run at Rails had ended in a pile of routing errors. Then the posting went up, and "eventually" turned into "this week."</p>
+            <p><strong>The constraint.</strong> 5 days, close to zero Rails knowledge, and an application window that was closing fast. I'd already spent days on the cover letter.</p>
+          </div>
+          <TapedImage
+            src="/images/hirepurpose-sketch-560.jpg"
+            sources={webp('hirepurpose-sketch-560')}
+            sizes="(max-width: 760px) 200px, 240px"
+            alt="Autumn's pencil sketches of the HirePurpose screens on the back of a meeting handout."
+            width={560}
+            height={996}
+            tilt={2.5}
+            loading="eager"
+            class="proj__sketch"
+          />
         </div>
+
+        <p><strong>The call I made.</strong> My first idea was a proficiency tracker for homeschooling families: state standards by grade level, with progress tracking for each kid. Good idea. Wrong deadline. I cut it and built something I could actually finish: a candidate tracker for hiring managers. It was relevant to the team I was applying to, small enough to ship, and big enough to teach me real Rails. It also had room for some personality.</p>
+
+        <div class="figure-wide"><FiveDayPath /></div>
+
+        <div class="split split--art">
+          <div>
+            <p>From there, scope stayed tight on purpose:</p>
+            <ul class="ink-list">
+              <li><strong>One model.</strong> Candidates, and that's it, so I could ship the core before the deadline.</li>
+              <li><strong>Statuses that admit how hiring really works.</strong> I started with the usual "reviewing" and "phone interview." Boring. Hiring is way more subjective than we like to admit, so the statuses describe how you <em>feel</em> about a candidate, all the way down to <Highlight>Hell no</Highlight>.</li>
+              <li><strong>Status is the whole point, so it's everywhere.</strong> You can change it from three different places, and the list sorts from most to least likely to hire, with "undecided" at the bottom.</li>
+              <li><strong>No page reloads.</strong> Status updates happen in place, using Turbo and partials instead of a JavaScript framework.</li>
+            </ul>
+          </div>
+          <div class="split__art"><StatusScale /></div>
+        </div>
+
+        <p>I sketched the screens on the back of a handout during a meeting I didn't strictly need to pay attention to. The deploy fought me harder than the code did: my Windows setup kept throwing a Docker error, so I finished on a friend's borrowed Linux machine.</p>
+
+        <p><strong>What shipped in 5 days:</strong> create, edit and delete for candidates, login and registration, live status updates, a responsive layout with dark mode, and a production deploy on DigitalOcean. The app is offline for now while I revamp it, so the code is the place to look.</p>
+
         <TapedImage
-          src="/images/hirepurpose-sketch-560.jpg"
-          sources={[{ type: 'image/webp', srcset: '/images/hirepurpose-sketch-560.webp' }]}
-          alt="Autumn's pencil sketches of the HirePurpose app screens."
-          width={560}
-          height={996}
-          tilt={2.5}
-          class="hp__sketch"
+          src="/images/side-projects-hirepurpose-screens-1040.jpg"
+          sources={[{ type: 'image/webp', srcset: '/images/side-projects-hirepurpose-screens-1040.webp' }]}
+          sizes="(max-width: 760px) 92vw, 600px"
+          alt="Three phone screens of HirePurpose: the candidate list sorted by status, a candidate's details, and the edit form."
+          width={1040}
+          height={644}
+          tilt={-1}
+          tape="corners"
+          class="proj__screens"
         />
+
+        <p><strong>What I'd build next,</strong> in priority order:</p>
+        <ol class="ink-steps">
+          <li><strong>Multi-user support,</strong> so a whole hiring panel can evaluate candidates together. Hiring is a team sport, and right now this app has one player.</li>
+          <li><strong>Evaluation scores</strong> for communication, technical skills and culture fit, so "Hell no" comes with reasons.</li>
+          <li><strong>Easier attachments:</strong> add and remove files from the candidate page, with visible file names.</li>
+        </ol>
+
+        <div class="someday">
+          <StickyNote tilt={-2.2} color="yellow" class="someday__note">
+            The proficiency tracker I cut is still in a sketch file somewhere. It's on my "someday" list, which is a backlog with no due dates.
+          </StickyNote>
+          <TapedImage
+            src="/images/side-projects-tracker-wireframe-480.jpg"
+            sources={webp('side-projects-tracker-wireframe-480')}
+            sizes="(max-width: 760px) 80vw, 300px"
+            alt="Wireframe of a proficiency tracker for homeschooling families, an idea Autumn set aside."
+            width={480}
+            height={280}
+            tilt={1.8}
+            class="someday__img"
+          />
+        </div>
+
+        <p><strong>Epilogue:</strong> I made it to the second round, one of only a handful of candidates. I didn't get the job, but the project did its job. And I learned I really like Rails.</p>
+      </div>
+    </section>
+
+    <InkDivider seed={86} flourish="arrow" />
+
+    <!-- 02. Room Reserve -->
+    <section class="sheet-section" id="room-reserve" aria-labelledby="rr-h">
+      <span class="margin-mark" aria-hidden="true">02</span>
+      <div class="section-body">
+        <h2 id="rr-h">Trying to make a senior capstone that doesn't suck</h2>
+        <p class="proj__tag">I refused to build a Pokémon card inventory. I built a room reservation app instead.</p>
+        <p class="proj__meta"><StatusBadge status="Senior capstone" size="sm" /> <span>.NET MVC · C# · SQL</span></p>
+
+        <p>Every capstone needs a problem. I picked one with real edge cases: businesses that rent rooms by the hour for things like conferences, receptions and community gatherings. Hourly bookings are where the double-booking headaches live.</p>
+        <p>To be clear, the business problem was my assumption. I looked at how a few local businesses handled bookings, but I never talked to any of them. A real version of this would start with those conversations.</p>
+        <p><strong>The constraint.</strong> A school project with no real users. That meant the requirements had to come from me, and the work had to prove itself through design and tests rather than adoption.</p>
+
+        <div class="split split--art split--center">
+          <p><strong>The call I made.</strong> I treated it like a product, not an assignment: requirements first, then a data model, then wireframes, then code, then tests. The core rule was simple. <Highlight>Two reservations can't overlap in the same room.</Highlight> Everything else (rooms, customers, reports) is built around protecting that.</p>
+          <div class="split__art"><ConflictCalendar /></div>
+        </div>
+
+        <ul class="ink-list">
+          <li><strong>Data model before screens.</strong> Rooms, reservations and customers, with reservations built on a general "booking" type so other booking types could be added later.</li>
+          <li><strong>Consistent screens.</strong> I designed the key screens in Figma with the same table layout and search placement everywhere, so learning one screen teaches you the rest.</li>
+          <li><strong>Guardrails in the data.</strong> A room with reservations on it can't be deleted.</li>
+          <li><strong>Tests on the rules that matter.</strong> It's designed to prevent double-booking, and 7 unit tests cover the date, guest-count and overlap rules.</li>
+        </ul>
+
+        <div class="pair">
+          <figure class="pair__fig"><RoomErd /></figure>
+          <figure class="pair__fig pair__fig--tests"><TestsChecklist /></figure>
+        </div>
+
+        <div class="split split--note">
+          <p><strong>What I'd build next:</strong> recurring bookings. The old write-up of this project claimed it handled them, but the tests don't cover them, so I'm calling it what it is: the next item on the backlog.</p>
+          <StickyNote tilt={2} color="pink" size="sm" class="rr-note">
+            Nobody was harmed in the making of this capstone. Several Pokémon cards remain uninventoried.
+          </StickyNote>
+        </div>
+      </div>
+    </section>
+
+    <InkDivider seed={91} />
+
+    <!-- 03. This site -->
+    <section class="sheet-section" id="this-site" aria-labelledby="site-h">
+      <span class="margin-mark" aria-hidden="true">03</span>
+      <div class="section-body">
+        <h2 id="site-h">Yes, this site is also a side project. Meta, I know.</h2>
+        <p class="proj__meta"><StatusBadge status="Personal project · in progress" size="sm" /></p>
+        <div class="split split--art">
+          <div>
+            <p><strong>The constraint.</strong> Almost nothing from my actual work can be screenshotted. Employer systems are confidential, so a portfolio full of pretty screenshots was off the table from the start.</p>
+            <p><strong>The call I made.</strong> I made my own visuals. Every case study gets hand-drawn diagrams, sketched redraws and simple charts built only from real numbers. The sketchbook look is a design choice, but it's also the honest one: these are drawings <em>of</em> the work, not pictures <em>from</em> it.</p>
+            <p>A few other calls:</p>
+            <ul class="ink-list">
+              <li><strong>The work is one click from anywhere,</strong> because that's what hiring managers came for.</li>
+              <li><strong>No dollar figures on the front page.</strong> They live on the case studies, next to how they were estimated.</li>
+              <li><strong>Every case study follows the same template:</strong> problem, digging in, constraints, decisions, outcome, lessons.</li>
+              <li><strong>Projected numbers are always labeled projected.</strong> If it didn't ship, the badge says so.</li>
+            </ul>
+            <p><strong>Built with:</strong> Astro, as a static site on Cloudflare Pages.</p>
+          </div>
+          <div class="split__art split__art--card"><TemplateCard /></div>
+        </div>
+      </div>
+    </section>
+
+    <InkDivider seed={96} flourish="arrow" />
+
+    <!-- 04. Design work -->
+    <section class="sheet-section" id="design" aria-labelledby="design-h">
+      <span class="margin-mark" aria-hidden="true">04</span>
+      <div class="section-body">
+        <h2 id="design-h">A few things I designed for Tech Handoff clients</h2>
+        <p class="sub-h">I started in design, which is why I still sketch before I spec.</p>
+        <p>These are client pieces from Tech Handoff, where I owned design as well as product. The interesting part isn't the logo. It's the call behind it.</p>
+
+        <ol class="strip" role="list">
+          <li class="strip__item">
+            <TapedImage
+              src="/images/tech-handoff-truck-magnet-720.jpg"
+              sources={webp('tech-handoff-truck-magnet-720')}
+              sizes="(max-width: 760px) 92vw, 340px"
+              alt="Truck magnet design for Schwab's Hauling and Excavation, a Tech Handoff client, on a pickup truck mockup."
+              width={720}
+              height={257}
+              tilt={-1.6}
+            />
+            <p><strong>Truck magnets nobody asked for.</strong> Schwab's Hauling and Excavation, a snow-plow client, wanted a brand guide. I pitched truck magnets too, and they went with them.</p>
+          </li>
+          <li class="strip__item">
+            <TapedImage
+              src="/images/side-projects-gameday-sign-720.jpg"
+              sources={webp('side-projects-gameday-sign-720')}
+              sizes="(max-width: 760px) 92vw, 340px"
+              alt="Barbershop sign concept styled like an '80s concert poster."
+              width={720}
+              height={318}
+              tilt={1.4}
+            />
+            <p><strong>A barbershop called Gameday, styled like an '80s concert poster.</strong> Four signage concepts for a shop in Wyoming that mix classic barbershop details with retro rock-band promo style.</p>
+          </li>
+          <li class="strip__item">
+            <TapedImage
+              src="/images/side-projects-schwab-shirt-720.jpg"
+              sources={webp('side-projects-schwab-shirt-720')}
+              sizes="(max-width: 760px) 92vw, 340px"
+              alt="Shirt design for Schwab's Hauling and Excavation, a Tech Handoff client, front and back."
+              width={720}
+              height={430}
+              tilt={-1.2}
+            />
+            <p><strong>Merch for a start-up crew.</strong> A T-shirt and ballcap for Schwab's, part of their branding package.</p>
+          </li>
+        </ol>
+        <p><a class="text-link" href="/work/#more-h">See the Tech Handoff strategy card →</a></p>
+
+        <StickyNote kind="card" tilt={-0.6} class="offclock">
+          <p class="offclock__head"><strong>Off the clock: art gallery flyers.</strong> <StatusBadge status="Volunteer work" size="sm" /></p>
+          <p>I also designed a few flyers as a volunteer for a local artist's special exhibit. Not client work, just a good cause and a fun brief.</p>
+        </StickyNote>
       </div>
     </section>
   </div>
@@ -45,12 +243,58 @@ import InkDivider from '../components/InkDivider.astro';
 <style>
   .intro { padding: var(--s3) 0 var(--s3) var(--margin-col); }
   .intro__sub { font-family: var(--font-hand); font-size: var(--step-2); line-height: 1.2; color: var(--accent-ink); max-width: 30ch; }
-  .hp { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 240px); gap: var(--s4); align-items: start; }
-  .hp__tag { font-size: var(--step-1); font-weight: 600; }
-  .hp__meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; color: var(--ink-soft); font-weight: 700; }
+  .intro__lede { font-size: var(--step-1); max-width: 58ch; }
+
+  .section-body > p, .section-body .split p { max-width: var(--measure); }
+  .proj__tag { font-size: var(--step-1); font-weight: 600; }
+  .proj__meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: center; color: var(--ink-soft); font-weight: 700; }
+  .sub-h { font-size: var(--step-1); font-weight: 800; color: var(--ink-soft); }
+
+  /* text + art side by side; stacks on narrow screens */
+  .split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 20rem); gap: var(--s2) var(--s4); align-items: start; margin-block: var(--s1); }
+  .split--photo { grid-template-columns: minmax(0, 1fr) minmax(0, 240px); }
+  .split--center { align-items: center; grid-template-columns: minmax(0, 1fr) minmax(0, 30rem); }
+  .split--note { align-items: center; grid-template-columns: minmax(0, 1fr) 13rem; }
+  .split__art { padding-top: var(--s1); }
+  .split__art--card { padding-top: var(--s3); }
+
+  .figure-wide { margin: var(--s2) 0 var(--s3); max-width: 34rem; }
+  .section-body :global(.proj__screens) { max-width: 600px; margin: var(--s3) 0 var(--s3) var(--s1); }
+
+  .someday { display: grid; grid-template-columns: auto minmax(0, 300px); gap: var(--s3); align-items: center; margin: var(--s3) 0; }
+  .someday :global(.someday__note) { margin: 0; --note-size: 15rem; }
+
+  .pair { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: var(--s3); align-items: end; margin: var(--s3) 0; }
+  .pair__fig { margin: 0; }
+
+  .split :global(.rr-note) { margin: 0; }
+
+  .strip { list-style: none; margin: var(--s3) 0 var(--s2); padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 var(--s3); }
+  /* images share one row and captions start on the same line */
+  .strip__item { display: grid; grid-row: span 2; grid-template-rows: subgrid; }
+  .strip__item :global(.taped) { align-self: center; }
+  .strip__item p { font-size: 1rem; margin-top: var(--s2); }
+
+  .section-body :global(.offclock) { max-width: 36rem; }
+  .offclock__head { display: flex; flex-wrap: wrap; gap: 0.2rem 0.8rem; align-items: center; }
+
+  @media (max-width: 1000px) {
+    .strip { grid-template-columns: 1fr 1fr; }
+    .split--center { grid-template-columns: 1fr; }
+    .split--center .split__art { max-width: 30rem; }
+  }
   @media (max-width: 760px) {
     .intro { padding-left: 0; }
-    .hp { grid-template-columns: 1fr; }
-    .hp :global(.hp__sketch) { max-width: 200px; }
+    .split, .split--photo, .split--note { grid-template-columns: 1fr; }
+    .split :global(.proj__sketch) { max-width: 170px; margin-left: var(--s1); }
+    .split__art { max-width: 20rem; padding-top: 0; }
+    .split__art--card { padding-top: 0; }
+    .someday { grid-template-columns: 1fr; gap: var(--s2); }
+    .someday :global(.someday__img) { max-width: 280px; margin-left: var(--s1); }
+    .pair { grid-template-columns: 1fr; }
+    .strip { grid-template-columns: 1fr; }
+    .strip { row-gap: var(--s1); }
+    .strip__item { max-width: 26rem; }
+    .section-body :global(.proj__screens) { margin: var(--s3) 12px var(--s3) 4px; }
   }
 </style>

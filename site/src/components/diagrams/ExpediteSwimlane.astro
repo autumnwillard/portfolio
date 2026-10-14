@@ -1,0 +1,141 @@
+---
+// expedite-intake-swimlane: before vs. after, three lanes (researcher, my team,
+// reviewing office). Wide: horizontal lanes, before above after. Narrow: the lanes
+// turn into columns and the flow runs top to bottom.
+import InkSvg from '../InkSvg.astro';
+import { rect, line, arrow } from '../../lib/ink';
+
+const label =
+  'Before: expedite requests arrived by email, missing details, so the team went back and forth with researchers, checked status by hand and re-typed everything for the reviewing office. After: a form captures everything up front and an automated flow sends it to the team’s inbox in a consistent format.';
+
+const A = (pts: [number, number][], s: number, h = 9) => { const a = arrow(pts, s, h); return `${a.shaft} ${a.head}`; };
+const diamond = (cx: number, cy: number, w: number, h: number, s: number) =>
+  `${line(cx, cy - h / 2, cx + w / 2, cy, s, 0.8)} ${line(cx + w / 2, cy, cx, cy + h / 2, s + 1, 0.8)} ${line(cx, cy + h / 2, cx - w / 2, cy, s + 2, 0.8)} ${line(cx - w / 2, cy, cx, cy - h / 2, s + 3, 0.8)}`;
+
+const lanes = ['Researcher', 'My team', 'Reviewing office'];
+const LH = 84;
+const before = { y: 50 };
+const after = { y: 362 };
+const laneY = (base: number, i: number) => base + i * LH;
+---
+<div class="exp-swim">
+  <InkSvg viewBox="0 0 1000 630" label={label} class="only-wide">
+    {[{ ...before, t: 'Before', s: 0 }, { ...after, t: 'After', s: 20 }].map((blk, bi) => (
+      <g>
+        <text class={`ink-text ink-fade ${bi ? 'ink-text--accent' : ''}`} style={`--i:${bi * 8}`} x="12" y={blk.y - 14} font-size="28">{blk.t}</text>
+        <path class="ink" style={`--i:${bi * 8}`} d={rect(10, blk.y, 980, LH * 3, 701 + blk.s, 1.4)} pathLength="1" />
+        {[1, 2].map((k) => <path class="ink ink--faint" style={`--i:${bi * 8}`} d={line(12, laneY(blk.y, k), 988, laneY(blk.y, k), 703 + k + blk.s, 1)} pathLength="1" />)}
+        <path class="ink ink--faint" style={`--i:${bi * 8}`} d={line(128, blk.y + 2, 128, blk.y + LH * 3 - 2, 706 + blk.s, 0.8)} pathLength="1" />
+        {lanes.map((l, i) => {
+          const parts = l === 'Reviewing office' ? ['Reviewing', 'office'] : [l];
+          return parts.map((p, k) => (
+            <text class="ink-sans ink-fade" style={`--i:${bi * 8}`} x="22" y={laneY(blk.y, i) + LH / 2 + 5 - (parts.length - 1) * 9 + k * 18} font-size="14" font-weight="800" fill="#57524c">{p}</text>
+          ));
+        })}
+      </g>
+    ))}
+
+    <!-- Before -->
+    <path class="ink" style="--i:1" d={rect(146, 64, 200, 56, 711, 1.2)} pathLength="1" />
+    <text class="ink-sans ink-fade" style="--i:1" x="160" y="84" font-size="12" font-weight="700" fill="#57524c">EMAIL</text>
+    <text class="ink-text ink-fade" style="--i:1" x="160" y="108" font-size="21">“Can you expedite?”</text>
+    <path class="ink" style="--i:2" d={A([[300, 122], [330, 150], [366, 174]], 712)} pathLength="1" />
+    <path class="ink ink--bold" style="--i:2.5" d={diamond(440, 176, 150, 64, 713)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:2.5" x="440" y="183" font-size="21" text-anchor="middle">Missing info?</text>
+    {/* the back-and-forth, a little frantic */}
+    <path class="ink ink--accent" style="--i:3" d={A([[440, 140], [446, 108], [410, 86], [352, 84]], 714, 9)} pathLength="1" />
+    <path class="ink ink--accent" style="--i:3.4" d={A([[352, 100], [404, 104], [424, 124], [428, 142]], 715, 9)} pathLength="1" />
+    <path class="ink ink--accent" style="--i:3.8" d={A([[456, 142], [470, 98], [430, 70], [352, 70]], 716, 9)} pathLength="1" />
+    <text class="ink-text ink-text--accent ink-fade" style="--i:4" x="482" y="92" font-size="20">back and forth… and forth</text>
+    <path class="ink" style="--i:4.5" d={A([[516, 176], [532, 174], [548, 176]], 717)} pathLength="1" />
+    <path class="ink" style="--i:5" d={rect(554, 148, 186, 58, 718, 1.2)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:5" x="647" y="172" font-size="19" text-anchor="middle">Check status in</text>
+    <text class="ink-text ink-fade" style="--i:5" x="647" y="195" font-size="19" text-anchor="middle">the system by hand</text>
+    <path class="ink" style="--i:5.5" d={A([[742, 177], [758, 175], [772, 177]], 719)} pathLength="1" />
+    <path class="ink" style="--i:6" d={rect(778, 148, 194, 58, 720, 1.2)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:6" x="875" y="172" font-size="19" text-anchor="middle">Re-type into an</text>
+    <text class="ink-text ink-fade" style="--i:6" x="875" y="195" font-size="19" text-anchor="middle">email template</text>
+    <path class="ink" style="--i:6.5" d={A([[875, 208], [872, 228], [875, 246]], 721)} pathLength="1" />
+    <path class="ink" style="--i:7" d={rect(800, 250, 150, 44, 722, 1.2)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:7" x="875" y="279" font-size="20" text-anchor="middle">Request arrives</text>
+
+    <!-- After -->
+    <path class="ink ink--bold" style="--i:9" d={rect(146, 376, 220, 58, 731, 1.2)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:9" x="256" y="400" font-size="21" text-anchor="middle">Expedite form</text>
+    <text class="ink-sans ink-fade" style="--i:9" x="256" y="422" font-size="13" text-anchor="middle" fill="#57524c">(all fields required)</text>
+    <path class="ink ink--bold" style="--i:10" d={A([[368, 406], [420, 420], [450, 470], [476, 488]], 732, 11)} pathLength="1" />
+    <text class="ink-sans ink-fade" style="--i:10" x="434" y="414" font-size="13" font-style="italic" fill="#57524c">automated flow</text>
+    <path class="ink" style="--i:11" d={rect(482, 460, 236, 58, 733, 1.2)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:11" x="600" y="484" font-size="19" text-anchor="middle">Team shared inbox,</text>
+    <text class="ink-text ink-fade" style="--i:11" x="600" y="507" font-size="19" text-anchor="middle">consistent format</text>
+    <text class="ink-text ink-text--accent ink-fade" style="--i:12" x="740" y="478" font-size="21">✓ trackable</text>
+    <path class="ink" style="--i:12" d={A([[720, 500], [770, 530], [796, 572]], 734)} pathLength="1" />
+    <path class="ink" style="--i:13" d={rect(800, 562, 150, 44, 735, 1.2)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:13" x="875" y="591" font-size="20" text-anchor="middle">Request arrives</text>
+  </InkSvg>
+
+  <InkSvg viewBox="0 0 380 930" label={label} class="only-narrow">
+    <!-- lane headers + dividers -->
+    {lanes.map((l, i) => {
+      const parts = l === 'Reviewing office' ? ['Reviewing', 'office'] : [l];
+      return parts.map((p, k) => (
+        <text class="ink-sans ink-fade" style="--i:0" x={64 + i * 126} y={22 + k * 16} font-size="13" font-weight="800" text-anchor="middle" fill="#57524c">{p}</text>
+      ));
+    })}
+    <path class="ink ink--faint" style="--i:0" d={line(127, 8, 127, 920, 751, 1.2)} pathLength="1" />
+    <path class="ink ink--faint" style="--i:0" d={line(253, 8, 253, 920, 752, 1.2)} pathLength="1" />
+
+    <!-- Before -->
+    <text class="ink-text ink-fade" style="--i:0.5" x="8" y="76" font-size="25">Before</text>
+    <path class="ink" style="--i:1" d={rect(10, 90, 108, 70, 753, 1.1)} pathLength="1" />
+    <text class="ink-sans ink-fade" style="--i:1" x="20" y="108" font-size="10.5" font-weight="700" fill="#57524c">EMAIL</text>
+    <text class="ink-text ink-fade" style="--i:1" x="20" y="130" font-size="17">“Can you</text>
+    <text class="ink-text ink-fade" style="--i:1" x="20" y="150" font-size="17">expedite?”</text>
+    <path class="ink" style="--i:2" d={A([[118, 140], [134, 160], [146, 182]], 754, 8)} pathLength="1" />
+    <path class="ink ink--bold" style="--i:2.5" d={diamond(190, 214, 116, 74, 755)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:2.5" x="190" y="210" font-size="17" text-anchor="middle">Missing</text>
+    <text class="ink-text ink-fade" style="--i:2.5" x="190" y="229" font-size="17" text-anchor="middle">info?</text>
+    <path class="ink ink--accent" style="--i:3" d={A([[140, 222], [96, 222], [70, 196], [66, 166]], 756, 8)} pathLength="1" />
+    <path class="ink ink--accent" style="--i:3.4" d={A([[50, 164], [50, 214], [90, 240], [140, 234]], 757, 8)} pathLength="1" />
+    <path class="ink ink--accent" style="--i:3.8" d={A([[150, 244], [80, 262], [34, 220], [34, 166]], 758, 8)} pathLength="1" />
+    <text class="ink-text ink-text--accent ink-fade" style="--i:4" x="8" y="302" font-size="16">back and forth…</text>
+    <path class="ink" style="--i:4.5" d={A([[190, 252], [188, 266], [190, 280]], 759, 8)} pathLength="1" />
+    <path class="ink" style="--i:5" d={rect(136, 286, 110, 66, 760, 1.1)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:5" x="191" y="314" font-size="16" text-anchor="middle">Check status</text>
+    <text class="ink-text ink-fade" style="--i:5" x="191" y="334" font-size="16" text-anchor="middle">by hand</text>
+    <path class="ink" style="--i:5.5" d={A([[190, 354], [192, 368], [190, 382]], 761, 8)} pathLength="1" />
+    <path class="ink" style="--i:6" d={rect(136, 388, 110, 66, 762, 1.1)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:6" x="191" y="416" font-size="16" text-anchor="middle">Re-type into</text>
+    <text class="ink-text ink-fade" style="--i:6" x="191" y="436" font-size="16" text-anchor="middle">email template</text>
+    <path class="ink" style="--i:6.5" d={A([[248, 430], [276, 446], [298, 470]], 763, 8)} pathLength="1" />
+    <path class="ink" style="--i:7" d={rect(262, 476, 108, 62, 764, 1.1)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:7" x="316" y="503" font-size="17" text-anchor="middle">Request</text>
+    <text class="ink-text ink-fade" style="--i:7" x="316" y="524" font-size="17" text-anchor="middle">arrives</text>
+
+    <path class="ink" style="--i:8" d={line(8, 566, 372, 564, 765, 1.4)} pathLength="1" />
+
+    <!-- After -->
+    <text class="ink-text ink-text--accent ink-fade" style="--i:8.5" x="8" y="604" font-size="25">After</text>
+    <path class="ink ink--bold" style="--i:9" d={rect(10, 618, 110, 84, 771, 1.1)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:9" x="65" y="646" font-size="17" text-anchor="middle">Expedite</text>
+    <text class="ink-text ink-fade" style="--i:9" x="65" y="666" font-size="17" text-anchor="middle">form</text>
+    <text class="ink-sans ink-fade" style="--i:9" x="65" y="688" font-size="10.5" text-anchor="middle" fill="#57524c">(all fields required)</text>
+    <path class="ink ink--bold" style="--i:10" d={A([[100, 704], [128, 730], [150, 752]], 772, 10)} pathLength="1" />
+    <text class="ink-sans ink-fade" style="--i:10" x="12" y="730" font-size="11.5" font-style="italic" fill="#57524c">automated</text>
+    <text class="ink-sans ink-fade" style="--i:10" x="12" y="745" font-size="11.5" font-style="italic" fill="#57524c">flow</text>
+    <path class="ink" style="--i:11" d={rect(136, 756, 110, 84, 773, 1.1)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:11" x="191" y="782" font-size="16" text-anchor="middle">Shared inbox,</text>
+    <text class="ink-text ink-fade" style="--i:11" x="191" y="802" font-size="16" text-anchor="middle">consistent</text>
+    <text class="ink-text ink-fade" style="--i:11" x="191" y="822" font-size="16" text-anchor="middle">format</text>
+    <text class="ink-text ink-text--accent ink-fade" style="--i:12" x="191" y="866" font-size="18" text-anchor="middle">✓ trackable</text>
+    <path class="ink" style="--i:12" d={A([[248, 800], [276, 818], [300, 842]], 774, 8)} pathLength="1" />
+    <path class="ink" style="--i:13" d={rect(262, 848, 108, 62, 775, 1.1)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:13" x="316" y="875" font-size="17" text-anchor="middle">Request</text>
+    <text class="ink-text ink-fade" style="--i:13" x="316" y="896" font-size="17" text-anchor="middle">arrives</text>
+  </InkSvg>
+</div>
+
+<style>
+  .exp-swim { max-width: 1000px; }
+  .exp-swim :global(.only-narrow) { max-width: 440px; }
+</style>

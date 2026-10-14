@@ -1,0 +1,118 @@
+---
+// expedite-intake-form-sketch: the request form, redrawn with generic labels,
+// with sticky-note annotations on why each part is there. The intro text is a
+// paraphrase (never the real form's wording); its two numbers are sourced.
+import InkSvg from '../InkSvg.astro';
+import { rect, arrow, loop } from '../../lib/ink';
+
+const label =
+  'A sketch of the expedite request form, with notes explaining each field and the intro text the reviewing offices asked for, which says the queue averages 50 to 100 items and reviews take 10 to 15 business days after manager review.';
+
+const A = (pts: [number, number][], s: number, h = 10) => { const a = arrow(pts, s, h); return `${a.shaft} ${a.head}`; };
+
+const notes = [
+  { n: '1', lines: ['Requested by the', 'reviewing offices'], color: '#fbd0e6' },
+  { n: '2', lines: ['Record + status:', 'no more manual', 'lookups'], color: '#fde68a' },
+  { n: '3', lines: ['Reason + deadline:', 'the reviewing office', 'can triage'], color: '#c7e0fb' },
+];
+
+/* wide form geometry */
+const fieldsW = [
+  { l: 'Record', y: 200, h: 32 },
+  { l: 'Current status', y: 262, h: 32 },
+  { l: 'Reason for expediting', y: 324, h: 58 },
+  { l: 'Deadline', y: 412, h: 32, w: 200 },
+];
+const noteW = [{ y: 34, h: 92 }, { y: 196, h: 118 }, { y: 360, h: 118 }];
+const arrowsW = [
+  A([[578, 84], [540, 96], [496, 120]], 801),
+  A([[578, 250], [540, 246], [496, 246]], 802),
+  A([[578, 414], [540, 398], [496, 378]], 803),
+];
+
+/* narrow form geometry */
+const fieldsN = [
+  { l: 'Record', y: 196, h: 30 },
+  { l: 'Current status', y: 256, h: 30 },
+  { l: 'Reason for expediting', y: 316, h: 54 },
+  { l: 'Deadline', y: 400, h: 30, w: 170 },
+];
+const badgesN = [[346, 120], [346, 246], [346, 372]];
+---
+<div class="exp-form">
+  <InkSvg viewBox="0 0 900 540" label={label} class="only-wide">
+    <rect class="ink-fade" style="--i:0" x="30" y="20" width="480" height="500" fill="#ffffff" fill-opacity="0.6" />
+    <path class="ink" style="--i:0" d={rect(30, 20, 480, 500, 811, 1.4)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:1" x="56" y="64" font-size="30">Expedite request</text>
+    <path class="ink ink--dash" style="--i:2" d={rect(52, 84, 436, 86, 812, 1)} />
+    <text class="ink-sans ink-fade" style="--i:2" x="68" y="112" font-size="14.5">The queue usually holds 50 to 100 items.</text>
+    <text class="ink-sans ink-fade" style="--i:2" x="68" y="134" font-size="14.5">Reviews take 10 to 15 business days</text>
+    <text class="ink-sans ink-fade" style="--i:2" x="68" y="156" font-size="14.5">after manager review.</text>
+    {fieldsW.map((f, i) => (
+      <g>
+        <text class="ink-sans ink-fade" style={`--i:${3 + i * 0.4}`} x="52" y={f.y - 6} font-size="14.5" font-weight="800">{f.l} <tspan fill="#c03a23">*</tspan></text>
+        <path class="ink" style={`--i:${3 + i * 0.4}`} d={rect(52, f.y + 2, f.w ?? 436, f.h, 820 + i, 1)} pathLength="1" />
+      </g>
+    ))}
+    <path class="ink ink--bold" style="--i:5" d={rect(52, 470, 112, 34, 830, 1)} pathLength="1" />
+    <text class="ink-sans ink-fade" style="--i:5" x="108" y="493" font-size="14.5" font-weight="800" text-anchor="middle">Submit</text>
+
+    {notes.map((n, i) => (
+      <g>
+        <path class="ink ink--accent" style={`--i:${6 + i * 0.6}`} d={arrowsW[i]} pathLength="1" />
+        <g transform={`rotate(${[-2, 1.6, -1.2][i]} 720 ${noteW[i].y + noteW[i].h / 2})`}>
+          <rect class="ink-fade" style={`--i:${6 + i * 0.6}`} x="585" y={noteW[i].y + 5} width="270" height={noteW[i].h} fill="#3c2d19" fill-opacity="0.12" />
+          <rect class="ink-fade" style={`--i:${6 + i * 0.6}`} x="582" y={noteW[i].y} width="270" height={noteW[i].h} fill={n.color} />
+          {n.lines.map((t, k) => (
+            <text class="ink-text ink-fade" style={`--i:${6 + i * 0.6}`} x="600" y={noteW[i].y + 36 + k * 28} font-size="23">{t}</text>
+          ))}
+        </g>
+      </g>
+    ))}
+  </InkSvg>
+
+  <InkSvg viewBox="0 0 380 930" label={label} class="only-narrow">
+    <rect class="ink-fade" style="--i:0" x="10" y="10" width="360" height="510" fill="#ffffff" fill-opacity="0.6" />
+    <path class="ink" style="--i:0" d={rect(10, 10, 360, 510, 841, 1.3)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:1" x="26" y="52" font-size="27">Expedite request</text>
+    <path class="ink ink--dash" style="--i:2" d={rect(26, 70, 296, 98, 842, 1)} />
+    <text class="ink-sans ink-fade" style="--i:2" x="38" y="98" font-size="13">The queue usually holds 50 to</text>
+    <text class="ink-sans ink-fade" style="--i:2" x="38" y="120" font-size="13">100 items. Reviews take 10 to 15</text>
+    <text class="ink-sans ink-fade" style="--i:2" x="38" y="142" font-size="13">business days after manager</text>
+    <text class="ink-sans ink-fade" style="--i:2" x="38" y="160" font-size="13">review.</text>
+    {fieldsN.map((f, i) => (
+      <g>
+        <text class="ink-sans ink-fade" style={`--i:${3 + i * 0.4}`} x="26" y={f.y - 6} font-size="13.5" font-weight="800">{f.l} <tspan fill="#c03a23">*</tspan></text>
+        <path class="ink" style={`--i:${3 + i * 0.4}`} d={rect(26, f.y + 2, f.w ?? 296, f.h, 850 + i, 1)} pathLength="1" />
+      </g>
+    ))}
+    <path class="ink ink--bold" style="--i:5" d={rect(26, 456, 104, 34, 860, 1)} pathLength="1" />
+    <text class="ink-sans ink-fade" style="--i:5" x="78" y="479" font-size="14" font-weight="800" text-anchor="middle">Submit</text>
+    {badgesN.map(([x, y], i) => (
+      <g>
+        <path class="ink ink--accent" style={`--i:${6 + i * 0.4}`} d={loop(x, y, 14, 14, 865 + i, 1.08)} pathLength="1" />
+        <text class="ink-text ink-text--accent ink-fade" style={`--i:${6 + i * 0.4}`} x={x} y={y + 7} font-size="20" text-anchor="middle">{i + 1}</text>
+      </g>
+    ))}
+
+    {notes.map((n, i) => {
+      const y = 552 + i * 124;
+      const h = n.lines.length === 2 ? 88 : 108;
+      return (
+        <g transform={`rotate(${[-1.5, 1.2, -1][i]} 190 ${y + h / 2})`}>
+          <rect class="ink-fade" style={`--i:${7 + i * 0.5}`} x="23" y={y + 5} width="340" height={h} fill="#3c2d19" fill-opacity="0.12" />
+          <rect class="ink-fade" style={`--i:${7 + i * 0.5}`} x="20" y={y} width="340" height={h} fill={n.color} />
+          <text class="ink-text ink-text--accent ink-fade" style={`--i:${7 + i * 0.5}`} x="40" y={y + 36} font-size="24">{n.n}</text>
+          {n.lines.map((t, k) => (
+            <text class="ink-text ink-fade" style={`--i:${7 + i * 0.5}`} x="68" y={y + 36 + k * 27} font-size="22">{t}</text>
+          ))}
+        </g>
+      );
+    })}
+  </InkSvg>
+</div>
+
+<style>
+  .exp-form { max-width: 900px; }
+  .exp-form :global(.only-narrow) { max-width: 420px; }
+</style>
