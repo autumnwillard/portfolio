@@ -1,5 +1,5 @@
 ---
-// review-routing-before-after: two pipes. Today every item gets all three reviews;
+// review-routing-before-after: two pipes. Today every item gets two reviews, and the third hinges on unreliable answers;
 // proposed, an AI answers the screening questions so each item goes only to the
 // reviews it needs, and low confidence goes to a person. Generic labels only.
 // Wide (side by side) and narrow (stacked) drawings; only one shows at a time.
@@ -7,7 +7,7 @@ import InkSvg from '../InkSvg.astro';
 import { rect, arrow, line } from '../../lib/ink';
 
 const label =
-  'Before: every submitted item went through all three reviews: export control, classification and a scientific subject-area review that rated sensitivity green to red. Proposed: an AI answers the screening questions so each item goes only to the reviews it needs, and anything low-confidence goes to a human.';
+  'Before: every submitted item went through export-control and classification review, and a third, scientific subject-area review depended on yes/no answers that were often wrong, in both directions. Proposed: an AI answers the screening questions so each item goes only to the reviews it needs, and anything low-confidence goes to a human.';
 
 /* ---------- wide geometry: before panel at x=0, after panel at x=520 ---------- */
 const bA = arrow([[240, 116], [242, 130], [240, 146]], 401, 9);
@@ -58,8 +58,8 @@ const nLow = arrow([[318, N + 156], [336, N + 200], [338, N + 240], [330, N + 26
     <text class="ink-text ink-fade" style="--i:6.3" x="245" y="353" font-size="21" text-anchor="middle">review</text>
     <path class="ink" style="--i:6.6" d={rect(330, 302, 150, 62, 416)} pathLength="1" />
     <text class="ink-text ink-fade" style="--i:6.6" x="405" y="329" font-size="21" text-anchor="middle">Subject-area</text>
-    <text class="ink-text ink-fade" style="--i:6.6" x="405" y="353" font-size="21" text-anchor="middle">review</text>
-    <text class="ink-text ink-text--accent ink-fade" style="--i:7" x="20" y="408" font-size="24">every item, all three reviews.</text>
+    <text class="ink-text ink-fade" style="--i:6.6" x="405" y="353" font-size="21" text-anchor="middle">review?</text>
+    <text class="ink-text ink-text--accent ink-fade" style="--i:7" x="20" y="408" font-size="24">every item: two reviews. The third: a guess.</text>
 
     <!-- divider -->
     <path class="ink ink--faint" style="--i:4" d={line(498, 20, 500, 450, 415, 1.4)} pathLength="1" />
@@ -125,8 +125,8 @@ const nLow = arrow([[318, N + 156], [336, N + 200], [338, N + 240], [330, N + 26
     <text class="ink-text ink-fade" style="--i:6.3" x="190" y="303" font-size="18" text-anchor="middle">review</text>
     <path class="ink" style="--i:6.6" d={rect(256, 254, 120, 60, 436)} pathLength="1" />
     <text class="ink-text ink-fade" style="--i:6.6" x="316" y="280" font-size="18" text-anchor="middle">Subject-area</text>
-    <text class="ink-text ink-fade" style="--i:6.6" x="316" y="303" font-size="18" text-anchor="middle">review</text>
-    <text class="ink-text ink-text--accent ink-fade" style="--i:7" x="10" y="352" font-size="22">every item, all three reviews.</text>
+    <text class="ink-text ink-fade" style="--i:6.6" x="316" y="303" font-size="18" text-anchor="middle">review?</text>
+    <text class="ink-text ink-text--accent ink-fade" style="--i:7" x="10" y="352" font-size="22">two reviews always. The third: a guess.</text>
 
     <path class="ink ink--faint" style="--i:7" d={line(10, 384, 370, 386, 435, 1.4)} pathLength="1" />
 

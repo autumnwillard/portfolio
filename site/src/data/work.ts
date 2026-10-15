@@ -25,8 +25,8 @@ export const featured: FeaturedCard[] = [
     size: 'large',
   },
   {
-    hook: 'Everything gets reviewed three times. Does it need to?',
-    blurb: "Slow reviews were the lab’s top complaint. The real cause was a screening form whose answers were too unreliable to use, so everything went through all three reviews. I designed the lab’s first AI review product to answer it, and got it approved for build.",
+    hook: 'Everything gets reviewed twice. Does it need to?',
+    blurb: "Slow reviews were the lab’s top complaint. The real cause was a screening form nobody could trust: every item got two reviews by default, and a third hinged on answers that were often wrong. I designed the lab’s first AI review product to answer it, and got it approved for build.",
     badge: 'Approved · in build when I left',
     numbers: ['~70–80% fewer manual reviews (projected)', '95% accuracy gate before anyone relies on it'],
     strip: '~70–80% fewer manual reviews (projected)',
@@ -35,7 +35,7 @@ export const featured: FeaturedCard[] = [
     size: 'large',
   },
   {
-    hook: '“Which team has room?” shouldn’t be a research project.',
+    hook: 'Ten workflows, seven dashboards, zero copy-paste.',
     blurb: 'Four engineering teams ran on hand-copied status numbers and one-by-one ticket reviews. I built them an AI toolkit, and it started turning up problems nobody had spotted yet.',
     badge: 'In daily use',
     numbers: ['10 workflows · 7 dashboards, used daily by four engineering teams', '75% less sprint reporting time', '114 items reviewed → 16 recommended for acceptance testing'],
@@ -67,7 +67,7 @@ export const featured: FeaturedCard[] = [
 
 export const pattern = [
   { said: '“Another hotfix this week?”', wrong: 'Nobody had a clear picture of what was going into each release, or what risk each ticket carried.', bet: 'Track it. Then an AI review that runs on my rules, with people making the calls.', link: 'Release risk review →', href: '/work/release-risk-review/' },
-  { said: '“Reviews take forever.” (the #1 complaint in a lab-wide survey)', wrong: 'Screening answers were too unreliable to use, so every item got all three reviews.', bet: 'An AI that answers the screening questions, trusted only after it clears a 95% accuracy gate.', link: 'AI review routing →', href: '/work/ai-review-routing/' },
+  { said: '“Reviews take forever.” (the #1 complaint in a lab-wide survey)', wrong: 'Screening answers were too unreliable to use, so every item got two reviews by default, and the third was hit or miss.', bet: 'An AI that answers the screening questions, trusted only after it clears a 95% accuracy gate.', link: 'AI review routing →', href: '/work/ai-review-routing/' },
   { said: '“Which team has room?”', wrong: 'The answer lived in hundreds of tickets. My first fix, a spreadsheet, needed four manual data pulls every refresh.', bet: 'Read the sources people already keep up to date instead of adding a new one.', link: 'AI toolkit →', href: '/work/ai-toolkit/' },
   { said: '“My record was submitted, right?”', wrong: 'A hidden button and a “New” status that looked like success.', bet: 'Three small UI changes, not a redesign.', link: 'Review system →', href: '/work/lab-review-system/' },
   { said: '“Can you expedite this?” (by email, missing key details)', wrong: 'No standard intake and no tracking for urgent work.', bet: 'Structured intake with automated routing.', link: 'Expedite intake →', href: '/work/expedite-intake/' },

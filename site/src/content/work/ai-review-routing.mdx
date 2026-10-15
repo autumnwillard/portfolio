@@ -1,9 +1,9 @@
 ---
-title: "Everything gets reviewed three times. Does it need to?"
+title: "Everything gets reviewed twice. Does it need to?"
 short_title: "AI review routing"
 order: 2
 so_what: "The lab’s top complaint was slow reviews. I traced it to screening answers nobody could trust, so every item got the full set of reviews. I designed the lab’s first AI review product to answer them, got it approved for build and then got asked to write an AI roadmap for all of compliance. It hadn’t shipped when I left."
-card_blurb: "Slow reviews were the lab’s top complaint. The real cause was a screening form whose answers were too unreliable to use, so everything went through all three reviews. I designed the lab’s first AI review product to answer it, and got it approved for build."
+card_blurb: "Slow reviews were the lab’s top complaint. The real cause was a screening form nobody could trust: every item got two reviews by default, and a third hinged on answers that were often wrong. I designed the lab’s first AI review product to answer it, and got it approved for build."
 card_metrics:
   - "~70–80% fewer manual reviews (projected)"
   - "95% accuracy gate before anyone relies on it"
@@ -35,7 +35,7 @@ import ReviewRoutingProjectedReviews from '../../components/diagrams/ReviewRouti
 
 ## The problem: everything got the full treatment
 
-Anything shared outside INL had to clear the lab's review system first, and every item got the full set of reviews, no matter what was in it: export control, classification and a review for specific scientific subject areas that rated sensitivity from green to red.
+Anything shared outside INL had to clear the lab's review system first. Every item got an export-control review and a classification review, no matter what was in it. A third review, for specific scientific subject areas that rated sensitivity from green to red, depended on how the submitter answered a set of yes/no questions.
 
 <StickyNote float tilt={2} color="yellow">
 Survey says… "reviews take forever." Number one answer, by a mile.
@@ -49,7 +49,9 @@ Meanwhile reviewers were spending a lot of their time on items that never needed
 
 ## Digging in: the input was broken
 
-Submitters answered yes/no screening questions that were supposed to flag which reviews applied. In practice the answers were too unreliable to route on, so everything defaulted to full review, ==just in case.==
+Submitters answered yes/no screening questions that were supposed to flag which reviews applied. In practice the answers were too unreliable to route on, so export control and classification reviewed everything, ==just in case.==
+
+The third review shows how bad the answers were, because they failed both ways. Some items got flagged for a review they didn't need. Other submitters answered no to every question to save time, which skipped reviews that should have happened. The first wasted reviewers' time. The second was a security risk.
 
 - **I met with every reviewing team.** In compliance work that's not optional.
 - **I drew the rules.** A flow chart of which conditions trigger which reviews, checked back with the teams.

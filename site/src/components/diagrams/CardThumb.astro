@@ -8,7 +8,7 @@ interface Props { kind: Kind; label?: string }
 const { kind } = Astro.props;
 
 const labels: Record<Kind, string> = {
-  routing: 'Before: every item went through all three reviews. After (planned): AI-answered screening sends each item only to the reviews it needs.',
+  routing: 'Before: every item got two reviews, and a third depended on unreliable answers. After (planned): AI-answered screening sends each item only to the reviews it needs.',
   toolkit: 'In one release, the triage workflow reviewed 114 items and recommended 16.',
   'review-system': 'Redesigned record panel: a visible grayed-out submit button and an ‘Unsubmitted Draft’ status.',
   intake: 'Before: requests bounced around email. After: one form routed them automatically.',

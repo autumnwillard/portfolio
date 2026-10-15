@@ -1,5 +1,5 @@
 ---
-title: "“Which team has room?” shouldn’t be a research project."
+title: "Ten workflows, seven dashboards, zero copy-paste."
 short_title: "AI toolkit"
 order: 3
 so_what: "Coordinating four engineering teams ran on one-by-one ticket reviews and hand-copied numbers. I built an internal AI toolkit the teams use daily. Its biggest win turned out to be the problems it found."
@@ -61,7 +61,7 @@ My first attempt is the cautionary tale: a spreadsheet that needed four manual d
 
 ## Constraints
 
-- **Trust.** Nobody wants an AI quietly editing their tickets. So ==the AI had to earn the right to make changes.== Each workflow started out drafting while I approved. I only let it edit tickets itself after a few test runs where I confirmed the edits were right and nothing else broke. When it got something wrong, that became a new rule. (One example: Jira descriptions have to be written in ADF, Jira's own format, not Markdown.)
+- **Trust.** Nobody wants an AI quietly editing their tickets. So ==the AI had to earn the right to make changes.== Each workflow started out drafting while I approved. I only let it update tickets itself (status, story points, fix version and more) after a few test runs where I confirmed the edits were right and nothing else broke. When it got something wrong, that became a new rule. (One example: Jira descriptions have to be written in ADF, Jira's own format, not Markdown.)
 - **The tracker fights back.** Its own automation would overwrite ticket content, so the ticket-drafting workflow had to create tickets in a way that keeps that from happening.
 - **No new chores.** A tool that needs people to maintain one more sheet is a tool that goes stale.
 - **I still had a day job.** I built this while owning the release lifecycle.
