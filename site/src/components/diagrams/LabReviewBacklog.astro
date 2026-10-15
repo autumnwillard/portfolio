@@ -65,6 +65,7 @@ const ny = (i: number) => 238 + Math.floor(i / 4) * 154;
     ))}
   </InkSvg>
 
+  <div class="lrs-fixes-wrap">
   <table class="lrs-fixes">
     <caption class="visually-hidden">Small fixes, each matched to the user pain it removed</caption>
     <thead>
@@ -74,6 +75,7 @@ const ny = (i: number) => 238 + Math.floor(i / 4) * 154;
       {rows.map((r) => <tr><td>{r.pain}</td><td>{r.fix}</td></tr>)}
     </tbody>
   </table>
+  </div>
 </div>
 
 <style>
@@ -101,9 +103,10 @@ const ny = (i: number) => 238 + Math.floor(i / 4) * 154;
   .lrs-fixes td:first-child { width: 48%; }
   .lrs-fixes td:last-child { font-weight: 700; }
 
-  /* wide: the board stands in for the table (kept for screen readers) */
+  /* wide: the board stands in for the table (kept for screen readers). The wrapper is
+     what's hidden: a table won't shrink to 1px, so hiding the table itself overflowed. */
   @media (min-width: 681px) {
-    .lrs-fixes {
+    .lrs-fixes-wrap {
       position: absolute !important;
       width: 1px; height: 1px;
       padding: 0; margin: -1px;
