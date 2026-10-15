@@ -17,21 +17,66 @@ const webp = (base: string) => [{ type: 'image/webp', srcset: `/images/${base}.w
 ---
 <BaseLayout
   title="Side projects · Autumn Willard"
-  description="What Autumn Willard builds on her own time, from a Rails app made in 5 days to a senior capstone, and why building makes her a better product manager."
+  description="What Autumn Willard builds on her own time: this site, rebuilt with AI in about 3 days, a Rails app made in 5 days and a senior capstone."
   active="side-projects"
 >
   <div class="page">
     <section class="intro" aria-labelledby="sp-h">
       <h1 id="sp-h">Side projects</h1>
       <p class="intro__sub">I build things, so I know what I’m asking engineers for.</p>
-      <p class="intro__lede">My day job is deciding what gets built. On my own time I build things myself, partly because it’s fun and partly because it keeps me honest about what “just add a button” actually costs.</p>
+      <p class="intro__lede">My day job is deciding what gets built. On my own time I build things myself, and lately I direct AI to build them too. Partly because it’s fun, and partly because it keeps me honest about what “just add a button” actually costs.</p>
     </section>
 
     <InkDivider seed={81} />
 
-    <!-- 01. HirePurpose -->
-    <section class="sheet-section" id="hirepurpose" aria-labelledby="hp-h">
+    <!-- 01. This site: built with AI, before/after, and how I ran it -->
+    <section class="sheet-section" id="this-site" aria-labelledby="site-h">
       <span class="margin-mark" aria-hidden="true">01</span>
+      <div class="section-body">
+        <h2 id="site-h">This site is a side project. Meta, I know.</h2>
+        <p class="proj__meta"><StatusBadge status="Personal project · built with AI" size="sm" /> <span>About 3 days · Claude Code</span></p>
+        <p class="proj__tag">I ran this rebuild like a product: rules first, three design options, about eight review rounds and every number checked. AI wrote the code and drew the pictures. I made every call.</p>
+
+        <div class="ba">
+          <TapedImage
+            src="/images/side-projects-site-before-desktop-960.jpg"
+            sources={webp('side-projects-site-before-desktop-960')}
+            sizes="(max-width: 760px) 92vw, 30rem"
+            alt="Before: the old home page, a plain white layout with a cartoon portrait and a short intro."
+            width={960} height={600} tilt={-1.4} tape="corners" loading="eager"
+            caption="Before: clean, a little generic."
+          />
+          <TapedImage
+            src="/images/side-projects-site-after-desktop-960.jpg"
+            sources={webp('side-projects-site-after-desktop-960')}
+            sizes="(max-width: 760px) 92vw, 30rem"
+            alt="After: the new home page, a sketchbook on graph paper with a taped-in portrait, a sticky note and page-flag buttons."
+            width={960} height={600} tilt={1.2} loading="eager"
+            caption="After: a sketchbook, so I can show work I can’t screenshot."
+          />
+        </div>
+
+        <h3 class="sub-h">How I ran it</h3>
+        <ol class="ink-steps">
+          <li><strong>Rules before code.</strong> Before any page, I had AI write a rulebook (voice, real numbers only, what’s confidential, the look) that every agent read first.</li>
+          <li><strong>Discovery, then decisions.</strong> An agent audited my old site and notes and came back with about 60 questions only I could answer. AI drafted the copy from my answers, and I approved every page.</li>
+          <li><strong>Options, not opinions.</strong> Three agents built three design directions in parallel. I picked one and ran about eight rounds of feedback on it.</li>
+          <li><strong>When feedback is hard to put into words, build a tool.</strong> I had AI build a slider playground for buttons and an approval page for 112 copy edits, which is now a skill I reuse.</li>
+          <li><strong>Research before taste calls.</strong> For the page turn, an agent researched what makes a click feel good and filmed a prototype frame by frame before I said yes.</li>
+          <li><strong>Check everything.</strong> Every number traces to a source, every page scores 100 for accessibility, and I made the call on every copy edit.</li>
+        </ol>
+        <StickyNote tilt={-1.6} color="blue" class="site__note">
+          Working with AI felt a lot like working with a fast, eager engineering team. Clear constraints, short feedback loops and one person who owns the decisions. That was me.
+        </StickyNote>
+        <p><strong>Built with:</strong> Astro and Claude Code, hosted on Cloudflare Pages.</p>
+      </div>
+    </section>
+
+    <InkDivider seed={86} flourish="arrow" />
+
+    <!-- 02. HirePurpose -->
+    <section class="sheet-section" id="hirepurpose" aria-labelledby="hp-h">
+      <span class="margin-mark" aria-hidden="true">02</span>
       <div class="section-body">
         <div class="split split--photo">
           <div>
@@ -49,7 +94,6 @@ const webp = (base: string) => [{ type: 'image/webp', srcset: `/images/${base}.w
             width={560}
             height={996}
             tilt={2.5}
-            loading="eager"
             class="proj__sketch"
           />
         </div>
@@ -114,11 +158,11 @@ const webp = (base: string) => [{ type: 'image/webp', srcset: `/images/${base}.w
       </div>
     </section>
 
-    <InkDivider seed={86} flourish="arrow" />
+    <InkDivider seed={91} />
 
-    <!-- 02. Room Reserve -->
+    <!-- 03. Room Reserve -->
     <section class="sheet-section" id="room-reserve" aria-labelledby="rr-h">
-      <span class="margin-mark" aria-hidden="true">02</span>
+      <span class="margin-mark" aria-hidden="true">03</span>
       <div class="section-body">
         <h2 id="rr-h">Trying to make a senior capstone that doesn’t suck</h2>
         <p class="proj__tag">I refused to build a Pokémon card inventory. I built a room reservation app instead.</p>
@@ -151,51 +195,6 @@ const webp = (base: string) => [{ type: 'image/webp', srcset: `/images/${base}.w
             Nobody was harmed in the making of this capstone. Several Pokémon cards remain uninventoried.
           </StickyNote>
         </div>
-      </div>
-    </section>
-
-    <InkDivider seed={91} />
-
-    <!-- 03. This site: built with AI, before/after, and how I ran it -->
-    <section class="sheet-section" id="this-site" aria-labelledby="site-h">
-      <span class="margin-mark" aria-hidden="true">03</span>
-      <div class="section-body">
-        <h2 id="site-h">This site is a side project too. Meta, I know.</h2>
-        <p class="proj__meta"><StatusBadge status="Personal project · built with AI" size="sm" /> <span>About 3 days · Claude Code</span></p>
-        <p class="proj__tag">I rebuilt this portfolio with AI. I didn’t write the code or draw the pictures. I did the part I’m actually selling: deciding what to build, setting the rules and saying “not yet” until it was right.</p>
-
-        <div class="ba">
-          <TapedImage
-            src="/images/side-projects-site-before-desktop-960.jpg"
-            sources={webp('side-projects-site-before-desktop-960')}
-            sizes="(max-width: 760px) 92vw, 30rem"
-            alt="Before: the old home page, a plain white layout with a cartoon portrait and a short intro."
-            width={960} height={600} tilt={-1.4} tape="corners"
-            caption="Before: clean, a little generic."
-          />
-          <TapedImage
-            src="/images/side-projects-site-after-desktop-960.jpg"
-            sources={webp('side-projects-site-after-desktop-960')}
-            sizes="(max-width: 760px) 92vw, 30rem"
-            alt="After: the new home page, a sketchbook on graph paper with a taped-in portrait, a sticky note and page-flag buttons."
-            width={960} height={600} tilt={1.2}
-            caption="After: a sketchbook, so I can show work I can’t screenshot."
-          />
-        </div>
-
-        <h3 class="sub-h">How I ran it</h3>
-        <ol class="ink-steps">
-          <li><strong>Rules before code.</strong> The first thing I had AI write was a rulebook, not a page: my voice, what counts as a real number, what’s confidential and what the site should look like. Every agent read it before touching anything. When something drifted, I fixed the rule, not just the page.</li>
-          <li><strong>Discovery, then decisions.</strong> An agent audited my old site and my notes and drafted what to feature. It came back with about 60 questions only I could answer. I answered them, and corrected the framing twice: I’m a product manager with technical depth, and this site shows how I think, not my job history. AI drafted the copy from my answers. I approved every page.</li>
-          <li><strong>Options, not opinions.</strong> Three agents built three full design directions in parallel. I picked one, borrowed the best parts of another, then ran about eight rounds of feedback until the sticky notes stopped looking like UI cards painted yellow.</li>
-          <li><strong>When feedback is hard to put into words, build a tool.</strong> I couldn’t describe the button I wanted, so I had AI build me a playground with presets and sliders. A copy review came back with 112 suggestions, so I had it build an approval page where I accepted, rejected or rewrote each one. That page is now a reusable skill I run on any writing.</li>
-          <li><strong>Research before taste calls.</strong> For the page turn, an agent researched what makes a click feel good, prototyped a fix on a separate branch and filmed it frame by frame, so I could compare before I said yes.</li>
-          <li><strong>Check everything.</strong> Every number on the site traces to a source. Automated checks run at six screen widths. Lighthouse scores 96 to 100 for performance and 100 for accessibility on every page. A blunt editor agent reviewed all the copy, and I made the call on every edit.</li>
-        </ol>
-        <StickyNote tilt={-1.6} color="blue" class="site__note">
-          Working with AI felt a lot like working with a fast, eager engineering team. Clear constraints, short feedback loops and one person who owns the decisions. That was me.
-        </StickyNote>
-        <p><strong>Built with:</strong> Astro and Claude Code, hosted on Cloudflare Pages.</p>
       </div>
     </section>
 
