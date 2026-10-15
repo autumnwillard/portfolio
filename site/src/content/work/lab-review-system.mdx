@@ -1,17 +1,17 @@
 ---
 title: "What do you mean it was never submitted?"
-short_title: "The lab's review system"
+short_title: "The lab’s review system"
 order: 4
-so_what: "People thought they'd submitted records they never had. That was one of many pains in two enterprise apps used by 2,000+ people across the national lab system. With a strict budget and borrowed developers, I ranked the backlog by user pain and shipped the smallest fix for each. Abandoned records went from hundreds a year to nearly zero."
-card_blurb: "Two enterprise apps, 2,000+ users, a strict budget and borrowed developers. I ranked the backlog by user pain and shipped small fixes, like the one for records people thought they'd submitted."
+so_what: "People thought they’d submitted records they never had. That was one of many pains in two enterprise apps used by 2,000+ people across the national lab system. With a strict budget and borrowed developers, I ranked the backlog by user pain and shipped the smallest fix for each. Abandoned records went from hundreds a year to nearly zero."
+card_blurb: "People thought they’d submitted records they never had. With a strict budget and borrowed developers, I ranked two apps’ backlog by user pain and shipped the smallest fix for each, starting with that one."
 card_metrics:
   - "2,000+ users"
   - "Abandoned records: hundreds per year → nearly zero"
   - "Questions down approximately 50%"
 status: "Shipped"
 glance:
-  role: "Product Manager & Software Engineer, backlog owner, at Idaho National Laboratory, a U.S. Department of Energy national lab"
-  team: "me, shared developers, and a co-worker on the help content, for 2,000+ researchers, reviewers and compliance stakeholders across the national laboratory system"
+  role: "Product Manager & Software Engineer at Idaho National Laboratory, a U.S. Department of Energy national lab"
+  team: "me, borrowed developers and a co-worker on the help content, for 2,000+ researchers, reviewers and compliance stakeholders across the national laboratory system"
   timeframe: "during my time at INL (2022–2025)"
   status: "Shipped"
   numbers: "2,000+ users · abandoned records: hundreds per year → nearly zero · questions down approximately 50%"
@@ -33,8 +33,6 @@ import LabReviewComic from '../../components/diagrams/LabReviewComic.astro';
 import LabReviewBacklog from '../../components/diagrams/LabReviewBacklog.astro';
 import LabReviewButtonTable from '../../components/diagrams/LabReviewButtonTable.astro';
 import LabReviewQuestionMap from '../../components/diagrams/LabReviewQuestionMap.astro';
-
-Two enterprise apps, 2,000+ users, and a backlog nobody had time for. I ranked it by pain and kept every fix small.
 
 ## The problem: a backlog that only grew
 
@@ -64,9 +62,9 @@ You wouldn't. The "Start Manager Review" button didn't appear until every requir
 
 ## Constraints
 
-- A preexisting system and a strict budget, so changes had to stay minimal.
-- Shared developers with little time for our department.
-- Access restrictions. Getting access to anything ourselves meant a whole process.
+- **Old system, small budget.** Changes had to stay minimal.
+- **Borrowed developers.** They had little time for our department.
+- **Access was its own project.** Getting into anything ourselves meant a whole process.
 
 <InkArrow from="cause" to="fix" seed={9} flip />
 
@@ -76,13 +74,11 @@ Every item got the same test: ==what's the smallest change that makes this pain 
 
 **1. Incomplete records: three changes, not a redesign.** A rebuilt submission flow would have been nicer, and it would have sat in the developer queue forever. So:
 
-- The "Start Manager Review" button is always visible, greyed out until the record is ready.
+- The "Start Manager Review" button is always visible, grayed out until the record is ready.
 - The status changed from "New" to "Unsubmitted Draft."
 - Leaving an incomplete record pops up a warning that changes may not save.
 
-I owned this one from the first walkthrough through implementation.
-
-**2. The backlog, and the developer bottleneck.** A ranked backlog doesn't help if nobody can work it. I'd finished my B.S. in software engineering, so I shadowed a senior developer, earned access to the repo, Jira and Azure DevOps, and started shipping fixes myself. Each one maps to a pain:
+**2. The backlog, and the developer bottleneck.** A ranked backlog doesn't help if nobody can work it. I'd finished my B.S. in software engineering, so I shadowed a senior developer, earned access to the repo, Jira and Azure DevOps and started shipping fixes myself. Each one maps to a pain:
 
 <figure class="figure-wide">
   <LabReviewBacklog />
@@ -108,15 +104,15 @@ Did I learn the deployment pipeline partly so I could stop waiting in line for a
 
 ## What happened
 
-- **Abandoned records:** unintentionally abandoned incomplete records dropped ==from hundreds per year to nearly zero==. We also saw a dramatic reduction in helpdesk emails about how to submit a record.
+- **Abandoned records:** records people left unsubmitted by accident dropped ==from hundreds per year to nearly zero==. Helpdesk emails about how to submit a record dropped dramatically, too.
 - **Questions:** the number of questions decreased by approximately 50%. The walkthrough videos were adopted by multiple research departments for training new users.
 - **Errors:** upload errors became nearly non-existent after I cut the upload limit to 120MB to match a federal repository's requirements.
-- **Overall:** a decrease in user-reported issues, and less admin intervention in reviews.
+- **Overall:** fewer user-reported issues, and fewer reviews that needed an admin to step in.
 
-To be honest about the gaps: I don't have exact baselines or measurement windows for these. They're what we observed, not a dashboard.
+I don't have exact baselines or dates for these. They're what we saw, not what a dashboard measured.
 
 ## Looking back
 
 Hard numbers were scarce here, which is exactly why I measure first now.
 
-The other lesson stuck too. The biggest result on this page came from a status label and a greyed-out button. Before asking for a redesign, check whether the system is just telling people the wrong thing.
+The biggest result on this page came from a status label and a grayed-out button. Before asking for a redesign, check whether the system is just telling people the wrong thing.

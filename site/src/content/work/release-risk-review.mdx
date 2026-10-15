@@ -2,8 +2,8 @@
 title: "Four hotfixes a week is not a release schedule."
 short_title: "Release risk review"
 order: 1
-so_what: "Severe defects kept reaching customers because nobody could say exactly what was in a release. I made that visible, then built an AI risk review that runs every release, with people making the calls. Severe defects fell ~85%."
-card_blurb: "Severe defects kept shipping because nobody knew exactly what was in a release. I tracked it, then built a rules-driven AI risk review. Severe defects fell ~85%."
+so_what: "Severe defects kept reaching customers because nobody could say exactly what was in a release. I made that visible, then built an AI risk review that runs every release, with people making the calls. The result: ~85% fewer severe defects."
+card_blurb: "Severe defects kept shipping because nobody knew exactly what was in a release. I started tracking it, then built an AI risk review that runs on rules I wrote. Severe defects fell ~85%."
 card_metrics:
   - "~85% fewer severe defects"
   - "Off-cycle hotfix releases: 4+ per week → 0–1"
@@ -19,7 +19,7 @@ metrics:
     label: "fewer severe defects"
   - value: "4+ → 0–1"
     label: "off-cycle hotfix releases per week"
-description: "How Autumn Willard made each release visible, then built a rules-driven AI risk review that runs every release. Severe defects fell ~85%."
+description: "How Autumn Willard made each release visible, then built an AI risk review that runs every release on rules she wrote. Severe defects fell ~85%."
 next:
   title: "AI review routing"
   href: "/work/ai-review-routing/"
@@ -33,7 +33,7 @@ import DefectStudy from '../../components/diagrams/DefectStudy.astro';
 
 ## The problem: the hotfix was the real schedule
 
-We ship a monthly release. When I started in December 2025, we were also shipping off-cycle hotfix releases 4+ times a week. Severe defects were reaching customers, and the monthly release had become more of a suggestion.
+We ship a monthly release. When I started in December 2025, we were also shipping off-cycle hotfix releases 4+ times a week. Severe defects were reaching customers.
 
 <StickyNote float tilt={2} color="yellow">
 On paper we had one release a month. In practice we had a release every time someone said "uh oh."
@@ -56,23 +56,22 @@ I only saw the pattern because I went looking. I started tracking our off-cycle 
 - **Four teams feed one release.** That's a lot of tickets to keep in anyone's memory, and memory was what release decisions were running on.
 - **The tracker isn't the truth.** What a ticket said and what was actually in the code didn't always match.
 - **The review has to fit in a short window,** after the release branch is cut and before regression testing starts.
-- **People make the calls.** I wasn't going to let an AI pull work out of a release on its own.
 
 <InkArrow from="cause" to="fix" seed={8} flip />
 
 ## What I did
 
-**Step one was boring on purpose: I tracked it.** I started recording exactly what went into each release, ticket by ticket, and what risks came with each one. If you ask me what moved the number most, it's this. Just knowing what's in the release.
+**Step one was boring on purpose: I tracked it.** I started recording exactly what went into each release, ticket by ticket, and what risks came with each one.
 
-**Then I made it repeatable.** I built a Claude skill that lists everything in a release along with its risks, like unresolved dependencies and failed-QA comments.
+**Then I made it repeatable.** I built a Claude skill (a saved AI workflow) that lists everything in a release along with its risks, like unresolved dependencies and failed-QA comments.
 
-**Then the risk review.** Once the release branch is cut, the review reads the branch, finds every ticket it references, and runs each one through a rule set I wrote. Every ticket lands in a bucket of recommended actions, like "revert it out of this release," with a note explaining why. It runs before regression testing, so testers start with the list of what's risky.
+**Then the risk review.** Once the release branch is cut, the review reads the branch, finds every ticket it references and runs each one through a rule set I wrote. Every ticket lands in a bucket of recommended actions, like "revert it out of this release," with a note explaining why. It runs before regression testing, so testers start with the list of what's risky.
 
 <figure class="figure-wide">
   <RiskReviewFlow />
 </figure>
 
-The actions are concrete: revert, cherry-pick, tag, untag, or no action. Claude gets one extra option, "unsure," that people don't: if it can't tell, it has to say so, and a person picks a real action. The options also depend on the situation. A ticket tagged to the release in Jira with no code on the branch can be untagged, but there's nothing to revert.
+The actions are concrete: revert, cherry-pick, tag, untag or no action. Claude gets one extra option, "unsure," that people don't: if it can't tell, it has to say so, and a person picks a real action.
 
 Two tradeoffs I made on purpose:
 
@@ -81,7 +80,7 @@ Two tradeoffs I made on purpose:
 
 **Then my manager asked a question I couldn't answer.** After the risk review was running, my manager asked for our escaped defect rate. Nobody tracked it. So I built the tracking: a defect escape dashboard that compares bugs caught in pre-release testing with bugs that reached customers. It's the product's first per-release quality metric.
 
-Then I went wider. I studied ~200 defects across ~2,100 code changes, sorted them into root-cause buckets, and ranked 8 preventive fixes. Most traced back to new functionality built on partner APIs. Another big bucket was dependencies nobody had coordinated, the same gap the risk review was built to catch. ==The top 4 address ~70% of the defects studied.== Those fixes are still being discussed with the teams.
+Then I went wider. I studied ~200 defects across ~2,100 code changes, sorted them into root-cause buckets and ranked 8 preventive fixes. Most traced back to new functionality built on partner APIs. Another big bucket was dependencies nobody had coordinated, the same gap the risk review was built to catch. ==The top 4 address ~70% of the defects studied.== Those fixes are still being discussed with the teams.
 
 <figure>
   <DefectStudy />
@@ -91,14 +90,14 @@ Then I went wider. I studied ~200 defects across ~2,100 code changes, sorted the
 The best time to start tracking a metric is before your manager asks for it. The second-best time is right after.
 </StickyNote>
 
-**Closing the loop (October 2026).** The output is now a spreadsheet with a summary page, so the other product owners can work in it with me. Claude's recommendations and notes sit in their own columns, separate from the team's decisions and notes. After a few releases, we feed the differences back into the rules and suggestions. Every time the team disagrees with the AI, that disagreement becomes something it learns from.
+**Closing the loop (October 2026).** The output is now a spreadsheet with a summary page, so the other product owners can work in it with me. Claude's recommendations and notes sit in their own columns, separate from the team's decisions and notes. After a few releases, I'll use the differences to fix the rules. Every time the team disagrees with the AI, that's a hint about which rule is wrong.
 
 <figure>
   <ClaudeVsTeam />
 </figure>
 
 <StickyNote tilt={1.6} color="blue" size="sm">
-Yes, I built a spreadsheet so I could grade a robot's homework.
+I built a spreadsheet so I could grade a robot's homework.
 </StickyNote>
 
 <InkArrow from="fix" to="result" seed={14} />
@@ -115,7 +114,7 @@ Yes, I built a spreadsheet so I could grade a robot's homework.
 
 "Severe" has a specific meaning here: a defect that breaks the product's core function badly enough to trigger a SEV call, where people stay on the line until a fix is out. Those calls are expensive, and nobody misses them.
 
-The honest version: the AI isn't the whole story. In my view, the biggest reason severe defects dropped is visibility. We know what's in each release and what each ticket risks. The automation is what keeps that from depending on someone remembering to check.
+The AI isn't the whole story. In my view, the biggest reason severe defects dropped is visibility. We know what's in each release and what each ticket risks. The automation is what keeps that from depending on someone remembering to check.
 
 Other things got better too. The defect study found that the share of bug fixes that included an automated test rose from 27% to 87% over three quarters. Credit for that one goes to the engineers.
 
@@ -123,4 +122,4 @@ Other things got better too. The defect study found that the share of bug fixes 
 
 Fix the process first, then automate the process you fixed. If I'd started with the AI, I'd have automated a release nobody could see into.
 
-Next, I want to automate as much of the release audit and clean-up as I can, and let the gap between "Claude says" and "we decided" tell me where the rules are wrong. The feedback loop is brand new as of October 2026, so the next few releases will show how much it actually teaches the rules.
+Next, I want to automate as much of the release audit and cleanup as I can, and let the gap between "Claude says" and "we decided" tell me where the rules are wrong. The feedback loop is brand new as of October 2026, so the next few releases will show how much it actually teaches the rules.

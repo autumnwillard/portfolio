@@ -5,11 +5,11 @@ import InkSvg from '../InkSvg.astro';
 import { arrow } from '../../lib/ink';
 
 const label =
-  'Loop showing how each workflow is built: do the task by hand with the AI, turn the corrections into rules, let the AI recommend, a person decides, check results against hand counts, then add fixes to the backlog and repeat.';
+  'Loop showing how each workflow is built: do the task by hand with the AI, turn the corrections into rules, let the AI draft until it has been tested, a person decides, check results against hand counts, then add fixes to the backlog and repeat.';
 const stops = [
   ['Do it by hand', 'with the AI'],
   ['My corrections', 'become rules'],
-  ['AI recommends', '(drafts only)'],
+  ['AI drafts', '(until it’s tested)'],
   ['I decide'],
   ['Check against', 'hand counts /', 'a no-AI baseline'],
 ];

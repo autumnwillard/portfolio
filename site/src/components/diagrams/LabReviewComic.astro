@@ -2,13 +2,13 @@
 // lab-review-system-never-submitted-comic: three-panel comic strip.
 // 1: a record with empty fields, no submit button, status "New"; "Done!"
 // 2: weeks later, "What do you mean it was never submitted?"
-// 3: the fix: greyed-out button, "Unsubmitted Draft", a leave-page warning.
+// 3: the fix: grayed-out button, "Unsubmitted Draft", a leave-page warning.
 // Side by side on wide screens, stacked on narrow ones. Placeholder text only.
 import InkSvg from '../InkSvg.astro';
 import { rect, line, loop } from '../../lib/ink';
 
 const label =
-  "Before: a record showed the status 'New' with no visible submit button, so researchers thought they were done. After: the 'Start Manager Review' button is visible but greyed out, the status reads 'Unsubmitted Draft,' and leaving the page triggers a warning.";
+  "Before: a record showed the status ‘New’ with no visible submit button, so researchers thought they were done. After: the ‘Start Manager Review’ button is visible but grayed out, the status reads ‘Unsubmitted Draft,’ and leaving the page triggers a warning.";
 
 const PW = 320, PH = 330;
 const layouts = [
@@ -99,7 +99,7 @@ const field = (x: number, y: number, w: number, s: number) =>
             <text class="ink-text ink-fade" style="--i:14" x="14" y="30" font-size="21">Leave page?</text>
             <text class="ink-sans ink-fade" style="--i:14" x="14" y="56" font-size="12.5">Changes may not save.</text>
           </g>
-          <text class="ink-text ink-text--accent ink-fade" style="--i:15" x="120" y="318" font-size="18" text-anchor="middle">visible, greyed out</text>
+          <text class="ink-text ink-text--accent ink-fade" style="--i:15" x="120" y="318" font-size="18" text-anchor="middle">visible, grayed out</text>
         </g>
       </InkSvg>
     );

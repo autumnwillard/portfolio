@@ -1,19 +1,19 @@
 ---
-title: "Everything gets reviewed twice. Does it need to?"
+title: "Everything gets reviewed three times. Does it need to?"
 short_title: "AI review routing"
 order: 2
-so_what: "The lab's top complaint was slow reviews. I traced it to screening answers nobody could trust, proposed the lab's first AI review product to answer them so each item goes only to the reviews it needs, and got it approved for build. That project led to the department head asking me to write an AI roadmap for all of compliance."
-card_blurb: "Slow reviews were the lab's top complaint. The real problem was screening answers too unreliable to route on. I designed the lab's first AI review product to fix them, and got it approved for build."
+so_what: "The lab’s top complaint was slow reviews. I traced it to screening answers nobody could trust, so every item got the full set of reviews. I designed the lab’s first AI review product to answer them, got it approved for build and then got asked to write an AI roadmap for all of compliance. It hadn’t shipped when I left."
+card_blurb: "Slow reviews were the lab’s top complaint. The real cause was a screening form whose answers were too unreliable to use, so everything went through all three reviews. I designed the lab’s first AI review product to answer it, and got it approved for build."
 card_metrics:
   - "~70–80% fewer manual reviews (projected)"
   - "95% accuracy gate before anyone relies on it"
 status: "Approved · in build when I left"
 glance:
   role: "Product Manager. My initiative from idea to approved build."
-  team: "Researchers submitting work, export-control reviewers and classification analysts at Idaho National Laboratory, a U.S. Department of Energy national lab"
+  team: "Researchers submitting work and the three reviewing teams (export control, classification and a scientific subject-area review) at Idaho National Laboratory, a U.S. Department of Energy national lab"
   timeframe: "2025"
   status: "Approved · in build when I left"
-  numbers: "All projected: ~70–80% fewer manual reviews (projected) · $1M+ annually (projected) in reviewer time · a 95% accuracy gate (a design decision, not a result)"
+  numbers: "~70–80% fewer manual reviews (projected) · $1M+ annually in reviewer time (projected) · a 95% accuracy gate (a design decision, not a result)"
 metrics:
   - value: "~70–80%"
     label: "fewer manual reviews (projected)"
@@ -21,7 +21,7 @@ metrics:
     label: "annually in reviewer time (projected)"
   - value: "95%"
     label: "accuracy gate (a design decision, not a result)"
-description: "How Autumn Willard traced slow reviews at INL to unreliable screening answers and got the lab's first AI review product approved for build."
+description: "How Autumn Willard traced slow reviews at INL to unreliable screening answers and got the lab’s first AI review product approved for build."
 next:
   title: "AI toolkit"
   href: "/work/ai-toolkit/"
@@ -33,14 +33,12 @@ import ReviewRoutingBeforeAfter from '../../components/diagrams/ReviewRoutingBef
 import ReviewRoutingRolloutGate from '../../components/diagrams/ReviewRoutingRolloutGate.astro';
 import ReviewRoutingProjectedReviews from '../../components/diagrams/ReviewRoutingProjectedReviews.astro';
 
-The lab's biggest complaint was slow reviews. The reviewers weren't the problem. A form was.
-
 ## The problem: everything got the full treatment
 
-Anything shared outside INL had to clear the lab's review system first, and every item got both an export-control review and a classification review, no matter what was in it.
+Anything shared outside INL had to clear the lab's review system first, and every item got the full set of reviews, no matter what was in it: export control, classification and a review for specific scientific subject areas that rated sensitivity from green to red.
 
 <StickyNote float tilt={2} color="yellow">
-Survey says… "reviews take forever." No Family Feud buzzer required.
+Survey says… "reviews take forever." Number one answer, by a mile.
 </StickyNote>
 
 In a lab-wide survey about the system, the most common complaint, by far, was how long reviews took.
@@ -51,13 +49,11 @@ Meanwhile reviewers were spending a lot of their time on items that never needed
 
 ## Digging in: the input was broken
 
-Submitters answered yes/no screening questions that were supposed to flag which reviews applied. In practice the answers were too unreliable to route on, so everything defaulted to full review, just in case.
-
-==The bottleneck wasn't reviewer speed. It was a set of answers nobody could trust.==
+Submitters answered yes/no screening questions that were supposed to flag which reviews applied. In practice the answers were too unreliable to route on, so everything defaulted to full review, ==just in case.==
 
 - **I met with every reviewing team.** In compliance work that's not optional.
 - **I drew the rules.** A flow chart of which conditions trigger which reviews, checked back with the teams.
-- **I sized it with the reviewers' own notes.** Reviewers left comments when a screening question had been answered wrong. From those, I estimated reliable answers would cut manual reviews by ~70–80%. The exact figures are no longer available.
+- **I sized it with the reviewers' own notes.** Reviewers left comments when a screening question had been answered wrong. From those, I estimated reliable answers would cut manual reviews by ~70–80%. I don't have the exact counts anymore.
 
 <figure class="figure-wide">
   <ReviewRoutingBeforeAfter />
@@ -73,7 +69,7 @@ Submitters answered yes/no screening questions that were supposed to flag which 
 
 ## What I did
 
-**I went after the input, not the reviewers.** I proposed the lab's first AI review product: an AI agent that reads the uploaded document and answers the screening questions itself. It would be grounded in the lab's internal classification guidelines, external export-control regulations, and historical review data from the system. Its answers would feed routing, so each item goes only to the reviews it actually needs. Reviewers keep the judgment calls. They just stop seeing items that never needed them.
+**I went after the input, not the reviewers.** I proposed the lab's first AI review product: an AI agent that reads the uploaded document and answers the screening questions itself. It would be grounded in the lab's internal classification guidelines, external export-control regulations and historical review data from the system. Its answers would feed routing, so each item would go only to the reviews it actually needs. Reviewers would keep the judgment calls and stop seeing items that never needed them.
 
 **I wrote the evaluation plan, and it's deliberately slow.** The plan has three phases:
 
@@ -87,13 +83,13 @@ Submitters answered yes/no screening questions that were supposed to flag which 
   <ReviewRoutingRolloutGate />
 </figure>
 
-*Tradeoff:* a faster launch would have shown value sooner. I traded time-to-value for compliance safety, because in compliance, one bad miss can sink trust in the whole idea.
+*Tradeoff:* a faster launch would have shown value sooner. I chose slow on purpose, because in compliance one bad miss can sink trust in the whole idea.
 
 **Low-confidence answers always go to a human,** before the 95% gate and after it. "Not sure" means a person looks.
 
 *Tradeoff:* every low-confidence handoff eats into the savings. I'd rather give up some savings than ask reviewers to trust a guess.
 
-I also wrote the UI specs for the system changes, and built the business case that won executive sponsorship for a multi-phase build.
+I also wrote the UI specs and the business case that got executives to back a multi-phase build.
 
 <InkArrow from="fix" to="result" seed={15} />
 
@@ -111,14 +107,14 @@ The project was approved a few months before I left INL in December 2025. The bu
 </figure>
 
 <StickyNote kind="card" tilt={-0.8}>
-Yes, I'm featuring a project that hadn't shipped yet. The parts a PM owns (finding the real problem, deciding what to build, getting a yes) were done. I'd rather say that up front than have you find out in a reference check.
+I'm featuring a project that hadn't shipped when I left. The parts a PM owns (finding the real problem, deciding what to build, getting a yes) were done. Better you hear it from me than from a reference check.
 </StickyNote>
 
 ## From one feature to a department roadmap
 
-The routing project got noticed. Through it, the head of the compliance department learned about my interest in AI and what I knew about it, and she asked me to build an AI roadmap for the entire department. Doing one project carefully is what earned me the bigger scope.
+The routing project got noticed. Through it, the head of the compliance department learned I knew my way around AI, and she asked me to build an AI roadmap for the whole department.
 
-I met with each team's leadership (usually the team manager, or someone they delegated): Supply Chain Risk Management, Export Control and the Privacy Program. Then I wrote up each one's current state, its pain points, and where AI could actually solve them.
+I met with the leadership of each team (Supply Chain Risk Management, Export Control and the Privacy Program), then wrote up where each one stood, what hurt and where AI could actually help.
 
 One example from Privacy: the team was trying to go through every tool used at the lab and identify which ones held personally identifiable information (PII). It was largely manual and had made hardly any progress. The roadmap proposed training AI to spot PII using the same criteria the privacy team used themselves, then automatically adding each tool to their system along with how much PII it holds. The HR system, for example, would get flagged as holding more PII than the review system.
 
@@ -126,6 +122,4 @@ That's a proposal, not a result. I don't know what came of the roadmap after I l
 
 ## Looking back
 
-I don't know how this one ends. If I were still there, I'd watch two things: how the shadow-phase answers compared to reviewer decisions, and how often low-confidence items landed on a human. If too many land there, the savings shrink. If almost none do, I'd want to know why the model is so sure of itself.
-
-The bigger lesson: the complaint was "reviews are slow." The fix sat upstream of the reviewers entirely.
+If I were still there, I'd watch two things: how the shadow-phase answers compared to reviewer decisions, and how often low-confidence items landed on a human. If too many land there, the savings shrink. If almost none do, I'd want to know why the model is so sure of itself.

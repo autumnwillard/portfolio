@@ -25,7 +25,7 @@ const notes = [
   { fix: ['Block alternate', 'owners as reviewers'], pain: 'no stuck reviews' },
   { fix: ['Buttons on the left'], pain: 'no scroll hunt' },
   { fix: ['Help link in the nav'], pain: 'lost users find help' },
-  { fix: ['Required match', 'checkbox'], pain: 'less manual checking' },
+  { fix: ['Required “matches', 'the review”', 'checkbox'], pain: 'less manual checking' },
   { fix: ['Conference subtypes'], pain: 'managers see detail' },
   { fix: ['Sort by Date', 'Last Modified'], pain: 'find recent work' },
 ];
@@ -104,7 +104,7 @@ const ny = (i: number) => 238 + Math.floor(i / 4) * 154;
   .lrs-fixes td:last-child { font-weight: 700; }
 
   /* wide: the board stands in for the table (kept for screen readers). The wrapper is
-     what's hidden: a table won't shrink to 1px, so hiding the table itself overflowed. */
+     what’s hidden: a table won’t shrink to 1px, so hiding the table itself overflowed. */
   @media (min-width: 681px) {
     .lrs-fixes-wrap {
       position: absolute !important;

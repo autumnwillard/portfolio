@@ -1,9 +1,9 @@
 ---
-title: "“Which team has room?” shouldn't take four data pulls."
+title: "“Which team has room?” shouldn’t be a research project."
 short_title: "AI toolkit"
 order: 3
-so_what: "Coordinating four engineering teams ran on one-by-one ticket reviews and hand-copied numbers. I treated that as a product problem and built an internal AI toolkit the teams use daily. Its biggest win turned out to be the problems it found."
-card_blurb: "Four engineering teams ran on hand-copied status numbers and one-by-one ticket reviews. I built them an AI toolkit, then it started finding problems leadership couldn't see."
+so_what: "Coordinating four engineering teams ran on one-by-one ticket reviews and hand-copied numbers. I built an internal AI toolkit the teams use daily. Its biggest win turned out to be the problems it found."
+card_blurb: "Four engineering teams ran on hand-copied status numbers and one-by-one ticket reviews. I built them an AI toolkit, and it started turning up problems nobody had spotted yet."
 card_metrics:
   - "10 workflows · 7 dashboards, used daily by four engineering teams"
   - "75% less sprint reporting time"
@@ -11,7 +11,7 @@ card_metrics:
 status: "In daily use"
 glance:
   role: "Technical Product Owner. I built the toolkit and I own it."
-  team: "Four engineering teams on a B2B SaaS document management platform, leadership, and the product team that runs acceptance testing. Also me."
+  team: "Four engineering teams on a B2B SaaS document management platform, leadership and the product team that runs acceptance testing. Also me."
   timeframe: "2026, built over about three months (July to October)"
   status: "In daily use"
   numbers: "10 workflows · 7 dashboards, used daily by four engineering teams · 75% less sprint reporting time · 114 items reviewed → 16 recommended for acceptance testing (one release)"
@@ -22,7 +22,7 @@ metrics:
     label: "less sprint reporting time"
   - value: "114 → 16"
     label: "items reviewed → recommended for acceptance testing (one release)"
-description: "How Autumn Willard treated coordinating four engineering teams as a product problem and built an AI toolkit that found problems leadership couldn't see."
+description: "How Autumn Willard treated coordinating four engineering teams as a product problem and built an AI toolkit that turned up problems nobody had spotted yet."
 next:
   title: "Lab review system"
   href: "/work/lab-review-system/"
@@ -49,13 +49,11 @@ My users were my own teams and leadership, so I treated it like any other produc
 
 ## Digging in: do it by hand first
 
-Every workflow started as a task I did manually with the AI. The corrections I made along the way became the rules it follows. Doing it by hand first told me what the job actually was before I automated it.
+I did every task by hand with the AI before I automated it. Each time I corrected it, the correction became a rule. That's how I learned what the job actually was.
 
-<StickyNote float tilt={2.2} color="yellow">
-Version one needed four manual data pulls per refresh. Great tool, if you love refreshing spreadsheets. I do not.
-</StickyNote>
+For capacity, my goal was simple: anyone should be able to see at a glance how much each team has on its plate and which ones have room to take on new work.
 
-My first capacity attempt is the cautionary tale. It was a spreadsheet that needed four manual data pulls every time I refreshed it. That's not a quick answer to "which team has room?" It's homework. The fix wasn't a better spreadsheet. The managers already maintained a staffing spreadsheet, so the next version read that directly, plus live workload from the tracker.
+My first attempt is the cautionary tale: a spreadsheet that needed four manual data pulls every time I refreshed it. That's not a quick answer to "which team has room?" It's homework. The managers already kept a staffing spreadsheet, so version two read that directly, plus live workload from the tracker.
 
 <figure>
   <AiToolkitWorkflowLoop />
@@ -63,7 +61,7 @@ My first capacity attempt is the cautionary tale. It was a spreadsheet that need
 
 ## Constraints
 
-- **Trust.** Nobody wants an AI quietly editing their tickets. So the hard rule is ==nothing changes a ticket's status on its own.== Drafts come before anything gets written, and I set clear rules for what the AI may and may not change.
+- **Trust.** Nobody wants an AI quietly editing their tickets. So ==the AI had to earn the right to make changes.== Each workflow started out drafting while I approved. I only let it edit tickets itself after a few test runs where I confirmed the edits were right and nothing else broke. When it got something wrong, that became a new rule. (One example: Jira descriptions have to be written in ADF, Jira's own format, not Markdown.)
 - **The tracker fights back.** Its own automation would overwrite ticket content, so the ticket-drafting workflow had to create tickets in a way that keeps that from happening.
 - **No new chores.** A tool that needs people to maintain one more sheet is a tool that goes stale.
 - **I still had a day job.** I built this while owning the release lifecycle.
@@ -84,9 +82,7 @@ I built 10 workflows and 7 dashboards across release management, capacity and ro
 
 **One status, three places, checked.** Each sprint, status reporting updates the leadership slide and the wiki status page from the project's tracking sheet, then checks that all three agree. It's used across 5 initiatives.
 
-**Check the code, not just the tracker.** On one project I audited the tracker against the actual code instead of trusting what the tickets said.
-
-The small stuff matters too. A demo picker rotates presenters fairly and never picks the person who built the thing. The team sees it as fair, which is more than most rotation spreadsheets can say.
+The small stuff matters too. A demo picker rotates presenters and never picks the person who built the thing. The team sees it as fair, which is more than most rotation spreadsheets can say.
 
 For the record, the first thing I built wasn't any of this. It was a skill that turns my loose weekly recap into 1-on-1 notes for my manager. A little selfish, I know.
 
@@ -94,13 +90,11 @@ For the record, the first thing I built wasn't any of this. It was a skill that 
 
 ## What happened
 
-The numbers:
-
 - **10 reusable workflows and 7 dashboards,** used daily by four engineering teams.
 - **75% less sprint reporting time,** measured in hours spent before vs. after. Sprint metrics are now rebuilt automatically instead of copied and pasted.
 - **114 → 16.** In one release, acceptance-testing triage reviewed 114 items and recommended 16.
 
-The better outcome: ==it found problems leadership had no visibility into.==
+The better outcome: ==it turned up problems nobody had spotted yet.==
 
 <figure>
   <AiToolkitFindingsLedger />
@@ -119,7 +113,5 @@ Three features marked done. Never built. The tracker was very confident about it
 The cycle time report showed the biggest delay was work waiting for QA, a median of 7.3 days, and only about 1 in 5 items finished within its estimate-based time budget.
 
 ## Looking back
-
-The time savings are nice. ==The bigger value was finding data problems nobody knew we had.==
 
 It's still a product with a backlog. Next up: stopping double-counted work in one report, and a proposed workflow that rolls the whole release week into a single run.

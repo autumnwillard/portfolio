@@ -17,21 +17,21 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
 ---
 <BaseLayout
   title="Autumn Willard · Product Manager"
-  description="Autumn Willard is a technical product manager and hands-on builder. See how she finds the real problem, decides what to build and proves it worked."
+  description="Autumn Willard is a product manager who reads the code. Case studies on finding the real problem, deciding what to build and checking it worked."
   active="about"
 >
   <div class="page">
     <!-- Hero -->
     <section class="hero" aria-labelledby="hero-h">
       <div class="hero__text">
-        <p class="hero__hi">Hi there! I'm Autumn.</p>
+        <p class="hero__hi">Hi there! I’m Autumn.</p>
         <h1 id="hero-h">Product manager. <span class="hero__h-2">Hands-on builder.</span></h1>
         <svg class="hero__swoosh draw" viewBox="0 0 420 18" preserveAspectRatio="none" aria-hidden="true" focusable="false">
           <path class="ink ink--accent" d={swoosh(4, 11, 410, 33, 4.5)} pathLength="1" />
         </svg>
         <p class="hero__lede">I find the problem behind the complaint, then build the fix, or the case for it.</p>
         <p>I translate between the two vastly different languages of business logic and technical implementation, so quality products get out the door without anyone wanting to kill each other.</p>
-        <p class="hero__now"><strong>Right now:</strong> I own the product and release lifecycle on a B2B SaaS document management platform built by four engineering teams.</p>
+        <p class="hero__now"><strong>Right now:</strong> I own the product and releases for a B2B SaaS document management platform built by four engineering teams.</p>
         <div class="btn-row">
           <Button variant="primary" href="/work/">See the work →</Button>
           <Button href="/autumn-willard-resume.pdf">Résumé (PDF)</Button>
@@ -51,7 +51,7 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
           fetchpriority="high"
         />
         <StickyNote tilt={-3} color="yellow" class="hero__note">
-          I also read the code and query the database before I write the spec. Engineers get fewer "wait, what did you mean?" moments from me.
+          I also read the code and query the database before I write the spec. Engineers get fewer “wait, what did you mean?” moments from me.
         </StickyNote>
       </div>
     </section>
@@ -60,7 +60,7 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
     <section class="sheet-section" aria-labelledby="top-work-h">
       <span class="margin-mark" aria-hidden="true">01</span>
       <div class="section-body">
-        <h2 id="top-work-h">Recent work</h2>
+        <h2 id="top-work-h">A few things I’ve done</h2>
         <TapedWorkCards />
       </div>
     </section>
@@ -75,14 +75,11 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
         <div class="think__grid">
           <div>
             <h3>The complaint tells you where it hurts. Not why.</h3>
-            <p>Most of my best work started with somebody annoyed. At the lab, it was "reviews take forever." The reviewers weren't slow. The screening answers that decided who reviewed what were too unreliable to use, so every item got reviewed twice. <Highlight>So I went after the bad answers, not the reviewers.</Highlight></p>
-            <p>So when someone brings me a problem, I take the complaint seriously and then go find out what's actually causing it. Usually that means walking the system as a brand-new user, reading the code or querying the data. It rarely means building the first thing someone asked for.</p>
-            <h3>I'd rather be honest than impressive.</h3>
-            <p>If a number is projected, I say projected. If a project hadn't shipped when I left, I say that up front, because a hiring manager who catches one inflated claim stops trusting the rest. Same goes for credit: I say "we" when it was we.</p>
+            <p>Most of my best work started with somebody annoyed. At the lab, it was “reviews take forever.” The reviewers weren’t slow. The screening answers that decided who reviewed what were too unreliable to use, so every item got the full set of reviews. <Highlight>So I went after the bad answers, not the reviewers.</Highlight></p>
+            <p>So I take the complaint seriously, then go find the cause. Usually that means walking the system like a brand-new user, reading the code or querying the data. It rarely means building the first thing someone asked for.</p>
+            <h3>I’d rather be honest than impressive.</h3>
+            <p>If a number is projected, I say projected. If a project hadn’t shipped when I left, I say that up front. And I say “we” when it was we.</p>
           </div>
-          <StickyNote kind="card" tilt={1.2} class="think__note">
-            The lab's self-serve help site was built by a co-worker and me, and it's credited that way.
-          </StickyNote>
         </div>
       </div>
     </section>
@@ -96,11 +93,11 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
         <h2 id="work-h">How I work</h2>
         <h3 class="sub-h">Five habits, in the order I use them</h3>
         <ol class="ink-steps">
-          <li><strong>Find the problem behind the complaint.</strong> "Reviews take forever" turned out to be a data-quality problem, not a reviewer problem.</li>
-          <li><strong>Size it with data.</strong> Before I pitch a fix, I want to know how big the problem is. Sometimes that's a survey, sometimes it's reviewer comments, sometimes it's ~200 defects in a spreadsheet.</li>
-          <li><strong>Read the code before writing the spec.</strong> I write specs by looking at the codebase and the database directly. It cuts the ambiguity and the back-and-forth with engineering, and it's how I found 3 features marked complete in the tracker that had never been built.</li>
+          <li><strong>Find the problem behind the complaint.</strong> “My record was submitted, right?” turned out to be a status label that said “New” when nothing had been submitted.</li>
+          <li><strong>Size it with data.</strong> Before I pitch a fix, I want to know how big the problem is: a survey, reviewer comments, ~200 defects in a spreadsheet.</li>
+          <li><strong>Read the code before writing the spec.</strong> It’s how I found 3 features marked complete in the tracker that had never been built.</li>
           <li><strong>Pick the smallest bet.</strong> Three small UI changes instead of a redesign. A form instead of a core-system feature. Ship the thing that fixes the problem now, and scope the bigger version next.</li>
-          <li><strong>Measure it, even if nobody was.</strong> When my manager asked for our escaped defect rate, nobody tracked it. So I built the metric first, then used it.</li>
+          <li><strong>Measure it, even when nobody else is.</strong> When my manager asked for our escaped defect rate, nobody was tracking it. So I built the tracking, then used it to find where the bugs came from.</li>
         </ol>
       </div>
     </section>
@@ -113,11 +110,11 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
       <div class="section-body ai">
         <div>
           <h2 id="ai-h">How I use AI</h2>
-          <h3 class="sub-h">The tools recommend. I decide.</h3>
-          <p>I build AI workflows for my own teams, and I've written the evaluation plan for an AI that had to be trusted with regulated content. Same rules either way:</p>
+          <h3 class="sub-h">AI does the legwork. I decide what it’s allowed to touch.</h3>
+          <p>I build AI workflows for my own teams, and I wrote the evaluation plan for an AI that would have to be trusted with regulated content. Same rules either way:</p>
           <ol class="ink-steps">
-            <li><strong>Do it by hand first, then make it repeatable.</strong> Every workflow I've built started as a task I did manually with the AI. The corrections I made along the way became the rules it follows.</li>
-            <li><strong>Keep a human in the loop.</strong> Nothing changes a ticket's status on its own. Drafts come before anything is written, and I set clear rules for what the AI may and may not touch.</li>
+            <li><strong>Do it by hand first, then make it repeatable.</strong> Every workflow I’ve built started as a task I did manually with the AI. The corrections I made along the way became the rules it follows.</li>
+            <li><strong>Keep a human in the loop until the AI earns more.</strong> A new workflow drafts, and I approve. My toolkit now edits tickets itself, but only after I tested it a few times and checked that its edits were right and didn’t break anything else. Where it slipped, I added a rule (like writing Jira descriptions in Jira’s own format, not Markdown).</li>
             <li><strong>Use the source of truth people already maintain.</strong> My capacity report reads the staffing spreadsheet managers already keep, instead of inventing a new one for them to forget.</li>
             <li><strong>Verify before trusting.</strong> I compare workflows against a no-AI baseline, reconcile dashboards against my own hand counts, and check the tracker against the actual code.</li>
             <li><strong>Keep improving.</strong> Every tool has its own backlog, same as any other product. (One item on mine: a single run that handles the whole release week.)</li>
@@ -135,8 +132,8 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
       <div class="section-body me">
         <div>
           <h2 id="me-h">A little more about me</h2>
-          <p>I live in Northwest Arkansas. Off the clock, you'll usually find me hiking (or just outside), spending time with my kids, or reading.</p>
-          <p>I still sketch before I spec, sometimes on the back of a handout during a meeting I didn't strictly need to pay attention to. (Sorry, whoever was presenting.) And I build things on my own time. <a class="text-link" href="/side-projects/">See the side projects →</a></p>
+          <p>I live in Northwest Arkansas. Off the clock, you’ll usually find me hiking (or just outside), spending time with my kids or reading.</p>
+          <p>I still sketch before I spec, sometimes on the back of a handout during a meeting I didn’t strictly need to pay attention to. (Sorry, whoever was presenting.) And I build things on my own time. <a class="text-link" href="/side-projects/">See the side projects →</a></p>
         </div>
         <div class="me__art"><OutdoorsDoodle /></div>
       </div>
@@ -179,10 +176,8 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
   .sub-h { font-size: var(--step-1); font-family: var(--font-body); font-weight: 800; color: var(--ink-soft); margin-bottom: var(--s2); }
   .think h3 { margin-top: var(--s2); }
   .think__grid { display: grid; grid-template-columns: minmax(0, var(--measure)) minmax(14rem, 19rem); gap: var(--s2) var(--s4); align-items: start; }
-  .think__grid :global(.think__note) { margin-top: 4.5rem; }
   @media (max-width: 1080px) {
     .think__grid { grid-template-columns: minmax(0, 1fr); }
-    .think__grid :global(.think__note) { margin-top: var(--s1); max-width: 26rem; }
   }
   .ai { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: var(--s3); align-items: center; }
   @media (max-width: 900px) { .ai { grid-template-columns: 1fr; } .ai__art { max-width: 26rem; } }

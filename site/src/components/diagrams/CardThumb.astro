@@ -8,9 +8,9 @@ interface Props { kind: Kind; label?: string }
 const { kind } = Astro.props;
 
 const labels: Record<Kind, string> = {
-  routing: 'Before: every item went to both reviews. After (planned): AI-answered screening sends each item only to the reviews it needs.',
+  routing: 'Before: every item went through all three reviews. After (planned): AI-answered screening sends each item only to the reviews it needs.',
   toolkit: 'In one release, the triage workflow reviewed 114 items and recommended 16.',
-  'review-system': 'Redesigned record panel: a visible greyed-out submit button and an ‘Unsubmitted Draft’ status.',
+  'review-system': 'Redesigned record panel: a visible grayed-out submit button and an ‘Unsubmitted Draft’ status.',
   intake: 'Before: requests bounced around email. After: one form routed them automatically.',
   'tech-handoff': 'A two-by-two chart of budget versus having an in-house team. The pivot moved from small businesses with little budget to mid-size businesses with budget but no in-house team, skipping large companies that already have IT.',
   'room-reserve': 'Sketched data model for Room Reserve: rooms, reservations and customers.',
@@ -24,12 +24,15 @@ const A = (pts: [number, number][], s: number, h = 9) => { const a = arrow(pts, 
       <text class="ink-text ink-fade" x="14" y="28" font-size="21">Before</text>
       <path class="ink" style="--i:0" d={rect(20, 52, 80, 40, 401)} pathLength="1" />
       <text class="ink-text ink-fade" x="60" y="78" font-size="19" text-anchor="middle">item</text>
-      <path class="ink" style="--i:1" d={A([[104, 66], [190, 46], [262, 40]], 402)} pathLength="1" />
-      <path class="ink" style="--i:1" d={A([[104, 78], [190, 92], [262, 100]], 403)} pathLength="1" />
-      <path class="ink" style="--i:2" d={rect(268, 22, 104, 36, 404)} pathLength="1" />
-      <path class="ink" style="--i:2" d={rect(268, 84, 104, 36, 405)} pathLength="1" />
-      <text class="ink-text ink-fade" x="320" y="46" font-size="19" text-anchor="middle">review</text>
-      <text class="ink-text ink-fade" x="320" y="108" font-size="19" text-anchor="middle">review</text>
+      <path class="ink" style="--i:1" d={A([[104, 62], [190, 34], [262, 26]], 402)} pathLength="1" />
+      <path class="ink" style="--i:1" d={A([[104, 72], [190, 68], [262, 66]], 412)} pathLength="1" />
+      <path class="ink" style="--i:1" d={A([[104, 82], [190, 100], [262, 106]], 403)} pathLength="1" />
+      <path class="ink" style="--i:2" d={rect(268, 10, 104, 32, 404)} pathLength="1" />
+      <path class="ink" style="--i:2" d={rect(268, 50, 104, 32, 413)} pathLength="1" />
+      <path class="ink" style="--i:2" d={rect(268, 90, 104, 32, 405)} pathLength="1" />
+      <text class="ink-text ink-fade" x="320" y="32" font-size="19" text-anchor="middle">review</text>
+      <text class="ink-text ink-fade" x="320" y="72" font-size="19" text-anchor="middle">review</text>
+      <text class="ink-text ink-fade" x="320" y="112" font-size="19" text-anchor="middle">review</text>
       <path class="ink ink--faint" style="--i:3" d={line(14, 136, 386, 134, 406, 1.4)} pathLength="1" />
       <text class="ink-text ink-fade" x="14" y="164" font-size="21">After (planned)</text>
       <path class="ink" style="--i:4" d={rect(20, 192, 64, 40, 407)} pathLength="1" />
@@ -75,7 +78,7 @@ const A = (pts: [number, number][], s: number, h = 9) => { const a = arrow(pts, 
       <rect class="ink-fade" x="48" y="168" width="128" height="44" rx="10" fill="#ece9e2" stroke="#a49d93" stroke-width="2" stroke-dasharray="5 5" />
       <text class="ink-sans ink-fade" x="112" y="196" font-size="16" font-weight="700" text-anchor="middle" fill="#6b655e">Submit</text>
       <path class="ink ink--accent" style="--i:5" d={A([[226, 222], [206, 214], [186, 198]], 436, 9)} pathLength="1" />
-      <text class="ink-text ink-text--accent ink-fade" x="232" y="236" font-size="19">visible, greyed out</text>
+      <text class="ink-text ink-text--accent ink-fade" x="232" y="236" font-size="19">visible, grayed out</text>
     </>
   )}
 
