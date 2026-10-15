@@ -12,7 +12,6 @@ import StatusScale from '../components/diagrams/SideProjectsStatusScale.astro';
 import RoomErd from '../components/diagrams/SideProjectsRoomErd.astro';
 import ConflictCalendar from '../components/diagrams/SideProjectsConflictCalendar.astro';
 import TestsChecklist from '../components/diagrams/SideProjectsTestsChecklist.astro';
-import TemplateCard from '../components/diagrams/SideProjectsTemplateCard.astro';
 
 const webp = (base: string) => [{ type: 'image/webp', srcset: `/images/${base}.webp` }];
 ---
@@ -157,25 +156,46 @@ const webp = (base: string) => [{ type: 'image/webp', srcset: `/images/${base}.w
 
     <InkDivider seed={91} />
 
-    <!-- 03. This site -->
+    <!-- 03. This site: built with AI, before/after, and how I ran it -->
     <section class="sheet-section" id="this-site" aria-labelledby="site-h">
       <span class="margin-mark" aria-hidden="true">03</span>
       <div class="section-body">
         <h2 id="site-h">This site is a side project too. Meta, I know.</h2>
-        <p class="proj__meta"><StatusBadge status="Personal project · in progress" size="sm" /></p>
-        <div class="split split--art">
-          <div>
-            <p><strong>The constraint.</strong> Almost nothing from my real work can be screenshotted. Employer systems are confidential.</p>
-            <p><strong>The call I made.</strong> I had AI build it. I ran the redesign like any other product: I set the constraints, made the calls and reviewed every page. AI wrote the code and drew every diagram and doodle, under my rules: no real screenshots, numbers only from my sources, copy that sounds like me. Nothing went up until I’d approved it. The sketchbook look is a design choice, but it’s also the honest one: these are drawings <em>of</em> the work, not pictures <em>from</em> it.</p>
-            <p>A few other calls:</p>
-            <ul class="ink-list">
-              <li><strong>The work is one click from anywhere,</strong> because that’s what hiring managers came for.</li>
-              <li><strong>Every case study follows the same template:</strong> problem, digging in, constraints, decisions, outcome, lessons.</li>
-            </ul>
-            <p><strong>Built with:</strong> Astro, as a static site on Cloudflare Pages.</p>
-          </div>
-          <div class="split__art split__art--card"><TemplateCard /></div>
+        <p class="proj__meta"><StatusBadge status="Personal project · built with AI" size="sm" /> <span>About 3 days · Claude Code</span></p>
+        <p class="proj__tag">I rebuilt this portfolio with AI. I didn’t write the code or draw the pictures. I did the part I’m actually selling: deciding what to build, setting the rules and saying “not yet” until it was right.</p>
+
+        <div class="ba">
+          <TapedImage
+            src="/images/side-projects-site-before-desktop-960.jpg"
+            sources={webp('side-projects-site-before-desktop-960')}
+            sizes="(max-width: 760px) 92vw, 30rem"
+            alt="Before: the old home page, a plain white layout with a cartoon portrait and a short intro."
+            width={960} height={600} tilt={-1.4} tape="corners"
+            caption="Before: clean, a little generic."
+          />
+          <TapedImage
+            src="/images/side-projects-site-after-desktop-960.jpg"
+            sources={webp('side-projects-site-after-desktop-960')}
+            sizes="(max-width: 760px) 92vw, 30rem"
+            alt="After: the new home page, a sketchbook on graph paper with a taped-in portrait, a sticky note and page-flag buttons."
+            width={960} height={600} tilt={1.2}
+            caption="After: a sketchbook, so I can show work I can’t screenshot."
+          />
         </div>
+
+        <h3 class="sub-h">How I ran it</h3>
+        <ol class="ink-steps">
+          <li><strong>Rules before code.</strong> The first thing I had AI write was a rulebook, not a page: my voice, what counts as a real number, what’s confidential and what the site should look like. Every agent read it before touching anything. When something drifted, I fixed the rule, not just the page.</li>
+          <li><strong>Discovery, then decisions.</strong> An agent audited my old site and my notes and drafted what to feature. It came back with about 60 questions only I could answer. I answered them, and corrected the framing twice: I’m a product manager with technical depth, and this site shows how I think, not my job history. AI drafted the copy from my answers. I approved every page.</li>
+          <li><strong>Options, not opinions.</strong> Three agents built three full design directions in parallel. I picked one, borrowed the best parts of another, then ran about eight rounds of feedback until the sticky notes stopped looking like UI cards painted yellow.</li>
+          <li><strong>When feedback is hard to put into words, build a tool.</strong> I couldn’t describe the button I wanted, so I had AI build me a playground with presets and sliders. A copy review came back with 112 suggestions, so I had it build an approval page where I accepted, rejected or rewrote each one. That page is now a reusable skill I run on any writing.</li>
+          <li><strong>Research before taste calls.</strong> For the page turn, an agent researched what makes a click feel good, prototyped a fix on a separate branch and filmed it frame by frame, so I could compare before I said yes.</li>
+          <li><strong>Check everything.</strong> Every number on the site traces to a source. Automated checks run at six screen widths. Lighthouse scores 96 to 100 for performance and 100 for accessibility on every page. A blunt editor agent reviewed all the copy, and I made the call on every edit.</li>
+        </ol>
+        <StickyNote tilt={-1.6} color="blue" class="site__note">
+          Working with AI felt a lot like working with a fast, eager engineering team. Clear constraints, short feedback loops and one person who owns the decisions. That was me.
+        </StickyNote>
+        <p><strong>Built with:</strong> Astro and Claude Code, hosted on Cloudflare Pages.</p>
       </div>
     </section>
 
@@ -295,4 +315,9 @@ const webp = (base: string) => [{ type: 'image/webp', srcset: `/images/${base}.w
     .strip__item { max-width: 26rem; }
     .section-body :global(.proj__screens) { margin: var(--s3) 12px var(--s3) 4px; }
   }
+  /* This site: before/after, side by side on wide screens */
+  .ba { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--s2) var(--s3); align-items: start; margin: var(--s2) 0 var(--s3); max-width: 62rem; }
+  .ba :global(figure) { margin: 0; }
+  .section-body :global(.site__note) { max-width: 22rem; margin: var(--s2) 0; }
+  @media (max-width: 760px) { .ba { grid-template-columns: 1fr; gap: var(--s3); } }
 </style>
