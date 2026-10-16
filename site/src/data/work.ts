@@ -37,9 +37,9 @@ export const featured: FeaturedCard[] = [
   {
     hook: 'Ten workflows, seven dashboards, zero copy-paste.',
     blurb: 'Four engineering teams ran on hand-copied status numbers and one-by-one ticket reviews. I built them an AI toolkit, and it started turning up problems nobody had spotted yet.',
-    badge: 'In daily use',
-    numbers: ['10 workflows · 7 dashboards, used daily by four engineering teams', '75% less sprint reporting time', '114 items reviewed → 16 recommended for acceptance testing'],
-    strip: '10 workflows · 7 dashboards, used daily by four engineering teams',
+    badge: 'In use',
+    numbers: ['10 workflows · 7 dashboards for four engineering teams and their managers', '75% less sprint reporting time', '114 items reviewed → 16 recommended for acceptance testing'],
+    strip: '10 workflows · 7 dashboards for four engineering teams and their managers',
     href: '/work/ai-toolkit/',
     thumb: 'toolkit',
     size: 'large',
