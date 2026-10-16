@@ -27,6 +27,7 @@ next:
 import StickyNote from '../../components/StickyNote.astro';
 import InkArrow from '../../components/InkArrow.astro';
 import RiskReviewFlow from '../../components/diagrams/RiskReviewFlow.astro';
+import CaseFlowLive from '../../components/fx/case-flow-live.astro';
 import HotfixWeeks from '../../components/diagrams/HotfixWeeks.astro';
 import ClaudeVsTeam from '../../components/diagrams/ClaudeVsTeam.astro';
 import DefectStudy from '../../components/diagrams/DefectStudy.astro';
@@ -68,7 +69,7 @@ I only saw the pattern because I went looking. I started tracking our off-cycle 
 **Then the risk review.** Once the release branch is cut, the review reads the branch, finds every ticket it references and runs each one through a rule set I wrote. Every ticket lands in a bucket of recommended actions, like "revert it out of this release," with a note explaining why. It runs before regression testing, so testers start with the list of what's risky.
 
 <figure class="figure-wide">
-  <RiskReviewFlow />
+  <CaseFlowLive kind="risk"><RiskReviewFlow /></CaseFlowLive>
 </figure>
 
 The actions are concrete: revert, cherry-pick, tag, untag or no action. Claude gets one extra option, "unsure," that people don't: if it can't tell, it has to say so, and a person picks a real action.

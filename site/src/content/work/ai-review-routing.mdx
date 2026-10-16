@@ -30,6 +30,7 @@ import StickyNote from '../../components/StickyNote.astro';
 import InkArrow from '../../components/InkArrow.astro';
 import Highlight from '../../components/Highlight.astro';
 import ReviewRoutingBeforeAfter from '../../components/diagrams/ReviewRoutingBeforeAfter.astro';
+import CaseFlowLive from '../../components/fx/case-flow-live.astro';
 import ReviewRoutingRolloutGate from '../../components/diagrams/ReviewRoutingRolloutGate.astro';
 import ReviewRoutingProjectedReviews from '../../components/diagrams/ReviewRoutingProjectedReviews.astro';
 
@@ -58,7 +59,7 @@ The third review shows how bad the answers were, because they failed both ways. 
 - **I sized it with the reviewers' own notes.** Reviewers left comments when a screening question had been answered wrong. From those, I estimated reliable answers would cut manual reviews by ~70–80%. I don't have the exact counts anymore.
 
 <figure class="figure-wide">
-  <ReviewRoutingBeforeAfter />
+  <CaseFlowLive kind="routing"><ReviewRoutingBeforeAfter /></CaseFlowLive>
 </figure>
 
 ## Constraints

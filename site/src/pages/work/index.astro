@@ -6,6 +6,7 @@ import StatusBadge from '../../components/StatusBadge.astro';
 import Highlight from '../../components/Highlight.astro';
 import Button from '../../components/Button.astro';
 import ProofStrip from '../../components/ProofStrip.astro';
+import WorkCorkboard from '../../components/fx/work-corkboard.astro';
 import InkDivider from '../../components/InkDivider.astro';
 import HotfixWeeks from '../../components/diagrams/HotfixWeeks.astro';
 import CardThumb from '../../components/diagrams/CardThumb.astro';
@@ -40,7 +41,7 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
     <section class="sheet-section proof" aria-labelledby="proof-h">
       <span class="margin-mark" aria-hidden="true">01</span>
       <div class="section-body">
-        <ProofStrip />
+        <WorkCorkboard><ProofStrip /></WorkCorkboard>
       </div>
     </section>
 
@@ -334,7 +335,7 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
     inset: 0;
     z-index: -1;
     border-radius: 2px;
-    box-shadow: 0 3px 4px rgb(60 50 40 / 0.08), 0 16px 24px -12px rgb(60 50 40 / 0.34);
+    box-shadow: 0 3px 4px rgb(var(--shadow) / 0.08), 0 16px 24px -12px rgb(var(--shadow) / 0.34);
     opacity: 0;
     pointer-events: none;
   }
