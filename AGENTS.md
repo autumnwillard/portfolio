@@ -123,7 +123,7 @@ Rules:
 The concept comes from Autumn's theme brief (`.notes/sources/Website theme.txt`). **Chosen direction (2026-10-13): the "ink sketchbook"**, with tweaks:
 
 - **Base:** loose near-black ink line art with a slight wobble (one seeded wobbly-pen helper so every drawing matches); hand-drawn marker headings; numbered sections in the left margin, end-credits style; generous whitespace.
-- **Signature motion:** SVG line art draws itself on scroll; coral arrows connect problem → cause → fix → result in case studies; the active tab is circled in marker and the circle slides to the new tab while the page turns. All motion is off under `prefers-reduced-motion`.
+- **Signature motion:** SVG line art draws itself on scroll; coral arrows connect problem → cause → fix → result in case studies; nav tabs are washi tape labels, and the active tab's wavy coral underline slides to the new tab while the page turns. All motion is off under `prefers-reduced-motion`.
 - **Accent:** one coral-red marker color for underlines, arrows, key numbers, the active tab and annotations.
 - **Highlighter:** classic yellow, used only for `==highlighted==` phrases. Red never stands in for highlighter.
 - **Paper:** faint graph-grid paper for the page background; lined paper inside index cards. Lines stay subtle enough that body text reads cleanly.
@@ -133,7 +133,7 @@ These rules hold for every page:
 
 - **Paper everywhere.** Content sits on paper: sheets, notebook pages, index cards. Subtle texture, never noisy enough to hurt reading.
 - **Scroll-first.** Each page reads top to bottom like a sketchbook flipped through, or like movie end credits. **Not** center-aligned text; keep a strong left reading edge.
-- **Tabs:** About, Work, Side Projects, Contact. They look like folder tabs or sketched buttons. Switching tabs plays a page-turn/page-change animation.
+- **Tabs:** About, Work, Contact, Side Projects. They are washi tape labels (torn, patterned strips matching the index-card tape). Switching tabs plays a page-turn/page-change animation.
 - **Taped-in images.** The homepage hero photo is attached with tape (or a similar scrapbook fastener). Other photos can be too.
 - **Asides** go on sticky notes or scribbled, hand-bordered boxes. This is where jokes and side comments live.
 - **Highlighter** effect on strong/important text, used sparingly (a few per page, max).
