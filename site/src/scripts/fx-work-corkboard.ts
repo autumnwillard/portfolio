@@ -5,6 +5,10 @@
 // through the CSS `translate` and `rotate` properties, which
 // compose with the note's own `transform` (its tilt and hover lift), so nothing in
 // ProofStrip changes. The loop only runs while something is moving.
+//
+// Performance: a note that's being moved gets `.is-moving` (its own compositor layer, no
+// transitions, a fixed shadow), so each frame is a composite, not a repaint. Nothing is
+// measured while moving: geometry is read once when a drag starts (and on resize).
 
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -13,14 +17,18 @@ type Note = {
   x: number; y: number; r: number;
   vx: number; vy: number; vr: number;
   held: boolean;
+  moving: boolean; // has .is-moving (layer + frozen effects) until it comes to rest
   flying: number; // seconds of free flight left after a toss
   home: { l: number; t: number; w: number; h: number } | null; // page coords at rest
   samples: { t: number; x: number; y: number }[];
+  slap: Animation | null;
+  out: { tr: string; rot: string; fly: boolean }; // what's on the element now
 };
 
 const FRICTION = 7; // a dropped or nudged note slides to a stop on the cork
 const SPIN = { k: 150, c: 10 };
 const MAX_V = 3200;
+const SUB = 0.008; // simulation substep, seconds
 
 let teardown: (() => void) | null = null;
 
@@ -35,25 +43,33 @@ function init() {
   }
   const cascade = board.querySelector<HTMLElement>('.cascade');
   const notes: Note[] = [...board.querySelectorAll<HTMLElement>('.jot')].map((el) => ({
-    el, x: 0, y: 0, r: 0, vx: 0, vy: 0, vr: 0, held: false, flying: 0, home: null, samples: [],
+    el, x: 0, y: 0, r: 0, vx: 0, vy: 0, vr: 0, held: false, moving: false, flying: 0, home: null,
+    samples: [], slap: null, out: { tr: '', rot: '', fly: false },
   }));
   if (!notes.length) return;
 
   const timers: number[] = [];
   const anims: Animation[] = [];
   const offs: (() => void)[] = [];
-  const on = <K extends keyof WindowEventMap>(t: Window | HTMLElement, type: K | string, fn: (e: any) => void, opts?: AddEventListenerOptions) => {
+  const on = (t: Window | HTMLElement, type: string, fn: (e: any) => void, opts?: AddEventListenerOptions) => {
     t.addEventListener(type, fn, opts);
     offs.push(() => t.removeEventListener(type, fn, opts));
   };
 
   /* ---------- simulation ---------- */
   let raf = 0;
-  let last = 0;
+  let last = 0; // timestamp of the previous frame (rAF clock); 0 = first frame of a run
   let bounds = { l: 0, r: 0, t: 0, b: 0 };
   let zTop = 10; // the note you touched last sits on top
   const area = board.closest<HTMLElement>('section') ?? board;
 
+  // the note's layout box in page coordinates, ignoring every transform (tilt, hover lift,
+  // our own translate/rotate), so it doesn't drift with whatever the note is doing
+  const layoutBox = (el: HTMLElement) => {
+    let l = 0, t = 0;
+    for (let p: HTMLElement | null = el; p; p = p.offsetParent as HTMLElement | null) { l += p.offsetLeft; t += p.offsetTop; }
+    return { l, t, w: el.offsetWidth, h: el.offsetHeight };
+  };
   const measure = () => {
     // notes stay inside their own section (and on screen)
     const vw = document.documentElement.clientWidth;
@@ -62,22 +78,25 @@ function init() {
       l: Math.max(4, ar.left + scrollX), r: Math.min(vw - 4, ar.right + scrollX),
       t: ar.top + scrollY + 4, b: ar.bottom + scrollY - 4,
     };
-    for (const n of notes) {
-      const r = n.el.getBoundingClientRect();
-      n.home = { l: r.left + scrollX - n.x, t: r.top + scrollY - n.y, w: r.width, h: r.height };
-    }
+    for (const n of notes) n.home = layoutBox(n.el);
   };
 
+  const setMoving = (n: Note, v: boolean) => {
+    if (n.moving === v) return;
+    n.moving = v;
+    n.el.classList.toggle('is-moving', v);
+  };
+
+  // only touch the DOM when the value actually changed
   const write = (n: Note) => {
     const s = n.el.style;
-    if (Math.abs(n.x) < 0.05 && Math.abs(n.y) < 0.05 && Math.abs(n.r) < 0.02 && !n.held) {
-      s.removeProperty('translate');
-      s.removeProperty('rotate');
-    } else {
-      s.translate = `${n.x.toFixed(2)}px ${n.y.toFixed(2)}px`;
-      s.rotate = `${n.r.toFixed(2)}deg`;
-    }
-    n.el.classList.toggle('is-flying', !n.held && n.flying > 0);
+    const rest = Math.abs(n.x) < 0.05 && Math.abs(n.y) < 0.05 && Math.abs(n.r) < 0.02 && !n.held;
+    const tr = rest ? '' : `${n.x.toFixed(1)}px ${n.y.toFixed(1)}px`;
+    const rot = rest ? '' : `${n.r.toFixed(2)}deg`;
+    if (tr !== n.out.tr) { n.out.tr = tr; tr ? (s.translate = tr) : s.removeProperty('translate'); }
+    if (rot !== n.out.rot) { n.out.rot = rot; rot ? (s.rotate = rot) : s.removeProperty('rotate'); }
+    const fly = !n.held && n.flying > 0;
+    if (fly !== n.out.fly) { n.out.fly = fly; n.el.classList.toggle('is-flying', fly); }
   };
 
   const keepIn = (n: Note, bounce: boolean) => {
@@ -110,19 +129,26 @@ function init() {
       o.vy += ny * along * 0.55 + ny * push * 300;
       o.vr += (n.vx * ny - n.vy * nx) * 0.03;
       o.flying = Math.max(o.flying, 0.18);
+      setMoving(o, true);
       n.vx -= nx * along * 0.3;
       n.vy -= ny * along * 0.3;
     }
   };
 
-  // Fixed small substeps, so the feel doesn't change with the frame rate.
+  // Fixed small substeps, so the feel doesn't change with the frame rate. The frame time
+  // comes from rAF's own clock only (an input handler's performance.now() can be later than
+  // the frame's timestamp, which used to give a negative step and stop the loop mid-drag).
   const frame = (now: number) => {
-    const real = Math.min(0.1, (now - last) / 1000 || 0.016);
+    const real = last ? Math.min(0.05, Math.max(0, (now - last) / 1000)) : 1 / 60;
     last = now;
-    const steps = Math.ceil(real / 0.008);
+    const steps = Math.max(1, Math.ceil(real / SUB - 1e-6));
     let busy = false;
     for (let k = 0; k < steps; k++) busy = step(real / steps);
-    notes.forEach(write);
+    for (const n of notes) {
+      write(n);
+      // back at rest: drop the layer
+      if (n.moving && !n.held && !n.vx && !n.vy && !n.vr && !n.r && n.flying <= 0) setMoving(n, false);
+    }
     raf = busy ? requestAnimationFrame(frame) : 0;
   };
   const step = (dt: number) => {
@@ -150,54 +176,81 @@ function init() {
       collide(n);
       const moving = n.flying > 0 || Math.abs(n.r) > 0.02 ||
         Math.abs(n.vx) > 2 || Math.abs(n.vy) > 2 || Math.abs(n.vr) > 0.5;
-      if (!moving) { n.r = n.vx = n.vy = n.vr = 0; }
+      if (!moving) { n.r = n.vx = n.vy = n.vr = 0; n.flying = 0; }
       busy ||= moving;
     }
     return busy;
   };
   const wake = () => {
     if (raf) return;
-    last = performance.now();
+    last = 0;
     raf = requestAnimationFrame(frame);
   };
 
   /* ---------- grabbing ---------- */
-  let active: { n: Note; id: number; sx: number; sy: number; ox: number; oy: number; dragged: boolean; touch: boolean } | null = null;
+  type Grab = { n: Note; id: number; sx: number; sy: number; ox: number; oy: number; dragged: boolean; touch: boolean };
+  let active: Grab | null = null;
   let suppressClick = false;
+  let suppressTimer = 0;
 
-  const sample = (n: Note, e: PointerEvent) => {
-    const t = performance.now();
-    n.samples.push({ t, x: e.clientX, y: e.clientY });
+  const sample = (n: Note, x: number, y: number, t: number) => {
+    n.samples.push({ t, x, y });
     while (n.samples.length > 2 && t - n.samples[0].t > 90) n.samples.shift();
   };
 
+  const release = () => {
+    window.removeEventListener('pointermove', onMove);
+    window.removeEventListener('pointerup', onUp);
+    window.removeEventListener('pointercancel', onUp);
+    active = null;
+  };
+
+  const startDrag = (a: Grab, e: PointerEvent) => {
+    const { n } = a;
+    a.dragged = true;
+    // pick the note up from where the finger is now, so it doesn't jump by the threshold
+    a.sx = e.clientX; a.sy = e.clientY;
+    a.ox = n.x; a.oy = n.y;
+    n.slap?.finish(); // grabbed mid slap-in: land it now, so the drag isn't fighting the animation
+    board.classList.add('was-dragged');
+    n.held = true;
+    n.flying = 0;
+    n.vx = n.vy = 0;
+    n.el.classList.add('is-held');
+    setMoving(n, true);
+    n.el.style.zIndex = String(++zTop);
+    try { n.el.setPointerCapture(a.id); } catch {}
+    measure();
+    wake();
+  };
+
   const onMove = (e: PointerEvent) => {
-    if (!active || e.pointerId !== active.id) return;
-    const { n } = active;
-    const dx = e.clientX - active.sx, dy = e.clientY - active.sy;
-    if (!active.dragged) {
-      if (Math.hypot(dx, dy) < 6) return;
-      // touch: only a sideways swipe grabs a note; anything more vertical is the page scrolling
-      if (active.touch && Math.abs(dy) > Math.abs(dx)) {
-        window.removeEventListener('pointermove', onMove);
-        window.removeEventListener('pointerup', onUp);
-        window.removeEventListener('pointercancel', onUp);
-        active = null;
-        return;
+    const a = active;
+    if (!a || e.pointerId !== a.id) return;
+    const { n } = a;
+    if (!a.dragged) {
+      const dx = e.clientX - a.sx, dy = e.clientY - a.sy;
+      const adx = Math.abs(dx), ady = Math.abs(dy);
+      if (!a.touch) {
+        if (Math.hypot(dx, dy) < 6) return;
+      } else {
+        // Touch: the note has `touch-action: pan-y`, so the browser owns vertical swipes: it
+        // starts scrolling and sends pointercancel. A clearly sideways swipe is ours. If the
+        // finger keeps going vertically and the browser still hasn't taken it, it isn't
+        // going to scroll, so pick the note up rather than leave the gesture dead.
+        const sideways = adx >= 8 && adx > ady;
+        if (!sideways && ady < 28) return;
       }
-      active.dragged = true;
-      board.classList.add('was-dragged');
-      n.held = true;
-      n.flying = 0;
-      n.el.classList.add('is-held');
-      n.el.style.zIndex = String(++zTop);
-      measure();
-      wake();
+      startDrag(a, e);
+      return;
     }
-    e.preventDefault();
-    sample(n, e);
-    n.x = active.ox + dx;
-    n.y = active.oy + dy;
+    if (e.cancelable) e.preventDefault();
+    // every pointer sample since the last event, for a truer fling speed
+    const all = (e.getCoalescedEvents?.() ?? []);
+    if (all.length) for (const c of all) sample(n, c.clientX, c.clientY, c.timeStamp || performance.now());
+    else sample(n, e.clientX, e.clientY, e.timeStamp || performance.now());
+    n.x = a.ox + e.clientX - a.sx;
+    n.y = a.oy + e.clientY - a.sy;
     // the note swings a little with the pointer, like it's pinched at the top
     const s = n.samples;
     const vx = s.length > 1 ? (s[s.length - 1].x - s[0].x) / Math.max(16, s[s.length - 1].t - s[0].t) : 0;
@@ -206,23 +259,31 @@ function init() {
   };
 
   const onUp = (e: PointerEvent) => {
-    if (!active || e.pointerId !== active.id) return;
-    const { n, dragged } = active;
-    active = null;
-    window.removeEventListener('pointermove', onMove);
-    window.removeEventListener('pointerup', onUp);
-    window.removeEventListener('pointercancel', onUp);
+    const a = active;
+    if (!a || e.pointerId !== a.id) return;
+    const { n, dragged } = a;
+    release();
     if (!dragged) return;
-    suppressClick = e.type === 'pointerup';
+    try { n.el.releasePointerCapture(a.id); } catch {}
+    // a drag isn't a click: don't open the case study at the end of one
+    if (e.type === 'pointerup') {
+      suppressClick = true;
+      clearTimeout(suppressTimer);
+      suppressTimer = window.setTimeout(() => (suppressClick = false), 400);
+    }
     n.held = false;
     n.el.classList.remove('is-held');
-    const s = n.samples;
+    // fling speed from the last ~80ms only: if the finger stopped before letting go, it's a drop
+    const t = e.timeStamp || performance.now();
+    const s = n.samples.filter((p) => t - p.t <= 80);
     if (e.type === 'pointerup' && s.length > 1) {
-      const span = Math.max(16, s[s.length - 1].t - s[0].t) / 1000;
+      const span = Math.max(16, t - s[0].t) / 1000;
       n.vx = Math.max(-MAX_V, Math.min(MAX_V, (s[s.length - 1].x - s[0].x) / span));
       n.vy = Math.max(-MAX_V, Math.min(MAX_V, (s[s.length - 1].y - s[0].y) / span));
       n.vr = n.vx * 0.12;
       if (Math.hypot(n.vx, n.vy) > 400) n.flying = 0.9;
+    } else {
+      n.vx = n.vy = 0;
     }
     n.samples = [];
     wake();
@@ -234,24 +295,37 @@ function init() {
     on(n.el, 'dragstart', (e: DragEvent) => e.preventDefault());
     on(n.el, 'pointerdown', (e: PointerEvent) => {
       if (active || !e.isPrimary || e.button !== 0) return;
+      // no focus on press: a focused note lifts (the keyboard cue), and on touch that made
+      // every note twitch under your finger. The click still opens the link.
+      e.preventDefault();
       suppressClick = false;
       active = { n, id: e.pointerId, sx: e.clientX, sy: e.clientY, ox: n.x, oy: n.y, dragged: false, touch: e.pointerType === 'touch' };
       n.samples = [];
-      sample(n, e);
+      sample(n, e.clientX, e.clientY, e.timeStamp || performance.now());
       window.addEventListener('pointermove', onMove, { passive: false });
       window.addEventListener('pointerup', onUp);
       window.addEventListener('pointercancel', onUp);
     });
-    // a fling isn't a click: don't open the case study at the end of one
     on(n.el, 'click', (e: MouseEvent) => {
       if (!suppressClick) return;
       suppressClick = false;
       e.preventDefault();
       e.stopImmediatePropagation();
     }, { capture: true });
+    // a long press while dragging shouldn't pop the link menu
+    on(n.el, 'contextmenu', (e: Event) => { if (active?.dragged) e.preventDefault(); });
   }
-  // a resize can leave a moved note outside its section: tuck it back in
-  on(window, 'resize', () => { measure(); notes.forEach((n) => { keepIn(n, false); write(n); }); });
+  // a resize can leave a moved note outside its section: tuck it back in (once per frame at most;
+  // phones fire resize while the address bar slides during a scroll)
+  let resizeQueued = 0;
+  on(window, 'resize', () => {
+    if (resizeQueued) return;
+    resizeQueued = requestAnimationFrame(() => {
+      resizeQueued = 0;
+      measure();
+      notes.forEach((n) => { keepIn(n, false); write(n); });
+    });
+  });
 
   /* ---------- slap-in ---------- */
   let lastSlap = notes.length - 1;
@@ -274,6 +348,8 @@ function init() {
       ],
       { duration: DUR, delay, fill: 'backwards' },
     );
+    n.slap = a;
+    a.finished.then(() => { if (n.slap === a) n.slap = null; }, () => {});
     anims.push(a);
     timers.push(window.setTimeout(() => impact(n, i), delay + DUR * 0.5));
   };
@@ -286,6 +362,7 @@ function init() {
       if (k >= i) return;
       const d = Math.abs(k - i);
       o.vr += (k % 2 ? 1 : -1) * (70 / d);
+      setMoving(o, true);
     });
     wake();
     // impact lines
@@ -325,17 +402,17 @@ function init() {
   teardown = () => {
     io.disconnect();
     cancelAnimationFrame(raf);
+    cancelAnimationFrame(resizeQueued);
+    clearTimeout(suppressTimer);
     timers.forEach(clearTimeout);
     anims.forEach((a) => a.cancel());
     offs.forEach((f) => f());
-    window.removeEventListener('pointermove', onMove);
-    window.removeEventListener('pointerup', onUp);
-    window.removeEventListener('pointercancel', onUp);
+    release();
     for (const n of notes) {
       n.el.style.removeProperty('translate');
       n.el.style.removeProperty('rotate');
       n.el.style.removeProperty('z-index');
-      n.el.classList.remove('is-held', 'is-flying');
+      n.el.classList.remove('is-held', 'is-flying', 'is-moving');
     }
   };
 }

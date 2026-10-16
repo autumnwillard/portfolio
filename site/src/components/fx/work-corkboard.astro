@@ -2,7 +2,7 @@
 // Overdrive (Work page): the Quick highlights become a corkboard. On arrival the notes are
 // slapped onto the board one at a time (the board thumps, the notes already up there
 // wobble). Then you can grab one and fling it: it flies, bounces off the edges of the
-// board, knocks into the others, and springs back to where it was stuck.
+// board, knocks into the others, and stays where it lands (only its tilt settles back).
 // Mouse/pen: drag in any direction. Touch: swipe a note sideways (vertical swipes still
 // scroll the page). A tap or click still opens the case study.
 // The slap-in plays once per visit (session); coming back to Work, the notes are already up.
@@ -35,8 +35,16 @@
 
   /* the slap-in is this board's arrival; the shared "press flat on scroll" would be a second one */
   .fx-cork.is-live :global(.jot), .fx-cork.is-live :global(.jot)::after { animation: none; }
-  .fx-cork.is-live :global(.jot) { touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
-  .fx-cork.is-live :global(.jot.is-held) { cursor: grabbing; z-index: 30; --lift: calc(var(--lift-at-rest, 1) + 1.6); }
+  /* draggable only with motion on (reduced motion: the notes are plain links) */
+  @media (prefers-reduced-motion: no-preference) {
+    .fx-cork.is-live :global(.jot) { touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+  }
+  .fx-cork.is-live :global(.jot.is-held) { cursor: grabbing; z-index: 30; }
+  /* A note in motion is its own compositor layer with everything frozen: no transitions
+     (they'd trail the finger), no shadow growth (a repaint of a big blur every frame).
+     The "lifted off the board" look is a pre-drawn shadow (::after) that only fades. */
+  .fx-cork.is-live :global(.jot.is-moving) { will-change: translate, rotate; transition: none; }
+  .fx-cork.is-live :global(.jot)::after { transition: opacity 160ms ease-out; }
   .fx-cork.is-live :global(.jot.is-held)::after,
   .fx-cork.is-live :global(.jot.is-flying)::after { opacity: 1; }
   .fx-cork.is-live :global(.jot.is-flying) { z-index: 25; }
