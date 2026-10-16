@@ -235,7 +235,7 @@ mark.hl {
   background-repeat: no-repeat;
   background-size: 100% 100%, 100% calc(100% - var(--card-head, 3.4rem) - 0.15rem);
   padding: 1.1rem 1.3rem 1.2rem;
-  box-shadow: var(--lift);
+  box-shadow: var(--paper-lift);
   border-radius: 2px;
 }
 

@@ -3,6 +3,8 @@
 // staggered row. Each note holds only the number and a short handwritten label. Variety
 // comes from rotation and from how each note’s bottom edge lifts off the page (its own
 // shadow); the green one has a folded corner. Sticky notes stick on their own: no tape, no pins.
+// They hinge on the adhesive top edge: hover/focus lifts the loose bottom edge toward you;
+// on touch screens each note comes in a little lifted and presses flat as it scrolls in.
 // The whole note is the link; its accessible name says which case study it opens.
 import { arrow } from '../lib/ink';
 
@@ -59,8 +61,43 @@ const go = (seed: number) => { const a = arrow([[3, 10], [18, 5], [32, 11], [46,
     place-items: center;
     text-align: center;
     transform: rotate(var(--tilt));
+    transform-origin: 50% 0;
     cursor: pointer;
   }
+  /* extra lifted-edge shadow under the face; it only fades. The folded note's shadow
+     follows its clipped shape through its filter instead. */
+  .jot::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: calc(var(--bias) * 4px) 12px 16px -9px rgb(60 45 25 / 0.36);
+  }
+  .jot--peel::after { display: none; }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    /* overrides the global sticky hover: the stuck top stays put, the bottom comes up */
+    .jot.sticky.sticky:hover {
+      transform: perspective(700px) rotate(var(--tilt)) rotateX(5deg) rotateY(calc(var(--bias) * -2deg));
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .jot.sticky.sticky:focus-within {
+      transform: perspective(700px) rotate(var(--tilt)) rotateX(5deg) rotateY(calc(var(--bias) * -2deg));
+    }
+  }
+  @supports (animation-timeline: view()) {
+    @media (hover: none) and (prefers-reduced-motion: no-preference) {
+      .jot { view-timeline: --jot block; animation: jot-settle linear both; animation-timeline: --jot; animation-range: entry 10% entry 90%; }
+      .jot::after { animation: jot-settle-shade linear both; animation-timeline: --jot; animation-range: entry 10% entry 90%; }
+    }
+  }
+  @keyframes jot-settle {
+    from { transform: perspective(700px) rotate(var(--tilt)) rotateX(9deg) translateY(-3px); }
+    to { transform: perspective(700px) rotate(var(--tilt)) rotateX(0deg) translateY(0); }
+  }
+  @keyframes jot-settle-shade { from { opacity: 1; } to { opacity: 0; } }
   .jot:hover, .jot:focus-within { z-index: 5; }
 
   .jot__link { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; color: var(--ink); text-decoration: none; }

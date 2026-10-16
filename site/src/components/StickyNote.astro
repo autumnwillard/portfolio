@@ -4,6 +4,9 @@
 //                  For short, punchy asides and jokes.
 //   kind="card":   a lined index card in the body font. For longer asides or explanations.
 // The tilt is static (no animation), so it stays under reduced motion.
+// Sticky notes are stuck along their top edge, so they move from there: on hover/focus the
+// loose bottom edge lifts toward you (its shadow grows); on touch screens a note comes in
+// a little lifted and presses flat as it scrolls into view. No tape, pins or curls.
 interface Props {
   kind?: 'sticky' | 'card';
   color?: 'yellow' | 'pink' | 'blue' | 'green' | 'peach';
@@ -24,9 +27,10 @@ const { kind = 'sticky', color = 'yellow', size = 'md', tilt = kind === 'card' ?
 
 <style>
   .note {
+    --t: var(--tilt);
     position: relative;
     margin: var(--s3) 0;
-    transform: rotate(var(--tilt));
+    transform: rotate(var(--t));
   }
   .note__text :global(p) { margin: 0; }
   .note__text :global(p + p) { margin-top: 0.6rem; }
@@ -48,6 +52,41 @@ const { kind = 'sticky', color = 'yellow', size = 'md', tilt = kind === 'card' ?
     text-wrap: pretty;
   }
   .note--sm { --note-size: 12.5rem; }
+  /* the adhesive strip is the hinge */
+  .note--sticky { transform-origin: 50% 0; }
+  /* extra lifted-edge shadow, under the face; it only fades, so scrolling stays cheap */
+  .note--sticky::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: calc(var(--bias, 0) * 4px) 12px 16px -9px rgb(60 45 25 / 0.36);
+  }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    /* overrides the global sticky hover (which slides the whole note up): only the loose
+       bottom edge comes up, the stuck top stays put */
+    .note.note--sticky.sticky:hover {
+      transform: perspective(700px) rotate(var(--t)) rotateX(5deg) rotateY(calc(var(--bias, 0) * -2deg));
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .note.note--sticky.sticky:focus-within {
+      transform: perspective(700px) rotate(var(--t)) rotateX(5deg) rotateY(calc(var(--bias, 0) * -2deg));
+    }
+  }
+  @supports (animation-timeline: view()) {
+    @media (hover: none) and (prefers-reduced-motion: no-preference) {
+      .note--sticky { view-timeline: --note block; animation: note-settle linear both; animation-timeline: --note; animation-range: entry 10% entry 90%; }
+      .note--sticky::after { animation: note-settle-shade linear both; animation-timeline: --note; animation-range: entry 10% entry 90%; }
+    }
+  }
+  @keyframes note-settle {
+    from { transform: perspective(700px) rotate(var(--t)) rotateX(9deg) translateY(-3px); }
+    to { transform: perspective(700px) rotate(var(--t)) rotateX(0deg) translateY(0); }
+  }
+  @keyframes note-settle-shade { from { opacity: 1; } to { opacity: 0; } }
   .note--sticky .note__text :global(a) { font-family: var(--font-body); font-size: 1rem; white-space: nowrap; }
 
   /* ---------- Lined index card ---------- */
@@ -67,7 +106,7 @@ const { kind = 'sticky', color = 'yellow', size = 'md', tilt = kind === 'card' ?
     }
   }
   @media (max-width: 520px) {
-    .note { transform: rotate(calc(var(--tilt) * 0.6)); }
+    .note { --t: calc(var(--tilt) * 0.6); }
     .note--md { --note-size: 15rem; }
     .note--sticky { padding: 1.5rem 1.1rem 1.1rem; }
     .note--sticky .note__text { font-size: 1.3rem; }

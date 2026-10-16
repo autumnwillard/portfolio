@@ -1,7 +1,15 @@
 ---
 // A photo "taped in" with a single strip of masking tape (or two corner strips).
 // Tape is pure CSS, so the image itself stays clean.
-interface Source { srcset: string; type: string }
+//
+// It behaves like a print held down by tape. Three layers, so the tape never moves:
+//   .taped__body   the static tilt; holds the tape
+//   .taped__drift  scroll: the photo settles flat as it scrolls in, and its free edge
+//                  lifts a little as it scrolls away (CSS scroll-driven; no-op elsewhere)
+//   .taped__photo  hover: the free edge lifts toward a mouse pointer (scripts/paper.ts),
+//                  with a faint sheen sliding across the print
+// The lifted shadow is its own layer that only fades in, so nothing animates a box-shadow.
+// Reduced motion: all of it is off and the photo sits flat.interface Source { srcset: string; type: string }
 interface Props {
   src: string;              // fallback <img> src
   sources?: Source[];       // e.g. webp srcset
@@ -24,31 +32,76 @@ const {
   class: cls = '', frame = true,
 } = Astro.props;
 ---
-<figure class:list={['taped', `taped--${tape}`, frame && 'taped--frame', cls]} style={`--tilt:${tilt}deg`}>
+<figure class:list={['taped', `taped--${tape}`, frame && 'taped--frame', cls]} style={`--tilt:${tilt}deg`} data-paper-tilt>
   <div class="taped__body">
-    <picture>
-      {sources.map((s) => <source srcset={s.srcset} type={s.type} sizes={sizes} />)}
-      <img src={src} srcset={srcset} sizes={sizes} alt={alt} width={width} height={height}
-        loading={loading} decoding="async" fetchpriority={fetchpriority} />
-    </picture>
+    <div class="taped__drift">
+      <div class="taped__photo">
+        <picture>
+          {sources.map((s) => <source srcset={s.srcset} type={s.type} sizes={sizes} />)}
+          <img src={src} srcset={srcset} sizes={sizes} alt={alt} width={width} height={height}
+            loading={loading} decoding="async" fetchpriority={fetchpriority} />
+        </picture>
+      </div>
+    </div>
     <span class="tape tape--a" aria-hidden="true"></span>
     {tape === 'corners' && <span class="tape tape--b" aria-hidden="true"></span>}
   </div>
   {caption && <figcaption>{caption}</figcaption>}
 </figure>
 
+<script>
+  import '../scripts/paper';
+</script>
+
 <style>
   .taped { margin: 0; position: relative; }
   .taped__body {
     position: relative;
     transform: rotate(var(--tilt));
-    box-shadow: var(--lift);
-    background: var(--paper-scrap);
   }
-  .taped--frame .taped__body { padding: clamp(6px, 1.2vw, 12px); }
+  /* the print: taped along its top edge, so it pivots from there */
+  .taped__drift, .taped__photo { position: relative; transform-origin: 50% 0; }
+  .taped--corners .taped__drift, .taped--corners .taped__photo { transform-origin: 50% 50%; }
+  .taped__photo {
+    box-shadow: var(--paper-lift);
+    background: var(--paper-scrap);
+    overflow: hidden;
+  }
+  .taped--frame .taped__photo { padding: clamp(6px, 1.2vw, 12px); }
   .taped img { width: 100%; height: auto; }
+
+  /* Lifted-edge shadows, cast on the page under the photo. Hover and scroll each get
+     their own layer so they never fight over one property. */
+  .taped__drift::before, .taped__drift::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow:
+      0 3px 6px -2px rgb(60 50 40 / 0.14),
+      0 16px 22px -12px rgb(60 50 40 / 0.4);
+  }
+  .taped--corners .taped__drift::before, .taped--corners .taped__drift::after {
+    box-shadow: 0 4px 8px -3px rgb(60 50 40 / 0.14), 0 14px 26px -10px rgb(60 50 40 / 0.32);
+  }
+
+  /* a faint gloss across the print, only while it's lifted */
+  .taped__photo::after {
+    content: '';
+    position: absolute;
+    inset: 0 -40%;
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+    background: linear-gradient(105deg, transparent 38%, rgb(255 255 255 / 0.5) 49%, rgb(255 255 255 / 0.15) 54%, transparent 62%);
+    mix-blend-mode: soft-light;
+  }
+
   .tape {
     position: absolute;
+    z-index: 2;
     width: clamp(70px, 34%, 150px);
     height: clamp(22px, 3.2vw, 34px);
     background:
@@ -59,9 +112,56 @@ const {
     /* torn ends */
     clip-path: polygon(2% 0, 98% 4%, 100% 22%, 97% 41%, 100% 62%, 97% 83%, 99% 100%, 1% 96%, 3% 78%, 0 58%, 2% 37%, 0 17%);
     box-shadow: 0 1px 2px rgb(60 50 40 / 0.12);
+    pointer-events: none;
   }
   .taped--top .tape--a { top: clamp(-14px, -1.6vw, -10px); left: 50%; transform: translateX(-50%) rotate(-3deg); }
   .taped--corners .tape--a { top: -10px; left: -18px; width: clamp(60px, 28%, 120px); transform: rotate(-38deg); }
   .taped--corners .tape--b { bottom: -8px; right: -18px; width: clamp(60px, 28%, 120px); transform: rotate(-38deg); }
   figcaption { margin-top: var(--s1); }
+
+  /* ---------- Hover (mouse only): the free edge lifts, nearest the pointer most ---------- */
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .taped__photo {
+      transition: transform 240ms cubic-bezier(0.2, 0.7, 0.3, 1);
+    }
+    .taped__photo::after { transition: opacity 240ms ease, translate 240ms cubic-bezier(0.2, 0.7, 0.3, 1); }
+    .taped__drift::before { transition: opacity 240ms ease; }
+    .taped:hover .taped__photo {
+      transform: perspective(1000px) rotateX(calc(2deg + (var(--py, 0) + 1) * 0.8deg)) rotateY(calc(var(--px, 0) * -2deg));
+    }
+    .taped--corners:hover .taped__photo {
+      transform: perspective(1000px) rotateX(calc(var(--py, 0) * 1.5deg)) rotateY(calc(var(--px, 0) * -1.5deg)) scale(1.008);
+    }
+    .taped:hover .taped__drift::before { opacity: 1; }
+    .taped:hover .taped__photo::after { opacity: 0.8; translate: calc(var(--px, 0) * 18%) 0; }
+  }
+
+  /* ---------- Scroll: settle in, lift a little on the way out ---------- */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .taped { view-timeline: --taped block; }
+      .taped__drift {
+        animation: taped-drift linear both;
+        animation-timeline: --taped;
+        animation-range: entry 0% exit 100%;
+      }
+      .taped__drift::after {
+        animation: taped-drift-shade linear both;
+        animation-timeline: --taped;
+        animation-range: entry 0% exit 100%;
+      }
+    }
+  }
+  @keyframes taped-drift {
+    entry 0% { transform: perspective(1000px) rotateX(6deg) translateY(-6px); }
+    entry 85% { transform: perspective(1000px) rotateX(0deg) translateY(0); }
+    exit 0% { transform: perspective(1000px) rotateX(0deg) translateY(0); }
+    exit 100% { transform: perspective(1000px) rotateX(5deg) translateY(0); }
+  }
+  @keyframes taped-drift-shade {
+    entry 0% { opacity: 1; }
+    entry 85% { opacity: 0; }
+    exit 0% { opacity: 0; }
+    exit 100% { opacity: 0.9; }
+  }
 </style>
