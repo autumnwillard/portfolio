@@ -20,7 +20,7 @@ const choices = [
 ];
 ---
 <div class="theme-switch on-paper" role="group" aria-labelledby="theme-switch-label" data-theme-switch transition:persist="theme-switch">
-  <span id="theme-switch-label" class="visually-hidden">Colour theme</span>
+  <span id="theme-switch-label" class="visually-hidden">Color theme</span>
   <span class="washi washi--dots theme-switch__tape" aria-hidden="true"></span>
   {choices.map((c, i) => (
     <button type="button" class="theme-switch__btn" data-theme-choice={c.key} aria-pressed={c.key === 'system' ? 'true' : 'false'} title={`${c.label} theme`}>
