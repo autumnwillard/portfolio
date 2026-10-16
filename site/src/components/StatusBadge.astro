@@ -1,17 +1,22 @@
 ---
 // Rubber-stamp status chip. Not-yet-real statuses (projected, approved-not-shipped)
 // get a dashed outline so they never look like shipped results.
-interface Props { status: string; size?: 'sm' | 'md' }
-const { status, size = 'md' } = Astro.props;
+// `thunk`: the first time the stamp scrolls into view it is pressed onto the page
+// (a quick drop, a squash and a faint ink ring). It rides the shared `.draw` observer
+// in site.ts, so without JS or with reduced motion it is simply there.
+interface Props { status: string; size?: 'sm' | 'md'; thunk?: boolean }
+const { status, size = 'md', thunk = false } = Astro.props;
 const tentative = /projected|approved|estimate/i.test(status);
 ---
-<span class:list={['stamp', `stamp--${size}`, tentative && 'stamp--tentative']}>
+<span class:list={['stamp', `stamp--${size}`, tentative && 'stamp--tentative', thunk && 'stamp--thunk draw']}>
   <span class="visually-hidden">Status: </span>{status}
 </span>
 
 <style>
   .stamp {
+    --stamp-tilt: -1.5deg;
     display: inline-block;
+    position: relative;
     font: 800 0.78rem/1.2 var(--font-body);
     letter-spacing: 0.08em;
     text-transform: uppercase;
@@ -19,10 +24,39 @@ const tentative = /projected|approved|estimate/i.test(status);
     padding: 0.32rem 0.6rem 0.28rem;
     border: 2px solid var(--ink);
     border-radius: var(--wobble-radius-2);
-    transform: rotate(-1.5deg);
+    transform: rotate(var(--stamp-tilt));
     white-space: normal;
     background: var(--paper-scrap);
   }
   .stamp--sm { font-size: 0.72rem; padding: 0.22rem 0.5rem 0.2rem; }
   .stamp--tentative { border-style: dashed; color: var(--ink-soft); }
+
+  /* ---------- the thunk ----------
+     Before it is in view the stamp is held just above the page (hidden); then it drops,
+     squashes flat for a frame and settles at its tilt. A faint ring of ink spreads from
+     the impact and fades. Transform and opacity only. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .stamp--thunk:not(.is-drawn) { opacity: 0; transform: translateY(-6px) rotate(-7deg) scale(1.3); }
+    :global(.js) .stamp--thunk.is-drawn { animation: stamp-thunk 420ms cubic-bezier(0.3, 0, 0.3, 1) 200ms both; }
+    :global(.js) .stamp--thunk.is-drawn::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border: 1.5px solid var(--ink);
+      border-radius: var(--wobble-radius);
+      opacity: 0;
+      pointer-events: none;
+      animation: stamp-ring 520ms ease-out 400ms both;
+    }
+  }
+  @keyframes stamp-thunk {
+    0% { opacity: 0; transform: translateY(-6px) rotate(-7deg) scale(1.3); }
+    45% { opacity: 1; transform: translateY(0) rotate(calc(var(--stamp-tilt) - 0.6deg)) scale(0.94, 0.9); }
+    70% { transform: rotate(var(--stamp-tilt)) scale(1.02); }
+    100% { opacity: 1; transform: rotate(var(--stamp-tilt)) scale(1); }
+  }
+  @keyframes stamp-ring {
+    0% { opacity: 0.28; transform: scale(0.96); }
+    100% { opacity: 0; transform: scale(1.18, 1.35); }
+  }
 </style>

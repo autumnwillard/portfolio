@@ -11,12 +11,21 @@ import HotfixWeeks from '../../components/diagrams/HotfixWeeks.astro';
 import CardThumb from '../../components/diagrams/CardThumb.astro';
 import PatternDoodle from '../../components/diagrams/PatternDoodle.astro';
 import { featured, pattern, analyses, tools } from '../../data/work';
-import { arrow } from '../../lib/ink';
+import { arrow, loop } from '../../lib/ink';
 
 
 // Many flags on this page, so they cycle through the flag colours.
 const flagColors = ['coral', 'blue', 'green', 'yellow'] as const;
 const rowArrow = (s: number) => { const a = arrow([[4, 14], [22, 8], [40, 15], [56, 12]], s, 9); return `${a.shaft} ${a.head}`; };
+// Phones: the order the hidden cards are dealt in when "Show more work" is pressed.
+const deal = new Map<object, number>();
+let dealt = 0;
+analyses.forEach((c) => c.extra && deal.set(c, dealt++));
+const dealHeading = dealt++;
+tools.forEach((c) => c.extra && deal.set(c, dealt++));
+const dealNote = dealt++;
+// Hover: a marker loop gets drawn around the card's number, like the active nav tab.
+const numLoop = (s: number) => loop(30, 20, 25, 15, s);
 const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], [12, 42]], s, 8); return `${a.shaft} ${a.head}`; };
 ---
 <BaseLayout
@@ -52,9 +61,9 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
                   : <CardThumb kind={c.thumb} />}
               </div>
               <div class="card__text">
-                <p class="card__num" aria-hidden="true">#{i + 1}</p>
+                <p class="card__num" aria-hidden="true"><span>#{i + 1}</span><svg class="card__loop" viewBox="0 0 60 40" focusable="false"><path class="ink ink--accent" d={numLoop(700 + i)} pathLength="1" /></svg></p>
                 <h3><a href={c.href} class="card__link">{c.hook}</a></h3>
-                <StatusBadge status={c.badge} />
+                <StatusBadge status={c.badge} thunk />
                 <p class="card__blurb">{c.blurb}</p>
                 <ul class="card__numbers" role="list">
                   {c.numbers.filter((n) => n !== c.strip).map((n, k) => <li class:list={[k > 1 && 'hide-mobile']}>{n}</li>)}
@@ -122,7 +131,7 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
                 <p class="index-card__tag">Strategy · Tech Handoff · 2021–2022</p>
                 <p>Small clients kept paying late or not at all. I pitched a pivot to mid-size firms with budget but no in-house design or dev team. <Highlight>The company still targets them</Highlight>, and still asks for my advice when it needs it.</p>
                 <p class="index-card__result">Pivot adopted; still the company’s target segment</p>
-                <p class="index-card__foot"><StatusBadge status="Adopted · still the target segment" size="sm" /> <a class="text-link" href="/work/tech-handoff/">Read the case study</a></p>
+                <p class="index-card__foot"><StatusBadge status="Adopted · still the target segment" size="sm" thunk /> <a class="text-link" href="/work/tech-handoff/">Read the case study</a></p>
               </div>
               <div class="index-card__art"><CardThumb kind="tech-handoff" /></div>
             </div>
@@ -135,7 +144,7 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
         <h3 class="more__group">Analyses for leadership</h3>
         <ul class="index-grid" role="list">
           {analyses.map((c) => (
-            <li class:list={['index-card', c.extra && 'is-extra']}>
+            <li class:list={['index-card', c.extra && 'is-extra']} style={c.extra ? `--deal:${deal.get(c)}` : undefined}>
               <h4>{c.hook}</h4>
               <p class="index-card__tag">{c.tag}</p>
               <p>{c.body}</p>
@@ -143,17 +152,17 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
           ))}
         </ul>
 
-        <h3 class="more__group is-extra">Tools from the internal toolkit</h3>
+        <h3 class="more__group is-extra" style={`--deal:${dealHeading}`}>Tools from the internal toolkit</h3>
         <ul class="index-grid" role="list">
           {tools.map((c) => (
-            <li class:list={['index-card', c.extra && 'is-extra']}>
+            <li class:list={['index-card', c.extra && 'is-extra']} style={c.extra ? `--deal:${deal.get(c)}` : undefined}>
               <h4>{c.hook}</h4>
               <p class="index-card__tag">{c.tag}</p>
               <p>{c.body}</p>
             </li>
           ))}
         </ul>
-        <div class="is-extra">
+        <div class="is-extra" style={`--deal:${dealNote}`}>
           <StickyNote tilt={-1.8} color="green" class="hp-note">
             I’ve built a hiring app before. That one had a “Hell no” status. The rubric is more professional. <a href="/side-projects/#hirepurpose">See HirePurpose →</a>
           </StickyNote>
@@ -243,6 +252,33 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
   }
   @media (max-width: 600px) { .hide-mobile { display: none; } }
 
+  /* ---------- Featured cards: hover/focus ----------
+     The card's art is drawn on the page, so it doesn't lift like a panel. Instead the pen
+     comes back: the sketch nudges up a hair, its coral strokes are traced over again, and a
+     marker loop circles the card's number (the same loop as the active nav tab).
+     Mouse hover or keyboard focus; touch gets a small press instead. */
+  .card__num { position: relative; display: inline-block; padding: 0 0.15rem; }
+  .card__loop { position: absolute; left: -0.7rem; top: -0.2rem; width: 3.4rem; max-width: none; height: 2.3rem; overflow: visible; pointer-events: none; opacity: 0; }
+  .card__loop .ink { stroke-width: 2.4; }
+  @media (prefers-reduced-motion: no-preference) {
+    .card__thumb { transition: transform 420ms var(--ease-spring, ease-out); }
+    .card__loop { opacity: 1; }
+    .card__loop .ink { stroke-dasharray: 1 1; stroke-dashoffset: 1; transition: stroke-dashoffset 380ms var(--ease-pen); }
+    .card:has(.card__link:focus-visible) .card__thumb { transform: translateY(-5px) rotate(-0.8deg); }
+    .card:has(.card__link:focus-visible) .card__thumb :global(.ink--accent) { animation: card-retrace 760ms var(--ease-pen) 80ms both; }
+    .card:has(.card__link:focus-visible) .card__loop .ink { stroke-dashoffset: 0; }
+    .card:active .card__thumb { transform: translateY(1px) scale(0.99); transition-duration: 120ms; }
+  }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .card:hover .card__thumb { transform: translateY(-5px) rotate(-0.8deg); }
+    .card:hover .card__thumb :global(.draw.is-drawn .ink--accent) { animation: card-retrace 760ms var(--ease-pen) 80ms both; }
+    .card:hover .card__loop .ink { stroke-dashoffset: 0; }
+  }
+  @keyframes card-retrace {
+    from { stroke-dasharray: 1 1; stroke-dashoffset: 1; }
+    to { stroke-dasharray: 1 1; stroke-dashoffset: 0; }
+  }
+
   /* ---------- Pattern: problem → cause → fix ---------- */
   .pattern__head { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 0 var(--s3); }
   .pattern__head :global(.pattern-doodle) { margin-bottom: var(--s1); }
@@ -286,8 +322,29 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
   .index-card--lead { grid-column: 1; grid-row: 1; }
   .more__strategy :global(.lead-note) { grid-column: 2; grid-row: 1; --note-size: 13.5rem; margin: var(--s2) 0 0 var(--s1); z-index: 2; }
   .index-grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr)); gap: var(--s2); }
-  .index-grid .index-card:nth-child(odd) { transform: rotate(-0.4deg); }
-  .index-grid .index-card:nth-child(even) { transform: rotate(0.5deg); }
+  .index-grid .index-card:nth-child(odd) { --card-tilt: -0.4deg; }
+  .index-grid .index-card:nth-child(even) { --card-tilt: 0.5deg; }
+  .index-grid .index-card, .index-card--lead { transform: rotate(var(--card-tilt, 0deg)); }
+
+  /* Index cards are loose paper: on mouse hover one slides up off the pile, turns a hair
+     and its shadow deepens (a pseudo-element fading in, so only transform/opacity move). */
+  .index-grid .index-card::after, .index-card--lead::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: 2px;
+    box-shadow: 0 3px 4px rgb(60 50 40 / 0.08), 0 16px 24px -12px rgb(60 50 40 / 0.34);
+    opacity: 0;
+    pointer-events: none;
+  }
+  .index-grid .index-card, .index-card--lead { isolation: isolate; }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .index-grid .index-card, .index-card--lead { transition: transform 300ms var(--ease-spring, ease-out); }
+    .index-grid .index-card::after, .index-card--lead::after { transition: opacity 300ms ease; }
+    .index-grid .index-card:hover, .index-card--lead:hover { transform: translateY(-4px) rotate(calc(var(--card-tilt, 0deg) * -1.6)); }
+    .index-grid .index-card:hover::after, .index-card--lead:hover::after { opacity: 1; }
+  }
   .more :global(.js-more-toggle) { margin-top: var(--s2); }
   @media (max-width: 1000px) {
     .more__strategy { grid-template-columns: 1fr; }
@@ -297,6 +354,17 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
   @media (max-width: 600px) {
     .index-card--lead .index-card__grid { grid-template-columns: 1fr; }
     .more.is-collapsed .is-extra { display: none; }
+  }
+  /* Phones: "Show more work" deals the extra cards onto the page, one after another,
+     each landing a little crooked and settling. Only after the button is pressed (the
+     collapsible state is set by JS), so without JS everything is simply there. */
+  @media (max-width: 600px) and (prefers-reduced-motion: no-preference) {
+    .more.is-collapsible:not(.is-collapsed) .is-extra { animation: card-deal 460ms var(--ease-spring, ease-out) both; animation-delay: calc(min(var(--deal, 0), 7) * 65ms); }
+    .more.is-collapsible:not(.is-collapsed) .index-card.is-extra:nth-child(2n) { --deal-from: 2.5deg; }
+  }
+  @keyframes card-deal {
+    from { opacity: 0; transform: translateY(18px) rotate(var(--deal-from, -2.5deg)); }
+    to { opacity: 1; transform: rotate(var(--card-tilt, 0deg)); }
   }
   @media (min-width: 601px) {
     .more :global(.js-more-toggle) { display: none; }

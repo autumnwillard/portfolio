@@ -6,14 +6,19 @@ import Button from '../components/Button.astro';
 import StatusBadge from '../components/StatusBadge.astro';
 import Metric from '../components/Metric.astro';
 import InkDivider from '../components/InkDivider.astro';
-import { swoosh } from '../lib/ink';
+import { swoosh, arrow } from '../lib/ink';
 
 interface Props { entry: CollectionEntry<'work'> }
 const { entry } = Astro.props;
 const d = entry.data;
+// The little arrow that points from the "Next up" note down to the Next button.
+const nextArrow = (() => { const a = arrow([[42, 8], [20, 8], [8, 22], [12, 42]], 77, 9); return `${a.shaft} ${a.head}`; })();
 ---
 <BaseLayout title={`${d.short_title} · Autumn Willard`} description={d.description} active="work">
   <article class="case page">
+    <!-- Overdrive: the room's light. A fixed, barely-there falloff from a lamp at the
+         top left, so the paper slides under the light as you scroll. Decorative only. -->
+    <div class="fx-lamp" aria-hidden="true"></div>
     <a class="back text-link" href="/work/">← All work</a>
 
     <header class="case__head">
@@ -32,13 +37,13 @@ const d = entry.data;
         <div><dt>Role</dt><dd>{d.glance.role}</dd></div>
         <div><dt>Team</dt><dd>{d.glance.team}</dd></div>
         <div><dt>Timeframe</dt><dd>{d.glance.timeframe}</dd></div>
-        <div><dt>Status</dt><dd><StatusBadge status={d.glance.status} /></dd></div>
+        <div><dt>Status</dt><dd><StatusBadge status={d.glance.status} thunk /></dd></div>
         <div class="glance__numbers">
           <dt>Numbers</dt>
           <dd>
             <span class="visually-hidden">{d.glance.numbers}</span>
             <div class="glance__metrics" aria-hidden="true">
-              {d.metrics.map((m, i) => <Metric value={m.value} label={m.label} seed={i + 4} size="lg" />)}
+              {d.metrics.map((m, i) => <Metric value={m.value} label={m.label} seed={i + 4} size="lg" order={i} />)}
             </div>
           </dd>
         </div>
@@ -52,7 +57,15 @@ const d = entry.data;
     </div>
 
     <nav class="case__next" aria-label="More">
-      {d.next && <Button variant="primary" href={d.next.href}>Next case study → <span class="visually-hidden">{d.next.title}</span></Button>}
+      {d.next && (
+        <div class="next-up">
+          <p class="next-up__note" aria-hidden="true">
+            <svg class="next-up__arrow draw" viewBox="0 0 44 44" focusable="false"><path class="ink ink--accent" d={nextArrow} pathLength="1" /></svg>
+            <span class="next-up__text">Next up: {d.next.title}</span>
+          </p>
+          <Button variant="primary" href={d.next.href}>Next case study → <span class="visually-hidden">{d.next.title}</span></Button>
+        </div>
+      )}
       <Button href="/contact/">Hiring a PM? Let’s talk →</Button>
     </nav>
   </article>
@@ -107,7 +120,47 @@ const d = entry.data;
   .prose :global(.hotfix-figure) { max-width: 36rem; margin-top: var(--s1); }
   .prose :global(.callout) { clear: both; }
 
-  .case__next { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s2); margin-top: var(--s4); }
+  .case__next { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--s1) var(--s2); margin-top: var(--s4); }
+
+  /* ---------- Next up: a handwritten note with an arrow down to the flag ---------- */
+  .next-up { display: flex; flex-direction: column; align-items: flex-start; }
+  .next-up__note {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.15rem;
+    margin: 0 0 -0.1rem 0.9rem;
+    font-family: var(--font-hand);
+    font-size: 1.45rem;
+    line-height: 1.1;
+    color: var(--ink-soft);
+  }
+  .next-up__arrow { flex: none; width: 2.6rem; height: 2.6rem; margin-top: 0.15rem; overflow: visible; }
+  .next-up__arrow .ink { stroke-width: 2.6; }
+  .next-up__text { padding-top: 0.1rem; }
+  @media (prefers-reduced-motion: no-preference) {
+    /* the note is written once the arrow has been drawn; hovering the flag nudges the
+       arrow toward it, as if pointing again */
+    :global(.js) .next-up__text { transition: opacity 360ms ease 650ms, transform 360ms ease 650ms; }
+    :global(.js) .next-up__note:has(.next-up__arrow:not(.is-drawn)) .next-up__text { opacity: 0; transform: translateX(-4px); }
+    .next-up__arrow { transition: transform 240ms var(--ease-spring, ease-out); }
+    .next-up:has(.btn:hover, .btn:focus-visible) .next-up__arrow { transform: translate(-1px, 4px) rotate(-6deg); }
+  }
+
+  /* ---------- Lamp light (case studies only) ----------
+     Fixed to the viewport, so the sheet scrolls under it like paper under a desk lamp.
+     At most ~4% darker in the far corner, where text rarely sits; body text and accent
+     text keep AA contrast. Paints once; nothing animates. Wide screens only: on a
+     phone held in the hand there's no desk lamp, and the falloff just reads as grey. */
+  .fx-lamp {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    pointer-events: none;
+    background:
+      radial-gradient(140% 110% at 12% -8%, transparent 52%, rgb(70 52 30 / 0.028) 78%, rgb(70 52 30 / 0.045) 100%);
+  }
+  @media screen and (min-width: 761px) { .fx-lamp { display: block; } }
 
   @media (max-width: 760px) {
     .case__head, .glance, .prose, .case__next { padding-left: 0; }
