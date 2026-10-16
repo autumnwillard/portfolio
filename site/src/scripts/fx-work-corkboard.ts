@@ -1,6 +1,8 @@
 // Work page corkboard (components/fx/work-corkboard.astro).
-// Notes are slapped on one by one, then can be dragged or flung. A tiny spring/flight
-// simulation drives each note through the CSS `translate` and `rotate` properties, which
+// Notes are slapped on one by one (every time the page opens), then can be dragged or flung. Wherever
+// you drop or fling a note, it stays: a little friction stops it, it can't leave its own
+// section, and only its tilt springs back. A tiny flight simulation drives each note
+// through the CSS `translate` and `rotate` properties, which
 // compose with the note's own `transform` (its tilt and hover lift), so nothing in
 // ProofStrip changes. The loop only runs while something is moving.
 
@@ -16,7 +18,7 @@ type Note = {
   samples: { t: number; x: number; y: number }[];
 };
 
-const SPRING = { k: 95, c: 11 }; // ~0.56 damping ratio: one soft overshoot, then still
+const FRICTION = 7; // a dropped or nudged note slides to a stop on the cork
 const SPIN = { k: 150, c: 10 };
 const MAX_V = 3200;
 
@@ -49,11 +51,17 @@ function init() {
   let raf = 0;
   let last = 0;
   let bounds = { l: 0, r: 0, t: 0, b: 0 };
+  let zTop = 10; // the note you touched last sits on top
+  const area = board.closest<HTMLElement>('section') ?? board;
 
   const measure = () => {
+    // notes stay inside their own section (and on screen)
     const vw = document.documentElement.clientWidth;
-    const br = board.getBoundingClientRect();
-    bounds = { l: 4, r: vw - 4, t: br.top + scrollY - 40, b: br.bottom + scrollY + 60 };
+    const ar = area.getBoundingClientRect();
+    bounds = {
+      l: Math.max(4, ar.left + scrollX), r: Math.min(vw - 4, ar.right + scrollX),
+      t: ar.top + scrollY + 4, b: ar.bottom + scrollY - 4,
+    };
     for (const n of notes) {
       const r = n.el.getBoundingClientRect();
       n.home = { l: r.left + scrollX - n.x, t: r.top + scrollY - n.y, w: r.width, h: r.height };
@@ -69,7 +77,7 @@ function init() {
       s.translate = `${n.x.toFixed(2)}px ${n.y.toFixed(2)}px`;
       s.rotate = `${n.r.toFixed(2)}deg`;
     }
-    n.el.classList.toggle('is-flying', !n.held && (n.flying > 0 || Math.hypot(n.x, n.y) > 12));
+    n.el.classList.toggle('is-flying', !n.held && n.flying > 0);
   };
 
   const keepIn = (n: Note, bounce: boolean) => {
@@ -131,17 +139,18 @@ function init() {
         n.flying -= dt;
         if (Math.hypot(n.vx, n.vy) < 140) n.flying = 0;
       } else {
-        n.vx += (-SPRING.k * n.x - SPRING.c * n.vx) * dt;
-        n.vy += (-SPRING.k * n.y - SPRING.c * n.vy) * dt;
+        // no spring home: friction just stops it where it is
+        const f = Math.exp(-FRICTION * dt);
+        n.vx *= f; n.vy *= f;
       }
       n.vr += (-SPIN.k * n.r - SPIN.c * n.vr) * dt;
       n.x += n.vx * dt; n.y += n.vy * dt; n.r += n.vr * dt;
       n.r = Math.max(-40, Math.min(40, n.r));
       keepIn(n, true);
       collide(n);
-      const moving = n.flying > 0 || Math.abs(n.x) > 0.05 || Math.abs(n.y) > 0.05 || Math.abs(n.r) > 0.02 ||
-        Math.abs(n.vx) > 0.5 || Math.abs(n.vy) > 0.5 || Math.abs(n.vr) > 0.5;
-      if (!moving) { n.x = n.y = n.r = n.vx = n.vy = n.vr = 0; }
+      const moving = n.flying > 0 || Math.abs(n.r) > 0.02 ||
+        Math.abs(n.vx) > 2 || Math.abs(n.vy) > 2 || Math.abs(n.vr) > 0.5;
+      if (!moving) { n.r = n.vx = n.vy = n.vr = 0; }
       busy ||= moving;
     }
     return busy;
@@ -181,6 +190,7 @@ function init() {
       n.held = true;
       n.flying = 0;
       n.el.classList.add('is-held');
+      n.el.style.zIndex = String(++zTop);
       measure();
       wake();
     }
@@ -240,7 +250,8 @@ function init() {
       e.stopImmediatePropagation();
     }, { capture: true });
   }
-  on(window, 'resize', () => { if (raf || active) measure(); });
+  // a resize can leave a moved note outside its section: tuck it back in
+  on(window, 'resize', () => { measure(); notes.forEach((n) => { keepIn(n, false); write(n); }); });
 
   /* ---------- slap-in ---------- */
   let lastSlap = notes.length - 1;
@@ -270,12 +281,11 @@ function init() {
   const impact = (n: Note, i: number) => {
     // the board thumps
     if (cascade) anims.push(cascade.animate([{ translate: '0 0' }, { translate: '0 2.5px' }, { translate: '0 -1px' }, { translate: '0 0' }], { duration: 200, easing: 'ease-out' }));
-    // the notes already up there wobble
+    // the notes already up there wobble (a little twist; they don't wander off)
     notes.forEach((o, k) => {
       if (k >= i) return;
       const d = Math.abs(k - i);
       o.vr += (k % 2 ? 1 : -1) * (70 / d);
-      o.vy += 50 / d;
     });
     wake();
     // impact lines
@@ -300,13 +310,10 @@ function init() {
     ([entry]) => {
       io.disconnect();
       board.classList.add('is-live');
-      let seen = false;
-      try { seen = sessionStorage.getItem('fx-cork-slap') === '1'; } catch {}
-      // Slap in only the notes you can see, the first time this visit. Notes below the
-      // fold (phones) and later visits: they're simply already on the board.
+      // Slap in the notes you can see, every time the page opens (refresh or navigation).
+      // Notes below the fold (phones) are simply already on the board.
       const inView = notes.filter((n) => n.el.getBoundingClientRect().top < innerHeight * 0.92);
-      if (!seen && entry.isIntersecting && inView.length) {
-        try { sessionStorage.setItem('fx-cork-slap', '1'); } catch {}
+      if (entry.isIntersecting && inView.length) {
         lastSlap = inView.length - 1;
         inView.forEach((n, i) => slap(n, i));
       } else board.classList.add('is-settled');
@@ -327,6 +334,7 @@ function init() {
     for (const n of notes) {
       n.el.style.removeProperty('translate');
       n.el.style.removeProperty('rotate');
+      n.el.style.removeProperty('z-index');
       n.el.classList.remove('is-held', 'is-flying');
     }
   };
