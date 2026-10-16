@@ -9,8 +9,10 @@
 //   .taped__photo  hover: the print lifts straight up off the page under its tape (a
 //                  couple of px up, a hair bigger, a larger softer shadow), and a soft gloss
 //                  drifts with the pointer, as bright as the print is lifted (--lk, eased in
-//                  scripts/paper.ts). No 3D tilt. Touch: the gloss shows briefly as the
-//                  print lifts on scroll.
+//                  scripts/paper.ts). Top-taped prints lift a little more on the side the
+//                  pointer is on (strongest at the free bottom corners, zero at the tape),
+//                  shown mostly in the shadow. Touch: the gloss shows briefly as the print
+//                  lifts on scroll.
 // The lifted shadow is its own layer that only fades in, so nothing animates a box-shadow.
 // Reduced motion: all of it is off and the photo sits flat.
 interface Source { srcset: string; type: string }
@@ -147,6 +149,8 @@ const {
     .taped__photo::after { transition: opacity var(--lift-time) ease, translate var(--lift-time) var(--ease-lift); }
     .taped__drift::before { transition: opacity var(--lift-time) ease; }
     .taped:hover .taped__photo { transform: translateY(-3px) scale(1.012); }
+    /* top-taped: pivot from the tape like the taped index cards (TapedWorkCards.astro) */
+    .taped--top:hover .taped__photo { transform: perspective(900px) rotateX(3deg); }
     .taped:hover .taped__drift::before { opacity: 1; }
     .taped:hover .taped__photo::after { opacity: 0.7; }
 
@@ -159,6 +163,31 @@ const {
     .taped.is-lit .taped__drift::before { transition: none; opacity: var(--lk, 0); }
     .taped.is-lit .taped__photo::after { transition: none; opacity: calc(var(--lk, 0) * 0.85); }
     .taped.is-lit .taped__photo::before { opacity: var(--lk, 0); }
+
+    /* Top-taped prints lift the way the taped index cards do: they pivot from the tape
+       (perspective(900px) rotateX ~3deg, origin at the top edge), so the top stays down and
+       the free bottom edge comes up. On top of that, they lift more where the pointer is:
+       pointer on the left lifts the left side (a little rotateY, like the cards' lean),
+       bottom centre lifts the bottom edge evenly. The shadow follows, skewed and stretched
+       from the taped edge so it grows on the lifted side.
+         --fy  0 at the tape .. 1 at the bottom edge
+         --ex  -1 left .. 1 right, sideways lift (some even near the top: those corners are free)
+         --ey  0..1, bottom-edge lift */
+    .taped--top.is-lit {
+      --fy: clamp(0, (var(--py, 0) + 1) / 2, 1);
+      --ex: calc(clamp(-1, var(--px, 0), 1) * (0.35 + 0.65 * var(--fy)) * var(--lk, 0));
+      --ey: calc(var(--fy) * var(--fy) * var(--lk, 0));
+    }
+    .taped--top.is-lit .taped__photo {
+      transform: perspective(900px)
+        rotateX(calc(var(--lk, 0) * 2.4deg + var(--ey) * 1.2deg))
+        rotateY(calc(var(--ex) * -1.4deg));
+    }
+    .taped--top.is-lit .taped__drift::before {
+      transform-origin: 50% 0;
+      transform: skewX(calc(var(--ex) * 1.3deg))
+        scale(calc(1 + 0.012 * var(--ey) + 0.008 * var(--lk, 0)), calc(1 + 0.022 * var(--ey) + 0.008 * var(--lk, 0)));
+    }
   }
 
   /* ---------- Scroll: settle in, lift a little on the way out ---------- */

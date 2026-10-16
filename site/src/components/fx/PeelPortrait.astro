@@ -30,6 +30,7 @@
   /* Hover lifts the print like every taped photo. While a corner is curled up the print is
      flat on the page except for that corner, so the lift waits. */
   .peel.is-peeling :global(.taped__photo) { transform: none !important; }
+  .peel.is-peeling :global(.taped__drift)::before { transform: none !important; }
   /* the lifted corner: SVG drawn in the print's own pixel box (fx-about-peel.ts) */
   .peel :global(.peel-flap) {
     position: absolute;
