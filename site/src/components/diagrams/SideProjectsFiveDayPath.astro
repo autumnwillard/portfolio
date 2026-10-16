@@ -1,0 +1,39 @@
+---
+// hirepurpose-5-day-path: a wobbly trail with four stops over a 5-tick ruler. Undated on
+// purpose (Autumn doesn’t remember which day was which).
+import InkSvg from '../InkSvg.astro';
+import { smooth, line, loop, arrow } from '../../lib/ink';
+
+const trail = smooth([[24, 128], [62, 132], [104, 100], [160, 84], [226, 118], [286, 136], [344, 96], [410, 82], [470, 110]]);
+const stops = [
+  { x: 104, y: 100, lines: ['kill the', 'first idea'], above: true, s: 911 },
+  { x: 226, y: 118, lines: ['sketch on', 'a handout'], above: false, s: 912 },
+  { x: 344, y: 96, lines: ['build'], above: true, s: 913 },
+];
+const end = arrow([[470, 110], [484, 118], [498, 116]], 914, 10);
+const ruler = line(104, 206, 500, 205, 915, 1.2);
+const ticks = [0, 1, 2, 3, 4].map((i) => {
+  const x = 140 + i * 80;
+  return line(x, 198, x + 1, 214, 920 + i, 0.4);
+}).join(' ');
+---
+<InkSvg viewBox="0 10 520 214" label="HirePurpose in 5 days: cut the first idea, sketch the screens, build, deploy from a borrowed Linux machine." class="sp-path">
+  <text class="ink-text ink-text--accent ink-fade" x="20" y="214" font-size="30">5 days</text>
+  <path class="ink ink--dash" style="--i:0.5" d={trail} />
+  {stops.map((st, i) => (
+    <>
+      <path class="ink ink--accent ink--bold" style={`--i:${1 + i}`} d={loop(st.x, st.y, 9, 9, st.s, 1.08)} pathLength="1" />
+      {st.lines.map((t, k) => (
+        <text class="ink-text ink-fade" style={`--i:${1 + i}`} x={st.x} y={st.above ? st.y - 22 - (st.lines.length - 1 - k) * 22 : st.y + 38 + k * 22} font-size="21" text-anchor="middle">{t}</text>
+      ))}
+    </>
+  ))}
+  <path class="ink ink--bold" style="--i:4" d={`${end.shaft} ${end.head}`} pathLength="1" />
+  <text class="ink-text ink-fade" style="--i:4" x="506" y="150" font-size="21" text-anchor="end">deploy on a borrowed</text>
+  <text class="ink-text ink-fade" style="--i:4" x="506" y="172" font-size="21" text-anchor="end">Linux box</text>
+  <path class="ink ink--faint" style="--i:5" d={`${ruler} ${ticks}`} pathLength="1" />
+</InkSvg>
+
+<style>
+  :global(svg.ink-svg.sp-path) { max-width: 30rem; }
+</style>

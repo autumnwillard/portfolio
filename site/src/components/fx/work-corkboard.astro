@@ -1,0 +1,93 @@
+---
+// Overdrive (Work page): the Quick highlights become a corkboard. On arrival the notes are
+// slapped onto the board one at a time (the board thumps, the notes already up there
+// wobble). Then you can grab one and fling it: it flies, bounces off the edges of the
+// board, knocks into the others, and stays where it lands (only its tilt settles back).
+// Mouse/pen: drag in any direction. Touch: swipe a note sideways (vertical swipes still
+// scroll the page). A tap or click still opens the case study.
+// The slap-in plays once per visit (session); coming back to Work, the notes are already up.
+// Mouse users get a handwritten hint once the notes have landed; it goes away after the
+// first drag. Touch gets no hint: there the notes are tap targets first, and a swipe
+// hint right next to the page's scroll gesture would invite accidental grabs.
+// Without JS, or with reduced motion, the notes are simply there (ProofStrip as is).
+---
+<div class="fx-cork" data-fx-cork>
+  <p class="fx-cork__hint" aria-hidden="true">
+    <span>Psst: these aren’t stuck very well. Drag one.</span>
+    <svg viewBox="0 0 40 30" focusable="false"><path d="M4 4c3 9 10 15 22 17M20 15c3 3 5 4.5 7 6-3 .6-6 1.6-8 3" /></svg>
+  </p>
+  <slot />
+</div>
+
+<script>
+  import '../../scripts/fx-work-corkboard.ts';
+</script>
+
+<style>
+  .fx-cork { position: relative; }
+
+  /* Before the slap-in runs, the notes wait off the board. A failsafe shows them anyway
+     if the script never arrives. Motion only; otherwise nothing is hidden. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .fx-cork:not(.is-live) :global(.jot) { opacity: 0; animation: fx-cork-failsafe 0s linear 2.5s forwards; }
+  }
+  @keyframes fx-cork-failsafe { to { opacity: 1; } }
+
+  /* the slap-in is this board's arrival; the shared "press flat on scroll" would be a second one */
+  .fx-cork.is-live :global(.jot), .fx-cork.is-live :global(.jot)::after { animation: none; }
+  /* draggable only with motion on (reduced motion: the notes are plain links) */
+  @media (prefers-reduced-motion: no-preference) {
+    .fx-cork.is-live :global(.jot) { touch-action: pan-y; cursor: grab; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+  }
+  .fx-cork.is-live :global(.jot.is-held) { cursor: grabbing; z-index: 30; }
+  /* A note in motion is its own compositor layer with everything frozen: no transitions
+     (they'd trail the finger), no shadow growth (a repaint of a big blur every frame).
+     The "lifted off the board" look is a pre-drawn shadow (::after) that only fades. */
+  .fx-cork.is-live :global(.jot.is-moving) { will-change: translate, rotate; transition: none; }
+  .fx-cork.is-live :global(.jot)::after { transition: opacity 160ms ease-out; }
+  .fx-cork.is-live :global(.jot.is-held)::after,
+  .fx-cork.is-live :global(.jot.is-flying)::after { opacity: 1; }
+  .fx-cork.is-live :global(.jot.is-flying) { z-index: 25; }
+  .fx-cork.is-live :global(.jot__link) { -webkit-user-drag: none; }
+
+  /* Comic impact lines when a note hits the board */
+  .fx-cork :global(.fx-slap) {
+    position: absolute;
+    inset: -14% -9%;
+    width: 118%;
+    height: 128%;
+    overflow: visible;
+    pointer-events: none;
+    z-index: 3;
+  }
+  .fx-cork :global(.fx-slap path) { fill: none; stroke: var(--accent); stroke-width: 2.6; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+
+  /* The hint: handwritten, top right, written in once the last note has landed */
+  .fx-cork__hint {
+    display: none;
+    position: absolute;
+    top: 0.35rem;
+    right: 0.5rem;
+    margin: 0;
+    font-family: var(--font-hand);
+    font-size: 1.35rem;
+    line-height: 1;
+    color: var(--accent-ink);
+    transform: rotate(-3deg);
+    pointer-events: none;
+  }
+  .fx-cork__hint svg { position: absolute; left: -1.6rem; top: 1.1rem; width: 2.2rem; overflow: visible; scale: -1 1; } /* mirrored: points down-left, at the notes */
+  .fx-cork__hint path { fill: none; stroke: var(--accent); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    :global(.js) .fx-cork__hint { display: block; opacity: 0; translate: -0.5rem 0; transition: opacity 400ms ease, translate 600ms var(--ease-spring, ease-out); }
+    :global(.js) .fx-cork.is-settled .fx-cork__hint { opacity: 1; translate: 0 0; }
+    :global(.js) .fx-cork.is-settled.was-dragged .fx-cork__hint { opacity: 0; transition-duration: 300ms; }
+  }
+  @media (max-width: 640px) {
+    .fx-cork__hint { font-size: 1.15rem; top: 0.6rem; right: 0.25rem; }
+    .fx-cork__hint svg { width: 1.7rem; top: 0.9rem; left: -1.2rem; }
+  }
+  @media (max-width: 380px) {
+    .fx-cork__hint { top: 2.9rem; }
+  }
+</style>

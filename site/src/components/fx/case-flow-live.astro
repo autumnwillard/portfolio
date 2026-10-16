@@ -1,0 +1,287 @@
+---
+// Overdrive (case studies): a diagram that runs. Wraps an existing flow diagram and lays a
+// transparent copy of its coordinate space on top, where little paper tickets travel the
+// diagram's own arrows, boxes get re-inked in coral as things pass through, and now and
+// then a pulse runs round the feedback loop. Geometry mirrors the wrapped diagram exactly
+// (same lib/ink seeds), so the arrows the tickets ride are the arrows you see.
+//
+//  kind="risk"     wraps RiskReviewFlow (release-risk-review)
+//  kind="routing"  wraps ReviewRoutingBeforeAfter (ai-review-routing). The "Proposed" side is
+//                  labeled as proposed; the bar under the figure says it's an illustration.
+//
+// Decorative (aria-hidden): the wrapped diagram keeps its own accessible label. With JS off
+// or reduced motion, nothing here shows. A Pause button stops it (WCAG 2.2.2), and it
+// stops by itself after a few rounds (fx-work-flow.ts), so it never runs beside the text forever.
+import { rect, arrow } from '../../lib/ink';
+
+interface Props { kind: 'risk' | 'routing' }
+const { kind } = Astro.props;
+
+type Box = { k: string; d: string; soft?: boolean; t?: string };
+type PathDef = { k: string; d: string };
+type Step = { p: string; d: number } | { h: number } | { f: string } | { split: Step[][] } | { c: string };
+type Route = { w: number; steps: Step[] };
+type Plan = {
+  emit: number;
+  shape: 'ticket' | 'doc';
+  size?: number;
+  lanes: Route[][];
+  every?: { n: number; events: ({ at: number; f: string } | { at: number; comet: string; d: number })[] };
+};
+type Variant = { cls: string; viewBox: string; paths: PathDef[]; boxes: Box[]; comets: PathDef[]; plan: Plan };
+
+const shaft = (pts: [number, number][], seed: number, head: number) => arrow(pts, seed, head).shaft;
+// a coral re-inking of a box: a touch outside the original line
+const ring = (x: number, y: number, w: number, h: number, seed: number) => rect(x - 4, y - 4, w + 8, h + 8, seed, 1.6);
+
+let variants: Variant[] = [];
+
+if (kind === 'risk') {
+  /* ---------- wide: mirrors RiskReviewFlow (viewBox 0 0 1000 450) ---------- */
+  const BY = (i: number) => 26 + i * 54;
+  const fan = [0, 1, 2, 3, 4, 5].map((i) => shaft([[546, 200], [570, (200 + BY(i) + 19) / 2 + 4], [601, BY(i) + 19]], 10 + i, 8));
+  const back = shaft([[920, 236], [930, 330], [880, 410], [700, 428], [520, 405], [478, 330], [472, 241]], 4, 13);
+  const a3 = shaft([[832, 185], [840, 186], [846, 186]], 3, 9);
+  const wide: Variant = {
+    cls: 'only-wide',
+    viewBox: '0 0 1000 450',
+    paths: [
+      { k: 's1', d: 'M160 200 L201 200' },
+      { k: 's2', d: 'M366 200 L404 200' },
+      ...fan.map((d, i) => ({ k: `fan${i}`, d })),
+    ],
+    boxes: [
+      { k: 'find', d: ring(200, 158, 165, 84, 801), soft: true },
+      { k: 'rules', d: ring(405, 165, 135, 70, 802) },
+      ...[0, 1, 2, 3, 4, 5].map((i) => ({ k: `b${i}`, d: ring(605, BY(i), 120, 38, 810 + i) })),
+      { k: 'po', d: ring(850, 138, 143, 98, 803) },
+    ],
+    comets: [{ k: 'a3', d: a3 }, { k: 'back', d: back }],
+    plan: {
+      emit: 820,
+      shape: 'ticket',
+      size: 1.35,
+      lanes: [[0, 1, 2, 3, 4, 5].map((i) => ({
+        w: 1,
+        steps: [{ p: 's1', d: 420 }, { f: 'find' }, { h: 300 }, { p: 's2', d: 380 }, { f: 'rules' }, { h: 340 }, { p: `fan${i}`, d: 640 }, { f: `b${i}` }],
+      }))],
+      every: { n: 7, events: [{ at: 600, comet: 'a3', d: 380 }, { at: 950, f: 'po' }, { at: 1500, comet: 'back', d: 1700 }, { at: 3150, f: 'rules' }] },
+    },
+  };
+
+  /* ---------- narrow: mirrors RiskReviewFlow (viewBox 0 0 380 745) ---------- */
+  const NBX = (i: number) => (i % 2 === 0 ? 16 : 188);
+  const NBY = (i: number) => 326 + Math.floor(i / 2) * 64;
+  const nD = shaft([[190, 530], [188, 546], [190, 562]], 24, 9);
+  const nBack = shaft([[190, 662], [196, 690], [260, 702], [352, 690], [364, 520], [358, 280], [300, 226], [276, 222]], 25, 12);
+  const narrow: Variant = {
+    cls: 'only-narrow',
+    viewBox: '0 0 380 745',
+    paths: [
+      { k: 's1', d: 'M190 64 L190 101' },
+      { k: 's2', d: 'M190 156 L190 191' },
+      ...[0, 1, 2, 3, 4, 5].map((i) => {
+        const y = NBY(i) + 27;
+        const tx = i % 2 === 0 ? 150 : 330;
+        return { k: `fan${i}`, d: `M190 292 L181 318 L181 ${y} L${tx} ${y}` };
+      }),
+    ],
+    boxes: [
+      { k: 'find', d: ring(45, 102, 290, 52, 821), soft: true },
+      { k: 'rules', d: ring(100, 192, 180, 52, 822) },
+      ...[0, 1, 2, 3, 4, 5].map((i) => ({ k: `b${i}`, d: ring(NBX(i), NBY(i), 158, 52, 830 + i) })),
+      { k: 'po', d: ring(70, 568, 240, 88, 823) },
+    ],
+    comets: [{ k: 'a3', d: nD }, { k: 'back', d: nBack }],
+    plan: {
+      emit: 900,
+      shape: 'ticket',
+      lanes: [[0, 1, 2, 3, 4, 5].map((i) => ({
+        w: 1,
+        steps: [{ p: 's1', d: 420 }, { f: 'find' }, { h: 300 }, { p: 's2', d: 380 }, { f: 'rules' }, { h: 420 }, { p: `fan${i}`, d: 640 + Math.floor(i / 2) * 140 }, { f: `b${i}` }],
+      }))],
+      every: { n: 7, events: [{ at: 700, comet: 'a3', d: 380 }, { at: 1050, f: 'po' }, { at: 1600, comet: 'back', d: 1800 }, { at: 3350, f: 'rules' }] },
+    },
+  };
+  variants = [wide, narrow];
+} else {
+  /* ---------- wide: mirrors ReviewRoutingBeforeAfter (viewBox 0 0 1000 470) ---------- */
+  const A = 520;
+  const bL = shaft([[226, 214], [200, 248], [100, 266], [88, 296]], 402, 11);
+  const bM = shaft([[240, 214], [242, 248], [246, 270], [245, 296]], 408, 11);
+  const bR = shaft([[254, 214], [280, 248], [390, 266], [402, 296]], 403, 11);
+  const aB = shaft([[A + 180, 216], [A + 178, 230], [A + 180, 246]], 405, 9);
+  const aC = shaft([[A + 180, 300], [A + 178, 318], [A + 172, 338]], 406, 9);
+  const aLow = shaft([[A + 400, 216], [A + 412, 262], [A + 404, 304], [A + 396, 338]], 407, 10);
+  const before: Step[] = [{ p: 'in', d: 420 }, { f: 'screen' }, { h: 360 }, { f: 'q' }];
+  const wide: Variant = {
+    cls: 'only-wide',
+    viewBox: '0 0 1000 470',
+    paths: [
+      { k: 'in', d: 'M240 112 L240 149' },
+      { k: 'L', d: bL }, { k: 'M', d: bM }, { k: 'R', d: bR },
+      { k: 'pin', d: `M${A + 240} 112 L${A + 240} 143` },
+      { k: 'aB', d: aB }, { k: 'aC', d: aC }, { k: 'low', d: aLow },
+    ],
+    boxes: [
+      { k: 'screen', d: ring(90, 150, 300, 60, 851), soft: true },
+      { k: 'q', d: rect(-26, -28, 52, 54, 852, 1.4), t: 'translate(418 168) rotate(-8)' },
+      { k: 'exp', d: ring(10, 302, 150, 62, 853) },
+      { k: 'cls', d: ring(170, 302, 150, 62, 854) },
+      { k: 'sub', d: ring(330, 302, 150, 62, 855) },
+      { k: 'ai', d: ring(A + 30, 144, 420, 70, 856) },
+      { k: 'rt', d: ring(A + 60, 250, 240, 48, 857), soft: true },
+      { k: 'only', d: ring(A + 40, 342, 250, 62, 858) },
+      { k: 'human', d: ring(A + 320, 342, 158, 62, 859) },
+    ],
+    comets: [],
+    plan: {
+      emit: 1500,
+      shape: 'doc',
+      size: 1.4,
+      lanes: [
+        [
+          // every item: two reviews. The third hinges on a guess (sometimes it goes, sometimes it doesn't).
+          { w: 1, steps: [...before, { split: [[{ p: 'L', d: 720 }, { f: 'exp' }], [{ p: 'M', d: 620 }, { f: 'cls' }], [{ c: 'guess' }, { p: 'R', d: 760 }, { f: 'sub' }]] }] },
+          { w: 1, steps: [...before, { split: [[{ p: 'L', d: 720 }, { f: 'exp' }], [{ p: 'M', d: 620 }, { f: 'cls' }]] }] },
+        ],
+        [
+          { w: 4, steps: [{ p: 'pin', d: 400 }, { f: 'ai' }, { h: 460 }, { p: 'aB', d: 300 }, { f: 'rt' }, { h: 280 }, { p: 'aC', d: 340 }, { f: 'only' }] },
+          { w: 1, steps: [{ p: 'pin', d: 400 }, { f: 'ai' }, { h: 460 }, { c: 'guess' }, { p: 'low', d: 760 }, { f: 'human' }] },
+        ],
+      ],
+    },
+  };
+
+  /* ---------- narrow: mirrors ReviewRoutingBeforeAfter (viewBox 0 0 380 846) ---------- */
+  const N = 460;
+  const nL = shaft([[176, 190], [140, 214], [74, 226], [64, 248]], 422, 10);
+  const nM = shaft([[190, 190], [192, 212], [188, 230], [190, 248]], 428, 10);
+  const nR = shaft([[204, 190], [240, 214], [306, 226], [316, 248]], 423, 10);
+  const nC = shaft([[140, N + 156], [138, N + 168], [140, N + 182]], 425, 9);
+  const nD = shaft([[140, N + 236], [138, N + 250], [140, N + 264]], 426, 9);
+  const nLow = shaft([[318, N + 156], [336, N + 200], [338, N + 240], [330, N + 266]], 427, 10);
+  const nBefore: Step[] = [{ p: 'in', d: 400 }, { f: 'screen' }, { h: 340 }, { f: 'q' }];
+  const narrow: Variant = {
+    cls: 'only-narrow',
+    viewBox: '0 0 380 846',
+    paths: [
+      { k: 'in', d: 'M190 96 L190 127' },
+      { k: 'L', d: nL }, { k: 'M', d: nM }, { k: 'R', d: nR },
+      { k: 'pin', d: `M190 ${N + 46} L190 ${N + 81}` },
+      { k: 'aB', d: nC }, { k: 'aC', d: nD }, { k: 'low', d: nLow },
+    ],
+    boxes: [
+      { k: 'screen', d: ring(30, 128, 270, 58, 861), soft: true },
+      { k: 'q', d: rect(-22, -24, 44, 46, 862, 1.3), t: 'translate(338 146) rotate(-8)' },
+      { k: 'exp', d: ring(4, 254, 120, 60, 863) },
+      { k: 'cls', d: ring(130, 254, 120, 60, 864) },
+      { k: 'sub', d: ring(256, 254, 120, 60, 865) },
+      { k: 'ai', d: ring(10, N + 82, 360, 70, 866) },
+      { k: 'rt', d: ring(20, N + 186, 230, 48, 867), soft: true },
+      { k: 'only', d: ring(20, N + 268, 210, 60, 868) },
+      { k: 'human', d: ring(248, N + 268, 122, 60, 869) },
+    ],
+    comets: [],
+    plan: {
+      emit: 1600,
+      shape: 'doc',
+      lanes: [
+        [
+          { w: 1, steps: [...nBefore, { split: [[{ p: 'L', d: 640 }, { f: 'exp' }], [{ p: 'M', d: 560 }, { f: 'cls' }], [{ c: 'guess' }, { p: 'R', d: 680 }, { f: 'sub' }]] }] },
+          { w: 1, steps: [...nBefore, { split: [[{ p: 'L', d: 640 }, { f: 'exp' }], [{ p: 'M', d: 560 }, { f: 'cls' }]] }] },
+        ],
+        [
+          { w: 4, steps: [{ p: 'pin', d: 400 }, { f: 'ai' }, { h: 460 }, { p: 'aB', d: 300 }, { f: 'rt' }, { h: 280 }, { p: 'aC', d: 340 }, { f: 'only' }] },
+          { w: 1, steps: [{ p: 'pin', d: 400 }, { f: 'ai' }, { h: 460 }, { c: 'guess' }, { p: 'low', d: 760 }, { f: 'human' }] },
+        ],
+      ],
+    },
+  };
+  variants = [wide, narrow];
+}
+const note = kind === 'routing'
+  ? 'The little pages are items going through review. It’s an illustration, not real data.'
+  : 'The little slips are tickets going through the review. It’s an illustration, not real release data.';
+---
+<div class:list={['fx-flow', `fx-flow--${kind}`]} data-fx-flow>
+  <div class="fx-flow__stage">
+    <slot />
+    {variants.map((v) => (
+      <svg class:list={['fx-flow__layer', v.cls]} viewBox={v.viewBox} aria-hidden="true" focusable="false" data-plan={JSON.stringify(v.plan)}>
+        {v.paths.map((p) => <path class="fx-flow__route" data-k={p.k} d={p.d} />)}
+        {v.comets.map((p) => <path class="fx-flow__comet" data-c={p.k} d={p.d} pathLength="1" />)}
+        {v.boxes.map((b) => <path class:list={['fx-flow__ring', b.soft && 'is-soft']} data-b={b.k} d={b.d} transform={b.t} pathLength="1" />)}
+        <g class="fx-flow__items"></g>
+      </svg>
+    ))}
+  </div>
+  <div class="fx-flow__bar" hidden>
+    <button type="button" class="fx-flow__toggle" aria-pressed="false">
+      <span class="fx-flow__icon" aria-hidden="true"></span><span class="fx-flow__label">Pause</span><span class="visually-hidden"> the moving diagram</span>
+    </button>
+    <span class="fx-flow__note">{note}</span>
+  </div>
+</div>
+
+<script>
+  import '../../scripts/fx-work-flow.ts';
+</script>
+
+<style>
+  .fx-flow { position: relative; }
+  .fx-flow__stage { position: relative; max-width: 1000px; }
+  @media (max-width: 680px) { .fx-flow__stage { max-width: 440px; } }
+  /* block, so the overlay box is exactly the drawing (no inline baseline gap) */
+  @media (min-width: 681px) { .fx-flow__stage :global(.ink-svg.only-wide) { display: block; } }
+  .fx-flow__layer { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+  .fx-flow__route { fill: none; stroke: none; }
+  .fx-flow__ring { fill: none; stroke: var(--accent); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: 0; }
+  .fx-flow__ring.is-soft { stroke: var(--ink-soft); stroke-width: 2; }
+  .fx-flow__comet { fill: none; stroke: var(--accent); stroke-width: 7; stroke-linecap: round; stroke-dasharray: 0.07 2; stroke-dashoffset: 0.07; opacity: 0; }
+
+  /* Tickets: tiny paper slips, same ink as the drawing */
+  .fx-flow :global(.fx-tk) { opacity: 0; }
+  .fx-flow :global(.fx-tk rect) { fill: var(--card, var(--paper)); stroke: var(--ink); stroke-width: 1.6; }
+  .fx-flow :global(.fx-tk path) { fill: none; stroke: var(--ink-soft); stroke-width: 1.4; stroke-linecap: round; }
+  .fx-flow :global(.fx-tk.is-guess rect) { stroke: var(--accent); stroke-width: 2; }
+  .fx-flow :global(.fx-tk.is-guess path) { stroke: var(--accent); }
+
+  /* only shown once the script is running (and never with reduced motion) */
+  .fx-flow__layer { display: none; }
+  @media (prefers-reduced-motion: no-preference) {
+    .fx-flow.is-live .fx-flow__layer.only-wide { display: block; }
+    @media (max-width: 680px) {
+      .fx-flow.is-live .fx-flow__layer.only-wide { display: none; }
+      .fx-flow.is-live .fx-flow__layer.only-narrow { display: block; }
+    }
+  }
+
+  .fx-flow__bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.8rem; margin-top: var(--s0); }
+  .fx-flow__bar[hidden] { display: none; }
+  .fx-flow__note { font-size: var(--step--1); color: var(--ink-soft); max-width: 52ch; }
+  .fx-flow__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.3rem 0.8rem 0.3rem 0.65rem;
+    font: 800 0.85rem/1.2 var(--font-body);
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    border-radius: var(--wobble-radius);
+    cursor: pointer;
+  }
+  .fx-flow__toggle:hover { background: var(--paper-shade); }
+  .fx-flow__toggle:focus-visible { outline: 2.5px solid var(--focus-ring, var(--accent-ink)); outline-offset: 3px; }
+  .fx-flow__icon { width: 0.6rem; height: 0.7rem; border-left: 3px solid currentColor; border-right: 3px solid currentColor; }
+  .fx-flow__toggle[aria-pressed='true'] .fx-flow__icon {
+    border: 0;
+    width: 0;
+    height: 0;
+    border-top: 0.38rem solid transparent;
+    border-bottom: 0.38rem solid transparent;
+    border-left: 0.6rem solid currentColor;
+  }
+</style>

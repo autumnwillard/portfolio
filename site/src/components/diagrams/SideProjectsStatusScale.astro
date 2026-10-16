@@ -1,0 +1,32 @@
+---
+// hirepurpose-status-scale: the candidate statuses, hand-lettered in the order the list
+// sorts them (most to least likely to hire, "Undecided" at the bottom).
+import InkSvg from '../InkSvg.astro';
+import { line, loop, arrow, rect } from '../../lib/ink';
+
+const statuses = ['Hire this person', 'Strong contender', 'Shows promise', 'On the fence', 'Not a fit', 'Hell no'];
+const Y0 = 44, GAP = 38;
+const up = arrow([[30, Y0 + GAP * 5 + 4], [27, Y0 + GAP * 2.5], [30, Y0 - 18]], 931, 11);
+const hellY = Y0 + GAP * 5;
+const sep = line(58, hellY + 26, 262, hellY + 27, 935, 1);
+const label = 'HirePurpose statuses, from most to least likely to hire: Hire this person, Strong contender, Shows promise, On the fence, Not a fit, Hell no. Undecided sorts to the bottom.';
+---
+<InkSvg viewBox="0 0 290 330" label={label} class="sp-scale">
+  <path class="ink ink--bold" style="--i:0" d={`${up.shaft} ${up.head}`} pathLength="1" />
+  <text class="ink-sans ink-fade fill-soft" x="0" y="0" font-size="12.5" font-weight="700" transform={`translate(16 ${Y0 + GAP * 4.4}) rotate(-90)`}>more likely to hire</text>
+  {statuses.map((s, i) => (
+    <>
+      <path class="ink ink--faint" style={`--i:${0.5 + i * 0.3}`} d={rect(56, Y0 + GAP * i - 15, 16, 16, 940 + i, 0.6)} pathLength="1" />
+      <text class="ink-text ink-fade" style={`--i:${0.5 + i * 0.3}`} x="84" y={Y0 + GAP * i + 1} font-size="25">{s}</text>
+    </>
+  ))}
+  <path class="ink ink--accent ink--bold" style="--i:3" d={loop(122, hellY - 6, 52, 21, 951, 1.12)} pathLength="1" />
+  <path class="ink ink--accent" style="--i:3" d={`${line(59, hellY - 9, 64, hellY - 2, 952, 0.3)} ${line(64, hellY - 2, 76, hellY - 20, 953, 0.3)}`} pathLength="1" />
+  <path class="ink ink--faint ink--dash" style="--i:3.5" d={sep} />
+  <text class="ink-text ink-text--soft ink-fade" style="--i:3.5" x="84" y={hellY + 60} font-size="23">Undecided</text>
+  <text class="ink-sans ink-fade fill-soft" style="--i:3.5" x="84" y={hellY + 80} font-size="12.5" font-weight="700">(sorts to the bottom)</text>
+</InkSvg>
+
+<style>
+  :global(svg.ink-svg.sp-scale) { max-width: 17rem; }
+</style>

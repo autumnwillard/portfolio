@@ -1,0 +1,115 @@
+---
+// An aside. Two kinds, picked per aside by length and tone:
+//   kind="sticky" (default): a square sticky note, slightly rotated, hand-lettered.
+//                  For short, punchy asides and jokes.
+//   kind="card":   a lined index card in the body font. For longer asides or explanations.
+// The tilt is static (no animation), so it stays under reduced motion.
+// Sticky notes are stuck along their top edge, so they move from there: on hover/focus the
+// loose bottom edge lifts toward you (its shadow grows); on touch screens a note comes in
+// a little lifted and presses flat as it scrolls into view. No tape, pins or curls.
+interface Props {
+  kind?: 'sticky' | 'card';
+  color?: 'yellow' | 'pink' | 'blue' | 'green' | 'peach';
+  size?: 'sm' | 'md'; // sticky only: sm for one-liners
+  tilt?: number;      // degrees
+  class?: string;
+  float?: boolean;    // float into the right margin on wide case-study pages
+}
+const { kind = 'sticky', color = 'yellow', size = 'md', tilt = kind === 'card' ? -0.8 : -2, class: cls = '', float = false } = Astro.props;
+---
+<aside
+  class:list={['note', `note--${kind}`, kind === 'sticky' && ['sticky', `sticky--${color}`, `note--${size}`], kind === 'card' && 'index-card', float && 'note--float', cls]}
+  style={`--tilt:${tilt}deg`}
+  aria-label="Aside"
+>
+  <div class="note__text"><slot /></div>
+</aside>
+
+<style>
+  .note {
+    --t: var(--tilt);
+    position: relative;
+    margin: var(--s3) 0;
+    transform: rotate(var(--t));
+  }
+  .note__text :global(p) { margin: 0; }
+  .note__text :global(p + p) { margin-top: 0.6rem; }
+  .note__text :global(a) { font-weight: 700; }
+
+  /* ---------- Square sticky note ---------- */
+  .note--sticky {
+    width: min(100%, var(--note-size, 16rem));
+    aspect-ratio: 1;               /* grows taller only if the text needs it */
+    display: flex;
+    align-items: center;
+    padding: 1.7rem 1.25rem 1.3rem;
+  }
+  .note--sticky .note__text {
+    font-family: var(--font-hand);
+    font-size: 1.42rem;
+    line-height: 1.22;
+    color: var(--ink);
+    text-wrap: pretty;
+  }
+  .note--sm { --note-size: 12.5rem; }
+  /* the adhesive strip is the hinge */
+  .note--sticky { transform-origin: 50% 0; }
+  /* extra lifted-edge shadow, under the face; it only fades, so scrolling stays cheap */
+  .note--sticky::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: calc(var(--bias, 0) * 4px) 12px 16px -9px rgb(var(--shadow) / 0.36);
+  }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    /* overrides the global sticky hover (which slides the whole note up): only the loose
+       bottom edge comes up, the stuck top stays put */
+    .note.note--sticky.sticky:hover {
+      transform: perspective(700px) rotate(var(--t)) rotateX(5deg) rotateY(calc(var(--bias, 0) * -2deg));
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .note.note--sticky.sticky:focus-within {
+      transform: perspective(700px) rotate(var(--t)) rotateX(5deg) rotateY(calc(var(--bias, 0) * -2deg));
+    }
+  }
+  @supports (animation-timeline: view()) {
+    @media (hover: none) and (prefers-reduced-motion: no-preference) {
+      .note--sticky { view-timeline: --note block; animation: note-settle linear both; animation-timeline: --note; animation-range: entry 10% entry 90%; }
+      .note--sticky::after { animation: note-settle-shade linear both; animation-timeline: --note; animation-range: entry 10% entry 90%; }
+    }
+  }
+  @keyframes note-settle {
+    from { transform: perspective(700px) rotate(var(--t)) rotateX(9deg) translateY(-3px); }
+    to { transform: perspective(700px) rotate(var(--t)) rotateX(0deg) translateY(0); }
+  }
+  @keyframes note-settle-shade { from { opacity: 1; } to { opacity: 0; } }
+  .note--sticky .note__text :global(a) { font-family: var(--font-body); font-size: 1rem; white-space: nowrap; }
+
+  /* ---------- Lined index card ---------- */
+  .note--card {
+    --card-head: 1.35rem;
+    max-width: 32rem;
+    padding: 1.8rem 1.4rem 1.25rem;
+  }
+  .note--card .note__text { font-size: 1.04rem; line-height: var(--card-pitch); font-weight: 600; }
+
+  @media (min-width: 1180px) {
+    .note--float {
+      float: right;
+      clear: right;
+      width: 16rem;
+      margin: 0.3rem calc(-1 * (16rem + var(--s3))) var(--s2) var(--s3);
+    }
+  }
+  @media (max-width: 520px) {
+    .note { --t: calc(var(--tilt) * 0.6); }
+    .note--md { --note-size: 15rem; }
+    .note--sticky { padding: 1.5rem 1.1rem 1.1rem; }
+    .note--sticky .note__text { font-size: 1.3rem; }
+    .note--card { padding-inline: 1.1rem; }
+  }
+</style>

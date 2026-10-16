@@ -1,0 +1,84 @@
+---
+// ai-toolkit-uat-funnel: 114 completed items in, 16 recommended for acceptance
+// testing out. Side exits are unlabeled by count on purpose (no derived numbers).
+import InkSvg from '../InkSvg.astro';
+import { line, arrow, rect } from '../../lib/ink';
+
+const label =
+  'In one release, the triage workflow reviewed 114 completed items, filtered out backend-only and test-automation work, and recommended 16 for acceptance testing. It was tested against a no-AI baseline before the team relied on it.';
+
+/* funnel outline: rim, two sides, spout */
+const funnel = (cx: number, top: number, rw: number, neck: number, nw: number, spout: number, s: number) => ({
+  rim: line(cx - rw / 2, top, cx + rw / 2, top + 1, s, 1.2),
+  left: `${line(cx - rw / 2, top, cx - nw / 2, neck, s + 1, 1.4)} ${line(cx - nw / 2, neck, cx - nw / 2 + 1, spout, s + 2, 0.6)}`,
+  right: `${line(cx + rw / 2, top + 1, cx + nw / 2, neck, s + 3, 1.4)} ${line(cx + nw / 2, neck, cx + nw / 2 - 1, spout, s + 4, 0.6)}`,
+});
+
+const wf = funnel(300, 112, 340, 290, 64, 324, 801);
+const wL = arrow([[182, 168], [130, 176], [84, 204]], 806, 10);
+const wR = arrow([[418, 168], [470, 176], [516, 204]], 807, 10);
+const wD = arrow([[300, 300], [302, 322], [300, 344]], 808, 10);
+
+const nf = funnel(190, 104, 250, 266, 54, 296, 821);
+const nL = arrow([[96, 150], [60, 158], [30, 184]], 826, 9);
+const nR = arrow([[284, 150], [320, 158], [350, 184]], 827, 9);
+const nD = arrow([[190, 278], [192, 296], [190, 316]], 828, 9);
+---
+<div class="uat">
+  <InkSvg viewBox="0 0 700 450" label={label} class="only-wide">
+    <text class="ink-text ink-text--accent ink-fade" style="--i:0" x="300" y="58" font-size="48" text-anchor="middle">114</text>
+    <text class="ink-text ink-fade" style="--i:0" x="300" y="92" font-size="22" text-anchor="middle">completed items reviewed</text>
+    <path class="ink ink--bold" style="--i:1" d={wf.rim} pathLength="1" />
+    <path class="ink ink--bold" style="--i:1.5" d={wf.left} pathLength="1" />
+    <path class="ink ink--bold" style="--i:1.5" d={wf.right} pathLength="1" />
+
+    <path class="ink" style="--i:3" d={wL.shaft + ' ' + wL.head} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:3" x="78" y="240" font-size="21" text-anchor="middle">backend-only</text>
+    <path class="ink" style="--i:3.5" d={wR.shaft + ' ' + wR.head} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:3.5" x="524" y="240" font-size="21" text-anchor="middle">test automation</text>
+
+    <path class="ink ink--accent" style="--i:5" d={wD.shaft + ' ' + wD.head} pathLength="1" />
+    <text class="ink-text ink-text--accent ink-fade" style="--i:6" x="300" y="392" font-size="48" text-anchor="middle">16</text>
+    <text class="ink-text ink-fade" style="--i:6" x="300" y="426" font-size="22" text-anchor="middle">recommended for acceptance testing</text>
+
+    <g class="on-paper" transform="translate(520 290) rotate(3)">
+      <rect class="ink-fade fill-sticky-yellow" style="--i:7" x="0" y="0" width="160" height="130" />
+      <path class="ink ink--faint" style="--i:7" d={rect(0, 0, 160, 130, 809, 0.6)} pathLength="1" />
+      <text class="ink-text ink-fade" style="--i:7" x="14" y="40" font-size="21">tested against</text>
+      <text class="ink-text ink-fade" style="--i:7" x="14" y="68" font-size="21">a no-AI</text>
+      <text class="ink-text ink-fade" style="--i:7" x="14" y="96" font-size="21">baseline first</text>
+    </g>
+  </InkSvg>
+
+  <InkSvg viewBox="0 0 380 540" label={label} class="only-narrow">
+    <text class="ink-text ink-text--accent ink-fade" style="--i:0" x="190" y="48" font-size="44" text-anchor="middle">114</text>
+    <text class="ink-text ink-fade" style="--i:0" x="190" y="82" font-size="21" text-anchor="middle">completed items reviewed</text>
+    <path class="ink ink--bold" style="--i:1" d={nf.rim} pathLength="1" />
+    <path class="ink ink--bold" style="--i:1.5" d={nf.left} pathLength="1" />
+    <path class="ink ink--bold" style="--i:1.5" d={nf.right} pathLength="1" />
+
+    <path class="ink" style="--i:3" d={nL.shaft + ' ' + nL.head} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:3" x="8" y="214" font-size="19">backend-</text>
+    <text class="ink-text ink-fade" style="--i:3" x="8" y="236" font-size="19">only</text>
+    <path class="ink" style="--i:3.5" d={nR.shaft + ' ' + nR.head} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:3.5" x="372" y="214" font-size="19" text-anchor="end">test</text>
+    <text class="ink-text ink-fade" style="--i:3.5" x="372" y="236" font-size="19" text-anchor="end">automation</text>
+
+    <path class="ink ink--accent" style="--i:5" d={nD.shaft + ' ' + nD.head} pathLength="1" />
+    <text class="ink-text ink-text--accent ink-fade" style="--i:6" x="190" y="362" font-size="44" text-anchor="middle">16</text>
+    <text class="ink-text ink-fade" style="--i:6" x="190" y="392" font-size="21" text-anchor="middle">recommended for</text>
+    <text class="ink-text ink-fade" style="--i:6" x="190" y="416" font-size="21" text-anchor="middle">acceptance testing</text>
+
+    <g class="on-paper" transform="translate(80 438) rotate(-2)">
+      <rect class="ink-fade fill-sticky-yellow" style="--i:7" x="0" y="0" width="220" height="86" />
+      <path class="ink ink--faint" style="--i:7" d={rect(0, 0, 220, 86, 829, 0.6)} pathLength="1" />
+      <text class="ink-text ink-fade" style="--i:7" x="16" y="36" font-size="21">tested against a</text>
+      <text class="ink-text ink-fade" style="--i:7" x="16" y="64" font-size="21">no-AI baseline first</text>
+    </g>
+  </InkSvg>
+</div>
+
+<style>
+  .uat { max-width: 38rem; }
+  .uat :global(.only-narrow) { max-width: 420px; }
+</style>

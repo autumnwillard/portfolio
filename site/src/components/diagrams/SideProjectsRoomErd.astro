@@ -1,0 +1,44 @@
+---
+// room-reserve-erd: sketch redraw of the capstone’s data model. Rooms and customers each
+// have many reservations; a reservation is a kind of booking.
+import InkSvg from '../InkSvg.astro';
+import { rect, line } from '../../lib/ink';
+
+const boxes = [
+  { x: 178, y: 16, w: 140, t: 'Booking', s: 961, soft: true, fields: ['start, end', 'guest count'] },
+  { x: 10, y: 168, w: 116, t: 'Room', s: 962, fields: ['name', 'capacity'] },
+  { x: 178, y: 168, w: 140, t: 'Reservation', s: 963, fields: ['room', 'customer'] },
+  { x: 370, y: 168, w: 116, t: 'Customer', s: 964, fields: ['name', 'email'] },
+];
+const H = 96;
+// inheritance: Reservation → Booking, hollow triangle head
+const inherit = line(248, 166, 248, 126, 970, 0.8);
+const tri = 'M236 126 L248 112 L260 126 Z';
+const roomLink = line(128, 216, 176, 216, 971, 0.5);
+const custLink = line(320, 216, 368, 216, 972, 0.5);
+---
+<InkSvg viewBox="0 0 496 290" label="Room Reserve data model: rooms, customers and reservations, with reservations built on a general booking type." class="sp-erd">
+  {boxes.map((b, i) => (
+    <>
+      <path class:list={['ink', b.soft && 'ink--dash']} style={`--i:${i * 0.6}`} d={rect(b.x, b.y, b.w, H, b.s, 1.2)} pathLength={b.soft ? undefined : '1'} />
+      <path class="ink" style={`--i:${i * 0.6}`} d={line(b.x + 2, b.y + 34, b.x + b.w - 2, b.y + 34, b.s + 10, 0.8)} pathLength="1" />
+      <text class="ink-text ink-fade" style={`--i:${i * 0.6}`} x={b.x + b.w / 2} y={b.y + 26} font-size="24" text-anchor="middle">{b.t}</text>
+      {b.fields.map((f, k) => (
+        <text class="ink-sans ink-fade fill-soft" style={`--i:${i * 0.6 + 0.3}`} x={b.x + 14} y={b.y + 56 + k * 20} font-size="13.5" font-weight="600">{f}</text>
+      ))}
+    </>
+  ))}
+  <path class="ink ink--accent ink--bold" style="--i:3" d={`${inherit} ${tri}`} pathLength="1" />
+  <text class="ink-text ink-text--accent ink-fade" style="--i:3" x="268" y="152" font-size="21">is a</text>
+  <path class="ink" style="--i:3.4" d={roomLink} pathLength="1" />
+  <path class="ink" style="--i:3.4" d={custLink} pathLength="1" />
+  <text class="ink-sans ink-fade" style="--i:3.6" x="132" y="208" font-size="13" font-weight="800">1</text>
+  <text class="ink-sans ink-fade fill-soft" style="--i:3.6" x="142" y="234" font-size="12" font-weight="700">many</text>
+  <text class="ink-sans ink-fade" style="--i:3.6" x="358" y="208" font-size="13" font-weight="800">1</text>
+  <text class="ink-sans ink-fade fill-soft" style="--i:3.6" x="324" y="234" font-size="12" font-weight="700">many</text>
+  <text class="ink-sans ink-fade fill-soft" style="--i:4" x="14" y="286" font-size="12.5" font-weight="700">Booking is the general type, so other kinds of booking can come later.</text>
+</InkSvg>
+
+<style>
+  :global(svg.ink-svg.sp-erd) { max-width: 32rem; }
+</style>

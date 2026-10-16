@@ -1,0 +1,188 @@
+---
+// About is the home page: intro + taped-in portrait, a one-line-each list of the
+// work, then how I think, how I work, how I use AI, and a little personality.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TapedImage from '../components/TapedImage.astro';
+import StickyNote from '../components/StickyNote.astro';
+import TapedWorkCards from '../components/TapedWorkCards.astro';
+import Button from '../components/Button.astro';
+import Highlight from '../components/Highlight.astro';
+import InkDivider from '../components/InkDivider.astro';
+import AiLoop from '../components/diagrams/AiLoop.astro';
+import OutdoorsDoodle from '../components/diagrams/OutdoorsDoodle.astro';
+import DeskLamp from '../components/fx/DeskLamp.astro';
+import PeelPortrait from '../components/fx/PeelPortrait.astro';
+import { swoosh } from '../lib/ink';
+
+const heroSources = [{ type: 'image/webp', srcset: '/images/hero-640.webp 640w, /images/hero-960.webp 960w, /images/hero-1280.webp 1280w' }];
+const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /images/hero-1280.jpg 1280w';
+---
+<BaseLayout
+  title="Autumn Willard · Product Manager"
+  description="Autumn Willard is a product manager who builds with AI and checks what’s actually been built. Case studies on finding the real problem, deciding what to build and checking it worked."
+  active="about"
+>
+  <div class="page">
+    <!-- Hero -->
+    <section class="hero" aria-labelledby="hero-h">
+      <DeskLamp />
+      <div class="hero__text">
+        <h1 id="hero-h">Product manager. <span class="hero__h-2">Hands-on builder.</span></h1>
+        <svg class="hero__swoosh draw" viewBox="0 0 420 18" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <path class="ink ink--accent" d={swoosh(4, 11, 410, 33, 4.5)} pathLength="1" />
+        </svg>
+        <p class="hero__lede">I figure out what’s actually broken and fix it, often with AI.</p>
+        <div class="btn-row">
+          <Button variant="primary" href="/work/">See the work →</Button>
+        </div>
+      </div>
+      <div class="hero__art">
+        <PeelPortrait>
+        <TapedImage
+          src="/images/hero-640.jpg"
+          srcset={heroSrcset}
+          sources={heroSources}
+          sizes="(max-width: 760px) 46vw, (max-width: 1280px) 34vw, 420px"
+          alt="Autumn Willard"
+          width={640}
+          height={640}
+          tilt={2.2}
+          loading="eager"
+          fetchpriority="high"
+        />
+        </PeelPortrait>
+      </div>
+    </section>
+
+    <!-- 01. The top three case studies, taped in on index cards -->
+    <section class="sheet-section" aria-labelledby="top-work-h">
+      <span class="margin-mark" aria-hidden="true">01</span>
+      <div class="section-body">
+        <h2 id="top-work-h">A few things I’ve done</h2>
+        <TapedWorkCards />
+      </div>
+    </section>
+
+    <InkDivider seed={44} />
+
+    <!-- 02. How I think -->
+    <section class="sheet-section" aria-labelledby="think-h">
+      <span class="margin-mark" aria-hidden="true">02</span>
+      <div class="section-body think">
+        <h2 id="think-h">How I think</h2>
+        <div class="think__grid">
+          <div>
+            <h3>The complaint tells you where it hurts. Not why.</h3>
+            <p>Most of my best work started with somebody annoyed. At the lab, it was “reviews take forever.” The screening answers that decided who reviewed what were too unreliable to use, so every item got two reviews, just in case. <Highlight>So I went after the bad answers, not the reviewers.</Highlight></p>
+            <p>I take the complaint seriously, then go find the cause. Usually that means walking the system like a brand-new user and checking what the code and data actually say. It rarely means building the first thing someone asked for.</p>
+            <h3>I’d rather be honest than impressive.</h3>
+            <p>If a number is projected, I say projected. If a project hadn’t shipped when I left, I say that up front. And I say “we” when it was we.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <InkDivider seed={52} flourish="arrow" />
+
+    <!-- 03. How I work -->
+    <section class="sheet-section" aria-labelledby="work-h">
+      <span class="margin-mark" aria-hidden="true">03</span>
+      <div class="section-body">
+        <h2 id="work-h">How I work</h2>
+        <h3 class="sub-h">Five habits, in the order I use them</h3>
+        <div class="habits">
+        <ol class="ink-steps">
+          <li><strong>Find the problem behind the complaint.</strong> “My record was submitted, right?” turned out to be a status label that said “New” when nothing had been submitted.</li>
+          <li><strong>Size it with data.</strong> Before I pitch a fix, I want to know how big the problem is: a survey, reviewer comments, ~200 defects in a spreadsheet.</li>
+          <li><strong>Understand the current process before automating it.</strong> Automate a broken process and you just get the same mess, faster.</li>
+          <li><strong>Pick the smallest bet.</strong> Three small UI changes instead of a redesign. A form instead of a core-system feature. Ship the thing that fixes the problem now, and scope the bigger version next.</li>
+          <li><strong>Measure it, even when nobody else is.</strong> When my manager asked for our escaped defect rate, nobody was tracking it. So I built the tracking, then used it to find where the bugs came from.</li>
+        </ol>
+        <StickyNote tilt={2.2} color="yellow" class="habits__note">The smallest bet is usually the one nobody wants to pitch. I pitch it anyway.</StickyNote>
+        </div>
+      </div>
+    </section>
+
+    <InkDivider seed={58} />
+
+    <!-- 04. How I use AI -->
+    <section class="sheet-section" id="ai" aria-labelledby="ai-h">
+      <span class="margin-mark" aria-hidden="true">04</span>
+      <div class="section-body ai">
+        <div>
+          <h2 id="ai-h">How I use AI</h2>
+          <h3 class="sub-h">AI does the legwork. I decide what it’s allowed to touch.</h3>
+          <p>I build AI workflows for my own teams, and I wrote the evaluation plan for an AI that would have to be trusted with regulated content. Same rules either way:</p>
+          <ol class="ink-steps">
+            <li><strong>Do it by hand first, then make it repeatable.</strong> Every workflow I’ve built started as a task I did manually with the AI. The corrections I made along the way became the rules it follows.</li>
+            <li><strong>Keep a human in the loop until the AI earns more.</strong> A new workflow drafts, and I approve. My toolkit now updates tickets itself, but only after test runs showed its edits were right and didn’t break anything else. Where it slipped, I added a rule.</li>
+            <li><strong>Use the source of truth people already maintain.</strong> My capacity report reads the staffing spreadsheet managers already keep, instead of inventing a new one for them to forget.</li>
+            <li><strong>Verify before trusting.</strong> I compare workflows against a no-AI baseline, reconcile dashboards against my own hand counts and check the tracker against the actual code.</li>
+            <li><strong>Keep improving.</strong> Every tool has its own backlog, same as any other product. (One item on mine: a single run that handles the whole release week.)</li>
+          </ol>
+          <p><a class="text-link" href="/side-projects/#this-site">See it in practice: how I ran this site’s AI build →</a></p>
+        </div>
+        <div class="ai__art">
+          <AiLoop />
+        </div>
+      </div>
+    </section>
+
+    <InkDivider seed={63} flourish="arrow" />
+
+    <!-- 05. A little more about me -->
+    <section class="sheet-section" aria-labelledby="me-h">
+      <span class="margin-mark" aria-hidden="true">05</span>
+      <div class="section-body me">
+        <div>
+          <h2 id="me-h">A little more about me</h2>
+          <p>I live in Northwest Arkansas. Off the clock, you’ll usually find me hiking (or just outside), spending time with my kids or reading.</p>
+          <p>I still sketch before I spec, sometimes on the back of a handout during a meeting I didn’t strictly need to pay attention to. (Sorry, whoever was presenting.) And I build things on my own time. <a class="text-link" href="/side-projects/">See the side projects →</a></p>
+        </div>
+        <div class="me__art"><OutdoorsDoodle /></div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.9fr);
+    gap: var(--s3) var(--s4);
+    align-items: center;
+    padding: var(--s3) 0 var(--s4) var(--margin-col);
+  }
+  .hero__text, .hero__art { position: relative; z-index: 1; }
+  .hero h1 { margin-bottom: 0.1rem; }
+  .hero__h-2 { display: block; }
+  .hero__swoosh { width: min(24rem, 90%); height: 16px; overflow: visible; margin-bottom: var(--s2); }
+  .hero__swoosh .ink { stroke-width: 4; }
+  .hero__lede { font-size: var(--step-1); font-weight: 700; line-height: 1.45; }
+  .hero__art { position: relative; padding-top: var(--s2); max-width: 420px; }
+
+  @media (max-width: 760px) {
+    .hero { grid-template-columns: 1fr; padding-left: 0; padding-top: var(--s1); gap: var(--s1); }
+    .hero__art { order: -1; padding-top: 0.75rem; max-width: min(15rem, 62%); }
+  }
+  @media (max-width: 400px) {
+    .hero h1 { font-size: 2.45rem; }
+  }
+
+  /* ---------- Think / work / AI ---------- */
+  .sub-h { font-size: var(--step-1); font-family: var(--font-body); font-weight: 800; color: var(--ink-soft); margin-bottom: var(--s2); }
+  .think h3 { margin-top: var(--s2); }
+  .think__grid { display: grid; grid-template-columns: minmax(0, var(--measure)) minmax(14rem, 19rem); gap: var(--s2) var(--s4); align-items: start; }
+  @media (max-width: 1080px) {
+    .think__grid { grid-template-columns: minmax(0, 1fr); }
+  }
+  .ai { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: var(--s3); align-items: center; }
+  .habits { display: grid; grid-template-columns: minmax(0, var(--measure)) minmax(12rem, 16rem); gap: var(--s2) var(--s4); align-items: start; }
+  .habits :global(.habits__note) { margin-top: var(--s2); }
+  @media (max-width: 1080px) { .habits { grid-template-columns: minmax(0, 1fr); } .habits :global(.habits__note) { margin-top: 0; max-width: 16rem; } }
+  @media (max-width: 900px) { .ai { grid-template-columns: 1fr; } .ai__art { max-width: 26rem; } }
+  .me { display: grid; grid-template-columns: minmax(0, var(--measure)) minmax(12rem, 22rem); gap: var(--s2) var(--s4); align-items: center; }
+  @media (max-width: 900px) { .me { grid-template-columns: minmax(0, 1fr); } .me__art { max-width: 18rem; } }
+</style>

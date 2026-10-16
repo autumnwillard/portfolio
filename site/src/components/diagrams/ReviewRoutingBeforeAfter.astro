@@ -1,0 +1,171 @@
+---
+// review-routing-before-after: two pipes. Before every item gets two reviews, and the third hinges on unreliable answers;
+// proposed, an AI answers the screening questions so each item goes only to the
+// reviews it needs, and low confidence goes to a person. Generic labels only.
+// Wide (side by side) and narrow (stacked) drawings; only one shows at a time.
+import InkSvg from '../InkSvg.astro';
+import { rect, arrow, line } from '../../lib/ink';
+
+const label =
+  'Before: every submitted item went through export-control and classification review, and a third, scientific subject-area review depended on yes/no answers that were often wrong, in both directions. Proposed: an AI answers the screening questions so each item goes only to the reviews it needs, and anything low-confidence goes to a human.';
+
+/* ---------- wide geometry: before panel at x=0, after panel at x=520 ---------- */
+const bA = arrow([[240, 116], [242, 130], [240, 146]], 401, 9);
+const bL = arrow([[226, 214], [200, 248], [100, 266], [88, 296]], 402, 11);
+const bM = arrow([[240, 214], [242, 248], [246, 270], [245, 296]], 408, 11);
+const bR = arrow([[254, 214], [280, 248], [390, 266], [402, 296]], 403, 11);
+const A = 520;
+const aA = arrow([[A + 240, 116], [A + 242, 128], [A + 240, 140]], 404, 9);
+const aB = arrow([[A + 180, 216], [A + 178, 230], [A + 180, 246]], 405, 9);
+const aC = arrow([[A + 180, 300], [A + 178, 318], [A + 172, 338]], 406, 9);
+const aLow = arrow([[A + 400, 216], [A + 412, 262], [A + 404, 304], [A + 396, 338]], 407, 10);
+
+/* ---------- narrow geometry ---------- */
+const N = 460; // after panel offset
+const nA = arrow([[190, 100], [192, 112], [190, 124]], 421, 9);
+const nL = arrow([[176, 190], [140, 214], [74, 226], [64, 248]], 422, 10);
+const nM = arrow([[190, 190], [192, 212], [188, 230], [190, 248]], 428, 10);
+const nR = arrow([[204, 190], [240, 214], [306, 226], [316, 248]], 423, 10);
+const nB = arrow([[190, N + 54], [192, N + 66], [190, N + 78]], 424, 9);
+const nC = arrow([[140, N + 156], [138, N + 168], [140, N + 182]], 425, 9);
+const nD = arrow([[140, N + 236], [138, N + 250], [140, N + 264]], 426, 9);
+const nLow = arrow([[318, N + 156], [336, N + 200], [338, N + 240], [330, N + 266]], 427, 10);
+---
+<div class="routing-ba">
+  <InkSvg viewBox="0 0 1000 470" label={label} class="only-wide">
+    <!-- ===== Before ===== -->
+    <text class="ink-text ink-fade" style="--i:0" x="20" y="38" font-size="32">Before</text>
+    <path class="ink" style="--i:0" d={rect(140, 62, 200, 50, 410)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:0" x="240" y="94" font-size="22" text-anchor="middle">Submitted item</text>
+    <path class="ink" style="--i:1" d={bA.shaft + ' ' + bA.head} pathLength="1" />
+
+    <path class="ink" style="--i:2" d={rect(90, 150, 300, 60, 411)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:2" x="210" y="188" font-size="22" text-anchor="middle">Yes/no screening answers</text>
+    <g transform="translate(418 168) rotate(-8)">
+      <path class="ink ink--accent" style="--i:3" d={rect(-22, -24, 44, 46, 412, 1.2)} pathLength="1" />
+      <text class="ink-text ink-text--accent ink-fade" style="--i:3" x="0" y="13" font-size="36" text-anchor="middle">?</text>
+    </g>
+    <text class="ink-text ink-text--accent ink-fade" style="--i:4" x="418" y="222" font-size="21" text-anchor="middle">unreliable</text>
+
+    <path class="ink ink--bold" style="--i:5" d={bL.shaft + ' ' + bL.head} pathLength="1" />
+    <path class="ink ink--bold" style="--i:5" d={bM.shaft + ' ' + bM.head} pathLength="1" />
+    <path class="ink ink--bold" style="--i:5" d={bR.shaft + ' ' + bR.head} pathLength="1" />
+    <path class="ink" style="--i:6" d={rect(10, 302, 150, 62, 413)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:6" x="85" y="329" font-size="21" text-anchor="middle">Export-control</text>
+    <text class="ink-text ink-fade" style="--i:6" x="85" y="353" font-size="21" text-anchor="middle">review</text>
+    <path class="ink" style="--i:6.3" d={rect(170, 302, 150, 62, 414)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:6.3" x="245" y="329" font-size="21" text-anchor="middle">Classification</text>
+    <text class="ink-text ink-fade" style="--i:6.3" x="245" y="353" font-size="21" text-anchor="middle">review</text>
+    <path class="ink" style="--i:6.6" d={rect(330, 302, 150, 62, 416)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:6.6" x="405" y="329" font-size="21" text-anchor="middle">Subject-area</text>
+    <text class="ink-text ink-fade" style="--i:6.6" x="405" y="353" font-size="21" text-anchor="middle">review?</text>
+    <text class="ink-text ink-text--accent ink-fade" style="--i:7" x="20" y="408" font-size="24">every item: two reviews. The third: a guess.</text>
+
+    <!-- divider -->
+    <path class="ink ink--faint" style="--i:4" d={line(498, 20, 500, 450, 415, 1.4)} pathLength="1" />
+
+    <!-- ===== Proposed ===== -->
+    <text class="ink-text ink-fade" style="--i:8" x={A + 20} y="38" font-size="32">Proposed</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:8" x={A + 152} y="36" font-size="14" font-weight="800" letter-spacing="1">· NOT SHIPPED</text>
+    <path class="ink" style="--i:8" d={rect(A + 140, 62, 200, 50, 420)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:8" x={A + 240} y="94" font-size="22" text-anchor="middle">Submitted item</text>
+    <path class="ink" style="--i:9" d={aA.shaft + ' ' + aA.head} pathLength="1" />
+
+    <path class="ink ink--bold" style="--i:10" d={rect(A + 30, 144, 420, 70, 421)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:10" x={A + 240} y="174" font-size="22" text-anchor="middle">AI reads the document,</text>
+    <text class="ink-text ink-fade" style="--i:10" x={A + 240} y="200" font-size="22" text-anchor="middle">answers the screening questions</text>
+    <path class="ink" style="--i:11" d={aB.shaft + ' ' + aB.head} pathLength="1" />
+
+    <path class="ink" style="--i:12" d={rect(A + 60, 250, 240, 48, 422)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:12" x={A + 180} y="281" font-size="22" text-anchor="middle">Existing routing rules</text>
+    <path class="ink" style="--i:13" d={aC.shaft + ' ' + aC.head} pathLength="1" />
+
+    <path class="ink" style="--i:14" d={rect(A + 40, 342, 250, 62, 423)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:14" x={A + 165} y="369" font-size="21" text-anchor="middle">Only the review(s)</text>
+    <text class="ink-text ink-fade" style="--i:14" x={A + 165} y="393" font-size="21" text-anchor="middle">it needs</text>
+
+    <!-- low-confidence side channel -->
+    <path class="ink ink--accent" style="--i:15" d={aLow.shaft + ' ' + aLow.head} pathLength="1" />
+    <text class="ink-text ink-text--accent ink-fade" style="--i:15" x={A + 422} y="262" font-size="18">low</text>
+    <text class="ink-text ink-text--accent ink-fade" style="--i:15" x={A + 422} y="282" font-size="18">confidence</text>
+    <rect class="ink-fade fill-hl" style="--i:16" x={A + 332} y="356" width="134" height="40" rx="6" fill-opacity="0.9" transform={`rotate(-1.5 ${A + 400} 376)`} />
+    <path class="ink" style="--i:16" d={rect(A + 320, 342, 158, 62, 424)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:16" x={A + 399} y="382" font-size="22" text-anchor="middle">A human decides</text>
+
+    <!-- corner tag -->
+    <g transform={`translate(${A + 228} 424) rotate(-2)`}>
+      <path class="ink ink--faint" style="--i:17" d={rect(0, 0, 250, 30, 425, 0.8)} pathLength="1" />
+      <text class="ink-sans ink-fade fill-soft" style="--i:17" x="125" y="20" font-size="13" text-anchor="middle">runs entirely on internal infrastructure</text>
+    </g>
+  </InkSvg>
+
+  <InkSvg viewBox="0 0 380 846" label={label} class="only-narrow">
+    <!-- ===== Before ===== -->
+    <text class="ink-text ink-fade" style="--i:0" x="10" y="32" font-size="30">Before</text>
+    <path class="ink" style="--i:0" d={rect(100, 48, 180, 48, 430)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:0" x="190" y="79" font-size="21" text-anchor="middle">Submitted item</text>
+    <path class="ink" style="--i:1" d={nA.shaft + ' ' + nA.head} pathLength="1" />
+
+    <path class="ink" style="--i:2" d={rect(30, 128, 270, 58, 431)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:2" x="165" y="164" font-size="21" text-anchor="middle">Yes/no screening answers</text>
+    <g transform="translate(338 146) rotate(-8)">
+      <path class="ink ink--accent" style="--i:3" d={rect(-18, -20, 36, 38, 432, 1.1)} pathLength="1" />
+      <text class="ink-text ink-text--accent ink-fade" style="--i:3" x="0" y="11" font-size="30" text-anchor="middle">?</text>
+    </g>
+    <text class="ink-text ink-text--accent ink-fade" style="--i:4" x="340" y="196" font-size="18" text-anchor="middle">unreliable</text>
+
+    <path class="ink ink--bold" style="--i:5" d={nL.shaft + ' ' + nL.head} pathLength="1" />
+    <path class="ink ink--bold" style="--i:5" d={nM.shaft + ' ' + nM.head} pathLength="1" />
+    <path class="ink ink--bold" style="--i:5" d={nR.shaft + ' ' + nR.head} pathLength="1" />
+    <path class="ink" style="--i:6" d={rect(4, 254, 120, 60, 433)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:6" x="64" y="280" font-size="18" text-anchor="middle">Export-control</text>
+    <text class="ink-text ink-fade" style="--i:6" x="64" y="303" font-size="18" text-anchor="middle">review</text>
+    <path class="ink" style="--i:6.3" d={rect(130, 254, 120, 60, 434)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:6.3" x="190" y="280" font-size="18" text-anchor="middle">Classification</text>
+    <text class="ink-text ink-fade" style="--i:6.3" x="190" y="303" font-size="18" text-anchor="middle">review</text>
+    <path class="ink" style="--i:6.6" d={rect(256, 254, 120, 60, 436)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:6.6" x="316" y="280" font-size="18" text-anchor="middle">Subject-area</text>
+    <text class="ink-text ink-fade" style="--i:6.6" x="316" y="303" font-size="18" text-anchor="middle">review?</text>
+    <text class="ink-text ink-text--accent ink-fade" style="--i:7" x="10" y="352" font-size="22">two reviews always. The third: a guess.</text>
+
+    <path class="ink ink--faint" style="--i:7" d={line(10, 384, 370, 386, 435, 1.4)} pathLength="1" />
+
+    <!-- ===== Proposed ===== -->
+    <text class="ink-text ink-fade" style="--i:8" x="10" y={N - 32} font-size="30">Proposed</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:8" x="132" y={N - 34} font-size="13" font-weight="800" letter-spacing="1">· NOT SHIPPED</text>
+    <path class="ink" style="--i:8" d={rect(100, N - 2, 180, 48, 440)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:8" x="190" y={N + 29} font-size="21" text-anchor="middle">Submitted item</text>
+    <path class="ink" style="--i:9" d={nB.shaft + ' ' + nB.head} pathLength="1" />
+
+    <path class="ink ink--bold" style="--i:10" d={rect(10, N + 82, 360, 70, 441)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:10" x="190" y={N + 112} font-size="21" text-anchor="middle">AI reads the document,</text>
+    <text class="ink-text ink-fade" style="--i:10" x="190" y={N + 137} font-size="21" text-anchor="middle">answers the screening questions</text>
+    <path class="ink" style="--i:11" d={nC.shaft + ' ' + nC.head} pathLength="1" />
+
+    <path class="ink" style="--i:12" d={rect(20, N + 186, 230, 48, 442)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:12" x="135" y={N + 217} font-size="21" text-anchor="middle">Existing routing rules</text>
+    <path class="ink" style="--i:13" d={nD.shaft + ' ' + nD.head} pathLength="1" />
+
+    <path class="ink" style="--i:14" d={rect(20, N + 268, 210, 60, 443)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:14" x="125" y={N + 294} font-size="20" text-anchor="middle">Only the review(s)</text>
+    <text class="ink-text ink-fade" style="--i:14" x="125" y={N + 317} font-size="20" text-anchor="middle">it needs</text>
+
+    <path class="ink ink--accent" style="--i:15" d={nLow.shaft + ' ' + nLow.head} pathLength="1" />
+    <text class="ink-text ink-text--accent ink-fade" style="--i:15" x="322" y={N + 196} font-size="17" text-anchor="end">low</text>
+    <text class="ink-text ink-text--accent ink-fade" style="--i:15" x="322" y={N + 215} font-size="17" text-anchor="end">confidence</text>
+    <rect class="ink-fade fill-hl" style="--i:16" x="256" y={N + 280} width="108" height="38" rx="6" fill-opacity="0.9" transform={`rotate(-1.5 310 ${N + 298})`} />
+    <path class="ink" style="--i:16" d={rect(248, N + 268, 122, 60, 444)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:16" x="309" y={N + 294} font-size="20" text-anchor="middle">A human</text>
+    <text class="ink-text ink-fade" style="--i:16" x="309" y={N + 317} font-size="20" text-anchor="middle">decides</text>
+
+    <g transform={`translate(40 ${N + 348}) rotate(-1.5)`}>
+      <path class="ink ink--faint" style="--i:17" d={rect(0, 0, 300, 30, 445, 0.8)} pathLength="1" />
+      <text class="ink-sans ink-fade fill-soft" style="--i:17" x="150" y="20" font-size="13.5" text-anchor="middle">runs entirely on internal infrastructure</text>
+    </g>
+  </InkSvg>
+</div>
+
+<style>
+  .routing-ba { max-width: 1000px; }
+  .routing-ba :global(.only-narrow) { max-width: 440px; }
+</style>

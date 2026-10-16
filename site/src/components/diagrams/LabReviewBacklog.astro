@@ -1,0 +1,121 @@
+---
+// lab-review-system-backlog-board: the prioritized board. On wide screens the
+// corkboard sketch replaces the pain → fix table visually (the table stays for
+// screen readers); on narrow screens the table shows and the board is hidden.
+import InkSvg from '../InkSvg.astro';
+import { rect, swoosh } from '../../lib/ink';
+
+const label =
+  'A backlog board: two bigger fixes for incomplete records and self-serve help, plus eight small fixes, each labeled with the user pain it removed, such as an Unclaim button so reviewers no longer needed an admin.';
+
+const rows = [
+  { pain: 'Uploads kept failing with confusing errors', fix: "Cut the max attachment size from 2GB to 120MB to match a federal repository’s requirements" },
+  { pain: 'Reviewers who claimed the wrong record needed an admin to undo it', fix: 'An “Unclaim” button' },
+  { pain: "Alternate owners got assigned as peer reviewers and couldn’t finish", fix: 'Blocked alternate owners from being added as reviewers' },
+  { pain: 'Action buttons hid off-screen', fix: 'Moved the action buttons to the left' },
+  { pain: 'Lost users had no quick way to find help', fix: 'A help page link in the navigation bar' },
+  { pain: 'My team manually checked released documents against the reviewed ones', fix: "A required checkbox in the release tool’s attachments tab" },
+  { pain: 'Managers wanted more detail on conference output', fix: 'Conference subtypes' },
+  { pain: 'Recently edited records were hard to find', fix: 'Sort the queue by “Date Last Modified”' },
+];
+
+const notes = [
+  { fix: ['120MB upload limit'], pain: 'uploads stop failing' },
+  { fix: ['Unclaim button'], pain: 'no admin to undo' },
+  { fix: ['Block alternate', 'owners as reviewers'], pain: 'no stuck reviews' },
+  { fix: ['Buttons on the left'], pain: 'no scroll hunt' },
+  { fix: ['Help link in the nav'], pain: 'lost users find help' },
+  { fix: ['Required “matches', 'the review”', 'checkbox'], pain: 'less manual checking' },
+  { fix: ['Conference subtypes'], pain: 'managers see detail' },
+  { fix: ['Sort by Date', 'Last Modified'], pain: 'find recent work' },
+];
+// sticky-note colours (classes in global.css, so they follow the theme)
+const colors = ['yellow', 'blue', 'green', 'pink', 'peach', 'yellow', 'green', 'blue'].map((c) => `fill-sticky-${c}`);
+const tilts = [-2, 1.5, -1, 2.2, 1.2, -1.8, 2, -1.2];
+const NW = 214, NH = 128;
+const nx = (i: number) => 34 + (i % 4) * 236;
+const ny = (i: number) => 238 + Math.floor(i / 4) * 154;
+---
+<div class="lrs-board">
+  <InkSvg viewBox="0 0 1000 560" label={label} class="lrs-board__art">
+    <path class="ink ink--bold" style="--i:0" d={rect(8, 8, 984, 544, 601, 1.6)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:0" x="34" y="56" font-size="30">Ranked by user feedback + how often it came up.</text>
+    <path class="ink ink--accent" style="--i:1" d={swoosh(34, 70, 600, 602, 3)} pathLength="1" />
+
+    {[
+      { x: 34, lines: ['Incomplete records:', '3 small changes'], t: -1 },
+      { x: 520, lines: ['Self-serve help,', 'built with a co-worker'], t: 1 },
+    ].map((c, k) => (
+      <g class="on-paper" transform={`rotate(${c.t} ${c.x + 220} 150)`}>
+        <rect class="ink-fade fill-card stroke-rule" style={`--i:${2 + k * 0.5}`} x={c.x} y="94" width="446" height="110" stroke-width="1.2" />
+        <path class="ink" style={`--i:${2 + k * 0.5};stroke:var(--accent);stroke-opacity:0.55;stroke-width:1.6`} d={`M${c.x + 4} 132 L${c.x + 442} 132`} pathLength="1" />
+        <text class="ink-text ink-fade" style={`--i:${2 + k * 0.5}`} x={c.x + 20} y="122" font-size="28">{c.lines[0]}</text>
+        <text class="ink-text ink-fade" style={`--i:${2 + k * 0.5}`} x={c.x + 20} y="170" font-size="28">{c.lines[1]}</text>
+      </g>
+    ))}
+
+    {notes.map((n, i) => (
+      <g class="on-paper" transform={`rotate(${tilts[i]} ${nx(i) + NW / 2} ${ny(i) + NH / 2})`}>
+        <rect class="ink-fade fill-shadow" style={`--i:${3.5 + i * 0.35}`} x={nx(i) + 3} y={ny(i) + 6} width={NW} height={NH} fill-opacity="0.12" />
+        <rect class:list={['ink-fade', colors[i]]} style={`--i:${3.5 + i * 0.35}`} x={nx(i)} y={ny(i)} width={NW} height={NH} />
+        {n.fix.map((t, k) => (
+          <text class="ink-text ink-fade" style={`--i:${3.5 + i * 0.35}`} x={nx(i) + 14} y={ny(i) + 36 + k * 27} font-size="23">{t}</text>
+        ))}
+        <text class="ink-sans ink-fade fill-soft" style={`--i:${3.5 + i * 0.35}`} x={nx(i) + 14} y={ny(i) + NH - 16} font-size="15" font-weight="700">→ {n.pain}</text>
+      </g>
+    ))}
+  </InkSvg>
+
+  <div class="lrs-fixes-wrap">
+  <table class="lrs-fixes">
+    <caption class="visually-hidden">Small fixes, each matched to the user pain it removed</caption>
+    <thead>
+      <tr><th scope="col">The pain</th><th scope="col">The fix</th></tr>
+    </thead>
+    <tbody>
+      {rows.map((r) => <tr><td>{r.pain}</td><td>{r.fix}</td></tr>)}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<style>
+  .lrs-board { max-width: 1000px; }
+  .lrs-fixes {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    line-height: 1.45;
+  }
+  .lrs-fixes th {
+    text-align: left;
+    font: 800 0.8rem/1.2 var(--font-body);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding: 0 0.8rem 0.5rem 0;
+    border-bottom: 2.5px solid var(--ink);
+  }
+  .lrs-fixes td {
+    vertical-align: top;
+    padding: 0.7rem 0.8rem 0.7rem 0;
+    border-bottom: 1.5px dashed var(--ink-faint);
+  }
+  .lrs-fixes td:first-child { width: 48%; }
+  .lrs-fixes td:last-child { font-weight: 700; }
+
+  /* wide: the board stands in for the table (kept for screen readers). The wrapper is
+     what’s hidden: a table won’t shrink to 1px, so hiding the table itself overflowed. */
+  @media (min-width: 681px) {
+    .lrs-fixes-wrap {
+      position: absolute !important;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0 0 0 0);
+      white-space: nowrap; border: 0;
+    }
+  }
+  @media (max-width: 680px) {
+    .lrs-board :global(.lrs-board__art) { display: none; }
+  }
+</style>

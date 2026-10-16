@@ -1,0 +1,19 @@
+// Cloudflare Workers (static assets only): serves the Astro build in dist/.
+// Two Workers, one per branch, each matching a Worker in the Cloudflare dashboard:
+//   portfolio             dev branch     → dev.autumnwillard.com   (npx wrangler deploy)
+//   portfolio-production  master branch  → autumnwillard.com, www  (npx wrangler deploy --env production)
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "portfolio",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  },
+  "env": {
+    "production": {
+      "name": "portfolio-production"
+    }
+  }
+}

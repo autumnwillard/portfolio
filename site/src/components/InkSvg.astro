@@ -1,0 +1,27 @@
+---
+// Wrapper for inline ink drawings. With a label it is a meaningful image
+// (role="img" + <title>); without one it is decorative and hidden from AT.
+interface Props {
+  viewBox: string;
+  label?: string;
+  class?: string;
+  draw?: boolean;
+  style?: string;
+}
+const { viewBox, label, class: cls = '', draw = true, style } = Astro.props;
+const id = `ink-${Math.random().toString(36).slice(2, 9)}`;
+---
+{label ? (
+  <svg viewBox={viewBox} class:list={['ink-svg', draw && 'draw', cls]} role="img" aria-labelledby={id} focusable="false" style={style}>
+    <title id={id}>{label}</title>
+    <slot />
+  </svg>
+) : (
+  <svg viewBox={viewBox} class:list={['ink-svg', draw && 'draw', cls]} aria-hidden="true" focusable="false" style={style}>
+    <slot />
+  </svg>
+)}
+
+<style>
+  .ink-svg { width: 100%; height: auto; overflow: visible; }
+</style>

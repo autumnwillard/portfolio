@@ -1,0 +1,35 @@
+---
+// An index flag (a Post-it page flag): a coloured flag with a translucent film strip on
+// its left end, the part that sticks. Primary is coral, secondary is blue; `color`
+// overrides either (coral, blue, green, yellow) so pages with many flags can mix them.
+// Clicking a link flag flips it over like a turned page (see scripts/site.ts).
+// On hover/focus the free right end lifts off the page as if you’re about to turn a page
+// with it; on press it squishes flat to the page. Reduced motion: a static lifted shadow only.
+// Renders <a> when href is given, otherwise <button>. Extra attributes pass through.
+interface Props {
+  href?: string;
+  variant?: 'primary' | 'secondary';
+  size?: 'md' | 'sm';
+  color?: 'coral' | 'blue' | 'green' | 'yellow';
+  type?: 'button' | 'submit';
+  class?: string;
+  [key: string]: unknown;
+}
+const { href, variant = 'secondary', size = 'md', color, type = 'button', class: cls = '', ...rest } = Astro.props;
+const label = await Astro.slots.render('default');
+
+// A stable, slightly different tilt per label so a row of flags isn’t uniform.
+let seed = 7;
+for (const ch of label) seed = (seed * 31 + ch.charCodeAt(0)) % 9973;
+const tilt = (((seed % 7) - 3) * 0.35).toFixed(2);
+const Tag = href ? 'a' : 'button';
+---
+<Tag
+  class:list={['btn', `btn--${variant}`, color && `btn--${color}`, size === 'sm' && 'btn--sm', cls]}
+  href={href}
+  type={href ? undefined : type}
+  style={`--flag-tilt:${tilt}deg`}
+  {...rest}
+>
+  <span class="btn__label btn__text"><Fragment set:html={label} /></span>
+</Tag>

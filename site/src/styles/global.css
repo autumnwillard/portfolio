@@ -1,0 +1,686 @@
+@import './tokens.css';
+
+/* ---------- Base ---------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+/* The desk. On wide screens it shows at the sides of the one long sheet of paper. */
+html { background: var(--desk); }
+
+/* Graph-grid paper: one long sheet that scrolls with the content (no fixed layers).
+   The header, page and footer all sit on it, so the grid never seams. */
+.paper-grid {
+  background-color: var(--paper);
+  background-image: var(--tooth), var(--grid-tile);
+  background-size: 220px 220px, var(--grid-tile-size) var(--grid-tile-size);
+  background-position: 0 0, -1px -1px;
+}
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: var(--step-0);
+  line-height: var(--leading);
+  font-weight: 400;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg, picture { display: block; max-width: 100%; height: auto; }
+/* Photos and screenshots dim a touch in dark mode so they don't glare (--img-filter). */
+img:not([src$='.svg']) { filter: var(--img-filter); }
+
+/* ---------- Paper objects ----------
+   Sticky notes, index cards, flag buttons and anything marked .on-paper (including groups
+   inside SVG diagrams) are light paper in both themes, so the ink on them stays dark.
+   In light mode these values equal the page's own; in dark mode they swap the pale
+   blueprint ink back to pen ink. */
+.sticky, .index-card, .btn, .on-paper {
+  --ink: var(--paper-ink);
+  --ink-soft: var(--paper-ink-soft);
+  --ink-faint: var(--paper-ink-faint);
+  --rule: var(--paper-rule);
+  --accent: var(--paper-accent);
+  --accent-ink: var(--paper-accent-ink);
+  --paper: var(--card);
+  --paper-scrap: var(--card);
+  --squiggle: var(--squiggle-paper);
+  --squiggle-strong: var(--squiggle-paper-strong);
+  --bullet-arrow: var(--bullet-arrow-paper);
+  --hl-diagram: var(--hl);
+  color: var(--ink);
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-hand);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: 0.005em;
+  margin: 0 0 var(--s1);
+  text-wrap: balance;
+}
+h1 { font-size: var(--step-4); }
+h2 { font-size: var(--step-3); }
+h3 { font-size: var(--step-2); }
+h4 { font-size: var(--step-1); }
+
+p { margin: 0 0 var(--s1); max-width: var(--measure); text-wrap: pretty; }
+strong { font-weight: 800; }
+
+/* ---------- Links ----------
+   Rest: a thin hand-drawn wavy underline (tiled SVG, wraps across lines).
+   Hover/focus: a real highlighter stroke on just the text: a light coral band from about
+   x-height to just under the baseline, with soft irregular ends, dragged in left to right.
+   box-decoration-break: clone gives each wrapped line its own stroke. Nothing opaque sits
+   behind the words, so the grid shows through. Ink on the band stays ≥ 11:1. */
+a { color: var(--ink); text-decoration: none; }
+a:where(:not(.btn, .tab, .logo, .skip-link, .scrap__link, .card__link, .tcard__link, :has(.link-text))),
+.link-text {
+  --link-under: var(--squiggle);
+  background-image:
+    var(--link-under),
+    linear-gradient(97deg,
+      rgb(224 74 50 / 0) 0, var(--link-hl) 0.22em, var(--link-hl-2) 45%,
+      var(--link-hl) calc(100% - 0.3em), rgb(224 74 50 / 0) 100%),
+    linear-gradient(-3deg, rgb(224 74 50 / 0) 30%, var(--link-hl-edge) 50%, rgb(224 74 50 / 0) 70%);
+  background-repeat: repeat-x, no-repeat, no-repeat;
+  background-size: 22px 6px, 0% 0.66em, 0% 0.26em;
+  background-position: 0 100%, 0 0.56em, 0.15em 0.44em;
+  padding: 0 0.12em 5px;
+  margin: 0 -0.12em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: background-size 420ms cubic-bezier(0.3, 0.6, 0.35, 1);
+}
+a:where(:not(.btn, .tab, .logo, .skip-link, .scrap__link, .card__link, .tcard__link, :has(.link-text))):hover,
+a:where(:not(.btn, .tab, .logo, .skip-link, .scrap__link, .card__link, .tcard__link, :has(.link-text))):focus-visible,
+a:hover > .link-text,
+a:focus-visible > .link-text {
+  --link-under: var(--squiggle-strong);
+  background-size: 22px 6px, 100% 0.66em, 92% 0.26em;
+}
+
+/* Links that are boxes (icon + label, tall tap targets): the underline and highlighter
+   go on the label span, so the band sits on the text rather than the box. */
+.link-text { display: inline; }
+
+/* Card titles (Work cards, About index cards): no hover effect; the whole card and its
+   button carry the affordance. Keyboard focus is shown on the card itself. */
+
+@media (prefers-reduced-motion: reduce) {
+  a, a:hover, a:focus-visible { animation: none !important; transition: none !important; }
+}
+
+/* Hand-drawn focus ring, everywhere */
+:focus-visible {
+  outline: 2.5px solid var(--accent-ink);
+  outline-offset: 4px;
+  border-radius: var(--wobble-radius);
+}
+
+::selection { background: var(--hl); color: var(--hl-ink); }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: var(--gutter);
+  top: -100px;
+  z-index: 100;
+  background: var(--paper-scrap);
+  padding: var(--s0) var(--s1);
+  border: 2px solid var(--ink);
+  border-radius: var(--wobble-radius);
+  font-weight: 700;
+}
+.skip-link:focus { top: var(--s0); }
+
+/* ---------- Highlighter (==text==): classic yellow, chisel-tip swipe ---------- */
+mark.hl {
+  color: var(--hl-ink);
+  background-color: transparent;
+  background-image: linear-gradient(100deg,
+    var(--hl-fade) 0.1em,
+    var(--hl-soft) 0.35em,
+    var(--hl) 55%,
+    var(--hl-soft) calc(100% - 0.35em),
+    var(--hl-fade) calc(100% - 0.05em));
+  background-size: 100% 80%;
+  background-position: 0 72%;
+  background-repeat: no-repeat;
+  padding: 0 0.22em;
+  margin: 0 -0.1em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* ---------- Sticky note paper (asides, proof strip) ----------
+   A real Post-it sits flat along its adhesive top edge and its bottom edge lifts off the
+   page. That is drawn with shadows only (no curl shape): a tight contact shadow at the
+   top, and a softer, larger shadow that grows toward the bottom and drops downward.
+   Per note:  --lift-at-rest  how far the bottom edge lifts (0 = flat, 1 = normal, 1.6 = a lot)
+              --bias  which bottom corner lifts more (-1 = left, 0 = even, 1 = right)
+   The face is painted by ::before, behind the content, inside the note's own stacking
+   context. */
+@property --lift { syntax: '<number>'; inherits: true; initial-value: 1; }
+.sticky {
+  --sticky: var(--sticky-yellow);
+  --lift-at-rest: 1;
+  --lift: var(--lift-at-rest);
+  --bias: 0;
+  position: relative;
+  isolation: isolate;
+  background: none;
+}
+.sticky::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background:
+    /* adhesive band across the top: a touch darker, fading out at its lower edge */
+    linear-gradient(rgb(70 50 20 / 0.075), rgb(70 50 20 / 0.06) 80%, rgb(70 50 20 / 0)) top / 100% 17% no-repeat,
+    /* the lower part tips toward the viewer and catches a little less light */
+    linear-gradient(180deg, transparent 55%, rgb(90 70 40 / calc(0.025 + var(--lift) * 0.03)) 100%),
+    var(--sticky);
+  border-radius: 1px;
+  box-shadow:
+    /* contact: the stuck-down top edge */
+    0 0.5px 1px rgb(var(--shadow) / 0.22),
+    /* the lifted bottom edge: offset down (and toward the lifted corner), spread pulled in
+       so it never shows above the note */
+    calc(var(--bias) * var(--lift) * 3px) calc(var(--lift) * 7px) calc(var(--lift) * 10px) calc(var(--lift) * -4px) rgb(var(--shadow) / 0.32),
+    calc(var(--bias) * var(--lift) * 6px) calc(var(--lift) * 14px) calc(var(--lift) * 18px) calc(var(--lift) * -10px) rgb(var(--shadow) / 0.22);
+  pointer-events: none;
+}
+/* Hover/focus: the note lifts a little further and turns a hair; its shadow grows. */
+@media (prefers-reduced-motion: no-preference) {
+  .sticky.sticky { transition: transform var(--lift-time) var(--ease-lift), --lift var(--lift-time) var(--ease-lift); }
+  .sticky.sticky:hover,
+  .sticky.sticky:focus-within {
+    --lift: calc(var(--lift-at-rest, 1) + 0.6);
+    transform: translateY(-4px) rotate(calc(var(--tilt, 0deg) - 0.7deg));
+  }
+}
+.sticky--yellow { --sticky: var(--sticky-yellow); }
+.sticky--pink { --sticky: var(--sticky-pink); }
+.sticky--green { --sticky: var(--sticky-green); }
+.sticky--peach { --sticky: var(--sticky-peach); }
+.sticky--blue { --sticky: var(--sticky-blue); }
+
+/* ---------- Washi / masking tape ----------
+   Translucent strips with torn ends, for things taped onto the page (index cards).
+   Sticky notes never get tape. Set per piece: --len (length), --rot (angle) and the
+   position (top/left/right). Patterns: --plain (masking), --stripes, --dots, --check. */
+.washi {
+  --len: 6rem;
+  --rot: -3deg;
+  position: absolute;
+  z-index: 3;
+  width: var(--len);
+  height: 1.55rem;
+  rotate: var(--rot);
+  background-color: var(--washi-base, var(--washi-plain));
+  mix-blend-mode: var(--washi-blend);
+  /* torn, slightly jagged ends */
+  clip-path: polygon(2% 0, 98% 3%, 96% 18%, 99.5% 36%, 96% 54%, 99.5% 72%, 96.5% 88%, 98.5% 100%, 1.5% 97%, 4% 84%, 0.5% 66%, 4% 48%, 0.5% 30%, 3.5% 13%);
+  box-shadow: 0 1px 2px rgb(var(--shadow) / 0.1);
+  pointer-events: none;
+}
+.washi--plain { --washi-base: var(--washi-plain); background-image: repeating-linear-gradient(90deg, transparent 0 6px, rgb(255 255 255 / 0.12) 6px 7px); }
+.washi--stripes { --washi-base: var(--washi-stripes); background-image: repeating-linear-gradient(90deg, transparent 0 5px, var(--washi-stripe-line) 5px 7px); }
+.washi--dots { --washi-base: var(--washi-dots); background-image: radial-gradient(circle, rgb(255 255 255 / 0.7) 1.3px, transparent 1.8px); background-size: 8px 8px; }
+.washi--check { --washi-base: var(--washi-check); background-image: linear-gradient(rgb(90 130 90 / 0.18) 1px, transparent 1px), linear-gradient(90deg, rgb(90 130 90 / 0.18) 1px, transparent 1px); background-size: 6px 6px; }
+
+/* ---------- Lined index card (shared by asides and short work cards) ---------- */
+.index-card {
+  position: relative;
+  background-color: var(--card);
+  /* coral header rule, then pale blue writing lines */
+  background-image:
+    linear-gradient(transparent calc(var(--card-head, 3.4rem) - 2px), rgb(224 74 50 / 0.55) calc(var(--card-head, 3.4rem) - 2px), rgb(224 74 50 / 0.55) var(--card-head, 3.4rem), transparent var(--card-head, 3.4rem)),
+    repeating-linear-gradient(transparent 0 calc(var(--card-pitch) - 1px), var(--card-line) calc(var(--card-pitch) - 1px) var(--card-pitch));
+  background-position: 0 0, 0 calc(var(--card-head, 3.4rem) + 0.15rem);
+  background-repeat: no-repeat;
+  background-size: 100% 100%, 100% calc(100% - var(--card-head, 3.4rem) - 0.15rem);
+  padding: 1.1rem 1.3rem 1.2rem;
+  box-shadow: var(--paper-lift);
+  border-radius: 2px;
+}
+
+/* Dark (blueprint): index cards are drawn on the blueprint rather than taped-on paper.
+   A lighter-blue card with a crisp pale edge, pale ruled lines, white ink and a coral
+   header rule, lifted off the page by a navy shadow. The theme switch (an index-card tab)
+   matches. Same selectors twice: the OS-dark one and the explicit Dark choice. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) :is(.index-card, .theme-switch) {
+    --card: var(--bp-card);
+    --card-line: var(--bp-card-line);
+    --ink: var(--bp-card-ink);
+    --ink-soft: var(--bp-card-ink-soft);
+    --ink-faint: var(--bp-card-ink-faint);
+    --rule: var(--bp-card-rule);
+    --accent: var(--bp-card-accent);
+    --accent-ink: var(--bp-card-accent-ink);
+    --squiggle: var(--bp-card-squiggle);
+    --squiggle-strong: var(--bp-card-squiggle-strong);
+    --bullet-arrow: var(--bp-card-bullet);
+    background-color: var(--bp-card);
+    outline: 1.5px solid var(--bp-card-edge);
+    outline-offset: -1.5px;
+    box-shadow: 0 1px 2px rgb(var(--shadow) / 0.35), 0 14px 26px -12px rgb(var(--shadow) / 0.7);
+  }
+  :root:not([data-theme="light"]) .index-card {
+    background-image:
+      linear-gradient(transparent calc(var(--card-head, 3.4rem) - 2px), var(--bp-card-head) calc(var(--card-head, 3.4rem) - 2px), var(--bp-card-head) var(--card-head, 3.4rem), transparent var(--card-head, 3.4rem)),
+      repeating-linear-gradient(transparent 0 calc(var(--card-pitch) - 1px), var(--card-line) calc(var(--card-pitch) - 1px) var(--card-pitch));
+  }
+  :root:not([data-theme="light"]) .index-card.index-card h4 { border-bottom-color: var(--bp-card-head); }
+  :root:not([data-theme="light"]) .theme-switch {
+    background-image: linear-gradient(transparent 3px, var(--bp-card-head) 3px, var(--bp-card-head) 4.5px, transparent 4.5px);
+  }
+}
+:root[data-theme="dark"] :is(.index-card, .theme-switch) {
+  --card: var(--bp-card);
+  --card-line: var(--bp-card-line);
+  --ink: var(--bp-card-ink);
+  --ink-soft: var(--bp-card-ink-soft);
+  --ink-faint: var(--bp-card-ink-faint);
+  --rule: var(--bp-card-rule);
+  --accent: var(--bp-card-accent);
+  --accent-ink: var(--bp-card-accent-ink);
+  --squiggle: var(--bp-card-squiggle);
+  --squiggle-strong: var(--bp-card-squiggle-strong);
+  --bullet-arrow: var(--bp-card-bullet);
+  background-color: var(--bp-card);
+  outline: 1.5px solid var(--bp-card-edge);
+  outline-offset: -1.5px;
+  box-shadow: 0 1px 2px rgb(var(--shadow) / 0.35), 0 14px 26px -12px rgb(var(--shadow) / 0.7);
+}
+:root[data-theme="dark"] .index-card {
+  background-image:
+    linear-gradient(transparent calc(var(--card-head, 3.4rem) - 2px), var(--bp-card-head) calc(var(--card-head, 3.4rem) - 2px), var(--bp-card-head) var(--card-head, 3.4rem), transparent var(--card-head, 3.4rem)),
+    repeating-linear-gradient(transparent 0 calc(var(--card-pitch) - 1px), var(--card-line) calc(var(--card-pitch) - 1px) var(--card-pitch));
+}
+:root[data-theme="dark"] .index-card.index-card h4 { border-bottom-color: var(--bp-card-head); }
+:root[data-theme="dark"] .theme-switch {
+  background-image: linear-gradient(transparent 3px, var(--bp-card-head) 3px, var(--bp-card-head) 4.5px, transparent 4.5px);
+}
+
+/* ---------- Layout ---------- */
+.page {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* Each section: number in the left "credits" margin, content on a hard left edge */
+.sheet-section {
+  display: grid;
+  grid-template-columns: var(--margin-col) minmax(0, 1fr);
+  column-gap: 0;
+  padding-block: var(--s4);
+}
+.sheet-section > .margin-mark {
+  grid-column: 1;
+  font-family: var(--font-hand);
+  font-size: 1.35rem;
+  color: var(--ink-soft);
+  padding-top: 0.6rem;
+  line-height: 1;
+}
+.sheet-section > .margin-mark::after {
+  content: '';
+  display: block;
+  width: 2.2rem;
+  height: 2px;
+  margin-top: 0.45rem;
+  background: var(--ink-faint);
+  border-radius: 2px;
+  transform: rotate(-3deg);
+}
+.sheet-section > .section-body { grid-column: 2; min-width: 0; }
+
+@media (max-width: 760px) {
+  .sheet-section { grid-template-columns: minmax(0, 1fr); padding-block: var(--s3); }
+  .sheet-section > .margin-mark { display: none; }
+  .sheet-section > .section-body { grid-column: 1; }
+}
+
+.section-lede { font-size: var(--step-1); color: var(--ink-soft); max-width: 58ch; }
+
+/* ---------- Lists with hand-drawn bullets ---------- */
+.ink-list { list-style: none; padding: 0; margin: 0 0 var(--s1); max-width: var(--measure); }
+.ink-list > li { position: relative; padding-left: 1.9rem; margin-bottom: 0.55rem; }
+.ink-list > li::before {
+  content: '';
+  position: absolute;
+  left: 0.1rem;
+  top: 0.55em;
+  width: 1.2rem;
+  height: 0.7rem;
+  background: var(--bullet-arrow) no-repeat center / contain;
+}
+
+ol.ink-steps { list-style: none; counter-reset: step; padding: 0; margin: 0 0 var(--s1); max-width: var(--measure); }
+ol.ink-steps > li { counter-increment: step; position: relative; padding-left: 2.6rem; margin-bottom: 0.85rem; }
+ol.ink-steps > li::before {
+  content: counter(step);
+  position: absolute;
+  left: 0;
+  top: -0.15rem;
+  width: 1.9rem;
+  height: 1.9rem;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-hand);
+  font-size: 1.3rem;
+  line-height: 1;
+  border: 2px solid var(--ink);
+  border-radius: var(--wobble-radius-2);
+}
+
+/* ---------- Buttons: index flags (markup: components/Button.astro) ----------
+   A Post-it page flag. The translucent film on the left end is the sticky part and stays
+   put; on hover/focus the free right end lifts toward the viewer (rotateY about the left
+   edge) and its shadow grows and drops. Press squishes it flat. Clicking a link flag flips
+   it all the way over, like it was used to turn the page; the page turn starts as it lands
+   (scripts/site.ts).
+   Ink on either flag colour is ≥ 8:1. */
+.btn-row { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s2); align-items: center; margin-top: var(--s2); }
+.btn {
+  --flag: var(--flag-blue);
+  --film: 0.85rem;
+  --pull: 0;
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.65rem 1.3rem 0.65rem calc(1.05rem + var(--film));
+  font: 700 1.02rem/1.2 var(--font-body);
+  color: var(--ink);
+  text-decoration: none;
+  border: 0;
+  border-radius: 1px 4px 4px 1px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  background:
+    /* film strip · hairline divider · flag */
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--flag) 38%, transparent) 0 var(--film),
+      rgb(var(--shadow) / 0.18) var(--film) calc(var(--film) + 1px),
+      var(--flag) calc(var(--film) + 1px));
+  box-shadow:
+    inset 0 0 0 1px rgb(var(--shadow) / 0.07),
+    0 1px 1px rgb(var(--shadow) / 0.1),
+    calc(3px + var(--pull) * 12px) calc(3px + var(--pull) * 9px) calc(6px + var(--pull) * 12px) calc(-3px - var(--pull) * 2px) rgb(var(--shadow) / calc(0.28 + var(--pull) * 0.14));
+  transform: perspective(600px) rotate(var(--flag-tilt, 0deg)) rotateY(calc(var(--pull) * -19deg)) rotateZ(calc(var(--pull) * -0.8deg));
+  transform-origin: 0 50%;
+}
+.btn--primary { --flag: var(--flag-coral); font-weight: 800; }
+.btn--coral { --flag: var(--flag-coral); }
+.btn--blue { --flag: var(--flag-blue); }
+.btn--green { --flag: var(--flag-green); }
+.btn--yellow { --flag: var(--flag-yellow); }
+.btn--sm { min-height: 44px; padding-block: 0.45rem; padding-right: 0.95rem; font-size: 0.92rem; }
+.btn__label { position: relative; }
+.btn:hover, .btn:focus-visible { --pull: 1; }
+.btn:focus-visible { outline: 2.5px dashed var(--focus-ring); outline-offset: 6px; }
+@property --pull { syntax: '<number>'; inherits: false; initial-value: 0; }
+/* The back of the flag: a touch darker, shown once the flag has flipped past edge-on. */
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background: rgb(var(--shadow) / 0.16);
+  opacity: 0;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: no-preference) {
+  /* Hover lifts the free end; letting go springs back. */
+  .btn { transition: --pull 240ms var(--ease-spring), transform 240ms var(--ease-spring); }
+  /* Press (pointerdown): the flag is pressed flat to the page and squishes a little,
+     right away, so the click feels caught before anything else happens. */
+  .btn:active {
+    --pull: 0;
+    transform: perspective(600px) rotate(var(--flag-tilt, 0deg)) translateY(1px) scale(0.95, 0.92);
+    transition-duration: 60ms;
+    transition-timing-function: ease-out;
+  }
+  /* The flip: thrown up off the press (decelerating to edge-on), falls over the stuck
+     end, and lands with a small bounce. The label drops out once it's edge-on, and the
+     darker back shows. No `from` keyframe, so it starts wherever the press left it. */
+  /* Routed pages: the flag is just pulled up, fast, and the page turns with it. */
+  .btn.is-pulling { --pull: 1; pointer-events: none; animation: flag-pull var(--pull-time) cubic-bezier(0.2, 0.7, 0.3, 1) forwards; }
+  .btn.is-flipping { --pull: 1; pointer-events: none; animation: flag-flip var(--flip-time) linear forwards; }
+  .btn.is-flipping .btn__label { animation: flag-flip-label var(--flip-time) linear forwards; }
+  .btn.is-flipping::after { animation: flag-flip-back var(--flip-time) linear forwards; }
+  /* links that don't leave the page (mailto:) flip the flag back afterwards */
+  .btn.is-unflipping { animation: flag-unflip var(--flip-time) cubic-bezier(0.3, 0, 0.2, 1); }
+  .btn.is-unflipping .btn__label { animation: flag-unflip-label var(--flip-time) linear; }
+  .btn.is-unflipping::after { animation: flag-unflip-back var(--flip-time) linear; }
+}
+@keyframes flag-pull {
+  to { transform: perspective(600px) rotate(var(--flag-tilt, 0deg)) translateY(-4px) rotateY(-58deg) rotateZ(-3deg) scale(1.03); }
+}
+@keyframes flag-flip {
+  0% { animation-timing-function: cubic-bezier(0.2, 0.6, 0.35, 1); }
+  42% {
+    transform: perspective(600px) rotate(var(--flag-tilt, 0deg)) translateY(-5px) rotateY(-92deg) rotateZ(-3deg) scale(1.04);
+    animation-timing-function: cubic-bezier(0.55, 0, 0.9, 0.5);
+  }
+  78% {
+    transform: perspective(600px) rotate(var(--flag-tilt, 0deg)) translateY(-1px) rotateY(-184deg) rotateZ(-2deg);
+    animation-timing-function: cubic-bezier(0.3, 0.6, 0.4, 1);
+  }
+  100% { transform: perspective(600px) rotate(var(--flag-tilt, 0deg)) translateY(-1px) rotateY(-174deg) rotateZ(-2deg); }
+}
+@keyframes flag-flip-label { 0%, 40% { opacity: 1; } 43%, 100% { opacity: 0; } }
+@keyframes flag-flip-back { 0%, 40% { opacity: 0; } 43%, 100% { opacity: 1; } }
+@keyframes flag-unflip {
+  from { transform: perspective(600px) rotate(var(--flag-tilt, 0deg)) translateY(-1px) rotateY(-174deg) rotateZ(-2deg); }
+  50% { transform: perspective(600px) rotate(var(--flag-tilt, 0deg)) translateY(-4px) rotateY(-90deg) rotateZ(-2deg); }
+}
+@keyframes flag-unflip-label { 0%, 50% { opacity: 0; } 53%, 100% { opacity: 1; } }
+@keyframes flag-unflip-back { 0%, 50% { opacity: 1; } 53%, 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) {
+  /* no movement: the flag just casts a bigger shadow */
+  .btn, .btn:hover, .btn:focus-visible, .btn:active { transform: rotate(var(--flag-tilt, 0deg)); transition: none !important; }
+}
+
+.text-link { font-weight: 700; }
+
+/* ---------- Ink drawings that draw themselves on scroll ---------- */
+.ink { fill: none; stroke: var(--ink); stroke-width: var(--stroke); stroke-linecap: round; stroke-linejoin: round; }
+.ink--bold { stroke-width: var(--stroke-bold); }
+.ink--faint { stroke: var(--ink-faint); }
+.ink--accent { stroke: var(--accent); }
+.ink--dash { stroke-dasharray: 6 7; }
+.ink-text { font-family: var(--font-hand); fill: var(--ink); }
+.ink-text--soft { fill: var(--ink-soft); }
+.ink-text--accent { fill: var(--accent-ink); }
+.ink-sans { font-family: var(--font-body); fill: var(--ink); }
+
+/* Colour roles for SVG diagrams. CSS beats SVG presentation attributes, so these follow
+   the theme wherever a diagram used to hardcode a colour. */
+.fill-ink { fill: var(--ink); }
+.fill-soft { fill: var(--ink-soft); }
+.fill-accent { fill: var(--accent); }
+.fill-accent-ink { fill: var(--accent-ink); }
+.fill-paper { fill: var(--paper); }            /* knocks a shape out of the lines behind it */
+.fill-shade { fill: var(--paper-shade); }
+.fill-card { fill: var(--card); }
+.fill-shadow { fill: rgb(var(--shadow)); }
+.fill-hl { fill: var(--hl-diagram); }          /* the rect's fill-opacity still applies */
+.fill-sticky-yellow { fill: var(--sticky-yellow); }
+.fill-sticky-pink { fill: var(--sticky-pink); }
+.fill-sticky-blue { fill: var(--sticky-blue); }
+.fill-sticky-green { fill: var(--sticky-green); }
+.fill-sticky-peach { fill: var(--sticky-peach); }
+.stroke-ink { stroke: var(--ink); }
+.stroke-faint { stroke: var(--ink-faint); }
+.stroke-rule { stroke: var(--rule); }
+.stroke-accent { stroke: var(--accent); }
+
+/* JS adds .js to <html>; without it (or with reduced motion) everything is simply drawn. */
+@media (prefers-reduced-motion: no-preference) {
+  .js .draw .ink:not(.ink--dash) {
+    stroke-dasharray: 1 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset var(--draw-time) var(--ease-pen);
+    transition-delay: calc(var(--i, 0) * 110ms);
+  }
+  .js .draw .ink--dash,
+  .js .draw .ink-fade {
+    opacity: 0;
+    transition: opacity 500ms ease;
+    transition-delay: calc(var(--i, 0) * 110ms + 300ms);
+  }
+  .js .draw.is-drawn .ink:not(.ink--dash) { stroke-dashoffset: 0; }
+  .js .draw.is-drawn .ink--dash,
+  .js .draw.is-drawn .ink-fade { opacity: 1; }
+}
+
+/* ---------- Written in as you read (site.ts: setupWriteIn, setupMarginLoops) ----------
+   Only elements that start below the fold get .is-waiting, and only with JS and motion
+   on. Everything's resting state is the finished page. */
+
+/* A pencil loop around the section number in the margin, drawn as its section arrives. */
+.sheet-section > .margin-mark { position: relative; }
+.margin-loop {
+  position: absolute;
+  left: -1.05rem;
+  top: 0.15rem;
+  width: 3.7rem;
+  height: auto;
+  overflow: visible;
+  pointer-events: none;
+}
+.margin-loop .ink { stroke: var(--ink-soft); stroke-width: 1.5; opacity: 0.75; }
+@media (prefers-reduced-motion: no-preference) {
+  .js .margin-loop.draw .ink { --draw-time: 650ms; transition-delay: 120ms; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Highlighter: the yellow swipes on left to right, chisel tip first, once. */
+  mark.hl { transition: background-size 560ms cubic-bezier(0.45, 0.05, 0.2, 1) 80ms, color 200ms ease 160ms; }
+  /* until the yellow arrives the words are plain page ink (pale on the blueprint) */
+  mark.hl.is-waiting { background-size: 0% 80%; color: var(--ink); transition: none; }
+
+  /* Case-study arrows: the arrow drops first, then its label is jotted beside it. */
+  .thread__label { transition: opacity 380ms ease 650ms, translate 520ms var(--ease-spring) 650ms; }
+  .thread__label.is-waiting { opacity: 0; translate: -0.6rem 0; transition: none; }
+
+  /* End credits: the sign-off is written in as the footer rolls up. */
+  .credits__signoff { transition: opacity 500ms ease, translate 700ms var(--ease-spring); }
+  .credits__signoff.is-waiting { opacity: 0; translate: 0 0.6rem; transition: none; }
+}
+
+/* ---------- Figures ---------- */
+figure { margin: var(--s3) 0; }
+figcaption {
+  font-size: var(--step--1);
+  color: var(--ink-soft);
+  margin-top: var(--s0);
+  max-width: 60ch;
+}
+.figure-wide { max-width: 1000px; }
+.only-narrow { display: none; }
+@media (max-width: 680px) {
+  .only-wide { display: none; }
+  .only-narrow { display: block; }
+}
+
+/* ---------- Page-turn view transition ----------
+   The sheet is a page in a sketchbook bound at the left. Forward: the old page lifts
+   toward you around the spine, darkening as it tilts away from the light, and the new
+   page is already lying underneath, coming out of its shadow. Back: the previous page
+   falls back over the spine onto the current one. Only transform, opacity and a
+   brightness filter animate (all compositor-friendly). Timing: lib/transitions.ts.
+   The hinge is the left edge; the vanishing point sits mid-sheet so the page doesn't
+   balloon, and vertically at the middle of whatever was on screen (site.ts sets
+   --turn-y-old / --turn-y-new / --turn-dy, since the sheet snapshot is the whole long page). */
+@keyframes page-turn-out {
+  from { transform: translateY(var(--turn-dy, 0px)) perspective(280vw) translateX(-50%) rotateY(0deg) translateX(50%); filter: brightness(1); }
+  85% { opacity: 1; }
+  to { transform: translateY(var(--turn-dy, 0px)) perspective(280vw) translateX(-50%) rotateY(-90deg) translateX(50%); filter: brightness(0.7); opacity: 0; }
+}
+@keyframes page-turn-in {
+  from { filter: brightness(0.84); }
+  to { filter: brightness(1); }
+}
+@keyframes page-back-out {
+  from { transform: translateY(var(--turn-dy, 0px)); filter: brightness(1); }
+  to { transform: translateY(var(--turn-dy, 0px)); filter: brightness(0.84); }
+}
+@keyframes page-back-in {
+  from { transform: perspective(280vw) translateX(-50%) rotateY(-90deg) translateX(50%); filter: brightness(0.7); opacity: 0; }
+  15% { opacity: 1; }
+  to { transform: perspective(280vw) translateX(-50%) rotateY(0deg) translateX(50%); filter: brightness(1); opacity: 1; }
+}
+/* The group sits where the new page is; the old page keeps its own scroll position
+   (--turn-dy), so it doesn't jump to the top before it turns. */
+::view-transition-group(sheet) { animation: none; }
+::view-transition-old(sheet) { transform-origin: 50% var(--turn-y-old, 50vh); clip-path: var(--turn-clip-old, none); z-index: 2; }
+::view-transition-new(sheet) { transform-origin: 50% var(--turn-y-new, 50vh); clip-path: var(--turn-clip-new, none); }
+/* scrolled: the marker circle turns with the page instead of sliding (site.ts) */
+[data-turn-whole] .tab__loop { view-transition-name: none !important; }
+[data-astro-transition='back']::view-transition-old(sheet) { z-index: 1; }
+[data-astro-transition='back']::view-transition-new(sheet) { z-index: 2; }
+
+/* Flag handoff: the clicked flag is captured on its own (site.ts names it `flag`) so it
+   doesn't freeze into the page snapshot. Its group rides the turning page: the same
+   spine, vanishing point, timing and easing as page-turn-out, worked out in viewport
+   pixels (--hand-*). Inside that, the flag itself keeps lifting from the pose the click
+   left it in, fast at first, so its motion runs straight on into the turn. It shades
+   and fades with the page. Forward turns only. */
+@keyframes flag-ride {
+  from { transform: translate(var(--hand-ox), var(--hand-oy)) perspective(280vw) translateX(calc(-1 * var(--hand-hw))) rotateY(0deg) translateX(var(--hand-hw)) translate(var(--hand-fx), var(--hand-fy)); }
+  to { transform: translate(var(--hand-ox), var(--hand-oy)) perspective(280vw) translateX(calc(-1 * var(--hand-hw))) rotateY(-90deg) translateX(var(--hand-hw)) translate(var(--hand-fx), var(--hand-fy)); }
+}
+@keyframes flag-carry {
+  from { transform: var(--hand-pose); }
+  to { transform: perspective(600px) rotate(var(--hand-tilt)) translateY(-6px) rotateY(-82deg) rotateZ(-3deg) scale(1.04); }
+}
+@keyframes flag-shade {
+  from { filter: brightness(1); }
+  85% { opacity: 1; }
+  to { filter: brightness(0.7); opacity: 0; }
+}
+/* The static styles match the first keyframes: they show while the turn is being set up. */
+::view-transition-group(flag) { transform-origin: 0 0; transform: translate(calc(var(--hand-ox) + var(--hand-fx)), calc(var(--hand-oy) + var(--hand-fy))); animation: flag-ride 0.42s cubic-bezier(0.2, 0.45, 0.25, 1) both; }
+::view-transition-image-pair(flag) { transform-origin: 0 50%; transform: var(--hand-pose); animation: flag-carry 0.3s cubic-bezier(0.15, 0.6, 0.35, 1) both; }
+::view-transition-old(flag) { animation: flag-shade 0.42s cubic-bezier(0.2, 0.45, 0.25, 1) both; }
+
+/* The marker circle slides to the new tab on a little spring, above the turning page,
+   and the two loop drawings cross-fade on the way. */
+::view-transition-group(tab-ink) { animation-duration: 440ms; animation-timing-function: var(--ease-spring); }
+::view-transition-old(tab-ink),
+::view-transition-new(tab-ink) { animation-duration: 220ms; animation-timing-function: ease-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) { animation: none !important; }
+  *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+}

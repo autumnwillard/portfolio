@@ -1,0 +1,51 @@
+---
+// expedite-intake-tally: the request counter. A hand-drawn gauge on a true
+// linear scale from 0: solid hatching up to the measured 828 (Feb 2025), dashed
+// from there to the estimated 1,000+ (Dec 2025). No monthly breakdown (none sourced).
+import InkSvg from '../InkSvg.astro';
+import { rect, line, arrow } from '../../lib/ink';
+
+const label = 'A tally showing 828 expedite requests as of February 2025, climbing to an estimated 1,000 or more by December 2025.';
+
+const A = (pts: [number, number][], s: number, h = 10) => { const a = arrow(pts, s, h); return `${a.shaft} ${a.head}`; };
+
+const gauge = (x0: number, x1000: number, y: number, h: number, seed: number) => {
+  const at = (n: number) => x0 + ((x1000 - x0) * n) / 1000;
+  const x828 = at(828);
+  const hatch: string[] = [];
+  for (let x = x0 + 6; x < x828 - 4; x += 11) hatch.push(line(x, y + h - 3, Math.min(x + 12, x828 - 2), y + 3, seed + x, 0.4));
+  return { x828, hatch: hatch.join(' ') };
+};
+const gw = gauge(40, 620, 130, 40, 900);
+const gn = gauge(20, 320, 126, 36, 950);
+---
+<div class="exp-tally">
+  <InkSvg viewBox="0 0 720 230" label={label} class="only-wide">
+    <text class="ink-text ink-text--accent ink-fade" style="--i:0" x="36" y="74" font-size="52">1,000+ requests</text>
+    <path class="ink" style="--i:1" d={rect(40, 130, 580, 40, 901, 1.2)} pathLength="1" />
+    <path class="ink" style="--i:2" d={gw.hatch} pathLength="1" />
+    <path class="ink ink--dash" style="--i:3" d={`M${gw.x828 + 4} 150 L614 150`} />
+    <path class="ink ink--bold" style="--i:3" d={line(gw.x828, 116, gw.x828, 178, 902, 0.6)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:3" x={gw.x828} y="108" font-size="22" text-anchor="middle">828 · Feb 2025</text>
+    <path class="ink ink--accent ink--bold" style="--i:4" d={A([[600, 150], [640, 146], [690, 150]], 903, 12)} pathLength="1" />
+    <text class="ink-sans ink-fade fill-soft" style="--i:4" x="40" y="196" font-size="14">0</text>
+    <text class="ink-text ink-text--accent ink-fade" style="--i:5" x="696" y="206" font-size="23" text-anchor="end">1,000+ · Dec 2025 (est.)</text>
+  </InkSvg>
+
+  <InkSvg viewBox="0 0 380 240" label={label} class="only-narrow">
+    <text class="ink-text ink-text--accent ink-fade" style="--i:0" x="16" y="56" font-size="44">1,000+ requests</text>
+    <path class="ink" style="--i:1" d={rect(20, 126, 300, 36, 951, 1.1)} pathLength="1" />
+    <path class="ink" style="--i:2" d={gn.hatch} pathLength="1" />
+    <path class="ink ink--dash" style="--i:3" d={`M${gn.x828 + 4} 144 L314 144`} />
+    <path class="ink ink--bold" style="--i:3" d={line(gn.x828, 112, gn.x828, 170, 952, 0.6)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:3" x={gn.x828 + 30} y="104" font-size="20" text-anchor="end">828 · Feb 2025</text>
+    <path class="ink ink--accent ink--bold" style="--i:4" d={A([[306, 144], [336, 141], [366, 144]], 953, 11)} pathLength="1" />
+    <text class="ink-sans ink-fade fill-soft" style="--i:4" x="20" y="188" font-size="13">0</text>
+    <text class="ink-text ink-text--accent ink-fade" style="--i:5" x="370" y="214" font-size="20" text-anchor="end">1,000+ · Dec 2025 (est.)</text>
+  </InkSvg>
+</div>
+
+<style>
+  .exp-tally { max-width: 720px; }
+  .exp-tally :global(.only-narrow) { max-width: 440px; }
+</style>

@@ -1,0 +1,43 @@
+---
+// 404: a page torn out of the sketchbook. Cloudflare Pages serves this for any missing
+// path (without a 404.html it would fall back to the home page).
+import BaseLayout from '../layouts/BaseLayout.astro';
+import StickyNote from '../components/StickyNote.astro';
+import Button from '../components/Button.astro';
+import InkDivider from '../components/InkDivider.astro';
+---
+<BaseLayout
+  title="Page not found · Autumn Willard"
+  description="This page doesn’t exist. Head back to Autumn Willard’s product work."
+>
+  <div class="page lost">
+    <div class="lost__grid">
+      <div>
+        <h1>What do you mean this page doesn’t exist?</h1>
+        <p class="lede">Either the link is old or I tore this page out of the sketchbook. Here’s what’s still in it:</p>
+        <div class="btn-row">
+          <Button variant="primary" href="/work/">Back to the work</Button>
+          <Button href="/" color="green">About me</Button>
+          <Button href="/contact/" color="yellow">Contact</Button>
+        </div>
+      </div>
+      <StickyNote tilt={2} color="pink" class="lost__note">
+        If a link on my own site sent you here, that’s a bug. Tell me and I’ll file it against myself.
+      </StickyNote>
+    </div>
+    <InkDivider seed={404} />
+  </div>
+</BaseLayout>
+
+<style>
+  .lost { padding: var(--s4) 0 var(--s3) var(--margin-col); overflow-x: clip; }
+  .lost__grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(12rem, 16rem); gap: var(--s3) var(--s4); align-items: start; }
+  .lost h1 { max-width: 16ch; }
+  .lede { font-size: var(--step-1); max-width: 46ch; }
+  .lost__grid :global(.lost__note) { margin-top: var(--s3); }
+  @media (max-width: 760px) {
+    .lost { padding-left: 0; padding-top: var(--s2); }
+    .lost__grid { grid-template-columns: 1fr; }
+    .lost__grid :global(.lost__note) { margin-top: 0; max-width: 15rem; }
+  }
+</style>

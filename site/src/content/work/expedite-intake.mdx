@@ -1,0 +1,86 @@
+---
+title: "You get an email, you get an email, everyone gets an email!"
+short_title: "Expedite Request Intake"
+order: 5
+so_what: "Our highest-priority review requests lived in loose email with missing details and no tracking. I replaced that with a structured form and automated routing, and it handled an estimated 1,000+ requests."
+card_blurb: "Our highest-priority requests lived in messy email chains. I swapped them for a structured form with automated routing, and it handled 1,000+ requests by the time I left."
+card_metrics:
+  - "1,000+ requests"
+status: "Shipped"
+glance:
+  role: "Product Manager, at Idaho National Laboratory, a U.S. Department of Energy national lab"
+  team: "my team, serving researchers and the reviewing offices"
+  timeframe: "during my time at INL (in use through December 2025)"
+  status: "Shipped"
+  numbers: "1,000+ requests (est.) · $175K+ in staff time saved (est.)"
+metrics:
+  - value: "1,000+"
+    label: "requests (est.)"
+  - value: "$175K+"
+    label: "in staff time saved (est.)"
+description: "How Autumn Willard replaced messy expedite emails at INL with a structured form and automated routing that handled 1,000+ requests."
+next:
+  title: "Tech Handoff Market Pivot"
+  href: "/work/tech-handoff/"
+---
+import StickyNote from '../../components/StickyNote.astro';
+import InkArrow from '../../components/InkArrow.astro';
+import ExpediteSwimlane from '../../components/diagrams/ExpediteSwimlane.astro';
+import ExpediteForm from '../../components/diagrams/ExpediteForm.astro';
+import ExpediteTally from '../../components/diagrams/ExpediteTally.astro';
+
+Maybe, just maybe, our most urgent requests shouldn't live only in messy email chains.
+
+## The problem
+
+When I joined, researchers asked to expedite reviews by email, and most emails were missing something we needed. Every request ate time from three groups. Researchers answered follow-up questions about their own request. Admins chased the missing details, checked the record's status in the system by hand, then re-typed it all into an email template for the reviewing offices. And reviewers still went back and forth when what reached them was incomplete.
+
+That's slow. Worse, these were the high-priority items, and with no standard intake and no tracking, one could slip through. ==Miss one and it's an information-security risk.==
+
+<figure class="figure-wide">
+  <ExpediteSwimlane />
+</figure>
+
+<InkArrow from="problem" to="cause" seed={6} />
+
+## Digging in
+
+I went through past requests to see which details we needed every single time. Then I gathered requirements from my team and from the reviewing offices. The reviewing offices asked for something I hadn't thought of: text at the top of the form that tells people what to expect before they submit.
+
+<StickyNote tilt={-1.8} color="pink">
+Best requirement on the whole project, and it was one paragraph of text.
+</StickyNote>
+
+## Constraints
+
+It had to be quick, cheap and stay out of the core system. Waiting in the shared developer queue wasn't an option.
+
+<InkArrow from="cause" to="fix" seed={11} flip />
+
+## What I did
+
+I built a Microsoft Form that asks for everything up front: the record, its current status, the reason for expediting and any deadlines. A Power Automate flow sends each submission straight to my team's shared inbox in a consistent format. When anyone emailed asking how to expedite, we sent them the link.
+
+The intro text sets expectations: the review queue usually holds 50 to 100 items, and a review takes 10 to 15 business days once the manager review is complete.
+
+<figure class="figure-wide">
+  <ExpediteForm />
+</figure>
+
+*Tradeoff:* building outside the core system meant it shipped now, with no developer time. The cost is that requests live in a separate tool from the system of record. I took that deal on purpose and planned to close the gap later.
+
+<InkArrow from="fix" to="result" seed={17} />
+
+## What happened
+
+<figure>
+  <ExpediteTally />
+</figure>
+
+- **Volume:** 828 responses as of February 2025, and an estimated ==1,000+ requests== by the time I left in December 2025.
+- **Savings: $175K+ in staff time saved (est.).** The estimate is salary × time saved for both researchers and reviewers. Researchers spent less time on incomplete emails and follow-ups, and reviewers spent less time chasing missing information.
+- **Tracking:** requests became trackable, which cut down on duplicates and gave us data for forecasting common busy seasons.
+
+## Looking back
+
+I scoped the next phase: bringing the request into the core system so it lives next to the record it's about. If I did it again, I'd capture time-per-request before launch, so the savings figure could be measured instead of estimated.

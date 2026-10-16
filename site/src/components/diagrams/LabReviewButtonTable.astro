@@ -1,0 +1,87 @@
+---
+// lab-review-system-button-table: two small sideways-scrolling tables, so readers
+// can feel the hunt for the action buttons. Fake placeholder data only.
+const rows = [
+  { id: 'REC-0001', title: 'Annual Equipment Report', owner: 'A. Researcher', status: 'Unsubmitted Draft', date: '2 days ago' },
+  { id: 'REC-0002', title: 'Field Test Summary', owner: 'B. Scientist', status: 'In Review', date: '1 week ago' },
+  { id: 'REC-0003', title: 'Conference Poster Draft', owner: 'C. Engineer', status: 'Approved', date: '3 weeks ago' },
+];
+const tables = [
+  { key: 'before', title: 'Before: actions on the far right', actionsFirst: false },
+  { key: 'after', title: 'After: actions on the left', actionsFirst: true },
+];
+const cols = ['ID', 'Title', 'Owner', 'Status', 'Date Modified'];
+---
+<figure class="lrs-btns">
+  <div class="lrs-btns__pair">
+    {tables.map((t) => (
+      <div class="lrs-btns__one">
+        <p class="lrs-btns__label" id={`lrs-btns-${t.key}`}>{t.title}</p>
+        <div class="lrs-btns__scroll" tabindex="0" role="region" aria-labelledby={`lrs-btns-${t.key}`}>
+          <table>
+            <thead>
+              <tr>
+                {t.actionsFirst && <th scope="col">Actions</th>}
+                {cols.map((c) => <th scope="col">{c}</th>)}
+                {!t.actionsFirst && <th scope="col">Actions</th>}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr>
+                  {t.actionsFirst && <td class="act"><span>View</span> <span>Edit</span></td>}
+                  <td>{r.id}</td><td>{r.title}</td><td>{r.owner}</td><td>{r.status}</td><td>{r.date}</td>
+                  {!t.actionsFirst && <td class="act"><span>View</span> <span>Edit</span></td>}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    ))}
+  </div>
+  <figcaption>Scroll each table sideways. Before, the View and Edit buttons sat off-screen on the right; after, they sit on the left where you can see them.</figcaption>
+</figure>
+
+<style>
+  .lrs-btns { max-width: 46rem; min-width: 0; }
+  .lrs-btns__one { min-width: 0; }
+  .lrs-btns__pair { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--s2); }
+  .lrs-btns__label {
+    font-family: var(--font-hand);
+    font-size: 1.45rem;
+    line-height: 1.1;
+    margin: 0 0 0.4rem;
+  }
+  .lrs-btns__one:last-child .lrs-btns__label { color: var(--accent-ink); }
+  .lrs-btns__scroll {
+    max-width: min(30rem, 100%);
+    overflow-x: auto;
+    border: 2.5px solid var(--ink);
+    border-radius: var(--wobble-radius-2);
+    background: var(--paper-scrap);
+  }
+  .lrs-btns__scroll:focus-visible { outline: 2.5px dashed var(--accent-ink); outline-offset: 4px; }
+  table { border-collapse: collapse; min-width: 50rem; font-size: 0.92rem; }
+  th, td { text-align: left; padding: 0.55rem 0.9rem; white-space: nowrap; }
+  th {
+    font: 800 0.74rem/1.2 var(--font-body);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    border-bottom: 2px solid var(--ink);
+  }
+  td { border-bottom: 1.5px dashed var(--ink-faint); }
+  tr:last-child td { border-bottom: 0; }
+  .act span {
+    display: inline-block;
+    font-weight: 800;
+    font-size: 0.82rem;
+    padding: 0.1rem 0.55rem;
+    /* a yellow paper chip, so its ink stays dark in either theme */
+    color: var(--paper-ink);
+    border: 2px solid var(--paper-ink);
+    border-radius: var(--wobble-radius-2);
+    background: var(--sticky-yellow);
+  }
+</style>

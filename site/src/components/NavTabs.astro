@@ -1,0 +1,104 @@
+---
+// Washi tape labels: each tab is a torn strip of the same patterned tape as the About
+// index cards, slightly tilted. Inactive strips sit back a little; the active one is
+// fully opaque with a wavy coral underline. The underline carries a view-transition-name
+// (via .tab__loop, see global.css and scripts/site.ts) so it slides between tabs.
+const tabs = [
+  { href: '/', label: 'About', key: 'about', tape: 'stripes', rot: -2 },
+  { href: '/work/', label: 'Work', key: 'work', tape: 'dots', rot: 1.5 },
+  { href: '/contact/', label: 'Contact', key: 'contact', tape: 'check', rot: -1 },
+  { href: '/side-projects/', label: 'Side Projects', key: 'side-projects', tape: 'plain', rot: 2 },
+];
+interface Props { active?: string }
+const { active } = Astro.props;
+---
+<nav class="tabs" aria-label="Main">
+  <ul role="list">
+    {tabs.map((t) => {
+      const isActive = t.key === active;
+      return (
+        <li>
+          <a href={t.href} class:list={['tab', `tab--${t.tape}`, isActive && 'is-active']} style={`--rot:${t.rot}deg`} aria-current={isActive ? 'page' : undefined}>
+            <span class="tab__label">
+              {t.label}
+              {isActive && <span class="tab__loop" aria-hidden="true"></span>}
+            </span>
+          </a>
+        </li>
+      );
+    })}
+  </ul>
+</nav>
+
+<style>
+  .tabs ul { list-style: none; display: flex; flex-wrap: wrap; gap: 0.5rem 0.55rem; margin: 0; padding: 0; }
+  .tab {
+    position: relative;
+    isolation: isolate;
+    display: inline-grid;
+    place-items: center;
+    min-height: 48px;
+    padding: 0.45rem 1.25rem 0.5rem;
+    font: 400 1.6rem/1 var(--font-hand);
+    color: var(--tab-ink-rest);
+    text-decoration: none;
+    white-space: nowrap;
+    rotate: var(--rot);
+    transition: color 150ms ease, rotate 150ms ease, transform 150ms ease;
+  }
+  /* the tape itself: a translucent strip with torn ends, behind the label */
+  .tab::before {
+    content: '';
+    position: absolute;
+    inset: 0.2rem 0;
+    z-index: -1;
+    background-color: var(--washi-base);
+    mix-blend-mode: var(--washi-blend);
+    clip-path: polygon(1% 0, 99% 2%, 97% 22%, 100% 46%, 97% 70%, 99.5% 100%, 0.5% 98%, 3% 76%, 0 52%, 3% 28%);
+    box-shadow: 0 1px 2px rgb(var(--shadow) / 0.1);
+    opacity: var(--tab-tape-rest);
+    transition: opacity 150ms ease;
+  }
+  .tab--stripes::before { --washi-base: rgb(240 190 178 / 0.8); background-image: repeating-linear-gradient(90deg, transparent 0 5px, rgb(224 74 50 / 0.24) 5px 7px); }
+  .tab--dots::before { --washi-base: rgb(168 196 224 / 0.85); background-image: radial-gradient(circle, rgb(255 255 255 / 0.7) 1.3px, transparent 1.8px); background-size: 8px 8px; }
+  .tab--check::before { --washi-base: rgb(178 210 178 / 0.85); background-image: linear-gradient(rgb(90 130 90 / 0.2) 1px, transparent 1px), linear-gradient(90deg, rgb(90 130 90 / 0.2) 1px, transparent 1px); background-size: 6px 6px; }
+  .tab--plain::before { --washi-base: rgb(214 194 152 / 0.8); background-image: repeating-linear-gradient(90deg, transparent 0 6px, rgb(255 255 255 / 0.14) 6px 7px); }
+
+  .tab__label { position: relative; }
+  .tab:hover { color: var(--tab-ink-active); rotate: calc(var(--rot) * 0.4); }
+  .tab:hover::before { opacity: 0.85; }
+  /* pressed: a quick squish, so the click registers before the page turns */
+  .tab:active { transform: scale(0.95); transition-duration: 60ms; }
+
+  .tab.is-active { color: var(--tab-ink-active); }
+  .tab.is-active::before { opacity: 1; }
+  /* the wavy coral underline under the current page's label */
+  .tab__loop {
+    position: absolute;
+    left: -0.1rem; right: -0.1rem; bottom: -0.32rem;
+    height: 6px;
+    background: var(--squiggle-paper-strong) 0 50% / 22px 6px repeat-x;
+    view-transition-name: tab-ink;
+    pointer-events: none;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tab, .tab::before { transition: none; }
+    .tab:hover, .tab:active { rotate: var(--rot); transform: none; }
+  }
+
+  /* Phones: the tabs get their own row and share it, so all four always fit on one line
+     (360px and up) while each stays at least 44px tall. */
+  @media (max-width: 899px) {
+    .tabs ul { flex-wrap: nowrap; gap: 0.35rem; }
+    .tabs li { flex: 1 1 auto; display: flex; }
+    .tab { flex: 1 1 auto; }
+  }
+  @media (max-width: 440px) {
+    .tabs ul { gap: 0.25rem; }
+    .tab { padding: 0.4rem 0.35rem 0.45rem; font-size: 1.22rem; min-height: 46px; }
+  }
+  @media (max-width: 374px) {
+    .tabs ul { gap: 0.15rem; }
+    .tab { padding-inline: 0.2rem; font-size: 1.1rem; }
+  }
+</style>

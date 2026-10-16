@@ -1,0 +1,117 @@
+---
+title: "Ten workflows, seven dashboards, zero copy-paste."
+short_title: "AI Toolkit"
+order: 3
+so_what: "Coordinating four engineering teams ran on one-by-one ticket reviews and hand-copied numbers. I built an internal AI toolkit for the teams and their managers. Its biggest win turned out to be the problems it found."
+card_blurb: "Four engineering teams ran on hand-copied status numbers and one-by-one ticket reviews. I built them an AI toolkit, and it started turning up problems nobody had spotted yet."
+card_metrics:
+  - "10 workflows · 7 dashboards for four engineering teams and their managers"
+  - "75% less sprint reporting time"
+  - "114 items reviewed → 16 recommended for acceptance testing"
+status: "In use"
+glance:
+  role: "Technical Product Owner. I built the toolkit and I own it."
+  team: "Four engineering teams on a B2B SaaS document management platform, leadership and the product team that runs acceptance testing. Also me."
+  timeframe: "2026, built over about three months (July to October)"
+  status: "In use"
+  numbers: "10 workflows · 7 dashboards for four engineering teams and their managers · 75% less sprint reporting time · 114 items reviewed → 16 recommended for acceptance testing (one release)"
+metrics:
+  - value: "10 · 7"
+    label: "workflows · dashboards for four engineering teams and their managers"
+  - value: "75%"
+    label: "less sprint reporting time"
+  - value: "114 → 16"
+    label: "items reviewed → recommended for acceptance testing (one release)"
+description: "How Autumn Willard treated coordinating four engineering teams as a product problem and built an AI toolkit that turned up problems nobody had spotted yet."
+next:
+  title: "Lab Review System"
+  href: "/work/lab-review-system/"
+---
+import StickyNote from '../../components/StickyNote.astro';
+import InkArrow from '../../components/InkArrow.astro';
+import AiToolkitWorkflowLoop from '../../components/diagrams/AiToolkitWorkflowLoop.astro';
+import AiToolkitUatFunnel from '../../components/diagrams/AiToolkitUatFunnel.astro';
+import AiToolkitFindingsLedger from '../../components/diagrams/AiToolkitFindingsLedger.astro';
+
+## The problem: coordination by hand
+
+Keeping four teams moving means answering the same questions over and over. The answers lived in hundreds of tickets, and the only way to get them was to read the tickets.
+
+Three questions hurt the most:
+
+- **"Which team has room?"** When new work came in, there was no quick, reliable answer.
+- **"Are these the real numbers?"** Status reports and engineering metrics were put together by hand at the end of every two-week sprint, copied between dashboards, spreadsheets, slides and wiki pages. Every copy was a chance for the numbers to drift out of sync.
+- **"What actually needs testing?"** Each release, after the release candidate was cut, someone had to go through the finished items, decide which had real user-facing changes worth acceptance testing, then change each one's status and assign it for testing by hand.
+
+My users were my own teams and leadership, so I treated it like any other product: who's it for, and how do I know it's right?
+
+<InkArrow from="problem" to="cause" seed={4} />
+
+## Digging in: do it by hand first
+
+I did every task by hand with the AI before I automated it. Each time I corrected it, the correction became a rule. That's how I learned what the job actually was.
+
+For capacity, my goal was simple: anyone should be able to see at a glance how much each team has on its plate and which ones have room to take on new work.
+
+My first attempt is the cautionary tale: a spreadsheet that needed four manual data pulls every time I refreshed it. That's not a quick answer to "which team has room?" It's homework. The managers already kept a staffing spreadsheet, so version two read that directly, plus live workload from the tracker.
+
+<figure>
+  <AiToolkitWorkflowLoop />
+</figure>
+
+## Constraints
+
+- **Trust.** Nobody wants an AI quietly editing their tickets. So ==the AI had to earn the right to make changes.== Each workflow started out drafting while I approved. I only let it update tickets itself (status, story points, fix version and more) after a few test runs where I confirmed the edits were right and nothing else broke. When it got something wrong, that became a new rule. (One example: Jira descriptions have to be written in ADF, Jira's own format, not Markdown.)
+- **The tracker fights back.** Its own automation would overwrite ticket content, so the ticket-drafting workflow had to create tickets in a way that keeps that from happening.
+- **No new chores.** A tool that needs people to maintain one more sheet is a tool that goes stale.
+- **I still had a day job.** I built this while running releases.
+
+<InkArrow from="cause" to="fix" seed={10} flip />
+
+## What I did
+
+I built 10 workflows and 7 dashboards across release management, capacity and routing, reporting, team rituals and hiring. The biggest one, the release risk review, [gets its own case study](/work/release-risk-review/). Here's the rest, and the calls behind it.
+
+**Use the source of truth people already keep.** The live capacity report combines the managers' staffing sheet with live tracker workload. It shows each team's load by stage (development, code review, QA, product) and by type of work, as a full report or a quick routing recommendation. The tradeoff: it's only as current as their sheet. I'll take that over a new sheet nobody updates.
+
+**Verify before trusting.** Acceptance-testing triage scans completed work and recommends the items with real user-facing changes, filtering out backend-only and test-automation work. I tested it against a no-AI baseline before anyone relied on it. Early on it flagged items it shouldn't have, and every miss became a new rule. Now it gets maybe one or two out of a release's 100-plus tickets wrong (my estimate), so it updates the tickets itself. I also reconcile dashboards against my own hand counts.
+
+<figure>
+  <AiToolkitUatFunnel />
+</figure>
+
+**One status, three places, checked.** Each sprint, status reporting updates the leadership slide and the wiki status page from the project's tracking sheet, then checks that all three agree. It's used across 5 initiatives.
+
+The small stuff matters too. A demo picker rotates presenters and never picks the person who built the thing. The team sees it as fair, which is more than most rotation spreadsheets can say.
+
+For the record, the first thing I built wasn't any of this. It was a skill that turns my loose weekly recap into 1-on-1 notes for my manager. A little selfish, I know.
+
+<InkArrow from="fix" to="result" seed={16} />
+
+## What happened
+
+- **10 reusable workflows and 7 dashboards** for four engineering teams and their managers. The team's feedback has been good: it saves them time, and releases go smoother, with fewer SEV calls and more time on planned work instead of putting out fires.
+- **75% less sprint reporting time,** measured in hours spent before vs. after. Sprint metrics are now rebuilt automatically instead of copied and pasted.
+- **114 → 16.** In one release, acceptance-testing triage reviewed 114 items and recommended 16. Its calls are now reliable enough that it moves the tickets itself.
+
+The bigger win was what it found.
+
+<figure>
+  <AiToolkitFindingsLedger />
+</figure>
+
+- 68 merged items in one release that were never tagged to it.
+- 120 in-progress items with no team assigned at all.
+- One team carrying several times its capacity while another had room.
+- 3 features marked complete in the tracker that had never been built. That changed the plan from "verify and close" to "build."
+- Formula errors in one project tracker that were understating the team's progress.
+
+<StickyNote float tilt={-2} color="pink">
+Three features marked done. Never built. The tracker was very confident about it.
+</StickyNote>
+
+The cycle time report showed the biggest delay was work waiting for QA, a median of 7.3 days, and only about 1 in 5 items finished within its estimate-based time budget.
+
+## Looking back
+
+It's a product, so it has versions. I've improved several of these workflows over time and retired the old versions, and the newer ones are still in use. Ship version one, watch how people use it and don't get attached to it.

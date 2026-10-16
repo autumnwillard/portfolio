@@ -1,0 +1,128 @@
+---
+// release-risk-review-flow: how the review works. Wide (left→right) and narrow
+// (top→bottom) drawings; only one is displayed at a time.
+import InkSvg from '../InkSvg.astro';
+import { rect, arrow, line, loop } from '../../lib/ink';
+
+const label =
+  'Flow: when the release branch is cut, the review finds every ticket in it, applies Autumn’s rules and sorts each ticket into an action (revert, cherry-pick, tag, untag or no action, or “unsure” when the AI can’t tell), each with a reason. A product owner makes the call, and the differences between the AI’s suggestions and the team’s decisions feed back into the rules.';
+
+const buckets = ['Revert', 'Cherry-pick', 'Tag', 'Untag', 'No action', 'Unsure'];
+
+/* ---------- wide geometry ---------- */
+const BY = (i: number) => 26 + i * 54;
+const a1 = arrow([[166, 200], [182, 197], [197, 200]], 1, 10);
+const a2 = arrow([[371, 200], [386, 203], [401, 200]], 2, 10);
+const fan = buckets.map((_, i) => arrow([[546, 200], [570, (200 + BY(i) + 19) / 2 + 4], [601, BY(i) + 19]], 10 + i, 8));
+const brace = (() => {
+  const x = 808, t = BY(0) + 2, b = BY(5) + 38, m = (t + b) / 2;
+  return `M${x} ${t} C${x + 12} ${t} ${x + 10} ${t + 18} ${x + 10} ${t + 40} L${x + 10} ${m - 20} C${x + 10} ${m - 6} ${x + 14} ${m} ${x + 22} ${m} C${x + 14} ${m} ${x + 10} ${m + 6} ${x + 10} ${m + 20} L${x + 10} ${b - 40} C${x + 10} ${b - 18} ${x + 12} ${b} ${x} ${b}`;
+})();
+const a3 = arrow([[832, 185], [840, 186], [846, 186]], 3, 9);
+const back = arrow([[920, 236], [930, 330], [880, 410], [700, 428], [520, 405], [478, 330], [472, 241]], 4, 13);
+
+/* ---------- narrow geometry ---------- */
+const nA = arrow([[190, 66], [192, 82], [190, 98]], 21, 9);
+const nB = arrow([[190, 156], [188, 172], [190, 188]], 22, 9);
+const nC = arrow([[190, 294], [192, 304], [190, 316]], 23, 9);
+const NBX = (i: number) => (i % 2 === 0 ? 16 : 188);
+const NBY = (i: number) => 326 + Math.floor(i / 2) * 64;
+const nD = arrow([[190, 530], [188, 546], [190, 562]], 24, 9);
+const nBack = arrow([[190, 662], [196, 690], [260, 702], [352, 690], [364, 520], [358, 280], [300, 226], [276, 222]], 25, 12);
+---
+<div class="flow">
+  <InkSvg viewBox="0 0 1000 450" label={label} class="only-wide flow-wide">
+    <!-- Release branch cut -->
+    <path class="ink" style="--i:0" d={rect(10, 165, 150, 70, 101)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:0" x="85" y="194" font-size="22" text-anchor="middle">Release branch</text>
+    <text class="ink-text ink-fade" style="--i:0" x="85" y="219" font-size="22" text-anchor="middle">cut</text>
+    <path class="ink" style="--i:1" d={a1.shaft + ' ' + a1.head} pathLength="1" />
+
+    <!-- Find every referenced ticket -->
+    <path class="ink" style="--i:2" d={rect(200, 158, 165, 84, 102)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:2" x="282" y="186" font-size="21" text-anchor="middle">Find every</text>
+    <text class="ink-text ink-fade" style="--i:2" x="282" y="208" font-size="21" text-anchor="middle">referenced</text>
+    <text class="ink-text ink-fade" style="--i:2" x="282" y="230" font-size="21" text-anchor="middle">ticket</text>
+    <path class="ink" style="--i:3" d={a2.shaft + ' ' + a2.head} pathLength="1" />
+
+    <!-- My rule set + side label -->
+    <path class="ink ink--bold" style="--i:4" d={rect(405, 165, 135, 70, 103)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:4" x="472" y="208" font-size="25" text-anchor="middle">My rule set</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:4" x="472" y="118" font-size="13.5" text-anchor="middle">risks: unresolved dependencies,</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:4" x="472" y="136" font-size="13.5" text-anchor="middle">failed-QA comments</text>
+    <path class="ink ink--faint" style="--i:4" d={line(472, 143, 471, 160, 9, 0.8)} pathLength="1" />
+
+    <!-- Fan out to action buckets -->
+    {fan.map((a, i) => <path class="ink ink--faint" style={`--i:${5 + i * 0.3}`} d={a.shaft + ' ' + a.head} pathLength="1" />)}
+    {buckets.map((b, i) => (
+      <g>
+        {i === 5 ? (
+          <path class="ink ink--dash" style={`--i:${6 + i * 0.4}`} d={rect(605, BY(i), 120, 38, 110 + i, 1.2)} />
+        ) : (
+          <path class="ink" style={`--i:${6 + i * 0.4}`} d={rect(605, BY(i), 120, 38, 110 + i, 1.2)} pathLength="1" />
+        )}
+        <text class="ink-text ink-fade" style={`--i:${6 + i * 0.4}`} x="665" y={BY(i) + 26} font-size="20" text-anchor="middle">{b}</text>
+        <g transform={`translate(${737} ${BY(i) + 6}) rotate(${i % 2 ? 3 : -3})`}>
+          <path class="ink ink--faint" style={`--i:${7 + i * 0.4}`} d={rect(0, 0, 58, 26, 130 + i, 0.8)} pathLength="1" />
+          <text class="ink-sans ink-fade fill-soft" style={`--i:${7 + i * 0.4}`} x="29" y="18" font-size="12.5" text-anchor="middle">why: …</text>
+        </g>
+      </g>
+    ))}
+    <text class="ink-sans ink-fade fill-soft" style="--i:9" x="665" y="352" font-size="13" text-anchor="middle" font-style="italic">Claude only</text>
+
+    <!-- Converge to product owner review -->
+    <path class="ink ink--faint" style="--i:9" d={brace} pathLength="1" />
+    <path class="ink" style="--i:10" d={a3.shaft + ' ' + a3.head} pathLength="1" />
+    <rect class="ink-fade fill-hl" style="--i:11" x="868" y="203" width="106" height="24" rx="6" fill-opacity="0.9" transform="rotate(-1.5 920 215)" />
+    <path class="ink ink--bold" style="--i:11" d={rect(850, 138, 143, 98, 104)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:11" x="921" y="168" font-size="21" text-anchor="middle">Product owner</text>
+    <text class="ink-text ink-fade" style="--i:11" x="921" y="192" font-size="21" text-anchor="middle">review</text>
+    <text class="ink-text ink-fade" style="--i:11" x="921" y="221" font-size="21" text-anchor="middle">(we decide)</text>
+
+    <!-- Feedback loop -->
+    <path class="ink ink--accent ink--bold" style="--i:13" d={back.shaft + ' ' + back.head} pathLength="1" />
+    <text class="ink-text ink-text--accent ink-fade" style="--i:14" x="700" y="414" font-size="23" text-anchor="middle">differences feed back</text>
+  </InkSvg>
+
+  <InkSvg viewBox="0 0 380 745" label={label} class="only-narrow flow-narrow">
+    <path class="ink" style="--i:0" d={rect(80, 10, 220, 52, 201)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:0" x="190" y="43" font-size="22" text-anchor="middle">Release branch cut</text>
+    <path class="ink" style="--i:1" d={nA.shaft + ' ' + nA.head} pathLength="1" />
+
+    <path class="ink" style="--i:2" d={rect(45, 102, 290, 52, 202)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:2" x="190" y="135" font-size="22" text-anchor="middle">Find every referenced ticket</text>
+    <path class="ink" style="--i:3" d={nB.shaft + ' ' + nB.head} pathLength="1" />
+
+    <path class="ink ink--bold" style="--i:4" d={rect(100, 192, 180, 52, 203)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:4" x="190" y="226" font-size="24" text-anchor="middle">My rule set</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:4" x="190" y="266" font-size="14" text-anchor="middle">risks: unresolved dependencies,</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:4" x="190" y="284" font-size="14" text-anchor="middle">failed-QA comments</text>
+    <path class="ink" style="--i:5" d={nC.shaft + ' ' + nC.head} pathLength="1" />
+
+    {buckets.map((b, i) => (
+      <g>
+        {i === 5 ? (
+          <path class="ink ink--dash" style={`--i:${6 + i * 0.4}`} d={rect(NBX(i), NBY(i), 158, 52, 210 + i, 1.2)} />
+        ) : (
+          <path class="ink" style={`--i:${6 + i * 0.4}`} d={rect(NBX(i), NBY(i), 158, 52, 210 + i, 1.2)} pathLength="1" />
+        )}
+        <text class="ink-text ink-fade" style={`--i:${6 + i * 0.4}`} x={NBX(i) + 14} y={NBY(i) + 24} font-size="21">{b}</text>
+        <text class="ink-sans ink-fade fill-soft" style={`--i:${6 + i * 0.4}`} x={NBX(i) + 14} y={NBY(i) + 43} font-size="13">{i === 5 ? 'why: … (Claude only)' : 'why: …'}</text>
+      </g>
+    ))}
+    <path class="ink" style="--i:9" d={nD.shaft + ' ' + nD.head} pathLength="1" />
+
+    <rect class="ink-fade fill-hl" style="--i:10" x="138" y="614" width="104" height="25" rx="6" fill-opacity="0.9" transform="rotate(-1.5 190 626)" />
+    <path class="ink ink--bold" style="--i:10" d={rect(70, 568, 240, 88, 204)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:10" x="190" y="602" font-size="22" text-anchor="middle">Product owner review</text>
+    <text class="ink-text ink-fade" style="--i:10" x="190" y="632" font-size="22" text-anchor="middle">(we decide)</text>
+
+    <path class="ink ink--accent ink--bold" style="--i:12" d={nBack.shaft + ' ' + nBack.head} pathLength="1" />
+    <text class="ink-text ink-text--accent ink-fade" style="--i:13" x="24" y="734" font-size="21">differences feed back</text>
+  </InkSvg>
+</div>
+
+<style>
+  .flow { max-width: 1000px; }
+  .flow :global(.flow-narrow) { max-width: 440px; }
+</style>

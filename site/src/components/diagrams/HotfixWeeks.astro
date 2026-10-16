@@ -1,0 +1,64 @@
+---
+// release-risk-review-hotfixes: two hand-drawn week strips with HOTFIX stamps.
+// Before: 4 stamps + a "+" spilling off the edge. After: one faded, dotted stamp.
+import InkSvg from '../InkSvg.astro';
+import { rect, line, rng } from '../../lib/ink';
+
+interface Props { variant?: 'full' | 'thumb'; label?: string }
+const {
+  variant = 'full',
+  label = 'Before: four or more hotfix releases stamped across a single week. After: zero to one.',
+} = Astro.props;
+const thumb = variant === 'thumb';
+
+const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+const X0 = 20, CW = 104, H = 84;
+const rows = [
+  { y: 58, title: 'Before', count: '4+ per week', stamps: [0, 1, 2, 3], plus: true, faded: [] as number[] },
+  { y: 218, title: 'After', count: '0–1 per week', stamps: [] as number[], plus: false, faded: [2] },
+];
+const r = rng(5);
+const W = X0 + CW * 5;
+---
+<InkSvg viewBox={thumb ? '0 0 600 310' : '0 0 600 320'} label={label} class={thumb ? 'hotfix hotfix--thumb' : 'hotfix'}>
+  {rows.map((row, ri) => (
+    <g>
+      <text class="ink-text" x={X0} y={row.y - 16} font-size={thumb ? 34 : 30}>{row.title}</text>
+      <text class="ink-text ink-text--accent" x={W} y={row.y - 16} font-size={thumb ? 34 : 30} text-anchor="end">{row.count}</text>
+      <path class="ink" style={`--i:${ri * 6}`} d={rect(X0, row.y, CW * 5, H, 20 + ri * 9, 1.6)} pathLength="1" />
+      {days.slice(1).map((_, i) => (
+        <path class="ink ink--faint" style={`--i:${ri * 6 + 1}`} d={line(X0 + CW * (i + 1), row.y + 4, X0 + CW * (i + 1) + (r() - 0.5) * 3, row.y + H - 4, 30 + i + ri * 7, 1.2)} pathLength="1" />
+      ))}
+      {!thumb && days.map((d, i) => (
+        <text class="ink-sans ink-fade fill-soft" style={`--i:${ri * 6 + 2}`} x={X0 + CW * i + 10} y={row.y + 20} font-size="13">{d}</text>
+      ))}
+      {row.stamps.map((di, k) => {
+        const cx = X0 + CW * di + CW / 2;
+        const cy = row.y + H / 2 + (thumb ? 0 : 7);
+        const rot = (r() - 0.5) * 16;
+        return (
+          <g transform={`translate(${cx} ${cy}) rotate(${rot.toFixed(1)})`}>
+            <path class="ink ink--accent" style={`--i:${ri * 6 + 3 + k}`} d={rect(-40, -17, 80, 34, 50 + k, 1.2)} pathLength="1" />
+            <text class="ink-sans ink-fade stamp-text" style={`--i:${ri * 6 + 3 + k}`} x="0" y="6" text-anchor="middle" font-size="16" font-weight="800" letter-spacing="1.5">HOTFIX</text>
+          </g>
+        );
+      })}
+      {row.plus && (
+        <g transform={`translate(${X0 + CW * 4 + CW * 0.98} ${row.y + H / 2 + 6}) rotate(9)`}>
+          <path class="ink ink--accent" style={`--i:${ri * 6 + 8}`} d={rect(-26, -20, 52, 40, 77, 1.2)} pathLength="1" />
+          <path class="ink ink--accent ink--bold" style={`--i:${ri * 6 + 9}`} d={`${line(-10, 0, 10, 0, 3, 0.6)} ${line(0, -10, 0, 10, 4, 0.6)}`} pathLength="1" />
+        </g>
+      )}
+      {row.faded.map((di) => (
+        <g transform={`translate(${X0 + CW * di + CW / 2} ${row.y + H / 2 + (thumb ? 0 : 7)}) rotate(-5)`} opacity="0.55">
+          <rect x="-40" y="-17" width="80" height="34" rx="3" fill="none" stroke-width="2" stroke-dasharray="2 5" stroke-linecap="round" class="ink-fade stroke-accent" />
+          <text class="ink-sans ink-fade fill-accent-ink" x="0" y="6" text-anchor="middle" font-size="16" font-weight="800" letter-spacing="1.5">HOTFIX</text>
+        </g>
+      ))}
+    </g>
+  ))}
+</InkSvg>
+
+<style>
+  .hotfix :global(.stamp-text) { fill: var(--accent-ink); }
+</style>

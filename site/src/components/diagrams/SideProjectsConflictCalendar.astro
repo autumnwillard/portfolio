@@ -1,0 +1,50 @@
+---
+// room-reserve-conflict-calendar: one room’s week. Two bookings overlap on Wednesday; the
+// second one gets crossed out and stamped. The core rule, drawn.
+import InkSvg from '../InkSvg.astro';
+import { rect, line, rng } from '../../lib/ink';
+
+const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+const X0 = 58, CW = 88, Y0 = 56, RH = 34; // rows: 9, 11, 1, 3, 5
+const hours = ['9', '11', '1', '3', '5'];
+const r = rng(981);
+const y = (h: number) => Y0 + h * RH; // h = row index (2-hour steps)
+const grid = [
+  ...days.slice(1).map((_, i) => line(X0 + CW * (i + 1), Y0 + 4, X0 + CW * (i + 1) + (r() - 0.5) * 3, Y0 + RH * 5 - 4, 982 + i, 1)),
+  ...hours.slice(1).map((_, i) => line(X0 + 4, Y0 + RH * (i + 1), X0 + CW * 5 - 4, Y0 + RH * (i + 1) + (r() - 0.5) * 2, 990 + i, 0.8)),
+].join(' ');
+const ok = [
+  { d: 0, h0: 0, h1: 1, t: 'Workshop' },
+  { d: 3, h0: 2, h1: 3.5, t: 'Reception' },
+];
+const first = { x: X0 + CW * 2 + 6, y0: y(0.5), y1: y(2.2) };
+const second = { x: X0 + CW * 2 + 34, y0: y(1.6), y1: y(3.3) };
+---
+<InkSvg viewBox="0 0 520 300" label="Two bookings for the same room overlap, and the app rejects the second one." class="sp-cal">
+  <text class="ink-text ink-fade" x={X0} y="30" font-size="26">Room A, one week</text>
+  <path class="ink" style="--i:0" d={rect(X0, Y0, CW * 5, RH * 5, 980, 1.4)} pathLength="1" />
+  <path class="ink ink--faint" style="--i:0.6" d={grid} pathLength="1" />
+  {days.map((d, i) => <text class="ink-sans ink-fade fill-soft" x={X0 + CW * i + CW / 2} y={Y0 - 8} font-size="13" font-weight="700" text-anchor="middle">{d}</text>)}
+  {hours.map((h, i) => <text class="ink-sans ink-fade fill-soft" x={X0 - 10} y={Y0 + RH * i + 15} font-size="12.5" font-weight="700" text-anchor="end">{h}</text>)}
+  {ok.map((b, i) => (
+    <>
+      <path class="ink" style={`--i:${1.2 + i * 0.3}`} d={rect(X0 + CW * b.d + 6, y(b.h0) + 4, CW - 12, (b.h1 - b.h0) * RH - 8, 1000 + i, 0.8)} pathLength="1" />
+      <text class="ink-text ink-fade" style={`--i:${1.2 + i * 0.3}`} x={X0 + CW * b.d + CW / 2} y={y(b.h0) + 25} font-size="17" text-anchor="middle">{b.t}</text>
+    </>
+  ))}
+  <rect class="ink-fade fill-hl" style="--i:2" x={first.x} y={first.y0} width="60" height={first.y1 - first.y0} rx="3" fill-opacity="0.55" />
+  <path class="ink ink--bold" style="--i:2" d={rect(first.x, first.y0, 60, first.y1 - first.y0, 1010, 0.8)} pathLength="1" />
+  <text class="ink-text ink-fade" style="--i:2" x={first.x + 30} y={first.y0 + 22} font-size="17" text-anchor="middle">Booked</text>
+  <path class="ink ink--accent ink--dash" style="--i:3" d={rect(second.x, second.y0, 60, second.y1 - second.y0, 1011, 0.8)} />
+  <path class="ink ink--accent ink--bold" style="--i:3.6" d={`${line(second.x + 4, second.y0 + 4, second.x + 56, second.y1 - 4, 1012, 0.6)} ${line(second.x + 56, second.y0 + 4, second.x + 4, second.y1 - 4, 1013, 0.6)}`} pathLength="1" />
+  <g transform={`translate(${X0 + CW * 3 + 70} ${y(4.25)}) rotate(-8)`}>
+    <path class="ink ink--accent ink--bold" style="--i:4.2" d={rect(-74, -20, 148, 40, 1014, 1.2)} pathLength="1" />
+    <text class="ink-sans ink-fade cal-stamp" style="--i:4.2" x="0" y="7" text-anchor="middle" font-size="19" font-weight="800" letter-spacing="2">CONFLICT!</text>
+  </g>
+  <text class="ink-text ink-text--accent ink-fade" style="--i:4.6" x={X0} y="286" font-size="19">Same room, same time: the second booking gets an error.</text>
+</InkSvg>
+
+<style>
+  :global(svg.ink-svg.sp-cal) { max-width: 32rem; }
+  :global(.sp-cal .cal-stamp) { fill: var(--accent-ink); }
+</style>

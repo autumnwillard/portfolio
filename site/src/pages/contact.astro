@@ -1,0 +1,91 @@
+---
+// Contact: one clear next step. No form. The email address is plain text on the page;
+// scripts/site.ts turns the "Email me" flag into a mailto link and reveals "Copy address".
+import BaseLayout from '../layouts/BaseLayout.astro';
+import StickyNote from '../components/StickyNote.astro';
+import Button from '../components/Button.astro';
+import ContactPaperPlane from '../components/diagrams/ContactPaperPlane.astro';
+import ContactIcon from '../components/diagrams/ContactIcon.astro';
+---
+<BaseLayout
+  title="Contact · Autumn Willard"
+  description="Get in touch with Autumn Willard, a technical product manager and hands-on builder. Email, LinkedIn and résumé."
+  active="contact"
+>
+  <div class="page contact">
+    <div class="contact__grid">
+      <div class="contact__main">
+        <div class="contact__head">
+          <h1>Let’s talk.</h1>
+          <ContactPaperPlane />
+        </div>
+        <p class="lede">I’m looking for a product manager role, ideally on an AI product. I want to own the what and the why, with a hand in the how and the when. The exact title matters less than that.</p>
+        <p>If that sounds like your team, email me. Tell me what you’re building and what’s hard about it right now. That’s my favorite kind of first message.</p>
+
+        <dl class="ways">
+          <div>
+            <dt><ContactIcon kind="email" /> Email</dt>
+            <dd>
+              <span class="addr" id="email-address">autumn<span>@</span>hey.com</span>
+              <span class="ways__btns">
+                <!-- Without JS the flag jumps to the address above; with JS it becomes a mailto link. -->
+                <Button variant="primary" class="js-email" href="#email-address" data-u="autumn" data-d="hey.com">Email me</Button>
+                <Button class="js-copy-email" data-u="autumn" data-d="hey.com" hidden>Copy address</Button>
+              </span>
+            </dd>
+          </div>
+          <div>
+            <dt><ContactIcon kind="linkedin" /> LinkedIn</dt>
+            <dd>
+              <span class="addr">linkedin.com/in/autumn-willard</span>
+              <Button href="https://www.linkedin.com/in/autumn-willard" color="green">Connect on LinkedIn</Button>
+            </dd>
+          </div>
+          <div>
+            <dt><ContactIcon kind="resume" /> Résumé</dt>
+            <dd><Button href="/autumn-willard-resume.pdf" color="yellow">Download résumé (PDF)</Button></dd>
+          </div>
+        </dl>
+      </div>
+
+      <StickyNote tilt={-2.4} color="yellow" class="contact__note">
+        Not sure it’s a fit? Email anyway. Worst case, we both learn something.
+      </StickyNote>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .contact { padding-top: var(--s3); padding-bottom: var(--s5); }
+  .contact__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 44rem) minmax(0, 17rem);
+    gap: var(--s3) var(--s4);
+    align-items: start;
+    padding-left: var(--margin-col);
+  }
+  .contact__head { display: flex; align-items: flex-end; gap: var(--s1) var(--s2); flex-wrap: wrap; }
+  .contact__head h1 { margin-bottom: 0; }
+  .contact__head :global(.contact-plane) { width: 13rem; margin-bottom: 0.4rem; }
+  .lede { font-size: var(--step-1); font-weight: 600; margin-top: var(--s2); }
+  .contact p { max-width: 60ch; }
+
+  .ways { margin: var(--s3) 0 0; display: grid; gap: var(--s2); }
+  .ways > div { border-top: 2px solid var(--ink); padding-top: 0.7rem; }
+  .ways dt { display: flex; align-items: center; gap: 0.55rem; font: 800 0.8rem/1.2 var(--font-body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft); }
+  .ways dd { margin: 0.5rem 0 0; display: flex; flex-wrap: wrap; gap: 0.75rem 1.25rem; align-items: center; }
+  .addr { font-weight: 800; font-size: var(--step-1); overflow-wrap: anywhere; scroll-margin-top: 6rem; }
+  .addr:target { background: var(--hl-soft); color: var(--hl-ink); }
+  .ways__btns { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+  .contact__grid :global(.contact__note) { margin-top: 9rem; }
+
+  @media (max-width: 900px) {
+    .contact__grid { grid-template-columns: minmax(0, 1fr); }
+    .contact__grid :global(.contact__note) { margin: var(--s2) 0 0 var(--s1); --note-size: 14rem; }
+  }
+  @media (max-width: 760px) {
+    .contact__grid { padding-left: 0; }
+    .contact__head :global(.contact-plane) { width: 7.5rem; }
+  }
+</style>

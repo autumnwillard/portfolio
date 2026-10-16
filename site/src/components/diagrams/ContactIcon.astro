@@ -1,0 +1,20 @@
+---
+// Hand-drawn link icons for the contact list: envelope, LinkedIn "in", résumé page.
+// Decorative: the link text carries the meaning.
+import { rect, line, smooth } from '../../lib/ink';
+interface Props { kind: 'email' | 'linkedin' | 'resume' }
+const { kind } = Astro.props;
+const d = {
+  email: `${rect(3, 7, 30, 22, 1201, 0.6)} ${smooth([[4, 9], [12, 16], [18, 20], [24, 16], [32, 9]])}`,
+  linkedin: `${rect(4, 4, 28, 28, 1211, 0.6)} ${line(11, 15, 11, 26, 1212, 0.3)} M11 10.5 l0.1 0.1 ${line(17, 15, 17, 26, 1213, 0.3)} ${smooth([[17, 19], [20, 15.5], [24, 15.5], [25.5, 19], [25.5, 26]])}`,
+  resume: `M7 3 L22 3 L30 11 L30 33 L7 33 Z M22 3 L22 11 L30 11 ${line(11, 17, 25, 17, 1221, 0.3)} ${line(11, 22, 25, 22, 1222, 0.3)} ${line(11, 27, 20, 27, 1223, 0.3)}`,
+}[kind];
+---
+<svg class="contact-icon" viewBox="0 0 36 36" width="28" height="28" aria-hidden="true" focusable="false">
+  <path class="ink" d={d} />
+</svg>
+
+<style>
+  .contact-icon { flex: none; overflow: visible; }
+  .contact-icon .ink { stroke-width: 2; }
+</style>

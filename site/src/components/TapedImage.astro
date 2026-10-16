@@ -1,0 +1,236 @@
+---
+// A photo "taped in" with a single strip of masking tape (or two corner strips).
+// Tape is pure CSS, so the image itself stays clean.
+//
+// It behaves like a print held down by tape. Three layers, so the tape never moves:
+//   .taped__body   the static tilt; holds the tape
+//   .taped__drift  scroll: the photo settles flat as it scrolls in, and its free edge
+//                  lifts a little as it scrolls away (CSS scroll-driven; no-op elsewhere)
+//   .taped__photo  hover: the print lifts straight up off the page under its tape (a
+//                  couple of px up, a hair bigger, a larger softer shadow), and a soft gloss
+//                  drifts with the pointer, as bright as the print is lifted (--lk, eased in
+//                  scripts/paper.ts). Top-taped prints lift a little more on the side the
+//                  pointer is on (strongest at the free bottom corners, zero at the tape),
+//                  shown mostly in the shadow. Touch: the gloss shows briefly as the print
+//                  lifts on scroll.
+// The lifted shadow is its own layer that only fades in, so nothing animates a box-shadow.
+// Reduced motion: all of it is off and the photo sits flat.
+interface Source { srcset: string; type: string }
+interface Props {
+  src: string;              // fallback <img> src
+  sources?: Source[];       // e.g. webp srcset
+  srcset?: string;          // fallback srcset (jpg)
+  sizes?: string;
+  alt: string;
+  width: number;
+  height: number;
+  tilt?: number;
+  tape?: 'top' | 'corners';
+  caption?: string;
+  loading?: 'eager' | 'lazy';
+  fetchpriority?: 'high' | 'auto';
+  class?: string;
+  frame?: boolean;          // white border, like a print
+}
+const {
+  src, sources = [], srcset, sizes, alt, width, height,
+  tilt = -1.5, tape = 'top', caption, loading = 'lazy', fetchpriority = 'auto',
+  class: cls = '', frame = true,
+} = Astro.props;
+---
+<figure class:list={['taped', `taped--${tape}`, frame && 'taped--frame', cls]} style={`--tilt:${tilt}deg`} data-paper-tilt>
+  <div class="taped__body">
+    <div class="taped__drift">
+      <div class="taped__photo">
+        <picture>
+          {sources.map((s) => <source srcset={s.srcset} type={s.type} sizes={sizes} />)}
+          <img src={src} srcset={srcset} sizes={sizes} alt={alt} width={width} height={height}
+            loading={loading} decoding="async" fetchpriority={fetchpriority} />
+        </picture>
+      </div>
+    </div>
+    <span class="tape tape--a" aria-hidden="true"></span>
+    {tape === 'corners' && <span class="tape tape--b" aria-hidden="true"></span>}
+  </div>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<script>
+  import '../scripts/paper';
+</script>
+
+<style>
+  .taped { margin: 0; position: relative; }
+  .taped__body {
+    position: relative;
+    transform: rotate(var(--tilt));
+  }
+  /* the print: taped along its top edge, so it pivots from there */
+  .taped__drift, .taped__photo { position: relative; transform-origin: 50% 0; }
+  .taped--corners .taped__drift, .taped--corners .taped__photo { transform-origin: 50% 50%; }
+  .taped__photo {
+    box-shadow: var(--paper-lift);
+    background: var(--card);  /* the print's border: white paper, dimmed in dark mode */
+    overflow: hidden;
+  }
+  .taped--frame .taped__photo { padding: clamp(6px, 1.2vw, 12px); }
+  .taped img { width: 100%; height: auto; }
+
+  /* Lifted-edge shadows, cast on the page under the photo. Hover and scroll each get
+     their own layer so they never fight over one property. */
+  .taped__drift::before, .taped__drift::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow:
+      0 3px 6px -2px rgb(var(--shadow) / 0.14),
+      0 16px 22px -12px rgb(var(--shadow) / 0.4);
+  }
+  .taped--corners .taped__drift::before, .taped--corners .taped__drift::after {
+    box-shadow: 0 4px 8px -3px rgb(var(--shadow) / 0.14), 0 14px 26px -10px rgb(var(--shadow) / 0.32);
+  }
+
+  /* Gloss on the print: a soft specular spot (a lamp reflected in a glossy photo) inside a
+     wide, faint glow. Bright core, quick falloff, long soft tail: no straight band.
+     Soft-light only lifts what's there, so it never washes the photo out, in either theme.
+     --px/--py (-1..1) move it; it sits up and to the left of the pointer, toward the lamp. */
+  .taped__photo::after, .taped__photo::before {
+    content: '';
+    position: absolute;
+    inset: -20%;
+    z-index: 1;
+    opacity: 0;
+    pointer-events: none;
+    --hx: calc(42% + var(--px, 0) * 26%);
+    --hy: calc(38% + var(--py, 0) * 22%);
+    background:
+      radial-gradient(ellipse 30% 26% at var(--hx) var(--hy),
+        rgb(255 255 255 / 0.75) 0%, rgb(255 255 255 / 0.42) 22%, rgb(255 255 255 / 0.14) 52%, rgb(255 255 255 / 0) 100%),
+      radial-gradient(ellipse 70% 60% at var(--hx) var(--hy),
+        rgb(255 255 255 / 0.22) 0%, rgb(255 255 255 / 0.07) 45%, rgb(255 255 255 / 0) 100%);
+    mix-blend-mode: soft-light;
+  }
+  /* the glint itself: soft-light vanishes on a pale print, so a faint plain-white core sits
+     on top. Small and capped low, so it reads as light, not as a white smear. */
+  .taped__photo::before {
+    background: radial-gradient(ellipse 16% 13% at var(--hx) var(--hy),
+      rgb(255 255 255 / 0.2) 0%, rgb(255 255 255 / 0.09) 40%, rgb(255 255 255 / 0) 100%);
+    mix-blend-mode: normal;
+  }
+
+  .tape {
+    position: absolute;
+    z-index: 2;
+    width: clamp(70px, 34%, 150px);
+    height: clamp(22px, 3.2vw, 34px);
+    background:
+      repeating-linear-gradient(90deg, transparent 0 5px, rgb(255 255 255 / 0.12) 5px 6px),
+      var(--tape);
+    border-top: 1px solid var(--tape-edge);
+    border-bottom: 1px solid var(--tape-edge);
+    /* torn ends */
+    clip-path: polygon(2% 0, 98% 4%, 100% 22%, 97% 41%, 100% 62%, 97% 83%, 99% 100%, 1% 96%, 3% 78%, 0 58%, 2% 37%, 0 17%);
+    box-shadow: 0 1px 2px rgb(var(--shadow) / 0.12);
+    pointer-events: none;
+  }
+  .taped--top .tape--a { top: clamp(-14px, -1.6vw, -10px); left: 50%; transform: translateX(-50%) rotate(-3deg); }
+  .taped--corners .tape--a { top: -10px; left: -18px; width: clamp(60px, 28%, 120px); transform: rotate(-38deg); }
+  .taped--corners .tape--b { bottom: -8px; right: -18px; width: clamp(60px, 28%, 120px); transform: rotate(-38deg); }
+  figcaption { margin-top: var(--s1); }
+
+  /* ---------- Hover (mouse only): the print lifts off the page under its tape ---------- */
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .taped__photo {
+      transition: transform var(--lift-time) var(--ease-lift);
+    }
+    .taped__photo::after { transition: opacity var(--lift-time) ease, translate var(--lift-time) var(--ease-lift); }
+    .taped__drift::before { transition: opacity var(--lift-time) ease; }
+    .taped:hover .taped__photo { transform: translateY(-3px) scale(1.012); }
+    /* top-taped: pivot from the tape like the taped index cards (TapedWorkCards.astro) */
+    .taped--top:hover .taped__photo { transform: perspective(900px) rotateX(3deg); }
+    .taped:hover .taped__drift::before { opacity: 1; }
+    .taped:hover .taped__photo::after { opacity: 0.7; }
+
+    /* With the script running, one spring drives it frame by frame (paper.ts), so the lift,
+       the shadow and the gloss rise and settle together (--lk). */
+    .taped.is-lit .taped__photo {
+      transition: none;
+      transform: translateY(calc(-3px * var(--lk, 0))) scale(calc(1 + 0.012 * var(--lk, 0)));
+    }
+    .taped.is-lit .taped__drift::before { transition: none; opacity: var(--lk, 0); }
+    .taped.is-lit .taped__photo::after { transition: none; opacity: calc(var(--lk, 0) * 0.85); }
+    .taped.is-lit .taped__photo::before { opacity: var(--lk, 0); }
+
+    /* Top-taped prints lift the way the taped index cards do: they pivot from the tape
+       (perspective(900px) rotateX ~3deg, origin at the top edge), so the top stays down and
+       the free bottom edge comes up. On top of that, they lift more where the pointer is:
+       pointer on the left lifts the left side (a little rotateY, like the cards' lean),
+       bottom centre lifts the bottom edge evenly. The shadow follows, skewed and stretched
+       from the taped edge so it grows on the lifted side.
+         --fy  0 at the tape .. 1 at the bottom edge
+         --ex  -1 left .. 1 right, sideways lift (some even near the top: those corners are free)
+         --ey  0..1, bottom-edge lift */
+    .taped--top.is-lit {
+      --fy: clamp(0, (var(--py, 0) + 1) / 2, 1);
+      --ex: calc(clamp(-1, var(--px, 0), 1) * (0.35 + 0.65 * var(--fy)) * var(--lk, 0));
+      --ey: calc(var(--fy) * var(--fy) * var(--lk, 0));
+    }
+    .taped--top.is-lit .taped__photo {
+      transform: perspective(900px)
+        rotateX(calc(var(--lk, 0) * 2.4deg + var(--ey) * 1.2deg))
+        rotateY(calc(var(--ex) * -1.4deg));
+    }
+    .taped--top.is-lit .taped__drift::before {
+      transform-origin: 50% 0;
+      transform: skewX(calc(var(--ex) * 1.3deg))
+        scale(calc(1 + 0.012 * var(--ey) + 0.008 * var(--lk, 0)), calc(1 + 0.022 * var(--ey) + 0.008 * var(--lk, 0)));
+    }
+  }
+
+  /* ---------- Scroll: settle in, lift a little on the way out ---------- */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .taped { view-timeline: --taped block; }
+      .taped__drift {
+        animation: taped-drift linear both;
+        animation-timeline: --taped;
+        animation-range: entry 0% exit 100%;
+      }
+      .taped__drift::after {
+        animation: taped-drift-shade linear both;
+        animation-timeline: --taped;
+        animation-range: entry 0% exit 100%;
+      }
+    }
+    /* touch: no pointer to follow, so the gloss answers the scroll instead. It glints as
+       the print settles in and again as its edge lifts on the way out. */
+    @media (hover: none) and (prefers-reduced-motion: no-preference) {
+      .taped__photo::after {
+        animation: taped-gloss linear both;
+        animation-timeline: --taped;
+        animation-range: entry 0% exit 100%;
+      }
+    }
+  }
+  @keyframes taped-gloss {
+    entry 0% { opacity: 0.45; translate: 0 -8%; }
+    entry 85% { opacity: 0; translate: 0 0; }
+    exit 0% { opacity: 0; translate: 0 0; }
+    exit 100% { opacity: 0.5; translate: 0 10%; }
+  }
+  @keyframes taped-drift {
+    entry 0% { transform: perspective(1000px) rotateX(6deg) translateY(-6px); }
+    entry 85% { transform: perspective(1000px) rotateX(0deg) translateY(0); }
+    exit 0% { transform: perspective(1000px) rotateX(0deg) translateY(0); }
+    exit 100% { transform: perspective(1000px) rotateX(5deg) translateY(0); }
+  }
+  @keyframes taped-drift-shade {
+    entry 0% { opacity: 1; }
+    entry 85% { opacity: 0; }
+    exit 0% { opacity: 0; }
+    exit 100% { opacity: 0.9; }
+  }
+</style>

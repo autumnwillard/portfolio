@@ -1,0 +1,119 @@
+---
+// The top three case studies as lined index cards taped onto the page. Copy comes
+// straight from the Work cards (hook, blurb, first headline number). Each card
+// is one link to its case study. A small status stamp sits under each hook, so the
+// unshipped routing project always says so. The tape varies on purpose: length, angle, position,
+// one or two pieces, and pattern.
+//
+// The tape holds each card down, so the card lifts under it: the <li> keeps the tilt and
+// the tape; .tcard__paper is the card itself. Hover/focus (and, on touch screens, scrolling
+// in) lifts the card's free edge away from where it's taped, and a softer shadow fades in.
+import { featured } from '../data/work';
+
+import StatusBadge from './StatusBadge.astro';
+
+const tape = [
+  [{ kind: 'plain', len: '6.5rem', rot: '-3deg', pos: 'top:-0.8rem; left:50%; translate:-50% 0' }],
+  [
+    { kind: 'stripes', len: '5.5rem', rot: '-38deg', pos: 'top:-0.4rem; left:-2rem' },
+    { kind: 'dots', len: '4.5rem', rot: '34deg', pos: 'top:-0.5rem; right:-1.6rem' },
+  ],
+  [{ kind: 'check', len: '5.25rem', rot: '30deg', pos: 'top:-0.5rem; right:-1.7rem' }],
+];
+const tilts = [-1.3, 0.9, -0.6];
+// where each card is held, so it pivots there: top middle, both top corners, top right only
+const pivots = [
+  { origin: '50% 0', lean: '0deg' },
+  { origin: '50% 0', lean: '0deg' },
+  { origin: '100% 0', lean: '1.6deg' }, // the loose left side lifts more
+];
+const cards = featured.slice(0, 3);
+---
+<ul class="tcards" role="list">
+  {cards.map((c, i) => (
+    <li class="tcard" style={`--tilt:${tilts[i]}deg; --origin:${pivots[i].origin}; --lean:${pivots[i].lean}`}>
+      <div class="tcard__paper index-card">
+        <h3 class="tcard__hook"><a class="card__link tcard__link" href={c.href}>{c.hook}<span class="visually-hidden">. Read the case study</span></a></h3>
+        <p class="tcard__stamp"><StatusBadge status={c.badge} size="sm" /></p>
+        <p class="tcard__blurb">{c.blurb}</p>
+        <p class="tcard__num">{c.numbers[0]}</p>
+      </div>
+      {tape[i].map((t) => <span class={`washi washi--${t.kind}`} style={`--len:${t.len}; --rot:${t.rot}; ${t.pos}`} aria-hidden="true"></span>)}
+    </li>
+  ))}
+</ul>
+<p class="tcards__all"><a class="text-link" href="/work/">See all the work →</a></p>
+
+<style>
+  .tcards {
+    list-style: none;
+    margin: 0;
+    padding: 1.25rem 0 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2.25rem 2rem;
+    align-items: start;
+  }
+  .tcard {
+    --card-head: 1.6rem;
+    position: relative;
+    transform: rotate(var(--tilt));
+  }
+  .tcard__paper {
+    padding: var(--card-head) 1.25rem 1.3rem;
+    /* writing lines sit just under each line of text */
+    background-position: 0 0, 0 calc(var(--card-head) + 0.4rem);
+    transform-origin: var(--origin);
+  }
+  /* the lifted card's shadow, cast on the page; it only fades in */
+  .tcard::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0;
+    pointer-events: none;
+    box-shadow: 0 3px 6px -2px rgb(var(--shadow) / 0.12), 0 16px 22px -12px rgb(var(--shadow) / 0.36);
+  }
+  .tcard:nth-child(2) { margin-top: 1.5rem; }
+  .tcard:nth-child(3) { margin-top: 0.5rem; }
+  .tcard p { margin: 0; }
+  .tcard__hook { font-size: clamp(1.4rem, 1.2rem + 0.5vw, 1.65rem); line-height: var(--card-pitch); margin: 0; padding-top: 0.1rem; }
+  .tcard__link { color: var(--ink); }
+  .tcard__link::after { content: ''; position: absolute; inset: 0; z-index: 1; }
+  .tcard__link:focus-visible { outline: none; }
+  .tcard:has(.tcard__link:focus-visible) { outline: 2.5px dashed var(--focus-ring); outline-offset: 6px; }
+  .tcard__blurb { font-size: 1rem; line-height: var(--card-pitch); }
+  .tcard__stamp { height: var(--card-pitch); display: flex; align-items: center; }
+  .tcard__num { margin-top: 0 !important; font-weight: 800; line-height: var(--card-pitch); padding-left: 1.4rem; position: relative; }
+  .tcard__num::before { content: ''; position: absolute; left: 0; top: 0.75em; width: 0.8rem; height: 0.35rem; border-bottom: 3px solid var(--accent); border-radius: 0 0 50% 50%; transform: rotate(-6deg); }
+  .tcards__all { margin-top: var(--s3); }
+  /* Hover (mouse) and keyboard focus: the tape stays, the card's free edge lifts under it */
+  @media (prefers-reduced-motion: no-preference) {
+    .tcard__paper { transition: transform var(--lift-time) var(--ease-lift); }
+    .tcard::before { transition: opacity var(--lift-time) ease; }
+    .tcard:focus-within .tcard__paper { transform: perspective(900px) rotateX(3deg) rotateY(var(--lean)); }
+    .tcard:focus-within::before { opacity: 1; }
+  }
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .tcard:hover .tcard__paper { transform: perspective(900px) rotateX(3deg) rotateY(var(--lean)); }
+    .tcard:hover::before { opacity: 1; }
+  }
+  /* Touch screens: each card comes in lifted and presses flat as it scrolls into view */
+  @supports (animation-timeline: view()) {
+    @media (hover: none) and (prefers-reduced-motion: no-preference) {
+      .tcard { view-timeline: --tcard block; }
+      .tcard__paper { animation: tcard-settle linear both; animation-timeline: --tcard; animation-range: entry 10% entry 90%; }
+      .tcard::before { animation: tcard-settle-shade linear both; animation-timeline: --tcard; animation-range: entry 10% entry 90%; }
+    }
+  }
+  @keyframes tcard-settle {
+    from { transform: perspective(900px) rotateX(7deg) rotateY(calc(var(--lean) * 2)) translateY(-4px); }
+    to { transform: perspective(900px) rotateX(0deg) rotateY(0deg) translateY(0); }
+  }
+  @keyframes tcard-settle-shade { from { opacity: 1; } to { opacity: 0; } }
+  @media (max-width: 1000px) {
+    .tcards { grid-template-columns: minmax(0, 1fr); max-width: 34rem; gap: 2.5rem; padding-inline: 1rem 1.75rem; }
+    .tcard:nth-child(n) { margin-top: 0; }
+  }
+</style>

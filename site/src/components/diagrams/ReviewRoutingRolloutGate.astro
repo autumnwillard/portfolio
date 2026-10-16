@@ -1,0 +1,112 @@
+---
+// review-routing-rollout-gate: the evaluation plan as a path. Shadow → 95% gate →
+// rely → maintain, with low confidence always going to a person, and a pin showing
+// where things stood when Autumn left. A plan, not a result.
+import InkSvg from '../InkSvg.astro';
+import { rect, arrow, line, loop } from '../../lib/ink';
+
+const label =
+  'The rollout plan: run the AI in shadow mode against reviewer decisions, rely on it only after it reaches 95% accuracy, then maintain it. Low-confidence items always go to a human. The build was just starting when Autumn left.';
+
+/* a little gate: two posts, a striped boom, and the 95% circled on it */
+const gate = (cx: number, top: number, w: number, h: number, seed: number) => ({
+  posts: `${line(cx - w / 2, top, cx - w / 2 + 1, top + h, seed, 1)} ${line(cx + w / 2, top, cx + w / 2 - 1, top + h, seed + 1, 1)}`,
+  feet: `${line(cx - w / 2 - 12, top + h, cx - w / 2 + 12, top + h, seed + 2, 0.6)} ${line(cx + w / 2 - 12, top + h, cx + w / 2 + 12, top + h, seed + 3, 0.6)}`,
+  boom: `${line(cx - w / 2, top + 22, cx + w / 2, top + 20, seed + 4, 1)} ${line(cx - w / 2, top + 36, cx + w / 2, top + 34, seed + 5, 1)}`,
+});
+
+/* wide */
+const g = gate(482, 120, 96, 90, 501);
+const w1 = arrow([[392, 160], [408, 158], [424, 160]], 502, 9);
+const w2 = arrow([[540, 160], [556, 162], [572, 160]], 503, 9);
+const w3 = arrow([[762, 160], [776, 158], [790, 160]], 504, 9);
+
+/* narrow */
+const ng = gate(190, 262, 120, 74, 521);
+const n1 = arrow([[190, 192], [192, 206], [190, 220]], 522, 9);
+const n2 = arrow([[190, 342], [188, 356], [190, 370]], 523, 9);
+const n3 = arrow([[190, 446], [192, 460], [190, 474]], 524, 9);
+---
+<div class="routing-gate">
+  <InkSvg viewBox="0 0 1000 330" label={label} class="only-wide">
+    <!-- pin: where things stood -->
+    <text class="ink-text ink-text--accent ink-fade" style="--i:0" x="14" y="40" font-size="23">Where it stood when I left</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:0" x="14" y="64" font-size="14">build starting, Dec 2025</text>
+    <path class="ink ink--accent ink--bold" style="--i:1" d={loop(84, 104, 13, 13, 505, 1.05)} pathLength="1" />
+    <path class="ink ink--accent ink--bold" style="--i:1" d={line(84, 118, 86, 190, 506, 0.8)} pathLength="1" />
+    <path class="ink ink--faint" style="--i:1" d={line(56, 192, 116, 191, 507, 0.8)} pathLength="1" />
+
+    <!-- 1. shadow -->
+    <path class="ink" style="--i:2" d={rect(140, 108, 248, 100, 510)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:2" x="160" y="142" font-size="27">1. Shadow</text>
+    <text class="ink-sans ink-fade" style="--i:2" x="160" y="170" font-size="14.5">compare AI answers to</text>
+    <text class="ink-sans ink-fade" style="--i:2" x="160" y="190" font-size="14.5">reviewer decisions</text>
+    <path class="ink" style="--i:3" d={w1.shaft + ' ' + w1.head} pathLength="1" />
+
+    <!-- the gate -->
+    <text class="ink-text ink-text--accent ink-fade" style="--i:4" x="482" y="88" font-size="22" text-anchor="middle">95% accuracy gate</text>
+    <path class="ink ink--bold" style="--i:4" d={g.posts} pathLength="1" />
+    <path class="ink" style="--i:4.5" d={g.feet} pathLength="1" />
+    <path class="ink" style="--i:5" d={g.boom} pathLength="1" />
+    <path class="ink ink--accent ink--bold" style="--i:6" d={loop(482, 174, 40, 24, 508, 1.1)} pathLength="1" />
+    <text class="ink-text ink-text--accent ink-fade" style="--i:6" x="482" y="184" font-size="27" text-anchor="middle">95%</text>
+    <path class="ink" style="--i:7" d={w2.shaft + ' ' + w2.head} pathLength="1" />
+
+    <!-- 2. rely -->
+    <path class="ink" style="--i:8" d={rect(576, 108, 182, 100, 511)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:8" x="594" y="142" font-size="27">2. Rely</text>
+    <text class="ink-sans ink-fade" style="--i:8" x="594" y="170" font-size="14.5">use it for routing</text>
+    <path class="ink" style="--i:9" d={w3.shaft + ' ' + w3.head} pathLength="1" />
+
+    <!-- 3. maintain -->
+    <path class="ink" style="--i:10" d={rect(794, 108, 196, 100, 512)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:10" x="812" y="142" font-size="27">3. Maintain</text>
+    <text class="ink-sans ink-fade" style="--i:10" x="812" y="170" font-size="14.5">update as guidelines</text>
+    <text class="ink-sans ink-fade" style="--i:10" x="812" y="190" font-size="14.5">and regulations change</text>
+
+    <!-- always: low confidence → a person -->
+    <path class="ink ink--accent ink--dash" style="--i:11" d={line(140, 250, 990, 248, 513, 1.2)} />
+    <path class="ink ink--accent" style="--i:11" d={`${line(140, 238, 140, 262, 514, 0.5)} ${line(990, 236, 990, 260, 515, 0.5)}`} pathLength="1" />
+    <text class="ink-text ink-text--accent ink-fade" style="--i:12" x="565" y="290" font-size="23" text-anchor="middle">Low confidence → human review (always)</text>
+  </InkSvg>
+
+  <InkSvg viewBox="0 0 380 640" label={label} class="only-narrow">
+    <text class="ink-text ink-text--accent ink-fade" style="--i:0" x="62" y="30" font-size="21">Where it stood when I left</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:0" x="62" y="52" font-size="13.5">build starting, Dec 2025</text>
+    <path class="ink ink--accent ink--bold" style="--i:1" d={loop(32, 38, 12, 12, 525, 1.05)} pathLength="1" />
+    <path class="ink ink--accent ink--bold" style="--i:1" d={line(32, 51, 34, 98, 526, 0.8)} pathLength="1" />
+
+    <path class="ink" style="--i:2" d={rect(14, 100, 330, 88, 530)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:2" x="32" y="132" font-size="26">1. Shadow</text>
+    <text class="ink-sans ink-fade" style="--i:2" x="32" y="158" font-size="14.5">compare AI answers to</text>
+    <text class="ink-sans ink-fade" style="--i:2" x="32" y="177" font-size="14.5">reviewer decisions</text>
+    <path class="ink" style="--i:3" d={n1.shaft + ' ' + n1.head} pathLength="1" />
+
+    <text class="ink-text ink-text--accent ink-fade" style="--i:4" x="190" y="250" font-size="21" text-anchor="middle">95% accuracy gate</text>
+    <path class="ink ink--bold" style="--i:4" d={ng.posts} pathLength="1" />
+    <path class="ink" style="--i:4.5" d={ng.feet} pathLength="1" />
+    <path class="ink" style="--i:5" d={ng.boom} pathLength="1" />
+    <path class="ink ink--accent ink--bold" style="--i:6" d={loop(190, 314, 40, 22, 527, 1.1)} pathLength="1" />
+    <text class="ink-text ink-text--accent ink-fade" style="--i:6" x="190" y="323" font-size="25" text-anchor="middle">95%</text>
+    <path class="ink" style="--i:7" d={n2.shaft + ' ' + n2.head} pathLength="1" />
+
+    <path class="ink" style="--i:8" d={rect(14, 374, 330, 68, 531)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:8" x="32" y="404" font-size="26">2. Rely</text>
+    <text class="ink-sans ink-fade" style="--i:8" x="32" y="428" font-size="14.5">use it for routing</text>
+    <path class="ink" style="--i:9" d={n3.shaft + ' ' + n3.head} pathLength="1" />
+
+    <path class="ink" style="--i:10" d={rect(14, 478, 330, 88, 532)} pathLength="1" />
+    <text class="ink-text ink-fade" style="--i:10" x="32" y="510" font-size="26">3. Maintain</text>
+    <text class="ink-sans ink-fade" style="--i:10" x="32" y="536" font-size="14.5">update as guidelines</text>
+    <text class="ink-sans ink-fade" style="--i:10" x="32" y="555" font-size="14.5">and regulations change</text>
+
+    <path class="ink ink--accent ink--dash" style="--i:11" d={line(364, 100, 362, 566, 533, 1.2)} />
+    <text class="ink-text ink-text--accent ink-fade" style="--i:12" x="14" y="602" font-size="21">Low confidence → human review</text>
+    <text class="ink-text ink-text--accent ink-fade" style="--i:12" x="14" y="626" font-size="21">(always)</text>
+  </InkSvg>
+</div>
+
+<style>
+  .routing-gate { max-width: 1000px; }
+  .routing-gate :global(.only-narrow) { max-width: 440px; }
+</style>

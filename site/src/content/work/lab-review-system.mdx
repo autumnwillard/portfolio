@@ -1,0 +1,118 @@
+---
+title: "What do you mean it was never submitted?"
+short_title: "Lab Review System"
+order: 4
+so_what: "People thought they’d submitted records they never had. That was one of many pains in two enterprise apps used by 2,000+ people across the national lab system. With a strict budget and borrowed developers, I ranked the backlog by user pain and shipped the smallest fix for each. Abandoned records went from hundreds a year to nearly zero."
+card_blurb: "People thought they’d submitted records they never had. With a strict budget and borrowed developers, I ranked two apps’ backlog by user pain and shipped the smallest fix for each, starting with that one."
+card_metrics:
+  - "2,000+ users"
+  - "Abandoned records: hundreds per year → nearly zero"
+  - "Questions down approximately 50%"
+status: "Shipped"
+glance:
+  role: "Product Manager & Software Engineer at Idaho National Laboratory, a U.S. Department of Energy national lab"
+  team: "me, borrowed developers and a co-worker on the help content, for 2,000+ researchers, reviewers and compliance stakeholders across the national laboratory system"
+  timeframe: "during my time at INL (2022–2025)"
+  status: "Shipped"
+  numbers: "2,000+ users · abandoned records: hundreds per year → nearly zero · questions down approximately 50%"
+metrics:
+  - value: "2,000+"
+    label: "users"
+  - value: "hundreds → ~0"
+    label: "abandoned records per year (nearly zero)"
+  - value: "~50%"
+    label: "fewer questions (approximately)"
+description: "How Autumn Willard ranked a growing backlog for two enterprise apps at INL by user pain, then shipped small fixes. Abandoned records dropped to nearly zero."
+next:
+  title: "Expedite Request Intake"
+  href: "/work/expedite-intake/"
+---
+import StickyNote from '../../components/StickyNote.astro';
+import InkArrow from '../../components/InkArrow.astro';
+import LabReviewComic from '../../components/diagrams/LabReviewComic.astro';
+import LabReviewBacklog from '../../components/diagrams/LabReviewBacklog.astro';
+import LabReviewButtonTable from '../../components/diagrams/LabReviewButtonTable.astro';
+import LabReviewQuestionMap from '../../components/diagrams/LabReviewQuestionMap.astro';
+
+## The problem: a backlog that only grew
+
+Work leaving the lab went through two systems: the review system and a companion release tool. I owned the backlog for both.
+
+The systems worked. They just weren't friendly. People got confused, hit the same errors and asked the same questions, and each of those became a backlog item. The developers who could fix them were shared, so our items kept getting pushed behind more urgent work. The backlog grew.
+
+<InkArrow from="problem" to="cause" seed={5} />
+
+## Digging in: three signals
+
+**"My record was submitted, right?"** Researchers believed they'd submitted records that never were. I walked the test site as a brand-new user, asking one question the whole way: "If this were my first time using this, how would I know what to do next?"
+
+You wouldn't. The "Start Manager Review" button didn't appear until every required field was filled in, and nothing told you a button was coming. Nothing warned you when you left a half-finished record. And the record's status said "New," which sure sounds like it worked.
+
+<figure class="figure-wide">
+  <LabReviewComic />
+</figure>
+
+<StickyNote float tilt={2} color="yellow">
+"New" is a great status for a car. For a record nobody ever submitted, it's a polite little lie.
+</StickyNote>
+
+**The same questions, every day.** We tracked the recurring questions and talked them through in our daily meetings. The systems had no user guides, and new employees had it worst.
+
+**Feedback and errors with nowhere to go.** I consolidated the scattered backlog and ranked it by user feedback and how often each issue came up.
+
+## Constraints
+
+- **Old system, small budget.** Changes had to stay minimal.
+- **Borrowed developers.** They had little time for our department.
+- **Access was its own project.** Getting into anything ourselves meant a whole process.
+
+<InkArrow from="cause" to="fix" seed={9} flip />
+
+## What I did: the smallest fix for the biggest pain
+
+Every item got the same test: ==what's the smallest change that makes this pain go away?==
+
+**1. Incomplete records: three changes, not a redesign.** A rebuilt submission flow would have been nicer, and it would have sat in the developer queue forever. So:
+
+- The "Start Manager Review" button is always visible, grayed out until the record is ready.
+- The status changed from "New" to "Unsubmitted Draft."
+- Leaving an incomplete record pops up a warning that changes may not save.
+
+**2. The backlog, and the developer bottleneck.** A ranked backlog doesn't help if nobody can work it. I'd finished my B.S. in software engineering, so I shadowed a senior developer, earned access to the repo, Jira and Azure DevOps, then started shipping fixes myself. Each one maps to a pain:
+
+<figure class="figure-wide">
+  <LabReviewBacklog />
+</figure>
+
+<LabReviewButtonTable />
+
+<StickyNote float tilt={-2.2} color="green">
+Did I learn the deployment pipeline partly so I could stop waiting in line for a developer? I'll neither confirm nor deny.
+</StickyNote>
+
+**3. Self-serve help (built with a co-worker).** The lab's training department was working on official courses, but users needed answers now. We chose speed over polish and used tools we already had:
+
+- A department SharePoint homepage (I took point) with links to both systems, the FAQ, a process overview and our expedite request form.
+- An FAQ, which I converted from a Word doc to a web page with a linked table of contents.
+- A walkthrough video for each system, which my co-worker and I recorded together.
+
+<figure class="figure-wide">
+  <LabReviewQuestionMap />
+</figure>
+
+<InkArrow from="fix" to="result" seed={15} />
+
+## What happened
+
+- **Abandoned records:** records people left unsubmitted by accident dropped ==from hundreds per year to nearly zero==. Helpdesk emails about how to submit a record dropped dramatically, too.
+- **Questions:** the number of questions decreased by approximately 50%. The walkthrough videos were adopted by multiple research departments for training new users.
+- **Errors:** upload errors became nearly non-existent after I cut the upload limit to 120MB to match a federal repository's requirements.
+- **Overall:** fewer user-reported issues, and fewer reviews that needed an admin to step in.
+
+I don't have exact baselines or dates for these. They're what we saw, not what a dashboard measured.
+
+## Looking back
+
+Hard numbers were scarce here, which is exactly why I measure first now.
+
+The biggest result on this page came from a status label and a grayed-out button. Before asking for a redesign, check whether the system is just telling people the wrong thing.
