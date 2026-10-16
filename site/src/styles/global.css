@@ -457,6 +457,40 @@ ol.ink-steps > li::before {
   .js .draw.is-drawn .ink-fade { opacity: 1; }
 }
 
+/* ---------- Written in as you read (site.ts: setupWriteIn, setupMarginLoops) ----------
+   Only elements that start below the fold get .is-waiting, and only with JS and motion
+   on. Everything's resting state is the finished page. */
+
+/* A pencil loop around the section number in the margin, drawn as its section arrives. */
+.sheet-section > .margin-mark { position: relative; }
+.margin-loop {
+  position: absolute;
+  left: -1.05rem;
+  top: 0.15rem;
+  width: 3.7rem;
+  height: auto;
+  overflow: visible;
+  pointer-events: none;
+}
+.margin-loop .ink { stroke: var(--ink-soft); stroke-width: 1.5; opacity: 0.75; }
+@media (prefers-reduced-motion: no-preference) {
+  .js .margin-loop.draw .ink { --draw-time: 650ms; transition-delay: 120ms; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Highlighter: the yellow swipes on left to right, chisel tip first, once. */
+  mark.hl { transition: background-size 560ms cubic-bezier(0.45, 0.05, 0.2, 1) 80ms; }
+  mark.hl.is-waiting { background-size: 0% 80%; transition: none; }
+
+  /* Case-study arrows: the arrow drops first, then its label is jotted beside it. */
+  .thread__label { transition: opacity 380ms ease 650ms, translate 520ms var(--ease-spring) 650ms; }
+  .thread__label.is-waiting { opacity: 0; translate: -0.6rem 0; transition: none; }
+
+  /* End credits: the sign-off is written in as the footer rolls up. */
+  .credits__signoff { transition: opacity 500ms ease, translate 700ms var(--ease-spring); }
+  .credits__signoff.is-waiting { opacity: 0; translate: 0 0.6rem; transition: none; }
+}
+
 /* ---------- Figures ---------- */
 figure { margin: var(--s3) 0; }
 figcaption {

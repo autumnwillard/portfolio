@@ -7,18 +7,19 @@ const r = rng(seed);
 const len = 520 + Math.round(r() * 140);
 const rule = line(4, 12, len, 12 + (r() - 0.5) * 6, seed, 2.2);
 const end = len + 22;
+// The star is three quick flicks of the pen, drawn one after another once the rule lands.
 const star = [
   line(end - 9, 12, end + 9, 12, seed + 3, 0.8),
   line(end, 3, end, 21, seed + 4, 0.8),
   line(end - 7, 5, end + 7, 19, seed + 5, 0.8),
-].join(' ');
+];
 const arrowHead = `M${end - 14} 4 L${end} 12 L${end - 13} 20`;
 ---
 <div class="divider" aria-hidden="true">
   <svg class="draw" viewBox={`0 0 ${end + 16} 24`} width={end + 16} height="24" focusable="false">
-    <path class="ink ink--faint" d={rule} pathLength="1" />
-    {flourish === 'star' && <path class="ink ink--accent" style="--i:4" d={star} pathLength="1" />}
-    {flourish === 'arrow' && <path class="ink ink--faint" style="--i:4" d={arrowHead} pathLength="1" />}
+    <path class="ink ink--faint divider__rule" d={rule} pathLength="1" />
+    {flourish === 'star' && star.map((d, k) => <path class="ink ink--accent divider__flick" style={`--k:${k}`} d={d} pathLength="1" />)}
+    {flourish === 'arrow' && <path class="ink ink--faint divider__flick" style="--k:0" d={arrowHead} pathLength="1" />}
   </svg>
 </div>
 
@@ -26,5 +27,11 @@ const arrowHead = `M${end - 14} 4 L${end} 12 L${end - 13} 20`;
   .divider { padding-left: var(--margin-col); }
   .divider svg { width: min(100%, 40rem); height: auto; overflow: visible; }
   .divider .ink { stroke-width: 2; }
+  /* Pen speed: the rule is one long confident sweep (slow off the mark, quick through
+     the middle, easing into the end), then the flourish is flicked on fast. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .divider .divider__rule { transition: stroke-dashoffset 900ms cubic-bezier(0.6, 0, 0.3, 1); }
+    :global(.js) .divider .divider__flick { transition: stroke-dashoffset 150ms cubic-bezier(0.3, 0.6, 0.4, 1); transition-delay: calc(860ms + var(--k) * 130ms); }
+  }
   @media (max-width: 760px) { .divider { padding-left: 0; } }
 </style>

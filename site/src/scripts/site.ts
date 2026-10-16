@@ -1,4 +1,5 @@
 // Small, CSS-first enhancements. Runs once; re-binds after every page change.
+import { loop } from '../lib/ink';
 
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 let observer: IntersectionObserver | null = null;
@@ -23,6 +24,49 @@ function setupDraw() {
     { rootMargin: '0px 0px -60px 0px', threshold: 0.1 },
   );
   items.forEach((el) => observer!.observe(el));
+}
+
+/**
+ * The sketchbook keeps up with you as you read. A few things get "written in" as they
+ * arrive: highlighter swipes, the label beside a case-study arrow, the end-credits
+ * sign-off. Only things that start below the fold wait (they get .is-waiting); anything
+ * already on screen, and everything without JS or with reduced motion, is simply there.
+ */
+const WRITE_IN = 'mark.hl, .thread__label, .credits__signoff';
+let writer: IntersectionObserver | null = null;
+function setupWriteIn() {
+  writer?.disconnect();
+  if (reduce.matches || !('IntersectionObserver' in window)) return;
+  writer = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        if (e.isIntersecting) {
+          e.target.classList.remove('is-waiting');
+          writer?.unobserve(e.target);
+        }
+      }
+    },
+    { rootMargin: '0px 0px -12% 0px', threshold: 0.6 },
+  );
+  const fold = innerHeight;
+  document.querySelectorAll<HTMLElement>(WRITE_IN).forEach((el) => {
+    if (el.getBoundingClientRect().top < fold) return;
+    el.classList.add('is-waiting');
+    writer!.observe(el);
+  });
+}
+
+/**
+ * Section numbers in the margin get a quick pencil loop around them as their section
+ * arrives, like someone ticking off where they are. Decoration only (and only on
+ * screens wide enough to show the margin); the numbers read fine without it.
+ */
+function setupMarginLoops() {
+  document.querySelectorAll<HTMLElement>('.sheet-section > .margin-mark').forEach((mark, i) => {
+    if (mark.querySelector('.margin-loop')) return;
+    const svg = `<svg class="margin-loop draw" viewBox="0 0 60 40" aria-hidden="true" focusable="false"><path class="ink" pathLength="1" d="${loop(30, 21, 24, 16, 50 + i * 7, 1.12)}"/></svg>`;
+    mark.insertAdjacentHTML('beforeend', svg);
+  });
 }
 
 /** Build mailto links at runtime (the address stays readable as text without JS). */
@@ -279,7 +323,9 @@ document.addEventListener('astro:before-preparation', (e) => {
 });
 
 document.addEventListener('astro:page-load', () => {
+  setupMarginLoops();
   setupDraw();
+  setupWriteIn();
   setupEmail();
   setupMore();
 });

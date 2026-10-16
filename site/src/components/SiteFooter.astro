@@ -1,11 +1,11 @@
 ---
-import { line } from '../lib/ink';
+import { line, swoosh } from '../lib/ink';
 ---
 <footer class="credits page">
   <svg class="credits__rule draw" viewBox="0 0 600 14" aria-hidden="true" focusable="false">
     <path class="ink" d={line(2, 7, 596, 8, 41, 2)} pathLength="1" />
   </svg>
-  <p class="credits__signoff">You made it to the end credits. Thanks for reading.</p>
+  <p class="credits__signoff">You made it to the <span class="credits__end">end credits<svg class="credits__swoosh" viewBox="0 0 200 16" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path class="ink ink--accent" d={swoosh(4, 9, 192, 17, 3)} pathLength="1" /></svg></span>. Thanks for reading.</p>
   <div class="credits__cols">
     <nav aria-label="Footer">
       <ul role="list">
@@ -50,10 +50,18 @@ import { line } from '../lib/ink';
   .credits__rule { width: min(100%, 36rem); height: 14px; overflow: visible; margin-bottom: var(--s2); }
   .credits__rule .ink { stroke-width: 2; }
   .credits__signoff { font-family: var(--font-hand); font-size: var(--step-2); line-height: 1.15; margin-bottom: var(--s2); }
+  /* A coral swoosh under "end credits", drawn as the sign-off is written in (global.css). */
+  .credits__end { position: relative; white-space: nowrap; }
+  .credits__swoosh { position: absolute; left: -0.1em; right: -0.1em; bottom: -0.32em; width: calc(100% + 0.2em); height: 0.42em; overflow: visible; pointer-events: none; }
+  .credits__swoosh .ink { stroke-width: 3; }
+  @media (prefers-reduced-motion: no-preference) {
+    .credits__swoosh .ink { stroke-dasharray: 1 1; stroke-dashoffset: 0; transition: stroke-dashoffset 750ms var(--ease-pen) 420ms; }
+    .credits__signoff.is-waiting .credits__swoosh .ink { stroke-dashoffset: 1; transition: none; }
+  }
   .credits__cols { display: flex; flex-wrap: wrap; gap: var(--s2) var(--s4); }
   .credits ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.4rem 1.4rem; }
   .credits a { font-weight: 700; display: inline-flex; align-items: center; gap: 0.4rem; min-height: 44px; }
-  .credits svg:not(.credits__rule) { width: 1.35rem; height: 1.35rem; flex: none; }
+  .credits__contact svg { width: 1.35rem; height: 1.35rem; flex: none; }
   .credits__contact .ink { stroke-width: 1.7; }
   .credits__small { color: var(--ink-soft); font-size: var(--step--1); margin-top: var(--s2); }
 </style>
