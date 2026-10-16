@@ -6,7 +6,6 @@ import Button from '../components/Button.astro';
 import StatusBadge from '../components/StatusBadge.astro';
 import Metric from '../components/Metric.astro';
 import InkDivider from '../components/InkDivider.astro';
-import CaseInkBleed from '../components/fx/case-ink-bleed.astro';
 import { swoosh, arrow } from '../lib/ink';
 
 interface Props { entry: CollectionEntry<'work'> }
@@ -20,7 +19,6 @@ const nextArrow = (() => { const a = arrow([[42, 8], [20, 8], [8, 22], [12, 42]]
     <!-- Overdrive: the room's light. A fixed, barely-there falloff from a lamp at the
          top left, so the paper slides under the light as you scroll. Decorative only. -->
     <div class="fx-lamp" aria-hidden="true"></div>
-    <CaseInkBleed />
     <a class="back text-link" href="/work/">← All work</a>
 
     <header class="case__head">
