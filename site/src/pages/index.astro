@@ -114,7 +114,13 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
           </ol>
           <p><a class="text-link" href="/side-projects/#this-site">See it in practice: how I ran this site’s AI build →</a></p>
         </div>
-        <div class="ai__art"><AiLoop /></div>
+        <div class="ai__art">
+          <AiLoop />
+          <div class="ai__notes">
+            <StickyNote size="sm" color="blue" tilt={-2.5}>Jira wants ADF, not Markdown. Ask me how I know.</StickyNote>
+            <StickyNote size="sm" color="pink" tilt={2}>Claude and I disagree about one call in six. We’re working on it.</StickyNote>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -129,7 +135,7 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
           <p>I live in Northwest Arkansas. Off the clock, you’ll usually find me hiking (or just outside), spending time with my kids or reading.</p>
           <p>I still sketch before I spec, sometimes on the back of a handout during a meeting I didn’t strictly need to pay attention to. (Sorry, whoever was presenting.) And I build things on my own time. <a class="text-link" href="/side-projects/">See the side projects →</a></p>
         </div>
-        <div class="me__art"><OutdoorsDoodle /></div>
+        <div class="me__art"><OutdoorsDoodle /><StickyNote size="sm" color="green" tilt={-2} class="me__note">My reading list is longer than my backlog.</StickyNote></div>
       </div>
     </section>
   </div>
@@ -168,6 +174,9 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
   }
   .ai { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: var(--s3); align-items: center; }
   @media (max-width: 900px) { .ai { grid-template-columns: 1fr; } .ai__art { max-width: 26rem; } }
+  .ai__notes { display: flex; flex-wrap: wrap; gap: var(--s2); justify-content: center; margin-top: var(--s2); }
+  .ai__notes :global(.note) { flex: 0 1 12.5rem; }
+  .me__art :global(.me__note) { margin: var(--s2) auto 0; }
   .me { display: grid; grid-template-columns: minmax(0, var(--measure)) minmax(12rem, 22rem); gap: var(--s2) var(--s4); align-items: center; }
   @media (max-width: 900px) { .me { grid-template-columns: minmax(0, 1fr); } .me__art { max-width: 18rem; } }
 </style>
