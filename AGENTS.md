@@ -11,7 +11,7 @@ Guidelines for anyone (human or AI agent) writing copy, making assets, or buildi
   - B.S. Software Engineering (2024); M.S. Computer Science, HCI specialization (expected 12/2026)
 - **Voice on the page:** all site copy is first person ("I"). Third-person text should rarely be needed; when it is (alt text, meta descriptions, notes, briefs), Autumn uses she/her.
 - **Audience:** hiring managers and product leaders hiring for product manager roles, skimming between meetings. They decide in about 30 seconds whether to keep reading. Every page has to survive a skim.
-- **Positioning:** a **product manager** with real technical depth as a bonus. Autumn is moving further onto the product side. The site sells product judgment first: finding the real problem, deciding what to build and why, getting buy-in, and proving it worked. The technical skills (reading the codebase, writing SQL, building AI workflows) are the differentiator that makes her a stronger PM, not the headline. Resume summary for reference: *"Technical product manager and hands-on builder."*
+- **Positioning:** a **product manager** with real technical depth as a bonus. Autumn is moving further onto the product side. The site sells product judgment first: finding the real problem, deciding what to build and why, getting buy-in, and proving it worked. The technical skills (checking what has actually been built, writing SQL, building and directing AI workflows; she relies on AI agents for most code reading now) are the differentiator that makes her a stronger PM, not the headline. Resume summary for reference: *"Technical product manager and hands-on builder."*
 - **The site is not a work history.** It showcases what Autumn can do and how she thinks. No career timeline, job-history section, education list, or HR-title explanations; the résumé PDF covers that. Roles and employers appear only as context inside a case study ("At a glance").
 - **Never position Autumn as** a developer, a UX designer, or a delivery/project manager who happens to do some product work.
 
@@ -49,7 +49,7 @@ Autumn's voice is warm, funny, a little self-deprecating, and blunt about proble
 
 ## Product manager framing
 
-Every story is told as product work, even when Autumn also wrote the code. The question a reader should be able to answer is "how does this person decide what to build, and how do they know it worked?" Technical depth shows up as *how* she got to a better decision (she read the code to write a sharper spec, she queried the data to size the problem), never as the point of the story.
+Every story is told as product work, even when Autumn also wrote the code. The question a reader should be able to answer is "how does this person decide what to build, and how do they know it worked?" Technical depth shows up as *how* she got to a better decision (she checked what had actually been built before writing the spec, she queried the data to size the problem), never as the point of the story.
 
 Emphasize, roughly in this order:
 1. **The problem and who felt it**, with evidence (survey, helpdesk volume, abandoned records, ticket counts).
