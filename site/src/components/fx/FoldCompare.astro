@@ -1,0 +1,287 @@
+---
+// Before/after as one sheet you can fold back. The old site is printed on top; drag the
+// fold (or use the arrow keys) and it rolls back like a page, showing the new site
+// underneath. The roll is shaded like a paper cylinder and casts a shadow.
+// Without JS the slotted content (the two photos side by side) shows instead.
+// Reduced motion: no intro sweep; the fold follows your drag without the spring.
+interface Shot { src: string; webp?: string; alt: string; label: string }
+interface Props { before: Shot; after: Shot; width: number; height: number; caption?: string }
+const { before, after, width, height, caption } = Astro.props;
+---
+<div class="fold-wrap" data-fold-wrap>
+  <div class="fold-static"><slot /></div>
+  <figure class="fold" data-fold hidden>
+    <div class="fold__frame">
+      <span class="fold__tape fold__tape--a" aria-hidden="true"></span>
+      <span class="fold__tape fold__tape--b" aria-hidden="true"></span>
+      <div class="fold__stage" style={`aspect-ratio:${width}/${height}`}>
+        <picture class="fold__img fold__img--after">
+          {after.webp && <source srcset={after.webp} type="image/webp" />}
+          <img src={after.src} alt={after.alt} width={width} height={height} loading="lazy" decoding="async" draggable="false" />
+        </picture>
+        <div class="fold__before">
+          <picture class="fold__img">
+            {before.webp && <source srcset={before.webp} type="image/webp" />}
+            <img src={before.src} alt={before.alt} width={width} height={height} loading="lazy" decoding="async" draggable="false" />
+          </picture>
+        </div>
+        <div class="fold__shadow" aria-hidden="true"></div>
+        <div class="fold__curl" aria-hidden="true"></div>
+        <span class="fold__tag fold__tag--before" aria-hidden="true">{before.label}</span>
+        <span class="fold__tag fold__tag--after" aria-hidden="true">{after.label}</span>
+        <span class="fold__grip" aria-hidden="true">
+          <svg viewBox="0 0 64 28" width="64" height="28" focusable="false"><path d="M22 14H6m0 0 6-6m-6 6 6 6M42 14h16m0 0-6-6m6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </div>
+    </div>
+    <input class="fold__range" type="range" min="0" max="1000" value="500" aria-label="Fold back the old site to compare it with the new one" />
+    {caption && <figcaption>{caption}</figcaption>}
+  </figure>
+</div>
+
+<script>
+  let stops: (() => void)[] = [];
+
+  function init(wrap: HTMLElement): () => void {
+    const fig = wrap.querySelector<HTMLElement>('[data-fold]')!;
+    const stage = fig.querySelector<HTMLElement>('.fold__stage')!;
+    const range = fig.querySelector<HTMLInputElement>('.fold__range')!;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    fig.hidden = false;
+    wrap.classList.add('is-live');
+
+    let W = stage.clientWidth || 1;
+    let x = 0.5, v = 0, target = 0.5;
+    let raf = 0, last = 0;
+    let dragging = false;
+
+    const paint = () => {
+      const xp = x * W;
+      // the roll is widest mid-sheet and flattens out at either edge
+      const cw = Math.max(0, Math.min(W * 0.085, xp * 0.35, (W - xp) * 0.6));
+      stage.style.setProperty('--xp', `${xp.toFixed(1)}px`);
+      stage.style.setProperty('--cw', `${cw.toFixed(1)}px`);
+      // a label only shows while its page has room to be seen
+      stage.classList.toggle('hide-before', xp - cw < 120);
+      stage.classList.toggle('hide-after', W - xp < 110);
+      range.value = String(Math.round(x * 1000));
+      range.setAttribute('aria-valuetext', `${Math.round((1 - x) * 100)}% of the new site showing`);
+    };
+    const frame = (now: number) => {
+      raf = 0;
+      const dt = Math.min(0.04, last ? (now - last) / 1000 : 1 / 60);
+      last = now;
+      const k = dragging ? 700 : 150, damp = 2 * (dragging ? 1 : 0.55) * Math.sqrt(k);
+      v += ((target - x) * k - v * damp) * dt;
+      x = Math.max(0, Math.min(1, x + v * dt));
+      paint();
+      if (Math.abs(target - x) > 0.0005 || Math.abs(v) > 0.002) raf = requestAnimationFrame(frame);
+      else { x = target; v = 0; last = 0; paint(); }
+    };
+    const go = (t: number) => {
+      target = Math.max(0, Math.min(1, t));
+      if (reduce.matches) { x = target; v = 0; paint(); return; }
+      if (!raf) raf = requestAnimationFrame(frame);
+    };
+    const at = (cx: number) => {
+      const r = stage.getBoundingClientRect();
+      return (cx - r.left) / r.width;
+    };
+
+    const ac = new AbortController();
+    const sig = { signal: ac.signal };
+    let id = -1;
+    let startX = 0, startY = 0, decided = false;
+    stage.addEventListener('pointerdown', (e) => {
+      if (e.button !== 0) return;
+      id = e.pointerId;
+      startX = e.clientX; startY = e.clientY;
+      decided = e.pointerType === 'mouse';
+      if (decided) { e.preventDefault(); begin(e); }
+    }, sig);
+    const begin = (e: PointerEvent) => {
+      dragging = true;
+      stage.setPointerCapture(e.pointerId);
+      stage.classList.add('is-dragging');
+      go(at(e.clientX));
+    };
+    stage.addEventListener('pointermove', (e) => {
+      if (e.pointerId !== id) return;
+      if (!decided) {
+        // touch: horizontal intent grabs the fold; vertical lets the page scroll (pan-y)
+        const dx = Math.abs(e.clientX - startX), dy = Math.abs(e.clientY - startY);
+        if (dx < 6 && dy < 6) return;
+        decided = true;
+        if (dx > dy) begin(e); else { id = -1; return; }
+      }
+      if (dragging) go(at(e.clientX));
+    }, sig);
+    const end = (e: PointerEvent) => {
+      if (e.pointerId !== id) return;
+      if (!decided && e.type === 'pointerup') go(at(e.clientX)); // a tap jumps the fold there
+      id = -1;
+      dragging = false;
+      stage.classList.remove('is-dragging');
+      if (!raf && !reduce.matches) raf = requestAnimationFrame(frame);
+    };
+    stage.addEventListener('pointerup', end, sig);
+    stage.addEventListener('pointercancel', end, sig);
+    range.addEventListener('input', () => go(Number(range.value) / 1000), sig);
+
+    const ro = new ResizeObserver(() => { W = stage.clientWidth || 1; paint(); });
+    ro.observe(stage);
+
+    // the first time it scrolls into view, the old page rolls back to show the new one
+    let io: IntersectionObserver | null = null;
+    if (reduce.matches) paint();
+    else {
+      x = target = 0.985;
+      paint();
+      io = new IntersectionObserver(([en]) => {
+        if (!en.isIntersecting) return;
+        io?.disconnect();
+        window.setTimeout(() => { if (!dragging) go(0.42); }, 250);
+      }, { threshold: 0.55 });
+      io.observe(stage);
+    }
+
+    return () => {
+      ac.abort();
+      ro.disconnect();
+      io?.disconnect();
+      cancelAnimationFrame(raf);
+    };
+  }
+
+  document.addEventListener('astro:page-load', () => {
+    stops.forEach((s) => s());
+    stops = [...document.querySelectorAll<HTMLElement>('[data-fold-wrap]')].map(init);
+  });
+  document.addEventListener('astro:before-swap', () => {
+    stops.forEach((s) => s());
+    stops = [];
+  });
+</script>
+
+<style>
+  /* html.js is set in <head> before first paint, so the swap causes no layout shift */
+  :global(.js) .fold-wrap .fold-static { display: none; }
+  :global(.js) .fold-wrap .fold[hidden] { display: block; }
+  .fold { position: relative; margin: var(--s3) 0 var(--s3); max-width: 46rem; }
+  .fold__frame {
+    position: relative;
+    padding: clamp(6px, 1.2vw, 12px);
+    background: var(--card, var(--paper-scrap));
+    box-shadow: var(--paper-lift);
+    transform: rotate(-0.6deg);
+  }
+  .fold__tape {
+    position: absolute;
+    z-index: 3;
+    width: clamp(60px, 18%, 120px);
+    height: clamp(22px, 3.2vw, 32px);
+    background: repeating-linear-gradient(90deg, transparent 0 5px, color-mix(in srgb, var(--paper-scrap) 14%, transparent) 5px 6px), var(--tape);
+    border-block: 1px solid var(--tape-edge);
+    clip-path: polygon(2% 0, 98% 4%, 100% 22%, 97% 41%, 100% 62%, 97% 83%, 99% 100%, 1% 96%, 3% 78%, 0 58%, 2% 37%, 0 17%);
+    pointer-events: none;
+  }
+  .fold__tape--a { top: -10px; left: -18px; transform: rotate(-38deg); }
+  .fold__tape--b { bottom: -8px; right: -18px; transform: rotate(-38deg); }
+
+  .fold__stage {
+    --xp: 100%;
+    --cw: 0px;
+    position: relative;
+    overflow: hidden;
+    touch-action: pan-y;
+    cursor: ew-resize;
+    user-select: none;
+    -webkit-user-select: none;
+    background: var(--paper-shade);
+  }
+  .fold__img, .fold__img img { display: block; width: 100%; height: 100%; }
+  .fold__img img { object-fit: cover; -webkit-user-drag: none; }
+  .fold__before {
+    position: absolute;
+    inset: 0;
+    clip-path: inset(0 calc(100% - var(--xp) + var(--cw) * 0.5) 0 0);
+  }
+  /* the rolled-back old page: a paper cylinder, its back side up */
+  .fold__curl {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--xp) - var(--cw));
+    width: var(--cw);
+    background: linear-gradient(90deg,
+      color-mix(in srgb, rgb(var(--shadow, 60 50 40)) 30%, var(--card, var(--paper-scrap))) 0%,
+      color-mix(in srgb, rgb(var(--shadow, 60 50 40)) 10%, var(--card, var(--paper-scrap))) 18%,
+      var(--card, var(--paper-scrap)) 55%,
+      var(--card, var(--paper-scrap)) 68%,
+      color-mix(in srgb, rgb(var(--shadow, 60 50 40)) 16%, var(--card, var(--paper-scrap))) 100%);
+    border-right: 1.5px solid color-mix(in srgb, var(--ink) 55%, transparent);
+    border-radius: 0 40% 40% 0 / 0 3% 3% 0;
+  }
+  /* its shadow on the new page */
+  .fold__shadow {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--xp);
+    width: calc(var(--cw) * 1.7 + 4px);
+    background: linear-gradient(90deg, rgb(var(--shadow, 60 50 40) / 0.42), rgb(var(--shadow, 60 50 40) / 0.12) 45%, transparent);
+    pointer-events: none;
+  }
+  .fold__tag {
+    position: absolute;
+    top: 0.6rem;
+    padding: 0.05rem 0.55rem 0.15rem;
+    font-family: var(--font-hand);
+    font-size: clamp(1.05rem, 2.4vw, 1.45rem);
+    line-height: 1.2;
+    color: var(--paper-ink); /* paper label: dark ink in either theme */
+    background: var(--sticky-yellow);
+    box-shadow: var(--sticky-shadow);
+    pointer-events: none;
+    transition: opacity 200ms ease;
+  }
+  .fold__tag--before { left: 0.6rem; transform: rotate(-3deg); }
+  .fold__tag--after { right: 0.6rem; transform: rotate(2.5deg); background: var(--sticky-blue); }
+  .fold__stage.hide-before .fold__tag--before, .fold__stage.hide-after .fold__tag--after { opacity: 0; }
+  .fold__grip {
+    position: absolute;
+    bottom: 0.6rem;
+    left: var(--xp);
+    translate: -50% 0;
+    display: grid;
+    place-items: center;
+    padding: 0.25rem 0.3rem;
+    color: var(--accent);
+    background: var(--card, var(--paper-scrap));
+    border: 2px solid var(--paper-ink, var(--ink));
+    border-radius: var(--wobble-radius);
+    box-shadow: var(--sticky-shadow);
+    pointer-events: none;
+    transition: scale 160ms ease;
+  }
+  .fold__grip svg { width: 2.6rem; height: auto; }
+  .fold__stage.is-dragging .fold__grip { scale: 1.12; }
+  .fold__range {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .fold:has(.fold__range:focus-visible) .fold__frame {
+    outline: 3px solid var(--accent);
+    outline-offset: 6px;
+    border-radius: var(--wobble-radius);
+  }
+  .fold figcaption { margin-top: var(--s2); max-width: var(--measure); }
+  @media (max-width: 760px) {
+    .fold { margin-inline: 4px 10px; }
+    .fold__tape--a { left: -10px; }
+    .fold__tape--b { right: -8px; }
+  }
+</style>

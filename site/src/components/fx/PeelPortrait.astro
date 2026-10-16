@@ -1,0 +1,73 @@
+---
+// Wraps the taped-in hero portrait so its loose bottom corners can be grabbed and
+// peeled up off the page. The fold is real geometry: the photo is clipped along the
+// fold line and the cut-off corner is mirrored across it as the back of the print,
+// casting a shadow. Let go and it springs back down.
+// Mouse: hover a bottom corner to lift it, drag to peel. Touch: drag from a corner.
+// Without JS (or with reduced motion and no drag) it is just the taped photo.
+---
+<div class="peel" data-peel>
+  <slot />
+</div>
+
+<script>
+  import { initPeel } from '../../scripts/fx-about-peel';
+  let stop: (() => void) | null = null;
+  document.addEventListener('astro:page-load', () => {
+    stop?.();
+    const el = document.querySelector<HTMLElement>('[data-peel]');
+    stop = el ? initPeel(el) : null;
+  });
+  document.addEventListener('astro:before-swap', () => {
+    stop?.();
+    stop = null;
+  });
+</script>
+
+<style>
+  .peel { position: relative; }
+  /* on this one photo, the peel replaces the hover tilt */
+  .peel.is-live :global(.taped__photo) { transform: none !important; }
+  .peel.is-live :global(.taped__photo)::after { display: none; }
+  .peel :global(.peel-flap) {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    filter: drop-shadow(0 7px 9px rgb(var(--shadow, 60 50 40) / 0.38))
+      drop-shadow(0 1px 1px rgb(var(--shadow, 60 50 40) / 0.24));
+    visibility: hidden;
+  }
+  .peel :global(.peel-flap__face) {
+    position: absolute;
+    inset: 0;
+    transform-origin: 0 0;
+    background: var(--card, var(--paper-scrap));
+  }
+  .peel :global(.peel-under) {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    font-family: var(--font-hand);
+    color: var(--accent-ink);
+    font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+    line-height: 1.1;
+  }
+  .peel :global(.peel-under span) { position: absolute; bottom: 7%; transform: rotate(-8deg); white-space: nowrap; }
+  .peel :global(.peel-under .r) { right: 7%; }
+  .peel :global(.peel-under .l) { left: 7%; transform: rotate(7deg); }
+  .peel :global(.peel-grip) {
+    position: absolute;
+    z-index: 3;
+    bottom: -14px;
+    width: clamp(64px, 26%, 110px);
+    aspect-ratio: 1;
+    touch-action: none;
+    cursor: grab;
+  }
+  .peel :global(.peel-grip.r) { right: -14px; }
+  .peel :global(.peel-grip.l) { left: -14px; }
+  .peel.is-dragging, .peel.is-dragging :global(.peel-grip) { cursor: grabbing; }
+  .peel.is-dragging { user-select: none; -webkit-user-select: none; }
+</style>

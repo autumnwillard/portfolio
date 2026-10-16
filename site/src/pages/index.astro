@@ -10,6 +10,8 @@ import Highlight from '../components/Highlight.astro';
 import InkDivider from '../components/InkDivider.astro';
 import AiLoop from '../components/diagrams/AiLoop.astro';
 import OutdoorsDoodle from '../components/diagrams/OutdoorsDoodle.astro';
+import DeskLamp from '../components/fx/DeskLamp.astro';
+import PeelPortrait from '../components/fx/PeelPortrait.astro';
 import { swoosh } from '../lib/ink';
 
 const heroSources = [{ type: 'image/webp', srcset: '/images/hero-640.webp 640w, /images/hero-960.webp 960w, /images/hero-1280.webp 1280w' }];
@@ -23,6 +25,7 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
   <div class="page">
     <!-- Hero -->
     <section class="hero" aria-labelledby="hero-h">
+      <DeskLamp />
       <div class="hero__text">
         <h1 id="hero-h">Product manager. <span class="hero__h-2">Hands-on builder.</span></h1>
         <svg class="hero__swoosh draw" viewBox="0 0 420 18" preserveAspectRatio="none" aria-hidden="true" focusable="false">
@@ -34,6 +37,7 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
         </div>
       </div>
       <div class="hero__art">
+        <PeelPortrait>
         <TapedImage
           src="/images/hero-640.jpg"
           srcset={heroSrcset}
@@ -46,6 +50,7 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
           loading="eager"
           fetchpriority="high"
         />
+        </PeelPortrait>
       </div>
     </section>
 
@@ -144,12 +149,14 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
 <style>
   /* ---------- Hero ---------- */
   .hero {
+    position: relative;
     display: grid;
     grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.9fr);
     gap: var(--s3) var(--s4);
     align-items: center;
     padding: var(--s3) 0 var(--s4) var(--margin-col);
   }
+  .hero__text, .hero__art { position: relative; z-index: 1; }
   .hero h1 { margin-bottom: 0.1rem; }
   .hero__h-2 { display: block; }
   .hero__swoosh { width: min(24rem, 90%); height: 16px; overflow: visible; margin-bottom: var(--s2); }

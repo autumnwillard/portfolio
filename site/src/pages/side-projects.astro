@@ -12,6 +12,7 @@ import StatusScale from '../components/diagrams/SideProjectsStatusScale.astro';
 import RoomErd from '../components/diagrams/SideProjectsRoomErd.astro';
 import ConflictCalendar from '../components/diagrams/SideProjectsConflictCalendar.astro';
 import TestsChecklist from '../components/diagrams/SideProjectsTestsChecklist.astro';
+import FoldCompare from '../components/fx/FoldCompare.astro';
 
 const webp = (base: string) => [{ type: 'image/webp', srcset: `/images/${base}.webp` }];
 ---
@@ -37,6 +38,13 @@ const webp = (base: string) => [{ type: 'image/webp', srcset: `/images/${base}.w
         <p class="proj__meta"><StatusBadge status="Personal project · built with AI" size="sm" /> <span>About 3 days · Claude Code</span></p>
         <p class="proj__tag">I ran this rebuild like a product: rules first, three design options, about eight review rounds and every number checked. AI wrote the code and drew the pictures. I made every call.</p>
 
+        <FoldCompare
+          width={960}
+          height={600}
+          before={{ src: '/images/side-projects-site-before-desktop-960.jpg', webp: '/images/side-projects-site-before-desktop-960.webp', alt: 'Before: the old home page, a plain white layout with a cartoon portrait and a short intro.', label: 'before' }}
+          after={{ src: '/images/side-projects-site-after-desktop-960.jpg', webp: '/images/side-projects-site-after-desktop-960.webp', alt: 'After: the new home page, a sketchbook on graph paper with a taped-in portrait, a sticky note and page-flag buttons.', label: 'after' }}
+          caption="Drag the fold to compare. Before: clean, a little generic. After: a sketchbook, so I can show work I can’t screenshot."
+        >
         <div class="ba">
           <TapedImage
             src="/images/side-projects-site-before-desktop-960.jpg"
@@ -55,6 +63,7 @@ const webp = (base: string) => [{ type: 'image/webp', srcset: `/images/${base}.w
             caption="After: a sketchbook, so I can show work I can’t screenshot."
           />
         </div>
+        </FoldCompare>
 
         <h3 class="sub-h">How I ran it</h3>
         <ol class="ink-steps">
