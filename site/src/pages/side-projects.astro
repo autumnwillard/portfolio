@@ -17,14 +17,14 @@ const webp = (base: string) => [{ type: 'image/webp', srcset: `/images/${base}.w
 ---
 <BaseLayout
   title="Side projects · Autumn Willard"
-  description="What Autumn Willard builds on her own time: this site, rebuilt with AI in about 3 days, a Rails app made in 5 days and a senior capstone."
+  description="What Autumn Willard builds on her own time: this site (rebuilt with AI in about 3 days), a Rails app made in 5 days and a senior capstone."
   active="side-projects"
 >
   <div class="page">
     <section class="intro" aria-labelledby="sp-h">
       <h1 id="sp-h">Side projects</h1>
       <p class="intro__sub">I build things, so I know what I’m asking engineers for.</p>
-      <p class="intro__lede">My day job is deciding what gets built. On my own time I build things myself, and lately I direct AI to build them too. Partly because it’s fun, and partly because it keeps me honest about what “just add a button” actually costs.</p>
+      <p class="intro__lede">My day job is deciding what gets built. On my own time I build things myself, and lately I direct AI to do the building. Partly because it’s fun, and partly because it keeps me honest about what “just add a button” actually costs.</p>
     </section>
 
     <InkDivider seed={81} />
@@ -59,11 +59,11 @@ const webp = (base: string) => [{ type: 'image/webp', srcset: `/images/${base}.w
         <h3 class="sub-h">How I ran it</h3>
         <ol class="ink-steps">
           <li><strong>Rules before code.</strong> Before any page, I had AI write a rulebook (voice, real numbers only, what’s confidential, the look) that every agent read first.</li>
-          <li><strong>Discovery, then decisions.</strong> An agent audited my old site and notes and came back with about 60 questions only I could answer. AI drafted the copy from my answers, and I approved every page.</li>
+          <li><strong>Discovery, then decisions.</strong> An agent audited my old site and notes and came back with about 60 questions only I could answer. AI drafted the copy from my answers.</li>
           <li><strong>Options, not opinions.</strong> Three agents built three design directions in parallel. I picked one and ran about eight rounds of feedback on it.</li>
           <li><strong>When feedback is hard to put into words, build a tool.</strong> I had AI build a slider playground for buttons and an approval page for 112 copy edits, which is now a skill I reuse.</li>
           <li><strong>Research before taste calls.</strong> For the page turn, an agent researched what makes a click feel good and filmed a prototype frame by frame before I said yes.</li>
-          <li><strong>Check everything.</strong> Every number traces to a source, every page scores 100 for accessibility, and I made the call on every copy edit.</li>
+          <li><strong>Check everything.</strong> Every number traces to a source, and every page scores 100 on Lighthouse’s accessibility check.</li>
         </ol>
         <StickyNote tilt={-1.6} color="blue" class="site__note">
           Working with AI felt a lot like working with a fast, eager engineering team. Clear constraints, short feedback loops and one person who owns the decisions. That was me.
@@ -173,7 +173,7 @@ const webp = (base: string) => [{ type: 'image/webp', srcset: `/images/${base}.w
         <p><strong>The constraint.</strong> A school project with no real users. That meant the requirements had to come from me, and the work had to prove itself through design and tests rather than adoption.</p>
 
         <div class="split split--art split--center">
-          <p><strong>The call I made.</strong> I treated it like a product, not an assignment: requirements first, then a data model, then wireframes, then code, then tests. The core rule was simple. <Highlight>Two reservations can’t overlap in the same room.</Highlight> Everything else (rooms, customers, reports) is built around protecting that.</p>
+          <p><strong>The call I made.</strong> I ran it like a product: requirements first, then a data model, then wireframes, then code, then tests. The core rule was simple. <Highlight>Two reservations can’t overlap in the same room.</Highlight> Everything else (rooms, customers, reports) is built around protecting that.</p>
           <div class="split__art"><ConflictCalendar /></div>
         </div>
 
@@ -206,7 +206,6 @@ const webp = (base: string) => [{ type: 'image/webp', srcset: `/images/${base}.w
       <div class="section-body">
         <h2 id="design-h">A few things I designed for Tech Handoff clients</h2>
         <p class="sub-h">I owned design as well as product at Tech Handoff.</p>
-        <p>Client pieces from Tech Handoff.</p>
 
         <ol class="strip" role="list">
           <li class="strip__item">
@@ -250,7 +249,7 @@ const webp = (base: string) => [{ type: 'image/webp', srcset: `/images/${base}.w
 
         <StickyNote kind="card" tilt={-0.6} class="offclock">
           <p class="offclock__head"><strong>Off the clock: art gallery flyers.</strong> <StatusBadge status="Volunteer work" size="sm" /></p>
-          <p>I also designed a few flyers as a volunteer for a local artist’s special exhibit. Not client work, just a good cause and a fun brief.</p>
+          <p>I designed a few flyers for a local artist’s special exhibit. A good cause and a fun brief.</p>
         </StickyNote>
       </div>
     </section>

@@ -1,12 +1,12 @@
 ---
-// review-routing-projected-reviews: two bars on an index scale (today = 100).
+// review-routing-projected-reviews: two bars on an index scale (before = 100).
 // No absolute volumes exist in the sources, so none are drawn. The projected bar
 // is hatched with a dashed band for the 20–30 range. The axis starts at zero.
 import InkSvg from '../InkSvg.astro';
 import { rect, line, arrow, scribble } from '../../lib/ink';
 
 const label =
-  'Projected manual reviews: today every item gets manual review; with reliable screening answers, an estimated 70 to 80 percent fewer manual reviews. This is a projection, not a measured result.';
+  'Projected manual reviews: before, every item got manual review; with reliable screening answers, an estimated 70 to 80 percent fewer manual reviews. This is a projection, not a measured result.';
 
 const X0 = 66, Y0 = 300, S = 2.1; // y for index value v: Y0 - v * S
 const y = (v: number) => Y0 - v * S;
@@ -30,13 +30,13 @@ const callout = arrow([[420, 104], [440, 150], [420, 196], [384, 216]], 611, 10)
     <path class="ink" style="--i:0.5" d={line(X0 - 8, y(100), X0 + 2, y(100), 603, 0.4)} pathLength="1" />
     <text class="ink-sans ink-fade" style="--i:0" x={X0 - 12} y={Y0 + 5} font-size="15" text-anchor="end" fill="#57524c">0</text>
     <text class="ink-sans ink-fade" style="--i:0" x={X0 - 12} y={y(100) + 5} font-size="15" text-anchor="end" fill="#57524c">100</text>
-    <text class="ink-sans ink-fade" style="--i:0" x="18" y="190" font-size="14" text-anchor="middle" fill="#57524c" transform="rotate(-90 18 190)">manual reviews (index, today = 100)</text>
+    <text class="ink-sans ink-fade" style="--i:0" x="18" y="190" font-size="14" text-anchor="middle" fill="#57524c" transform="rotate(-90 18 190)">manual reviews (index, before = 100)</text>
 
     <!-- bar A: today, solid -->
     <path class="ink ink--faint" style="--i:1" d={scribble(A.x + 4, y(100) + 6, A.w - 8, 100 * S - 12, 604, 9)} pathLength="1" />
     <path class="ink ink--bold" style="--i:1" d={rect(A.x, y(100), A.w, 100 * S, 605, 1.2)} pathLength="1" />
     <text class="ink-text ink-fade" style="--i:2" x={A.x + A.w / 2} y={y(100) - 12} font-size="26" text-anchor="middle">100</text>
-    <text class="ink-text ink-fade" style="--i:2" x={A.x + A.w / 2} y={Y0 + 30} font-size="23" text-anchor="middle">Today</text>
+    <text class="ink-text ink-fade" style="--i:2" x={A.x + A.w / 2} y={Y0 + 30} font-size="23" text-anchor="middle">Before</text>
     <text class="ink-sans ink-fade" style="--i:2" x={A.x + A.w / 2} y={Y0 + 52} font-size="15" text-anchor="middle" fill="#57524c">every item gets</text>
     <text class="ink-sans ink-fade" style="--i:2" x={A.x + A.w / 2} y={Y0 + 70} font-size="15" text-anchor="middle" fill="#57524c">manual review</text>
 

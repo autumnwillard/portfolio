@@ -1,9 +1,12 @@
 ---
 // The top three case studies as lined index cards taped onto the page. Copy comes
 // straight from the Work cards (hook, blurb, first headline number). Each card
-// is one link to its case study. The tape varies on purpose: length, angle, position,
+// is one link to its case study. A small status stamp sits under each hook, so the
+// unshipped routing project always says so. The tape varies on purpose: length, angle, position,
 // one or two pieces, and pattern.
 import { featured } from '../data/work';
+
+import StatusBadge from './StatusBadge.astro';
 
 const tape = [
   [{ kind: 'plain', len: '6.5rem', rot: '-3deg', pos: 'top:-0.8rem; left:50%; translate:-50% 0' }],
@@ -21,6 +24,7 @@ const cards = featured.slice(0, 3);
     <li class="tcard index-card" style={`--tilt:${tilts[i]}deg`}>
       {tape[i].map((t) => <span class={`washi washi--${t.kind}`} style={`--len:${t.len}; --rot:${t.rot}; ${t.pos}`} aria-hidden="true"></span>)}
       <h3 class="tcard__hook"><a class="card__link tcard__link" href={c.href}>{c.hook}<span class="visually-hidden">. Read the case study</span></a></h3>
+      <p class="tcard__stamp"><StatusBadge status={c.badge} size="sm" /></p>
       <p class="tcard__blurb">{c.blurb}</p>
       <p class="tcard__num">{c.numbers[0]}</p>
     </li>
@@ -55,6 +59,7 @@ const cards = featured.slice(0, 3);
   .tcard__link:focus-visible { outline: none; }
   .tcard:has(.tcard__link:focus-visible) { outline: 2.5px dashed var(--accent-ink); outline-offset: 6px; }
   .tcard__blurb { font-size: 1rem; line-height: var(--card-pitch); }
+  .tcard__stamp { height: var(--card-pitch); display: flex; align-items: center; }
   .tcard__num { margin-top: 0 !important; font-weight: 800; line-height: var(--card-pitch); padding-left: 1.4rem; position: relative; }
   .tcard__num::before { content: ''; position: absolute; left: 0; top: 0.75em; width: 0.8rem; height: 0.35rem; border-bottom: 3px solid var(--accent); border-radius: 0 0 50% 50%; transform: rotate(-6deg); }
   .tcards__all { margin-top: var(--s3); }

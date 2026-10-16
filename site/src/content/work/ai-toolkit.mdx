@@ -41,7 +41,7 @@ Three questions hurt the most:
 
 - **"Which team has room?"** When new work came in, there was no quick, reliable answer.
 - **"Are these the real numbers?"** Status reports and engineering metrics were put together by hand at the end of every two-week sprint, copied between dashboards, spreadsheets, slides and wiki pages. Every copy was a chance for the numbers to drift out of sync.
-- **"What actually needs testing?"** Each release, someone had to decide which finished items had real user-facing changes worth sending to the product team for acceptance testing.
+- **"What actually needs testing?"** Each release, after the release candidate was cut, someone had to go through the finished items, decide which had real user-facing changes worth acceptance testing, then change each one's status and assign it for testing by hand.
 
 My users were my own teams and leadership, so I treated it like any other product: who's it for, and how do I know it's right?
 
@@ -64,7 +64,7 @@ My first attempt is the cautionary tale: a spreadsheet that needed four manual d
 - **Trust.** Nobody wants an AI quietly editing their tickets. So ==the AI had to earn the right to make changes.== Each workflow started out drafting while I approved. I only let it update tickets itself (status, story points, fix version and more) after a few test runs where I confirmed the edits were right and nothing else broke. When it got something wrong, that became a new rule. (One example: Jira descriptions have to be written in ADF, Jira's own format, not Markdown.)
 - **The tracker fights back.** Its own automation would overwrite ticket content, so the ticket-drafting workflow had to create tickets in a way that keeps that from happening.
 - **No new chores.** A tool that needs people to maintain one more sheet is a tool that goes stale.
-- **I still had a day job.** I built this while owning the release lifecycle.
+- **I still had a day job.** I built this while running releases.
 
 <InkArrow from="cause" to="fix" seed={10} flip />
 
@@ -74,7 +74,7 @@ I built 10 workflows and 7 dashboards across release management, capacity and ro
 
 **Use the source of truth people already keep.** The live capacity report combines the managers' staffing sheet with live tracker workload. It shows each team's load by stage (development, code review, QA, product) and by type of work, as a full report or a quick routing recommendation. The tradeoff: it's only as current as their sheet. I'll take that over a new sheet nobody updates.
 
-**Verify before trusting.** Acceptance-testing triage scans completed work and recommends the items with real user-facing changes, filtering out backend-only and test-automation work. I tested it against a no-AI baseline before anyone relied on it. I also reconcile dashboards against my own hand counts.
+**Verify before trusting.** Acceptance-testing triage scans completed work and recommends the items with real user-facing changes, filtering out backend-only and test-automation work. I tested it against a no-AI baseline before anyone relied on it. Early on it flagged items it shouldn't have, and every miss became a new rule. Now it gets maybe one or two out of a release's 100-plus tickets wrong (my estimate), so it updates the tickets itself. I also reconcile dashboards against my own hand counts.
 
 <figure>
   <AiToolkitUatFunnel />
@@ -90,11 +90,11 @@ For the record, the first thing I built wasn't any of this. It was a skill that 
 
 ## What happened
 
-- **10 reusable workflows and 7 dashboards,** used daily by four engineering teams.
+- **10 reusable workflows and 7 dashboards,** used daily by four engineering teams. The team's feedback has been good: it saves them time, and releases go smoother, with fewer SEV calls and more time on planned work instead of putting out fires.
 - **75% less sprint reporting time,** measured in hours spent before vs. after. Sprint metrics are now rebuilt automatically instead of copied and pasted.
-- **114 → 16.** In one release, acceptance-testing triage reviewed 114 items and recommended 16.
+- **114 → 16.** In one release, acceptance-testing triage reviewed 114 items and recommended 16. Its calls are now reliable enough that it moves the tickets itself.
 
-The better outcome: ==it turned up problems nobody had spotted yet.==
+The bigger win was what it found.
 
 <figure>
   <AiToolkitFindingsLedger />
@@ -114,4 +114,4 @@ The cycle time report showed the biggest delay was work waiting for QA, a median
 
 ## Looking back
 
-It's still a product with a backlog. Next up: stopping double-counted work in one report, and a proposed workflow that rolls the whole release week into a single run.
+It's a product, so it has versions. I've improved several of these workflows over time and retired the old versions, and the newer ones are still in use. Ship version one, watch how people use it and don't get attached to it.

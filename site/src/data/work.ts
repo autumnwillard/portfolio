@@ -78,13 +78,13 @@ export interface MoreCard { hook: string; tag: string; body: string; extra?: boo
 
 export const analyses: MoreCard[] = [
   { hook: '“Done” isn’t done.', tag: 'Analysis · current role', body: 'I audited the tracker against the actual code and found 3 features marked complete that had never been built. The plan changed from “verify and close” to “build.”' },
-  { hook: 'The cost of changing your mind mid-project.', tag: 'Analysis · current role', body: "I found 20% of work items were sent backward in the workflow at least once, and reworked items spent up to 9 times longer than normal in testing. The main culprit was UI-heavy work. Now devs and I work through the design from the start, with screenshots, quick questions and sometimes a demo during QA, so small fixes happen before code review, while they’re cheap." },
+  { hook: 'The cost of changing your mind mid-project.', tag: 'Analysis · current role', body: "I found 20% of work items were sent backward in the workflow at least once, and reworked items spent up to 9 times longer than normal in testing. UI-heavy work kept bouncing back. Now devs and I work through the design from the start, so small fixes happen before code review, while they’re cheap." },
   { hook: 'Why the outage happened.', tag: 'Analysis · current role', body: 'I traced a production outage to two changes that shipped before a service they depended on. We got a quick hotfix out and held a retrospective.', extra: true },
 ];
 
 export const tools: MoreCard[] = [
   { hook: "What’s actually stuck?", tag: 'Internal product · current role', body: "A blocker map that groups every flagged item by what’s blocking it (another task, a product decision or an outside vendor) and highlights flags that have gone stale.", extra: true },
   { hook: 'Which number is right?', tag: 'Internal product · current role', body: 'Status numbers kept drifting between the leadership slide, the wiki and the tracking sheet. Now one workflow updates the slide and the wiki from the sheet, then checks that all three agree. Used across 5 initiatives.', extra: true },
-  { hook: 'Never the person who built it.', tag: 'Internal product · current role', body: "Picking who presented at sprint demos wasn’t consistently fair. Now a workflow picks the work worth demoing and rotates presenters, never the person who built it. The team agrees it works.", extra: true },
+  { hook: 'Never the person who built it.', tag: 'Internal product · current role', body: "Picking who presented at sprint demos wasn’t consistently fair. Now a workflow picks the work worth demoing and rotates presenters. The team sees it as fair.", extra: true },
   { hook: 'Gut feel, now with weights.', tag: 'Hiring · current role', body: 'Interview panels needed a consistent way to score candidates. I built a weighted rubric, plus scenario questions drawn from the skills that matter most, so every panelist scores against the same yardstick.', extra: true },
 ];

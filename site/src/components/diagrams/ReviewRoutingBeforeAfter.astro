@@ -1,5 +1,5 @@
 ---
-// review-routing-before-after: two pipes. Today every item gets two reviews, and the third hinges on unreliable answers;
+// review-routing-before-after: two pipes. Before every item gets two reviews, and the third hinges on unreliable answers;
 // proposed, an AI answers the screening questions so each item goes only to the
 // reviews it needs, and low confidence goes to a person. Generic labels only.
 // Wide (side by side) and narrow (stacked) drawings; only one shows at a time.
@@ -34,7 +34,7 @@ const nLow = arrow([[318, N + 156], [336, N + 200], [338, N + 240], [330, N + 26
 <div class="routing-ba">
   <InkSvg viewBox="0 0 1000 470" label={label} class="only-wide">
     <!-- ===== Before ===== -->
-    <text class="ink-text ink-fade" style="--i:0" x="20" y="38" font-size="32">Today</text>
+    <text class="ink-text ink-fade" style="--i:0" x="20" y="38" font-size="32">Before</text>
     <path class="ink" style="--i:0" d={rect(140, 62, 200, 50, 410)} pathLength="1" />
     <text class="ink-text ink-fade" style="--i:0" x="240" y="94" font-size="22" text-anchor="middle">Submitted item</text>
     <path class="ink" style="--i:1" d={bA.shaft + ' ' + bA.head} pathLength="1" />
@@ -101,7 +101,7 @@ const nLow = arrow([[318, N + 156], [336, N + 200], [338, N + 240], [330, N + 26
 
   <InkSvg viewBox="0 0 380 846" label={label} class="only-narrow">
     <!-- ===== Before ===== -->
-    <text class="ink-text ink-fade" style="--i:0" x="10" y="32" font-size="30">Today</text>
+    <text class="ink-text ink-fade" style="--i:0" x="10" y="32" font-size="30">Before</text>
     <path class="ink" style="--i:0" d={rect(100, 48, 180, 48, 430)} pathLength="1" />
     <text class="ink-text ink-fade" style="--i:0" x="190" y="79" font-size="21" text-anchor="middle">Submitted item</text>
     <path class="ink" style="--i:1" d={nA.shaft + ' ' + nA.head} pathLength="1" />

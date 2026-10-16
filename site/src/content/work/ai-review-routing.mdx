@@ -35,7 +35,7 @@ import ReviewRoutingProjectedReviews from '../../components/diagrams/ReviewRouti
 
 ## The problem: everything got the full treatment
 
-Anything shared outside INL had to clear the lab's review system first. Every item got an export-control review and a classification review, no matter what was in it. A third review, for specific scientific subject areas that rated sensitivity from green to red, depended on how the submitter answered a set of yes/no questions.
+Anything shared outside INL had to clear the lab's review system first. Every item got an export-control review and a classification review, no matter what was in it. A third review, which rated sensitivity in specific scientific subject areas from green to red, depended on how the submitter answered a set of yes/no questions.
 
 <StickyNote float tilt={2} color="yellow">
 Survey says… "reviews take forever." Number one answer, by a mile.
@@ -49,7 +49,7 @@ Meanwhile reviewers were spending a lot of their time on items that never needed
 
 ## Digging in: the input was broken
 
-Submitters answered yes/no screening questions that were supposed to flag which reviews applied. In practice the answers were too unreliable to route on, so export control and classification reviewed everything, ==just in case.==
+Submitters answered yes/no screening questions that were supposed to flag which reviews applied. In practice the answers were too unreliable to use, so export control and classification reviewed everything, ==just in case.==
 
 The third review shows how bad the answers were, because they failed both ways. Some items got flagged for a review they didn't need. Other submitters answered no to every question to save time, which skipped reviews that should have happened. The first wasted reviewers' time. The second was a security risk.
 
@@ -64,7 +64,7 @@ The third review shows how bad the answers were, because they failed both ways. 
 ## Constraints
 
 - **Regulated, sensitive content.** A wrong routing decision isn't a bug report. It's a compliance problem.
-- **Nothing could leave the lab.** The model had to run entirely on internal infrastructure.
+- **Nothing could leave the lab.** The model was the lab's call, not mine: a version of ChatGPT hosted on the lab's own servers.
 - **Trust comes first.** If reviewers don't trust a tool, they double-check everything it does, and it saves nobody any time.
 
 <InkArrow from="cause" to="fix" seed={9} flip />
@@ -77,7 +77,7 @@ The third review shows how bad the answers were, because they failed both ways. 
 
 <ol class="ink-steps">
   <li><strong>Shadow.</strong> Run the AI alongside the existing process and compare its answers to what reviewers actually decided.</li>
-  <li><strong>Rely.</strong> Use it for routing only once accuracy reaches <Highlight>95% or better</Highlight>.</li>
+  <li><strong>Rely.</strong> Use it for routing only once accuracy reaches <Highlight>95% or better</Highlight>. That bar was really about the "no"s. A confident wrong "no" would let sensitive information skip a review it needed.</li>
   <li><strong>Maintain.</strong> Keep it current as guidelines and regulations change.</li>
 </ol>
 
@@ -87,9 +87,9 @@ The third review shows how bad the answers were, because they failed both ways. 
 
 *Tradeoff:* a faster launch would have shown value sooner. I chose slow on purpose, because in compliance one bad miss can sink trust in the whole idea.
 
-**Low-confidence answers always go to a human,** before the 95% gate and after it. "Not sure" means a person looks.
+**When it's unsure, it answers "yes,"** before the 95% gate and after it. "Yes" is the conservative answer: it sends the item to a person.
 
-*Tradeoff:* every low-confidence handoff eats into the savings. I'd rather give up some savings than ask reviewers to trust a guess.
+*Tradeoff:* all the savings come from correctly spotting the "no"s, so every unsure "yes" eats into them. I'd rather give up some savings than ask reviewers to trust a guess.
 
 I also wrote the UI specs and the business case that got executives to back a multi-phase build.
 
@@ -120,7 +120,7 @@ I met with the leadership of each team (Supply Chain Risk Management, Export Con
 
 One example from Privacy: the team was trying to go through every tool used at the lab and identify which ones held personally identifiable information (PII). It was largely manual and had made hardly any progress. The roadmap proposed training AI to spot PII using the same criteria the privacy team used themselves, then automatically adding each tool to their system along with how much PII it holds. The HR system, for example, would get flagged as holding more PII than the review system.
 
-That's a proposal, not a result. I don't know what came of the roadmap after I left, so I won't guess.
+That's a proposal, not a result. I don't know what came of it after I left.
 
 ## Looking back
 
