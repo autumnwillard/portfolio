@@ -55,6 +55,10 @@ img:not([src$='.svg']) { filter: var(--img-filter); }
   --squiggle: var(--squiggle-paper);
   --squiggle-strong: var(--squiggle-paper-strong);
   --bullet-arrow: var(--bullet-arrow-paper);
+  --hl: var(--hl-paper);
+  --hl-soft: var(--hl-paper-soft);
+  --hl-fade: var(--hl-paper-fade);
+  --hl-ink: var(--hl-paper-ink);
   --hl-diagram: var(--hl);
   color: var(--ink);
 }
@@ -279,6 +283,7 @@ mark.hl {
     --squiggle: var(--bp-card-squiggle);
     --squiggle-strong: var(--bp-card-squiggle-strong);
     --bullet-arrow: var(--bp-card-bullet);
+    --hl: var(--hl-night); --hl-soft: var(--hl-night-soft); --hl-fade: var(--hl-night-fade); --hl-ink: var(--hl-night-ink);
     background-color: var(--bp-card);
     outline: 1.5px solid var(--bp-card-edge);
     outline-offset: -1.5px;
@@ -306,6 +311,7 @@ mark.hl {
   --squiggle: var(--bp-card-squiggle);
   --squiggle-strong: var(--bp-card-squiggle-strong);
   --bullet-arrow: var(--bp-card-bullet);
+  --hl: var(--hl-night); --hl-soft: var(--hl-night-soft); --hl-fade: var(--hl-night-fade); --hl-ink: var(--hl-night-ink);
   background-color: var(--bp-card);
   outline: 1.5px solid var(--bp-card-edge);
   outline-offset: -1.5px;
