@@ -1,0 +1,77 @@
+/* ==========================================================================
+   Sketchbook cursors
+   Native CSS cursors only: small SVG files in /cursors/, no JS, nothing following the
+   pointer. Ink on paper in the light theme, light ink on blueprint in the dark one; both
+   carry a thin halo so they read on any background or photo. Every value ends in a system
+   keyword, so a cursor that hasn't loaded (or isn't supported) is just the usual one.
+   Mouse/trackpad only; touch, forced colours and high contrast keep system cursors.
+   Light set and dark set are generated together (paths hand-wobbled to match ink.ts).
+   ========================================================================== */
+/* Forced colours / high contrast fall outside this query, so they keep the system cursors
+   (components' own `cursor: grab` etc. still apply there). */
+@media (hover: hover) and (pointer: fine) and (forced-colors: none) and (not (prefers-contrast: more)) {
+  :root {
+    --cur-default: url('/cursors/arrow.svg') 3 3, default;
+    --cur-pointer: url('/cursors/pointer.svg') 13 3, pointer;
+    --cur-text: url('/cursors/text.svg') 16 16, text;
+    --cur-grab: url('/cursors/grab.svg') 15 14, grab;
+    --cur-grabbing: url('/cursors/grabbing.svg') 15 16, grabbing;
+    --cur-ew: url('/cursors/ew.svg') 16 16, ew-resize;
+    --cur-nope: url('/cursors/nope.svg') 16 16, not-allowed;
+  }
+  /* same theme selectors as tokens.css */
+  :root[data-theme='dark'] {
+    --cur-default: url('/cursors/arrow-dark.svg') 3 3, default;
+    --cur-pointer: url('/cursors/pointer-dark.svg') 13 3, pointer;
+    --cur-text: url('/cursors/text-dark.svg') 16 16, text;
+    --cur-grab: url('/cursors/grab-dark.svg') 15 14, grab;
+    --cur-grabbing: url('/cursors/grabbing-dark.svg') 15 16, grabbing;
+    --cur-ew: url('/cursors/ew-dark.svg') 16 16, ew-resize;
+    --cur-nope: url('/cursors/nope-dark.svg') 16 16, not-allowed;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme='light']) {
+      --cur-default: url('/cursors/arrow-dark.svg') 3 3, default;
+      --cur-pointer: url('/cursors/pointer-dark.svg') 13 3, pointer;
+      --cur-text: url('/cursors/text-dark.svg') 16 16, text;
+      --cur-grab: url('/cursors/grab-dark.svg') 15 14, grab;
+      --cur-grabbing: url('/cursors/grabbing-dark.svg') 15 16, grabbing;
+      --cur-ew: url('/cursors/ew-dark.svg') 16 16, ew-resize;
+      --cur-nope: url('/cursors/nope-dark.svg') 16 16, not-allowed;
+    }
+  }
+
+  /* The arrow over the page and over plain text (selection still works as usual). */
+  html { cursor: var(--cur-default); }
+
+  /* Typing: inputs, text areas and editable text keep a (sketchy) I-beam and the caret. */
+  :where(textarea, [contenteditable]:not([contenteditable='false']),
+    input:not([type]),
+    input:is([type='text'], [type='email'], [type='search'], [type='url'], [type='tel'],
+      [type='password'], [type='number'], [type='date'], [type='time'])) { cursor: var(--cur-text); }
+
+  /* Clickables. Element rules first, then the site's own classed controls, which set
+     `cursor: pointer` in scoped styles, so they're named here with enough weight to win. */
+  :where(a[href], area[href], button, [role='button'], label[for], summary, select,
+    input:is([type='checkbox'], [type='radio'], [type='submit'], [type='button'],
+      [type='reset'], [type='file'], [type='color'])) { cursor: var(--cur-pointer); }
+  :root:root :is(.btn, .theme-switch__btn, .fx-flow__toggle, .jot) { cursor: var(--cur-pointer); }
+
+  /* Not available */
+  :root:root :is(button, input, select, textarea, [role='button']):is(:disabled, [aria-disabled='true']) {
+    cursor: var(--cur-nope);
+  }
+
+  /* Before/after fold slider (FoldCompare) */
+  :root:root .fold__stage { cursor: var(--cur-ew); }
+
+  /* Work corkboard notes: grab, then grabbing while held (classes from fx-work-corkboard.ts) */
+  :root:root .fx-cork.is-live .jot { cursor: var(--cur-grab); }
+  :root:root .fx-cork.is-live .jot.is-held { cursor: var(--cur-grabbing); }
+
+  /* About portrait corner peel (classes from fx-about-peel.ts) */
+  :root:root .peel .peel-grip { cursor: var(--cur-grab); }
+  :root:root .peel.is-dragging,
+  :root:root .peel.is-dragging .peel-grip { cursor: var(--cur-grabbing); }
+}
+
