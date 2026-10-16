@@ -31,7 +31,7 @@ const rot = [-12, 8, -4, 14, -9, 5, 11, -6];
 
     <!-- After -->
     <text class="ink-text ink-fade" style="--i:5" x="482" y="38" font-size="28">After</text>
-    <text class="ink-sans ink-fade" style="--i:5" x="990" y="34" font-size="13" font-style="italic" text-anchor="end" fill="#57524c">built with a co-worker</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:5" x="990" y="34" font-size="13" font-style="italic" text-anchor="end">built with a co-worker</text>
     {qs(494, 92).map(([x, y], i) => (
       <text class="ink-text ink-fade" style={`--i:${5.5 + i * 0.15}`} x={x} y={y} font-size="34" transform={`rotate(${rot[i]} ${x} ${y})`}>?</text>
     ))}
@@ -52,8 +52,8 @@ const rot = [-12, 8, -4, 14, -9, 5, 11, -6];
     <path class="ink ink--faint" style="--i:9" d={rect(680, 290, 140, 44, 630, 1.2)} pathLength="1" />
     <text class="ink-text ink-text--soft ink-fade" style="--i:9" x="750" y="319" font-size="20" text-anchor="middle">helpdesk</text>
 
-    <g transform="rotate(3 920 330)">
-      <rect class="ink-fade" style="--i:10" x="852" y="290" width="138" height="84" fill="#fde68a" />
+    <g class="on-paper" transform="rotate(3 920 330)">
+      <rect class="ink-fade fill-sticky-yellow" style="--i:10" x="852" y="290" width="138" height="84" />
       <text class="ink-sans ink-fade" style="--i:10" x="864" y="314" font-size="13" font-weight="700">videos adopted by</text>
       <text class="ink-sans ink-fade" style="--i:10" x="864" y="334" font-size="13" font-weight="700">multiple research</text>
       <text class="ink-sans ink-fade" style="--i:10" x="864" y="354" font-size="13" font-weight="700">departments</text>
@@ -79,7 +79,7 @@ const rot = [-12, 8, -4, 14, -9, 5, 11, -6];
 
     <!-- After -->
     <text class="ink-text ink-fade" style="--i:5" x="12" y="282" font-size="26">After</text>
-    <text class="ink-sans ink-fade" style="--i:5" x="368" y="278" font-size="12.5" font-style="italic" text-anchor="end" fill="#57524c">built with a co-worker</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:5" x="368" y="278" font-size="12.5" font-style="italic" text-anchor="end">built with a co-worker</text>
     {qs(18, 330).slice(0, 6).map(([x, y], i) => (
       <text class="ink-text ink-fade" style={`--i:${5.5 + i * 0.15}`} x={x} y={y} font-size="30" transform={`rotate(${rot[i]} ${x} ${y})`}>?</text>
     ))}
@@ -102,8 +102,8 @@ const rot = [-12, 8, -4, 14, -9, 5, 11, -6];
 
     <text class="ink-text ink-text--accent ink-fade" style="--i:11" x="12" y="604" font-size="26">Questions: down</text>
     <text class="ink-text ink-text--accent ink-fade" style="--i:11" x="12" y="634" font-size="26">approximately 50%</text>
-    <g transform="rotate(3 300 610)">
-      <rect class="ink-fade" style="--i:10" x="226" y="570" width="144" height="80" fill="#fde68a" />
+    <g class="on-paper" transform="rotate(3 300 610)">
+      <rect class="ink-fade fill-sticky-yellow" style="--i:10" x="226" y="570" width="144" height="80" />
       <text class="ink-sans ink-fade" style="--i:10" x="236" y="594" font-size="12.5" font-weight="700">videos adopted by</text>
       <text class="ink-sans ink-fade" style="--i:10" x="236" y="613" font-size="12.5" font-weight="700">multiple research</text>
       <text class="ink-sans ink-fade" style="--i:10" x="236" y="632" font-size="12.5" font-weight="700">departments</text>

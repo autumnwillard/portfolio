@@ -24,15 +24,15 @@ const second = { x: X0 + CW * 2 + 34, y0: y(1.6), y1: y(3.3) };
   <text class="ink-text ink-fade" x={X0} y="30" font-size="26">Room A, one week</text>
   <path class="ink" style="--i:0" d={rect(X0, Y0, CW * 5, RH * 5, 980, 1.4)} pathLength="1" />
   <path class="ink ink--faint" style="--i:0.6" d={grid} pathLength="1" />
-  {days.map((d, i) => <text class="ink-sans ink-fade" x={X0 + CW * i + CW / 2} y={Y0 - 8} font-size="13" font-weight="700" text-anchor="middle" fill="#57524c">{d}</text>)}
-  {hours.map((h, i) => <text class="ink-sans ink-fade" x={X0 - 10} y={Y0 + RH * i + 15} font-size="12.5" font-weight="700" text-anchor="end" fill="#57524c">{h}</text>)}
+  {days.map((d, i) => <text class="ink-sans ink-fade fill-soft" x={X0 + CW * i + CW / 2} y={Y0 - 8} font-size="13" font-weight="700" text-anchor="middle">{d}</text>)}
+  {hours.map((h, i) => <text class="ink-sans ink-fade fill-soft" x={X0 - 10} y={Y0 + RH * i + 15} font-size="12.5" font-weight="700" text-anchor="end">{h}</text>)}
   {ok.map((b, i) => (
     <>
       <path class="ink" style={`--i:${1.2 + i * 0.3}`} d={rect(X0 + CW * b.d + 6, y(b.h0) + 4, CW - 12, (b.h1 - b.h0) * RH - 8, 1000 + i, 0.8)} pathLength="1" />
       <text class="ink-text ink-fade" style={`--i:${1.2 + i * 0.3}`} x={X0 + CW * b.d + CW / 2} y={y(b.h0) + 25} font-size="17" text-anchor="middle">{b.t}</text>
     </>
   ))}
-  <rect class="ink-fade" style="--i:2" x={first.x} y={first.y0} width="60" height={first.y1 - first.y0} rx="3" fill="#fbe55c" fill-opacity="0.55" />
+  <rect class="ink-fade fill-hl" style="--i:2" x={first.x} y={first.y0} width="60" height={first.y1 - first.y0} rx="3" fill-opacity="0.55" />
   <path class="ink ink--bold" style="--i:2" d={rect(first.x, first.y0, 60, first.y1 - first.y0, 1010, 0.8)} pathLength="1" />
   <text class="ink-text ink-fade" style="--i:2" x={first.x + 30} y={first.y0 + 22} font-size="17" text-anchor="middle">Booked</text>
   <path class="ink ink--accent ink--dash" style="--i:3" d={rect(second.x, second.y0, 60, second.y1 - second.y0, 1011, 0.8)} />

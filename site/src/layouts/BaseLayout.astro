@@ -8,6 +8,7 @@ import '@fontsource/nunito-sans/800.css';
 import '../styles/global.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
 import { pageTurn } from '../lib/transitions';
 // Preload the two faces that set the page’s line breaks (headings, body) so the text
 // doesn’t reflow when they arrive.
@@ -30,15 +31,37 @@ const { title, description, active } = Astro.props;
     <meta name="description" content={description} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta name="theme-color" content="#fcfbf7" />
+    <!-- Browser chrome colour per scheme (paper / blueprint). The theme script below
+         points both at the chosen one when the visitor picks Light or Dark. -->
+    <meta name="theme-color" content="#fcfbf7" media="(prefers-color-scheme: light)" data-scheme="light" />
+    <meta name="theme-color" content="#1a3a60" media="(prefers-color-scheme: dark)" data-scheme="dark" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preload" href={handFont} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={bodyFont} as="font" type="font/woff2" crossorigin />
+    <!-- Before first paint: mark JS on, and apply the saved theme (no attribute = follow
+         the system). Re-applied after every page swap, since the swap replaces <html>'s
+         attributes. Stored in localStorage when it can be; otherwise kept for this visit.
+         window.__setTheme is used by the switch (components/ThemeToggle.astro). -->
     <script is:inline>
-      document.documentElement.classList.add('js');
-      document.addEventListener('astro:after-swap', function () {
-        document.documentElement.classList.add('js');
-      });
+      (function () {
+        var KEY = 'theme', COLORS = { light: '#fcfbf7', dark: '#1a3a60' };
+        var choice = 'system';
+        try { var v = localStorage.getItem(KEY); if (v === 'light' || v === 'dark') choice = v; } catch (e) {}
+        function apply() {
+          var d = document.documentElement, forced = choice === 'light' || choice === 'dark';
+          if (forced) d.setAttribute('data-theme', choice); else d.removeAttribute('data-theme');
+          var m = document.querySelectorAll('meta[name="theme-color"]');
+          for (var i = 0; i < m.length; i++) m[i].setAttribute('content', COLORS[forced ? choice : m[i].getAttribute('data-scheme')]);
+          d.classList.add('js');
+        }
+        window.__setTheme = function (t) {
+          choice = t === 'light' || t === 'dark' ? t : 'system';
+          try { if (choice === 'system') localStorage.removeItem(KEY); else localStorage.setItem(KEY, choice); } catch (e) {}
+          apply();
+        };
+        apply();
+        document.addEventListener('astro:after-swap', apply);
+      })();
     </script>
     <!-- Browsers without view transitions just swap pages (no half-working fallback). -->
     <ClientRouter fallback="swap" />
@@ -55,8 +78,11 @@ const { title, description, active } = Astro.props;
       </main>
       <SiteFooter />
     </div>
+    <!-- Outside the turning sheet, so it stays put while the page turns. -->
+    <ThemeToggle />
     <script>
       import '../scripts/site.ts';
+      import '../scripts/theme.ts';
     </script>
   </body>
 </html>
@@ -64,6 +90,11 @@ const { title, description, active } = Astro.props;
 <style>
   main:focus { outline: none; }
   .sheet { min-height: 100vh; max-width: 1360px; margin-inline: auto; overflow-x: clip; }
+  /* Phones and tablets: room under the footer for the theme switch in the corner, so it
+     never sits on the last links. */
+  @media (max-width: 899px) {
+    .sheet { padding-bottom: calc(4.25rem + env(safe-area-inset-bottom, 0px)); }
+  }
   /* Wide screens: the sheet lies on the desk, with soft edges at the sides. */
   @media (min-width: 1400px) {
     .sheet { box-shadow: var(--sheet-edge); }

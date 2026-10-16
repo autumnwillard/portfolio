@@ -32,9 +32,9 @@ const arcs = stops.map((_, i) => {
     return (
       <g>
         {i === 3 && (
-          <rect class="ink-fade" style={`--i:${i * 1.2}`} x={x - 62} y={y - off - 14} width="124" height="30" rx="6" fill="#fbe55c" fill-opacity="0.9" transform={`rotate(-2 ${x} ${y})`} />
+          <rect class="ink-fade fill-hl" style={`--i:${i * 1.2}`} x={x - 62} y={y - off - 14} width="124" height="30" rx="6" fill-opacity="0.9" transform={`rotate(-2 ${x} ${y})`} />
         )}
-        <circle class="ink-fade" style={`--i:${i * 1.2}`} cx={x} cy={y - off - 32} r="15" fill="#fff" stroke="#1f1d1b" stroke-width="2" />
+        <circle class="ink-fade fill-paper stroke-ink" style={`--i:${i * 1.2}`} cx={x} cy={y - off - 32} r="15" stroke-width="2" />
         <text class="ink-text ink-text--accent ink-fade" style={`--i:${i * 1.2}`} x={x} y={y - off - 24} font-size="21" text-anchor="middle">{i + 1}</text>
         {lines.map((l, k) => (
           <text class="ink-text ink-fade" style={`--i:${i * 1.2}`} x={x} y={y - off + 8 + k * 26} font-size="24" text-anchor="middle">{l}</text>

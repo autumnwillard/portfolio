@@ -30,7 +30,7 @@ const W = X0 + CW * 5;
         <path class="ink ink--faint" style={`--i:${ri * 6 + 1}`} d={line(X0 + CW * (i + 1), row.y + 4, X0 + CW * (i + 1) + (r() - 0.5) * 3, row.y + H - 4, 30 + i + ri * 7, 1.2)} pathLength="1" />
       ))}
       {!thumb && days.map((d, i) => (
-        <text class="ink-sans ink-fade" style={`--i:${ri * 6 + 2}`} x={X0 + CW * i + 10} y={row.y + 20} font-size="13" fill="#57524c">{d}</text>
+        <text class="ink-sans ink-fade fill-soft" style={`--i:${ri * 6 + 2}`} x={X0 + CW * i + 10} y={row.y + 20} font-size="13">{d}</text>
       ))}
       {row.stamps.map((di, k) => {
         const cx = X0 + CW * di + CW / 2;
@@ -51,8 +51,8 @@ const W = X0 + CW * 5;
       )}
       {row.faded.map((di) => (
         <g transform={`translate(${X0 + CW * di + CW / 2} ${row.y + H / 2 + (thumb ? 0 : 7)}) rotate(-5)`} opacity="0.55">
-          <rect x="-40" y="-17" width="80" height="34" rx="3" fill="none" stroke="#e04a32" stroke-width="2" stroke-dasharray="2 5" stroke-linecap="round" class="ink-fade" />
-          <text class="ink-sans ink-fade" x="0" y="6" text-anchor="middle" font-size="16" font-weight="800" letter-spacing="1.5" fill="#c03a23">HOTFIX</text>
+          <rect x="-40" y="-17" width="80" height="34" rx="3" fill="none" stroke-width="2" stroke-dasharray="2 5" stroke-linecap="round" class="ink-fade stroke-accent" />
+          <text class="ink-sans ink-fade fill-accent-ink" x="0" y="6" text-anchor="middle" font-size="16" font-weight="800" letter-spacing="1.5">HOTFIX</text>
         </g>
       ))}
     </g>

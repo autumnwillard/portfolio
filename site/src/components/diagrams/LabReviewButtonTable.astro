@@ -78,7 +78,9 @@ const cols = ['ID', 'Title', 'Owner', 'Status', 'Date Modified'];
     font-weight: 800;
     font-size: 0.82rem;
     padding: 0.1rem 0.55rem;
-    border: 2px solid var(--ink);
+    /* a yellow paper chip, so its ink stays dark in either theme */
+    color: var(--paper-ink);
+    border: 2px solid var(--paper-ink);
     border-radius: var(--wobble-radius-2);
     background: var(--sticky-yellow);
   }

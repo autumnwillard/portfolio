@@ -1,0 +1,97 @@
+---
+// The theme switch: a little index-card tab taped into the bottom-right corner, with three
+// choices (System, Light, Dark) with Phosphor icons. The current one is circled in coral marker,
+// the same loop as the active nav tab. Three buttons with aria-pressed in a labelled group.
+// It lives outside the turning sheet (and persists across page changes), so it never
+// flips with the page. The choice is applied by the inline script in BaseLayout's head
+// (before first paint); scripts/theme.ts handles clicks and keeps the buttons in sync.
+import { loop } from '../lib/ink';
+const icons = import.meta.glob('../icons/phosphor/*.svg', { query: '?raw', import: 'default', eager: true });
+
+// Icons: Phosphor (regular), vendored in src/icons/phosphor (MIT).
+const icon = (name: string) => {
+  const svg = icons[`../icons/phosphor/${name}.svg`] as string;
+  return [...svg.matchAll(/ d="([^"]+)"/g)].map((m) => m[1]);
+};
+const choices = [
+  { key: 'system', label: 'System', icon: icon('monitor') },
+  { key: 'light', label: 'Light', icon: icon('sun') },
+  { key: 'dark', label: 'Dark', icon: icon('moon') },
+];
+---
+<div class="theme-switch on-paper" role="group" aria-labelledby="theme-switch-label" data-theme-switch transition:persist="theme-switch">
+  <span id="theme-switch-label" class="visually-hidden">Colour theme</span>
+  <span class="washi washi--dots theme-switch__tape" aria-hidden="true"></span>
+  {choices.map((c, i) => (
+    <button type="button" class="theme-switch__btn" data-theme-choice={c.key} aria-pressed={c.key === 'system' ? 'true' : 'false'} title={`${c.label} theme`}>
+      <svg class="theme-switch__icon" viewBox="0 0 256 256" aria-hidden="true" focusable="false">{c.icon.map((d) => <path d={d} />)}</svg>
+      <svg class="theme-switch__loop" viewBox="0 0 48 48" aria-hidden="true" focusable="false"><path class="ink ink--accent" d={loop(24, 24, 19, 17, 300 + i * 11, 1.1)} /></svg>
+      <span class="visually-hidden">{c.label}</span>
+    </button>
+  ))}
+</div>
+
+<style>
+  .theme-switch {
+    position: fixed;
+    z-index: 60;
+    right: calc(10px + env(safe-area-inset-right, 0px));
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    display: flex;
+    gap: 2px;
+    padding: 5px 6px 4px;
+    background-color: var(--card);
+    /* a coral header rule along the top, like the index cards */
+    background-image: linear-gradient(transparent 3px, rgb(224 74 50 / 0.5) 3px, rgb(224 74 50 / 0.5) 4.5px, transparent 4.5px);
+    border-radius: 2px;
+    box-shadow: var(--paper-lift), 0 0 0 1px rgb(var(--shadow) / 0.08);
+    rotate: -1.2deg;
+    view-transition-name: theme-switch;
+  }
+  .theme-switch__tape { --len: 2.6rem; --rot: -24deg; top: -0.55rem; left: -1rem; height: 1.05rem; }
+
+  .theme-switch__btn {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: var(--ink-soft);
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .theme-switch__btn:hover,
+  .theme-switch__btn[aria-pressed='true'] { color: var(--ink); }
+  .theme-switch__btn:focus-visible { outline: 2.5px solid var(--accent-ink); outline-offset: -1px; }
+
+  .theme-switch__icon { width: 24px; height: 24px; overflow: visible; }
+  .theme-switch__icon { fill: currentColor; }
+  .theme-switch__loop {
+    position: absolute;
+    inset: -2px;
+    width: 48px;
+    height: 48px;
+    max-width: none;
+    overflow: visible;
+    pointer-events: none;
+    opacity: 0;
+  }
+  .theme-switch__loop .ink { stroke-width: 2.2; }
+  .theme-switch__btn[aria-pressed='true'] .theme-switch__loop { opacity: 1; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .theme-switch__icon { transition: transform 200ms var(--ease-spring, ease-out); }
+    .theme-switch__btn:hover .theme-switch__icon { transform: rotate(-8deg) scale(1.08); }
+    .theme-switch__btn:active .theme-switch__icon { transform: scale(0.9); transition-duration: 60ms; }
+    /* the marker loop is drawn around the new choice */
+    .theme-switch__btn[aria-pressed='true'] .theme-switch__loop .ink {
+      stroke-dasharray: 1 1;
+      animation: theme-loop 420ms var(--ease-pen) both;
+    }
+  }
+  @keyframes theme-loop { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+</style>

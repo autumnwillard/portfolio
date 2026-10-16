@@ -44,7 +44,7 @@ const A = (pts: [number, number][], s: number, h = 9) => { const a = arrow(pts, 
       <path class="ink ink--accent ink--bold" style="--i:6" d={A([[232, 208], [250, 196], [262, 188]], 410)} pathLength="1" />
       <path class="ink" style="--i:6" d={rect(268, 166, 104, 36, 411)} pathLength="1" />
       <text class="ink-text ink-fade" x="320" y="190" font-size="19" text-anchor="middle">review</text>
-      <rect class="ink-fade" x="268" y="214" width="104" height="36" rx="4" fill="none" stroke="#a49d93" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round" />
+      <rect class="ink-fade stroke-faint" x="268" y="214" width="104" height="36" rx="4" fill="none" stroke-width="2" stroke-dasharray="2 6" stroke-linecap="round" />
       <text class="ink-text ink-text--soft ink-fade" x="320" y="238" font-size="19" text-anchor="middle">not needed</text>
     </>
   )}
@@ -56,9 +56,9 @@ const A = (pts: [number, number][], s: number, h = 9) => { const a = arrow(pts, 
       {Array.from({ length: 22 }, (_, i) => {
         const x = 80 + (i % 11) * 24 + (i > 10 ? 12 : 0);
         const y = 78 + Math.floor(i / 11) * 18;
-        return <circle class="ink-fade" style={`--i:${1 + i * 0.05}`} cx={x} cy={y} r="3.4" fill="#57524c" />;
+        return <circle class="ink-fade fill-soft" style={`--i:${1 + i * 0.05}`} cx={x} cy={y} r="3.4" />;
       })}
-      {Array.from({ length: 3 }, (_, i) => <circle class="ink-fade" style="--i:3" cx={188 + i * 12} cy={150} r="3.4" fill="#e04a32" />)}
+      {Array.from({ length: 3 }, (_, i) => <circle class="ink-fade fill-accent" style="--i:3" cx={188 + i * 12} cy={150} r="3.4" />)}
       <path class="ink ink--accent" style="--i:3" d={A([[200, 200], [202, 212], [200, 222]], 426, 8)} pathLength="1" />
       <text class="ink-text ink-text--accent ink-fade" x="200" y="252" font-size="30" text-anchor="middle">16 recommended</text>
     </>
@@ -68,15 +68,15 @@ const A = (pts: [number, number][], s: number, h = 9) => { const a = arrow(pts, 
     <>
       <path class="ink" style="--i:0" d={rect(26, 16, 348, 228, 431, 1.4)} pathLength="1" />
       <path class="ink ink--faint" style="--i:1" d={line(28, 46, 372, 46, 432, 1)} pathLength="1" />
-      {[0, 1, 2].map((k) => <circle class="ink-fade" cx={44 + k * 14} cy="31" r="4" fill="none" stroke="#a49d93" stroke-width="1.6" />)}
+      {[0, 1, 2].map((k) => <circle class="ink-fade stroke-faint" cx={44 + k * 14} cy="31" r="4" fill="none" stroke-width="1.6" />)}
       <path class="ink ink--faint" style="--i:2" d={line(48, 78, 160, 78, 433, 1.2)} pathLength="1" />
       <path class="ink ink--faint" style="--i:2" d={line(48, 100, 132, 100, 434, 1.2)} pathLength="1" />
       <path class="ink ink--faint" style="--i:2" d={line(48, 122, 150, 122, 435, 1.2)} pathLength="1" />
-      <text class="ink-sans ink-fade" x="200" y="74" font-size="13" font-weight="700" fill="#57524c">Status</text>
-      <rect class="ink-fade" style="--i:3" x="196" y="84" width="164" height="34" rx="7" fill="#fbe55c" fill-opacity="0.9" transform="rotate(-1.5 278 101)" />
+      <text class="ink-sans ink-fade fill-soft" x="200" y="74" font-size="13" font-weight="700">Status</text>
+      <rect class="ink-fade fill-hl" style="--i:3" x="196" y="84" width="164" height="34" rx="7" fill-opacity="0.9" transform="rotate(-1.5 278 101)" />
       <text class="ink-text ink-fade" x="278" y="109" font-size="22" text-anchor="middle">Unsubmitted Draft</text>
-      <rect class="ink-fade" x="48" y="168" width="128" height="44" rx="10" fill="#ece9e2" stroke="#a49d93" stroke-width="2" stroke-dasharray="5 5" />
-      <text class="ink-sans ink-fade" x="112" y="196" font-size="16" font-weight="700" text-anchor="middle" fill="#6b655e">Submit</text>
+      <rect class="ink-fade fill-shade stroke-faint" x="48" y="168" width="128" height="44" rx="10" stroke-width="2" stroke-dasharray="5 5" />
+      <text class="ink-sans ink-fade fill-soft" x="112" y="196" font-size="16" font-weight="700" text-anchor="middle">Submit</text>
       <path class="ink ink--accent" style="--i:5" d={A([[226, 222], [206, 214], [186, 198]], 436, 9)} pathLength="1" />
       <text class="ink-text ink-text--accent ink-fade" x="232" y="236" font-size="19">visible, grayed out</text>
     </>
@@ -117,7 +117,7 @@ const A = (pts: [number, number][], s: number, h = 9) => { const a = arrow(pts, 
       <text class="ink-text ink-fade" x="66" y="186" font-size="18">small local</text>
       <text class="ink-text ink-fade" x="66" y="204" font-size="18">businesses</text>
       <text class="ink-text ink-fade" x="236" y="54" font-size="18">large companies</text>
-      <text class="ink-sans ink-fade" x="236" y="74" font-size="12.5" fill="#57524c">“they don’t need us”</text>
+      <text class="ink-sans ink-fade fill-soft" x="236" y="74" font-size="12.5">“they don’t need us”</text>
       <path class="ink ink--accent ink--bold" style="--i:3" d={loop(304, 176, 86, 34, 475, 1.1)} pathLength="1" />
       <text class="ink-text ink-fade" x="304" y="172" font-size="17" text-anchor="middle">mid-size businesses:</text>
       <text class="ink-text ink-fade" x="304" y="192" font-size="17" text-anchor="middle">has budget, no team</text>

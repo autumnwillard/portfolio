@@ -29,7 +29,8 @@ const notes = [
   { fix: ['Conference subtypes'], pain: 'managers see detail' },
   { fix: ['Sort by Date', 'Last Modified'], pain: 'find recent work' },
 ];
-const colors = ['#fde68a', '#c7e0fb', '#c4efcf', '#fbd0e6', '#fdd5b4', '#fde68a', '#c4efcf', '#c7e0fb'];
+// sticky-note colours (classes in global.css, so they follow the theme)
+const colors = ['yellow', 'blue', 'green', 'pink', 'peach', 'yellow', 'green', 'blue'].map((c) => `fill-sticky-${c}`);
 const tilts = [-2, 1.5, -1, 2.2, 1.2, -1.8, 2, -1.2];
 const NW = 214, NH = 128;
 const nx = (i: number) => 34 + (i % 4) * 236;
@@ -45,22 +46,22 @@ const ny = (i: number) => 238 + Math.floor(i / 4) * 154;
       { x: 34, lines: ['Incomplete records:', '3 small changes'], t: -1 },
       { x: 520, lines: ['Self-serve help,', 'built with a co-worker'], t: 1 },
     ].map((c, k) => (
-      <g transform={`rotate(${c.t} ${c.x + 220} 150)`}>
-        <rect class="ink-fade" style={`--i:${2 + k * 0.5}`} x={c.x} y="94" width="446" height="110" fill="#fffdf6" stroke="#d9d2c3" stroke-width="1.2" />
-        <path class="ink" style={`--i:${2 + k * 0.5};stroke:rgb(224 74 50 / 0.55);stroke-width:1.6`} d={`M${c.x + 4} 132 L${c.x + 442} 132`} pathLength="1" />
+      <g class="on-paper" transform={`rotate(${c.t} ${c.x + 220} 150)`}>
+        <rect class="ink-fade fill-card stroke-rule" style={`--i:${2 + k * 0.5}`} x={c.x} y="94" width="446" height="110" stroke-width="1.2" />
+        <path class="ink" style={`--i:${2 + k * 0.5};stroke:var(--accent);stroke-opacity:0.55;stroke-width:1.6`} d={`M${c.x + 4} 132 L${c.x + 442} 132`} pathLength="1" />
         <text class="ink-text ink-fade" style={`--i:${2 + k * 0.5}`} x={c.x + 20} y="122" font-size="28">{c.lines[0]}</text>
         <text class="ink-text ink-fade" style={`--i:${2 + k * 0.5}`} x={c.x + 20} y="170" font-size="28">{c.lines[1]}</text>
       </g>
     ))}
 
     {notes.map((n, i) => (
-      <g transform={`rotate(${tilts[i]} ${nx(i) + NW / 2} ${ny(i) + NH / 2})`}>
-        <rect class="ink-fade" style={`--i:${3.5 + i * 0.35}`} x={nx(i) + 3} y={ny(i) + 6} width={NW} height={NH} fill="#3c2d19" fill-opacity="0.12" />
-        <rect class="ink-fade" style={`--i:${3.5 + i * 0.35}`} x={nx(i)} y={ny(i)} width={NW} height={NH} fill={colors[i]} />
+      <g class="on-paper" transform={`rotate(${tilts[i]} ${nx(i) + NW / 2} ${ny(i) + NH / 2})`}>
+        <rect class="ink-fade fill-shadow" style={`--i:${3.5 + i * 0.35}`} x={nx(i) + 3} y={ny(i) + 6} width={NW} height={NH} fill-opacity="0.12" />
+        <rect class:list={['ink-fade', colors[i]]} style={`--i:${3.5 + i * 0.35}`} x={nx(i)} y={ny(i)} width={NW} height={NH} />
         {n.fix.map((t, k) => (
           <text class="ink-text ink-fade" style={`--i:${3.5 + i * 0.35}`} x={nx(i) + 14} y={ny(i) + 36 + k * 27} font-size="23">{t}</text>
         ))}
-        <text class="ink-sans ink-fade" style={`--i:${3.5 + i * 0.35}`} x={nx(i) + 14} y={ny(i) + NH - 16} font-size="15" font-weight="700" fill="#57524c">→ {n.pain}</text>
+        <text class="ink-sans ink-fade fill-soft" style={`--i:${3.5 + i * 0.35}`} x={nx(i) + 14} y={ny(i) + NH - 16} font-size="15" font-weight="700">→ {n.pain}</text>
       </g>
     ))}
   </InkSvg>

@@ -46,7 +46,7 @@ const field = (x: number, y: number, w: number, s: number) =>
           <path class="ink ink--bold" style="--i:0" d={rect(0, 0, PW, PH, 510 + sd, 1.4)} pathLength="1" />
           <text class="ink-text ink-fade" style="--i:0" x="16" y="34" font-size="24">Before</text>
           <path class="ink" style="--i:1" d={rect(16, 56, 190, 250, 511 + sd, 1.2)} pathLength="1" />
-          <text class="ink-sans ink-fade" style="--i:1" x="30" y="84" font-size="13" font-weight="700" fill="#57524c">Status</text>
+          <text class="ink-sans ink-fade fill-soft" style="--i:1" x="30" y="84" font-size="13" font-weight="700">Status</text>
           <path class="ink" style="--i:2" d={rect(82, 66, 64, 26, 512 + sd, 0.9)} pathLength="1" />
           <text class="ink-text ink-fade" style="--i:2" x="114" y="86" font-size="20" text-anchor="middle">New</text>
           {[118, 168, 218].map((y, k) => (
@@ -55,7 +55,7 @@ const field = (x: number, y: number, w: number, s: number) =>
               <text class="ink-text ink-text--accent ink-fade" style={`--i:${2 + k * 0.3}`} x="82" y={y + 6} font-size="18">*</text>
             </>
           ))}
-          <text class="ink-sans ink-fade" style="--i:3" x="111" y="290" font-size="12.5" font-style="italic" text-anchor="middle" fill="#57524c">(no button anywhere)</text>
+          <text class="ink-sans ink-fade fill-soft" style="--i:3" x="111" y="290" font-size="12.5" font-style="italic" text-anchor="middle">(no button anywhere)</text>
           <path class="ink" style="--i:4" d={person(262, 300, 530 + sd, 'up')} pathLength="1" />
           <path class="ink" style="--i:5" d={bubble(218, 120, 90, 44, 252, 182, 540 + sd)} pathLength="1" />
           <text class="ink-text ink-fade" style="--i:5" x="263" y="150" font-size="24" text-anchor="middle">Done!</text>
@@ -84,17 +84,17 @@ const field = (x: number, y: number, w: number, s: number) =>
           <path class="ink ink--bold" style="--i:10" d={rect(0, 0, PW, PH, 580 + sd, 1.4)} pathLength="1" />
           <text class="ink-text ink-text--accent ink-fade" style="--i:10" x="16" y="34" font-size="24">After</text>
           <path class="ink" style="--i:11" d={rect(16, 56, 236, 236, 581 + sd, 1.2)} pathLength="1" />
-          <text class="ink-sans ink-fade" style="--i:11" x="30" y="84" font-size="13" font-weight="700" fill="#57524c">Status</text>
-          <rect class="ink-fade" style="--i:12" x="80" y="66" width="160" height="28" rx="6" fill="#fbe55c" fill-opacity="0.9" transform="rotate(-1.5 160 80)" />
+          <text class="ink-sans ink-fade fill-soft" style="--i:11" x="30" y="84" font-size="13" font-weight="700">Status</text>
+          <rect class="ink-fade fill-hl" style="--i:12" x="80" y="66" width="160" height="28" rx="6" fill-opacity="0.9" transform="rotate(-1.5 160 80)" />
           <text class="ink-text ink-fade" style="--i:12" x="160" y="87" font-size="21" text-anchor="middle">Unsubmitted Draft</text>
           {[118, 168].map((y, k) => (
             <path class="ink ink--faint" style={`--i:${12 + k * 0.3}`} d={field(30, y, 160, 590 + k * 3 + sd)} pathLength="1" />
           ))}
-          <rect class="ink-fade" style="--i:13" x="30" y="234" width="180" height="40" rx="9" fill="#ece9e2" stroke="#a49d93" stroke-width="2" stroke-dasharray="5 5" />
-          <text class="ink-sans ink-fade" style="--i:13" x="120" y="259" font-size="13.5" font-weight="700" text-anchor="middle" fill="#6b655e">Start Manager Review</text>
+          <rect class="ink-fade fill-shade stroke-faint" style="--i:13" x="30" y="234" width="180" height="40" rx="9" stroke-width="2" stroke-dasharray="5 5" />
+          <text class="ink-sans ink-fade fill-soft" style="--i:13" x="120" y="259" font-size="13.5" font-weight="700" text-anchor="middle">Start Manager Review</text>
           {/* leave-page warning */}
           <g transform="translate(138 150) rotate(2)">
-            <rect class="ink-fade" style="--i:14" x="0" y="0" width="172" height="78" rx="4" fill="#ffffff" />
+            <rect class="ink-fade fill-paper" style="--i:14" x="0" y="0" width="172" height="78" rx="4" />
             <path class="ink" style="--i:14" d={rect(0, 0, 172, 78, 600 + sd, 1)} pathLength="1" />
             <text class="ink-text ink-fade" style="--i:14" x="14" y="30" font-size="21">Leave page?</text>
             <text class="ink-sans ink-fade" style="--i:14" x="14" y="56" font-size="12.5">Changes may not save.</text>

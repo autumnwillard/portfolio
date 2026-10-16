@@ -40,7 +40,7 @@ const { active } = Astro.props;
     min-height: 48px;
     padding: 0.45rem 1.25rem 0.5rem;
     font: 400 1.6rem/1 var(--font-hand);
-    color: var(--ink-soft);
+    color: var(--tab-ink-rest);
     text-decoration: none;
     white-space: nowrap;
     rotate: var(--rot);
@@ -53,10 +53,10 @@ const { active } = Astro.props;
     inset: 0.2rem 0;
     z-index: -1;
     background-color: var(--washi-base);
-    mix-blend-mode: multiply;
+    mix-blend-mode: var(--washi-blend);
     clip-path: polygon(1% 0, 99% 2%, 97% 22%, 100% 46%, 97% 70%, 99.5% 100%, 0.5% 98%, 3% 76%, 0 52%, 3% 28%);
-    box-shadow: 0 1px 2px rgb(60 45 25 / 0.1);
-    opacity: 0.55;
+    box-shadow: 0 1px 2px rgb(var(--shadow) / 0.1);
+    opacity: var(--tab-tape-rest);
     transition: opacity 150ms ease;
   }
   .tab--stripes::before { --washi-base: rgb(240 190 178 / 0.8); background-image: repeating-linear-gradient(90deg, transparent 0 5px, rgb(224 74 50 / 0.24) 5px 7px); }
@@ -65,19 +65,19 @@ const { active } = Astro.props;
   .tab--plain::before { --washi-base: rgb(214 194 152 / 0.8); background-image: repeating-linear-gradient(90deg, transparent 0 6px, rgb(255 255 255 / 0.14) 6px 7px); }
 
   .tab__label { position: relative; }
-  .tab:hover { color: var(--ink); rotate: calc(var(--rot) * 0.4); }
+  .tab:hover { color: var(--tab-ink-active); rotate: calc(var(--rot) * 0.4); }
   .tab:hover::before { opacity: 0.85; }
   /* pressed: a quick squish, so the click registers before the page turns */
   .tab:active { transform: scale(0.95); transition-duration: 60ms; }
 
-  .tab.is-active { color: var(--ink); }
+  .tab.is-active { color: var(--tab-ink-active); }
   .tab.is-active::before { opacity: 1; }
   /* the wavy coral underline under the current page's label */
   .tab__loop {
     position: absolute;
     left: -0.1rem; right: -0.1rem; bottom: -0.32rem;
     height: 6px;
-    background: var(--squiggle-strong) 0 50% / 22px 6px repeat-x;
+    background: var(--squiggle-paper-strong) 0 50% / 22px 6px repeat-x;
     view-transition-name: tab-ink;
     pointer-events: none;
   }

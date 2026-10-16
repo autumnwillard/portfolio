@@ -30,10 +30,10 @@ const check = (x: number, yy: number, s: number) => `${line(x + 3, yy - 8, x + 9
   })}
   <path class="ink ink--bold" style="--i:3" d={line(220, Y0 + GAP * 2 + 16, 300, Y0 + GAP * 2 + 15, 1080, 0.6)} pathLength="1" />
   <text class="ink-text ink-text--accent ink-fade" style="--i:3.4" x="222" y={Y0 + GAP * 3 + 2} font-size="27">= 7 tests</text>
-  <text class="ink-sans ink-fade" style="--i:3.4" x="12" y={Y0 + GAP * 3} font-size="13" font-weight="700" fill="#57524c">all passing</text>
+  <text class="ink-sans ink-fade fill-soft" style="--i:3.4" x="12" y={Y0 + GAP * 3} font-size="13" font-weight="700">all passing</text>
 </InkSvg>
 
 <style>
   :global(svg.ink-svg.sp-tests) { max-width: 21rem; }
-  :global(.sp-tests .sp-tests__rule) { stroke: rgb(84 130 176 / 0.28); stroke-width: 1.2; }
+  :global(.sp-tests .sp-tests__rule) { stroke: var(--rule-blue); stroke-width: 1.2; }
 </style>

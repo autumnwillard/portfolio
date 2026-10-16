@@ -13,7 +13,7 @@ const label = 'HirePurpose statuses, from most to least likely to hire: Hire thi
 ---
 <InkSvg viewBox="0 0 290 330" label={label} class="sp-scale">
   <path class="ink ink--bold" style="--i:0" d={`${up.shaft} ${up.head}`} pathLength="1" />
-  <text class="ink-sans ink-fade" x="0" y="0" font-size="12.5" font-weight="700" fill="#57524c" transform={`translate(16 ${Y0 + GAP * 4.4}) rotate(-90)`}>more likely to hire</text>
+  <text class="ink-sans ink-fade fill-soft" x="0" y="0" font-size="12.5" font-weight="700" transform={`translate(16 ${Y0 + GAP * 4.4}) rotate(-90)`}>more likely to hire</text>
   {statuses.map((s, i) => (
     <>
       <path class="ink ink--faint" style={`--i:${0.5 + i * 0.3}`} d={rect(56, Y0 + GAP * i - 15, 16, 16, 940 + i, 0.6)} pathLength="1" />
@@ -24,7 +24,7 @@ const label = 'HirePurpose statuses, from most to least likely to hire: Hire thi
   <path class="ink ink--accent" style="--i:3" d={`${line(59, hellY - 9, 64, hellY - 2, 952, 0.3)} ${line(64, hellY - 2, 76, hellY - 20, 953, 0.3)}`} pathLength="1" />
   <path class="ink ink--faint ink--dash" style="--i:3.5" d={sep} />
   <text class="ink-text ink-text--soft ink-fade" style="--i:3.5" x="84" y={hellY + 60} font-size="23">Undecided</text>
-  <text class="ink-sans ink-fade" style="--i:3.5" x="84" y={hellY + 80} font-size="12.5" font-weight="700" fill="#57524c">(sorts to the bottom)</text>
+  <text class="ink-sans ink-fade fill-soft" style="--i:3.5" x="84" y={hellY + 80} font-size="12.5" font-weight="700">(sorts to the bottom)</text>
 </InkSvg>
 
 <style>

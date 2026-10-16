@@ -42,11 +42,11 @@ const hdr = (cls = '') => `ink-sans ink-fade ${cls}`;
     <text class="ink-sans ink-fade" style="--i:0" x="77" y="52" font-size="15" font-weight="800" text-anchor="middle">Summary</text>
     <path class="ink ink--accent" style="--i:1" d={swoosh(38, 58, 80, 4, 1.5)} pathLength="1" />
     <path class="ink ink--faint" style="--i:1" d={`M136 64 L140 40 Q142 33 149 33 L214 33 Q221 33 223 40 L228 64`} pathLength="1" />
-    <text class="ink-sans ink-fade" style="--i:1" x="182" y="55" font-size="15" text-anchor="middle" fill="#57524c">Tickets</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:1" x="182" y="55" font-size="15" text-anchor="middle">Tickets</text>
 
     <!-- highlighted columns -->
-    <rect class="ink-fade" style="--i:2" x={W.x[2] + 4} y={W.head + 4} width={W.x[3] - W.x[2] - 8} height={wideRowY[3] - W.head - 8} rx="8" fill="#fbe55c" fill-opacity="0.45" />
-    <rect class="ink-fade" style="--i:2" x={W.x[3] + 4} y={W.head + 4} width={W.x[4] - W.x[3] - 8} height={wideRowY[3] - W.head - 8} rx="8" fill="#fbe55c" fill-opacity="0.45" />
+    <rect class="ink-fade fill-hl" style="--i:2" x={W.x[2] + 4} y={W.head + 4} width={W.x[3] - W.x[2] - 8} height={wideRowY[3] - W.head - 8} rx="8" fill-opacity="0.45" />
+    <rect class="ink-fade fill-hl" style="--i:2" x={W.x[3] + 4} y={W.head + 4} width={W.x[4] - W.x[3] - 8} height={wideRowY[3] - W.head - 8} rx="8" fill-opacity="0.45" />
 
     <!-- grid -->
     <path class="ink" style="--i:2" d={rect(20, W.head, 640, wideRowY[3] - W.head, 70, 1.2)} pathLength="1" />
@@ -84,10 +84,10 @@ const hdr = (cls = '') => `ink-sans ink-fade ${cls}`;
     <path class="ink" style="--i:0" d={`M12 58 L16 30 Q18 22 26 22 L104 22 Q112 22 114 30 L120 58`} pathLength="1" />
     <text class="ink-sans ink-fade" style="--i:0" x="66" y="47" font-size="15" font-weight="800" text-anchor="middle">Summary</text>
     <path class="ink ink--faint" style="--i:1" d={`M122 58 L126 34 Q128 28 135 28 L194 28 Q201 28 203 34 L208 58`} pathLength="1" />
-    <text class="ink-sans ink-fade" style="--i:1" x="165" y="50" font-size="15" text-anchor="middle" fill="#57524c">Tickets</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:1" x="165" y="50" font-size="15" text-anchor="middle">Tickets</text>
 
-    <rect class="ink-fade" style="--i:2" x={N.x[1] + 4} y={N.head + 4} width={N.x[2] - N.x[1] - 8} height={narrowRowY[3] - N.head - 8} rx="8" fill="#fbe55c" fill-opacity="0.45" />
-    <rect class="ink-fade" style="--i:2" x={N.x[2] + 4} y={N.head + 4} width={N.x[3] - N.x[2] - 8} height={narrowRowY[3] - N.head - 8} rx="8" fill="#fbe55c" fill-opacity="0.45" />
+    <rect class="ink-fade fill-hl" style="--i:2" x={N.x[1] + 4} y={N.head + 4} width={N.x[2] - N.x[1] - 8} height={narrowRowY[3] - N.head - 8} rx="8" fill-opacity="0.45" />
+    <rect class="ink-fade fill-hl" style="--i:2" x={N.x[2] + 4} y={N.head + 4} width={N.x[3] - N.x[2] - 8} height={narrowRowY[3] - N.head - 8} rx="8" fill-opacity="0.45" />
     <path class="ink" style="--i:2" d={rect(12, N.head, 360, narrowRowY[3] - N.head, 90, 1.2)} pathLength="1" />
     {narrowRowY.slice(0, 3).map((y, i) => <path class="ink ink--faint" style="--i:3" d={line(14, y, 370, y, 91 + i, 1)} pathLength="1" />)}
     {N.x.slice(1, 3).map((x, i) => <path class="ink ink--faint" style="--i:3" d={line(x, N.head + 2, x, narrowRowY[3] - 2, 95 + i, 1)} pathLength="1" />)}

@@ -64,7 +64,7 @@ const {
   .taped--corners .taped__drift, .taped--corners .taped__photo { transform-origin: 50% 50%; }
   .taped__photo {
     box-shadow: var(--paper-lift);
-    background: var(--paper-scrap);
+    background: var(--card);  /* the print's border: white paper, dimmed in dark mode */
     overflow: hidden;
   }
   .taped--frame .taped__photo { padding: clamp(6px, 1.2vw, 12px); }
@@ -80,11 +80,11 @@ const {
     opacity: 0;
     pointer-events: none;
     box-shadow:
-      0 3px 6px -2px rgb(60 50 40 / 0.14),
-      0 16px 22px -12px rgb(60 50 40 / 0.4);
+      0 3px 6px -2px rgb(var(--shadow) / 0.14),
+      0 16px 22px -12px rgb(var(--shadow) / 0.4);
   }
   .taped--corners .taped__drift::before, .taped--corners .taped__drift::after {
-    box-shadow: 0 4px 8px -3px rgb(60 50 40 / 0.14), 0 14px 26px -10px rgb(60 50 40 / 0.32);
+    box-shadow: 0 4px 8px -3px rgb(var(--shadow) / 0.14), 0 14px 26px -10px rgb(var(--shadow) / 0.32);
   }
 
   /* a faint gloss across the print, only while it's lifted */
@@ -111,7 +111,7 @@ const {
     border-bottom: 1px solid var(--tape-edge);
     /* torn ends */
     clip-path: polygon(2% 0, 98% 4%, 100% 22%, 97% 41%, 100% 62%, 97% 83%, 99% 100%, 1% 96%, 3% 78%, 0 58%, 2% 37%, 0 17%);
-    box-shadow: 0 1px 2px rgb(60 50 40 / 0.12);
+    box-shadow: 0 1px 2px rgb(var(--shadow) / 0.12);
     pointer-events: none;
   }
   .taped--top .tape--a { top: clamp(-14px, -1.6vw, -10px); left: 50%; transform: translateX(-50%) rotate(-3deg); }

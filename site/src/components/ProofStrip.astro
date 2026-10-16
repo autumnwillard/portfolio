@@ -73,7 +73,7 @@ const go = (seed: number) => { const a = arrow([[3, 10], [18, 5], [32, 11], [46,
     z-index: -2;
     opacity: 0;
     pointer-events: none;
-    box-shadow: calc(var(--bias) * 4px) 12px 16px -9px rgb(60 45 25 / 0.36);
+    box-shadow: calc(var(--bias) * 4px) 12px 16px -9px rgb(var(--shadow) / 0.36);
   }
   .jot--peel::after { display: none; }
   @media (hover: hover) and (prefers-reduced-motion: no-preference) {
@@ -103,7 +103,7 @@ const go = (seed: number) => { const a = arrow([[3, 10], [18, 5], [32, 11], [46,
   .jot__link { display: flex; flex-direction: column; align-items: center; gap: 0.35rem; color: var(--ink); text-decoration: none; }
   .jot__link::after { content: ''; position: absolute; inset: 0; z-index: 1; }
   .jot__link:focus-visible { outline: none; }
-  .jot:has(.jot__link:focus-visible) { outline: 2.5px dashed var(--accent-ink); outline-offset: 6px; }
+  .jot:has(.jot__link:focus-visible) { outline: 2.5px dashed var(--focus-ring); outline-offset: 6px; }
   .jot__num { white-space: nowrap; font-family: var(--font-hand); font-size: clamp(2.3rem, 3.3vw, 3.1rem); line-height: 0.95; color: var(--accent-deep); }
   .jot__num--small { white-space: normal; font-size: clamp(1.5rem, 2vw, 1.85rem); line-height: 1.02; text-wrap: balance; }
   .jot__label { font-family: var(--font-hand); font-size: clamp(1.15rem, 1.5vw, 1.35rem); line-height: 1.12; color: var(--ink); text-wrap: balance; }
@@ -125,8 +125,8 @@ const go = (seed: number) => { const a = arrow([[3, 10], [18, 5], [32, 11], [46,
   }
   .jot--peel {
     filter:
-      drop-shadow(0 0.5px 0.6px rgb(60 45 25 / 0.25))
-      drop-shadow(calc(var(--lift) * 3px) calc(var(--lift) * 5px) calc(var(--lift) * 4px) rgb(60 45 25 / 0.2));
+      drop-shadow(0 0.5px 0.6px rgb(var(--shadow) / 0.25))
+      drop-shadow(calc(var(--lift) * 3px) calc(var(--lift) * 5px) calc(var(--lift) * 4px) rgb(var(--shadow) / 0.2));
   }
   .jot__peel {
     position: absolute; right: 0; bottom: 0; width: 3rem; height: 3rem; z-index: 0;

@@ -24,7 +24,7 @@ const custLink = line(320, 216, 368, 216, 972, 0.5);
       <path class="ink" style={`--i:${i * 0.6}`} d={line(b.x + 2, b.y + 34, b.x + b.w - 2, b.y + 34, b.s + 10, 0.8)} pathLength="1" />
       <text class="ink-text ink-fade" style={`--i:${i * 0.6}`} x={b.x + b.w / 2} y={b.y + 26} font-size="24" text-anchor="middle">{b.t}</text>
       {b.fields.map((f, k) => (
-        <text class="ink-sans ink-fade" style={`--i:${i * 0.6 + 0.3}`} x={b.x + 14} y={b.y + 56 + k * 20} font-size="13.5" font-weight="600" fill="#57524c">{f}</text>
+        <text class="ink-sans ink-fade fill-soft" style={`--i:${i * 0.6 + 0.3}`} x={b.x + 14} y={b.y + 56 + k * 20} font-size="13.5" font-weight="600">{f}</text>
       ))}
     </>
   ))}
@@ -33,10 +33,10 @@ const custLink = line(320, 216, 368, 216, 972, 0.5);
   <path class="ink" style="--i:3.4" d={roomLink} pathLength="1" />
   <path class="ink" style="--i:3.4" d={custLink} pathLength="1" />
   <text class="ink-sans ink-fade" style="--i:3.6" x="132" y="208" font-size="13" font-weight="800">1</text>
-  <text class="ink-sans ink-fade" style="--i:3.6" x="142" y="234" font-size="12" font-weight="700" fill="#57524c">many</text>
+  <text class="ink-sans ink-fade fill-soft" style="--i:3.6" x="142" y="234" font-size="12" font-weight="700">many</text>
   <text class="ink-sans ink-fade" style="--i:3.6" x="358" y="208" font-size="13" font-weight="800">1</text>
-  <text class="ink-sans ink-fade" style="--i:3.6" x="324" y="234" font-size="12" font-weight="700" fill="#57524c">many</text>
-  <text class="ink-sans ink-fade" style="--i:4" x="14" y="286" font-size="12.5" font-weight="700" fill="#57524c">Booking is the general type, so other kinds of booking can come later.</text>
+  <text class="ink-sans ink-fade fill-soft" style="--i:3.6" x="324" y="234" font-size="12" font-weight="700">many</text>
+  <text class="ink-sans ink-fade fill-soft" style="--i:4" x="14" y="286" font-size="12.5" font-weight="700">Booking is the general type, so other kinds of booking can come later.</text>
 </InkSvg>
 
 <style>

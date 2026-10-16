@@ -3,6 +3,8 @@
    One place for color, type, spacing, texture and motion.
    ========================================================================== */
 :root {
+  color-scheme: light dark;
+
   /* Paper & ink */
   --paper: #fcfbf7;            /* bright off-white sketch paper */
   --paper-scrap: #ffffff;      /* torn scraps sit a touch brighter than the page */
@@ -30,7 +32,7 @@
   --sticky-green: #c4efcf;
   --sticky-peach: #fdd5b4;
   --accent-deep: #a8301b;
-  --sticky-shadow: 0 1px 1px rgb(60 50 40 / 0.1), 0 10px 16px -10px rgb(60 50 40 / 0.45);
+  --sticky-shadow: 0 1px 1px rgb(var(--shadow) / 0.1), 0 10px 16px -10px rgb(var(--shadow) / 0.45);
 
   /* Tape */
   --tape: rgb(233 222 196 / 0.82);
@@ -76,6 +78,7 @@
      lighter still, so text stays ≥ 14:1 (ink) and ≥ 6.5:1 (ink-soft) where it crosses one. */
   --grid: 24px;
   --grid-tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24'%3E%3Cpath d='M0 .5H24M.5 0V24' fill='none' stroke='rgb(84,120,156)' stroke-opacity='.2' stroke-width='1' stroke-dasharray='1.5 1.5'/%3E%3C/svg%3E");
+  --grid-tile-size: var(--grid);
   --desk: #ebe7de;
 
   /* Index-flag buttons. Primary defaults to coral, secondary to blue; pages with many
@@ -93,14 +96,52 @@
   --link-hl: rgb(224 74 50 / 0.2);
   --link-hl-2: rgb(224 74 50 / 0.25);
   --link-hl-edge: rgb(224 74 50 / 0.08);
-  --sheet-edge: 0 0 0 1px rgb(60 50 40 / 0.07), 0 2px 4px rgb(60 50 40 / 0.06), 0 18px 48px -18px rgb(60 50 40 / 0.35);
+  --sheet-edge: 0 0 0 1px rgb(var(--shadow) / 0.07), 0 2px 4px rgb(var(--shadow) / 0.06), 0 18px 48px -18px rgb(var(--shadow) / 0.35);
   /* Lined index cards: white card, coral header rule, pale blue writing lines */
   --card: #ffffff;
   --card-line: rgb(84 130 176 / 0.2);
   --card-pitch: 1.75rem;
+  /* pale blue ruled lines drawn straight onto the page (diagrams) */
+  --rule-blue: rgb(84 130 176 / 0.28);
 
   /* Paper tooth: a tiny tiled noise tile, kept faint so text contrast is unaffected */
   --tooth: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.35 0 0 0 0 0.31 0 0 0 0 0.26 0 0 0 0.075 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  /* ---------- Roles added for theming ----------
+     Paper objects (sticky notes, index cards, flags, the theme switch) are light paper in
+     both themes, so the ink on them stays dark. global.css maps --ink & co. to these inside
+     those objects. */
+  --paper-ink: #1f1d1b;
+  --paper-ink-soft: #57524c;
+  --paper-ink-faint: #a49d93;
+  --paper-rule: #d9d4ca;
+  --paper-accent: #e04a32;
+  --paper-accent-ink: #c03a23;
+  /* text on the yellow highlighter, in either theme */
+  --hl-ink: #1f1d1b;
+  /* highlighter bands inside SVG diagrams (the rect's own fill-opacity still applies) */
+  --hl-diagram: #fbe55c;
+  /* keyboard focus ring drawn outside a paper object, on the page itself */
+  --focus-ring: #c03a23;
+  /* photos and screenshots */
+  --img-filter: none;
+  /* washi tape: translucent and multiplied onto light paper */
+  --washi-blend: multiply;
+  --washi-plain: rgb(214 194 152 / 0.62);
+  --washi-stripes: rgb(240 190 178 / 0.55);
+  --washi-stripe-line: rgb(224 74 50 / 0.22);
+  --washi-dots: rgb(168 196 224 / 0.62);
+  --washi-check: rgb(178 210 178 / 0.62);
+  /* nav tape labels */
+  --tab-tape-rest: 0.55;
+  --tab-ink-rest: #57524c;
+  --tab-ink-active: #1f1d1b;
+  /* hand-drawn list bullet (an arrow), on the page and on paper objects */
+  --bullet-arrow-paper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 14'%3E%3Cpath d='M1.5 7.6c4.2-.6 9.6-.9 17.6-.4M14.6 2.2c1.9 1.6 4.1 3.3 6.6 4.9-2.3 1.5-4.4 3.1-6.2 4.8' fill='none' stroke='%231f1d1b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  --bullet-arrow: var(--bullet-arrow-paper);
+  /* link squiggles for links sitting on paper objects (always the deep coral) */
+  --squiggle-paper: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='6'%3E%3Cpath d='M0 3.6C2.6 1.9 4.6 1.6 7.2 3c2.8 1.6 4.9 1.8 7.6.4 2.5-1.3 4.6-1.4 7.2.2' fill='none' stroke='rgb(192,58,35)' stroke-width='1.3' stroke-linecap='round'/%3E%3C/svg%3E");
+  --squiggle-paper-strong: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='6'%3E%3Cpath d='M0 3.6C2.6 1.9 4.6 1.6 7.2 3c2.8 1.6 4.9 1.8 7.6.4 2.5-1.3 4.6-1.4 7.2.2' fill='none' stroke='rgb(192,58,35)' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
 
   /* Motion */
   --ease-pen: cubic-bezier(0.55, 0.05, 0.25, 1);
@@ -117,6 +158,155 @@
     0.82 19.2%, 0.938 23.6%, 1.012 28%, 1.05 32.6%, 1.061 37%, 1.052 42%, 1.031 47.6%,
     1.008 54%, 0.994 61%, 0.99 68%, 0.995 77%, 1);
 
-  /* Shadows */
-  --paper-lift: 0 1px 1px rgb(60 50 40 / 0.06), 0 6px 14px -6px rgb(60 50 40 / 0.18);
+  /* Shadows: one shadow colour (an RGB triple), so dark mode can swap it in one place */
+  --shadow: 60 50 40;
+  --paper-lift: 0 1px 1px rgb(var(--shadow) / 0.06), 0 6px 14px -6px rgb(var(--shadow) / 0.18);
 }
+
+/* ==========================================================================
+   Dark: the sketchbook at night, drawn as a blueprint.
+   Deep blueprint-blue paper with pale linework (a faint dotted grid, a slightly firmer
+   line every fifth square); text and line art in pale blue-white ink. The coral marker is
+   lifted to read on blue. Paper things (sticky notes, flags, index cards, washi tape) stay
+   coloured paper taped onto the blueprint, a touch dimmer, with dark ink on them.
+   Every token here also has a light value above, and the two blocks below are identical:
+   one follows the OS setting unless the visitor picked Light, the other is the explicit
+   Dark choice (data-theme is set before first paint in BaseLayout).
+   Contrast (blueprint #1a3a60, measured against the worst grid line too): ink ≥ 7.6:1,
+   ink-soft ≥ 5.2:1, accent-ink ≥ 4.6:1; dark ink on every sticky/flag/card ≥ 7:1.
+   ========================================================================== */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --paper: #1a3a60;
+    --paper-scrap: #22466f;
+    --paper-shade: #24496f;
+    --ink: #eef3f9;
+    --ink-soft: #b9cce2;
+    --ink-faint: #7594b8;
+    --rule: #3e6189;
+    --desk: #0f243d;
+
+    --accent: #ff8a70;
+    --accent-ink: #ffab96;
+    --accent-deep: #962a17;
+    --focus-ring: #ffab96;
+
+    --hl: #e8cf55;
+    --hl-soft: rgb(232 207 85 / 0.85);
+    --hl-fade: rgb(232 207 85 / 0.45);
+    --hl-diagram: rgb(232 207 85 / 0.34);
+
+    --sticky-yellow: #ecd987;
+    --sticky-pink: #ecc8d9;
+    --sticky-blue: #bed4ea;
+    --sticky-green: #bcdfc4;
+    --sticky-peach: #eecbac;
+
+    --flag-coral: #e6937f;
+    --flag-blue: #92b9da;
+    --flag-green: #98c7a0;
+    --flag-yellow: #e3c368;
+
+    --card: #e9e5dc;
+    --card-line: rgb(84 130 176 / 0.24);
+    --rule-blue: rgb(170 200 235 / 0.3);
+    --paper-ink-faint: #8f887e;
+    --paper-rule: #c8c2b6;
+    --paper-accent: #d2452e;
+    --paper-accent-ink: #962a17;
+
+    --tape: rgb(222 208 176 / 0.72);
+    --tape-edge: rgb(190 176 146 / 0.4);
+    --washi-blend: normal;
+    --washi-plain: rgb(206 186 146 / 0.8);
+    --washi-stripes: rgb(232 184 172 / 0.8);
+    --washi-stripe-line: rgb(200 70 50 / 0.3);
+    --washi-dots: rgb(160 190 222 / 0.8);
+    --washi-check: rgb(170 204 170 / 0.8);
+    --tab-tape-rest: 0.85;
+    --tab-ink-rest: #1f1d1b;
+    --tab-ink-active: #1f1d1b;
+
+    --link-hl: rgb(255 138 112 / 0.2);
+    --link-hl-2: rgb(255 138 112 / 0.25);
+    --link-hl-edge: rgb(255 138 112 / 0.08);
+    --squiggle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='6'%3E%3Cpath d='M0 3.6C2.6 1.9 4.6 1.6 7.2 3c2.8 1.6 4.9 1.8 7.6.4 2.5-1.3 4.6-1.4 7.2.2' fill='none' stroke='rgb(255,171,150)' stroke-width='1.3' stroke-linecap='round'/%3E%3C/svg%3E");
+    --squiggle-strong: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='6'%3E%3Cpath d='M0 3.6C2.6 1.9 4.6 1.6 7.2 3c2.8 1.6 4.9 1.8 7.6.4 2.5-1.3 4.6-1.4 7.2.2' fill='none' stroke='rgb(255,171,150)' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+    --bullet-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 14'%3E%3Cpath d='M1.5 7.6c4.2-.6 9.6-.9 17.6-.4M14.6 2.2c1.9 1.6 4.1 3.3 6.6 4.9-2.3 1.5-4.4 3.1-6.2 4.8' fill='none' stroke='%23eef3f9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+
+    --grid-tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cpath d='M0 24.5H120M0 48.5H120M0 72.5H120M0 96.5H120M24.5 0V120M48.5 0V120M72.5 0V120M96.5 0V120' fill='none' stroke='rgb(200,222,255)' stroke-opacity='.11' stroke-width='1' stroke-dasharray='2 2'/%3E%3Cpath d='M0 .5H120M.5 0V120' fill='none' stroke='rgb(200,222,255)' stroke-opacity='.12' stroke-width='1'/%3E%3C/svg%3E");
+    --grid-tile-size: 120px;
+    --tooth: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.8 0 0 0 0 0.88 0 0 0 0 1 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+    --shadow: 3 10 24;
+    --img-filter: brightness(0.9);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #1a3a60;
+  --paper-scrap: #22466f;
+  --paper-shade: #24496f;
+  --ink: #eef3f9;
+  --ink-soft: #b9cce2;
+  --ink-faint: #7594b8;
+  --rule: #3e6189;
+  --desk: #0f243d;
+
+  --accent: #ff8a70;
+  --accent-ink: #ffab96;
+  --accent-deep: #962a17;
+  --focus-ring: #ffab96;
+
+  --hl: #e8cf55;
+  --hl-soft: rgb(232 207 85 / 0.85);
+  --hl-fade: rgb(232 207 85 / 0.45);
+  --hl-diagram: rgb(232 207 85 / 0.34);
+
+  --sticky-yellow: #ecd987;
+  --sticky-pink: #ecc8d9;
+  --sticky-blue: #bed4ea;
+  --sticky-green: #bcdfc4;
+  --sticky-peach: #eecbac;
+
+  --flag-coral: #e6937f;
+  --flag-blue: #92b9da;
+  --flag-green: #98c7a0;
+  --flag-yellow: #e3c368;
+
+  --card: #e9e5dc;
+  --card-line: rgb(84 130 176 / 0.24);
+  --rule-blue: rgb(170 200 235 / 0.3);
+  --paper-ink-faint: #8f887e;
+  --paper-rule: #c8c2b6;
+  --paper-accent: #d2452e;
+  --paper-accent-ink: #962a17;
+
+  --tape: rgb(222 208 176 / 0.72);
+  --tape-edge: rgb(190 176 146 / 0.4);
+  --washi-blend: normal;
+  --washi-plain: rgb(206 186 146 / 0.8);
+  --washi-stripes: rgb(232 184 172 / 0.8);
+  --washi-stripe-line: rgb(200 70 50 / 0.3);
+  --washi-dots: rgb(160 190 222 / 0.8);
+  --washi-check: rgb(170 204 170 / 0.8);
+  --tab-tape-rest: 0.85;
+  --tab-ink-rest: #1f1d1b;
+  --tab-ink-active: #1f1d1b;
+
+  --link-hl: rgb(255 138 112 / 0.2);
+  --link-hl-2: rgb(255 138 112 / 0.25);
+  --link-hl-edge: rgb(255 138 112 / 0.08);
+  --squiggle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='6'%3E%3Cpath d='M0 3.6C2.6 1.9 4.6 1.6 7.2 3c2.8 1.6 4.9 1.8 7.6.4 2.5-1.3 4.6-1.4 7.2.2' fill='none' stroke='rgb(255,171,150)' stroke-width='1.3' stroke-linecap='round'/%3E%3C/svg%3E");
+  --squiggle-strong: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='22' height='6'%3E%3Cpath d='M0 3.6C2.6 1.9 4.6 1.6 7.2 3c2.8 1.6 4.9 1.8 7.6.4 2.5-1.3 4.6-1.4 7.2.2' fill='none' stroke='rgb(255,171,150)' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+  --bullet-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 14'%3E%3Cpath d='M1.5 7.6c4.2-.6 9.6-.9 17.6-.4M14.6 2.2c1.9 1.6 4.1 3.3 6.6 4.9-2.3 1.5-4.4 3.1-6.2 4.8' fill='none' stroke='%23eef3f9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+
+  --grid-tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cpath d='M0 24.5H120M0 48.5H120M0 72.5H120M0 96.5H120M24.5 0V120M48.5 0V120M72.5 0V120M96.5 0V120' fill='none' stroke='rgb(200,222,255)' stroke-opacity='.11' stroke-width='1' stroke-dasharray='2 2'/%3E%3Cpath d='M0 .5H120M.5 0V120' fill='none' stroke='rgb(200,222,255)' stroke-opacity='.12' stroke-width='1'/%3E%3C/svg%3E");
+  --grid-tile-size: 120px;
+  --tooth: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.8 0 0 0 0 0.88 0 0 0 0 1 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  --shadow: 3 10 24;
+  --img-filter: brightness(0.9);
+}
+:root[data-theme="light"] { color-scheme: light; }

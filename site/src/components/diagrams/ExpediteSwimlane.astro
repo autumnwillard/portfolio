@@ -29,7 +29,7 @@ const laneY = (base: number, i: number) => base + i * LH;
         {lanes.map((l, i) => {
           const parts = l === 'Reviewing office' ? ['Reviewing', 'office'] : [l];
           return parts.map((p, k) => (
-            <text class="ink-sans ink-fade" style={`--i:${bi * 8}`} x="22" y={laneY(blk.y, i) + LH / 2 + 5 - (parts.length - 1) * 9 + k * 18} font-size="14" font-weight="800" fill="#57524c">{p}</text>
+            <text class="ink-sans ink-fade fill-soft" style={`--i:${bi * 8}`} x="22" y={laneY(blk.y, i) + LH / 2 + 5 - (parts.length - 1) * 9 + k * 18} font-size="14" font-weight="800">{p}</text>
           ));
         })}
       </g>
@@ -37,7 +37,7 @@ const laneY = (base: number, i: number) => base + i * LH;
 
     <!-- Before -->
     <path class="ink" style="--i:1" d={rect(146, 64, 200, 56, 711, 1.2)} pathLength="1" />
-    <text class="ink-sans ink-fade" style="--i:1" x="160" y="84" font-size="12" font-weight="700" fill="#57524c">EMAIL</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:1" x="160" y="84" font-size="12" font-weight="700">EMAIL</text>
     <text class="ink-text ink-fade" style="--i:1" x="160" y="108" font-size="21">“Can you expedite?”</text>
     <path class="ink" style="--i:2" d={A([[300, 122], [330, 150], [366, 174]], 712)} pathLength="1" />
     <path class="ink ink--bold" style="--i:2.5" d={diamond(440, 176, 150, 64, 713)} pathLength="1" />
@@ -62,9 +62,9 @@ const laneY = (base: number, i: number) => base + i * LH;
     <!-- After -->
     <path class="ink ink--bold" style="--i:9" d={rect(146, 376, 220, 58, 731, 1.2)} pathLength="1" />
     <text class="ink-text ink-fade" style="--i:9" x="256" y="400" font-size="21" text-anchor="middle">Expedite form</text>
-    <text class="ink-sans ink-fade" style="--i:9" x="256" y="422" font-size="13" text-anchor="middle" fill="#57524c">(all fields required)</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:9" x="256" y="422" font-size="13" text-anchor="middle">(all fields required)</text>
     <path class="ink ink--bold" style="--i:10" d={A([[368, 406], [420, 420], [450, 470], [476, 488]], 732, 11)} pathLength="1" />
-    <text class="ink-sans ink-fade" style="--i:10" x="434" y="414" font-size="13" font-style="italic" fill="#57524c">automated flow</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:10" x="434" y="414" font-size="13" font-style="italic">automated flow</text>
     <path class="ink" style="--i:11" d={rect(482, 460, 236, 58, 733, 1.2)} pathLength="1" />
     <text class="ink-text ink-fade" style="--i:11" x="600" y="484" font-size="19" text-anchor="middle">Team shared inbox,</text>
     <text class="ink-text ink-fade" style="--i:11" x="600" y="507" font-size="19" text-anchor="middle">consistent format</text>
@@ -79,7 +79,7 @@ const laneY = (base: number, i: number) => base + i * LH;
     {lanes.map((l, i) => {
       const parts = l === 'Reviewing office' ? ['Reviewing', 'office'] : [l];
       return parts.map((p, k) => (
-        <text class="ink-sans ink-fade" style="--i:0" x={64 + i * 126} y={22 + k * 16} font-size="13" font-weight="800" text-anchor="middle" fill="#57524c">{p}</text>
+        <text class="ink-sans ink-fade fill-soft" style="--i:0" x={64 + i * 126} y={22 + k * 16} font-size="13" font-weight="800" text-anchor="middle">{p}</text>
       ));
     })}
     <path class="ink ink--faint" style="--i:0" d={line(127, 8, 127, 920, 751, 1.2)} pathLength="1" />
@@ -88,7 +88,7 @@ const laneY = (base: number, i: number) => base + i * LH;
     <!-- Before -->
     <text class="ink-text ink-fade" style="--i:0.5" x="8" y="76" font-size="25">Before</text>
     <path class="ink" style="--i:1" d={rect(10, 90, 108, 70, 753, 1.1)} pathLength="1" />
-    <text class="ink-sans ink-fade" style="--i:1" x="20" y="108" font-size="10.5" font-weight="700" fill="#57524c">EMAIL</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:1" x="20" y="108" font-size="10.5" font-weight="700">EMAIL</text>
     <text class="ink-text ink-fade" style="--i:1" x="20" y="130" font-size="17">“Can you</text>
     <text class="ink-text ink-fade" style="--i:1" x="20" y="150" font-size="17">expedite?”</text>
     <path class="ink" style="--i:2" d={A([[118, 140], [134, 160], [146, 182]], 754, 8)} pathLength="1" />
@@ -119,10 +119,10 @@ const laneY = (base: number, i: number) => base + i * LH;
     <path class="ink ink--bold" style="--i:9" d={rect(10, 618, 110, 84, 771, 1.1)} pathLength="1" />
     <text class="ink-text ink-fade" style="--i:9" x="65" y="646" font-size="17" text-anchor="middle">Expedite</text>
     <text class="ink-text ink-fade" style="--i:9" x="65" y="666" font-size="17" text-anchor="middle">form</text>
-    <text class="ink-sans ink-fade" style="--i:9" x="65" y="688" font-size="10.5" text-anchor="middle" fill="#57524c">(all fields required)</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:9" x="65" y="688" font-size="10.5" text-anchor="middle">(all fields required)</text>
     <path class="ink ink--bold" style="--i:10" d={A([[100, 704], [128, 730], [150, 752]], 772, 10)} pathLength="1" />
-    <text class="ink-sans ink-fade" style="--i:10" x="12" y="730" font-size="11.5" font-style="italic" fill="#57524c">automated</text>
-    <text class="ink-sans ink-fade" style="--i:10" x="12" y="745" font-size="11.5" font-style="italic" fill="#57524c">flow</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:10" x="12" y="730" font-size="11.5" font-style="italic">automated</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:10" x="12" y="745" font-size="11.5" font-style="italic">flow</text>
     <path class="ink" style="--i:11" d={rect(136, 756, 110, 84, 773, 1.1)} pathLength="1" />
     <text class="ink-text ink-fade" style="--i:11" x="191" y="782" font-size="16" text-anchor="middle">Shared inbox,</text>
     <text class="ink-text ink-fade" style="--i:11" x="191" y="802" font-size="16" text-anchor="middle">consistent</text>

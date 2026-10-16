@@ -48,8 +48,8 @@ const nBack = arrow([[190, 662], [196, 690], [260, 702], [352, 690], [364, 520],
     <!-- My rule set + side label -->
     <path class="ink ink--bold" style="--i:4" d={rect(405, 165, 135, 70, 103)} pathLength="1" />
     <text class="ink-text ink-fade" style="--i:4" x="472" y="208" font-size="25" text-anchor="middle">My rule set</text>
-    <text class="ink-sans ink-fade" style="--i:4" x="472" y="118" font-size="13.5" text-anchor="middle" fill="#57524c">risks: unresolved dependencies,</text>
-    <text class="ink-sans ink-fade" style="--i:4" x="472" y="136" font-size="13.5" text-anchor="middle" fill="#57524c">failed-QA comments</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:4" x="472" y="118" font-size="13.5" text-anchor="middle">risks: unresolved dependencies,</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:4" x="472" y="136" font-size="13.5" text-anchor="middle">failed-QA comments</text>
     <path class="ink ink--faint" style="--i:4" d={line(472, 143, 471, 160, 9, 0.8)} pathLength="1" />
 
     <!-- Fan out to action buckets -->
@@ -64,16 +64,16 @@ const nBack = arrow([[190, 662], [196, 690], [260, 702], [352, 690], [364, 520],
         <text class="ink-text ink-fade" style={`--i:${6 + i * 0.4}`} x="665" y={BY(i) + 26} font-size="20" text-anchor="middle">{b}</text>
         <g transform={`translate(${737} ${BY(i) + 6}) rotate(${i % 2 ? 3 : -3})`}>
           <path class="ink ink--faint" style={`--i:${7 + i * 0.4}`} d={rect(0, 0, 58, 26, 130 + i, 0.8)} pathLength="1" />
-          <text class="ink-sans ink-fade" style={`--i:${7 + i * 0.4}`} x="29" y="18" font-size="12.5" text-anchor="middle" fill="#57524c">why: …</text>
+          <text class="ink-sans ink-fade fill-soft" style={`--i:${7 + i * 0.4}`} x="29" y="18" font-size="12.5" text-anchor="middle">why: …</text>
         </g>
       </g>
     ))}
-    <text class="ink-sans ink-fade" style="--i:9" x="665" y="352" font-size="13" text-anchor="middle" font-style="italic" fill="#57524c">Claude only</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:9" x="665" y="352" font-size="13" text-anchor="middle" font-style="italic">Claude only</text>
 
     <!-- Converge to product owner review -->
     <path class="ink ink--faint" style="--i:9" d={brace} pathLength="1" />
     <path class="ink" style="--i:10" d={a3.shaft + ' ' + a3.head} pathLength="1" />
-    <rect class="ink-fade" style="--i:11" x="868" y="203" width="106" height="24" rx="6" fill="#fbe55c" fill-opacity="0.9" transform="rotate(-1.5 920 215)" />
+    <rect class="ink-fade fill-hl" style="--i:11" x="868" y="203" width="106" height="24" rx="6" fill-opacity="0.9" transform="rotate(-1.5 920 215)" />
     <path class="ink ink--bold" style="--i:11" d={rect(850, 138, 143, 98, 104)} pathLength="1" />
     <text class="ink-text ink-fade" style="--i:11" x="921" y="168" font-size="21" text-anchor="middle">Product owner</text>
     <text class="ink-text ink-fade" style="--i:11" x="921" y="192" font-size="21" text-anchor="middle">review</text>
@@ -95,8 +95,8 @@ const nBack = arrow([[190, 662], [196, 690], [260, 702], [352, 690], [364, 520],
 
     <path class="ink ink--bold" style="--i:4" d={rect(100, 192, 180, 52, 203)} pathLength="1" />
     <text class="ink-text ink-fade" style="--i:4" x="190" y="226" font-size="24" text-anchor="middle">My rule set</text>
-    <text class="ink-sans ink-fade" style="--i:4" x="190" y="266" font-size="14" text-anchor="middle" fill="#57524c">risks: unresolved dependencies,</text>
-    <text class="ink-sans ink-fade" style="--i:4" x="190" y="284" font-size="14" text-anchor="middle" fill="#57524c">failed-QA comments</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:4" x="190" y="266" font-size="14" text-anchor="middle">risks: unresolved dependencies,</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:4" x="190" y="284" font-size="14" text-anchor="middle">failed-QA comments</text>
     <path class="ink" style="--i:5" d={nC.shaft + ' ' + nC.head} pathLength="1" />
 
     {buckets.map((b, i) => (
@@ -107,12 +107,12 @@ const nBack = arrow([[190, 662], [196, 690], [260, 702], [352, 690], [364, 520],
           <path class="ink" style={`--i:${6 + i * 0.4}`} d={rect(NBX(i), NBY(i), 158, 52, 210 + i, 1.2)} pathLength="1" />
         )}
         <text class="ink-text ink-fade" style={`--i:${6 + i * 0.4}`} x={NBX(i) + 14} y={NBY(i) + 24} font-size="21">{b}</text>
-        <text class="ink-sans ink-fade" style={`--i:${6 + i * 0.4}`} x={NBX(i) + 14} y={NBY(i) + 43} font-size="13" fill="#57524c">{i === 5 ? 'why: … (Claude only)' : 'why: …'}</text>
+        <text class="ink-sans ink-fade fill-soft" style={`--i:${6 + i * 0.4}`} x={NBX(i) + 14} y={NBY(i) + 43} font-size="13">{i === 5 ? 'why: … (Claude only)' : 'why: …'}</text>
       </g>
     ))}
     <path class="ink" style="--i:9" d={nD.shaft + ' ' + nD.head} pathLength="1" />
 
-    <rect class="ink-fade" style="--i:10" x="138" y="614" width="104" height="25" rx="6" fill="#fbe55c" fill-opacity="0.9" transform="rotate(-1.5 190 626)" />
+    <rect class="ink-fade fill-hl" style="--i:10" x="138" y="614" width="104" height="25" rx="6" fill-opacity="0.9" transform="rotate(-1.5 190 626)" />
     <path class="ink ink--bold" style="--i:10" d={rect(70, 568, 240, 88, 204)} pathLength="1" />
     <text class="ink-text ink-fade" style="--i:10" x="190" y="602" font-size="22" text-anchor="middle">Product owner review</text>
     <text class="ink-text ink-fade" style="--i:10" x="190" y="632" font-size="22" text-anchor="middle">(we decide)</text>

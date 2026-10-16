@@ -28,17 +28,17 @@ const callout = arrow([[420, 104], [440, 150], [420, 196], [384, 216]], 611, 10)
     <path class="ink" style="--i:0" d={line(X0, Y0, X0 + 1, y(100) - 14, 601, 1)} pathLength="1" />
     <path class="ink" style="--i:0" d={line(X0, Y0, 420, Y0 - 1, 602, 1)} pathLength="1" />
     <path class="ink" style="--i:0.5" d={line(X0 - 8, y(100), X0 + 2, y(100), 603, 0.4)} pathLength="1" />
-    <text class="ink-sans ink-fade" style="--i:0" x={X0 - 12} y={Y0 + 5} font-size="15" text-anchor="end" fill="#57524c">0</text>
-    <text class="ink-sans ink-fade" style="--i:0" x={X0 - 12} y={y(100) + 5} font-size="15" text-anchor="end" fill="#57524c">100</text>
-    <text class="ink-sans ink-fade" style="--i:0" x="18" y="190" font-size="14" text-anchor="middle" fill="#57524c" transform="rotate(-90 18 190)">manual reviews (index, before = 100)</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:0" x={X0 - 12} y={Y0 + 5} font-size="15" text-anchor="end">0</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:0" x={X0 - 12} y={y(100) + 5} font-size="15" text-anchor="end">100</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:0" x="18" y="190" font-size="14" text-anchor="middle" transform="rotate(-90 18 190)">manual reviews (index, before = 100)</text>
 
     <!-- bar A: today, solid -->
     <path class="ink ink--faint" style="--i:1" d={scribble(A.x + 4, y(100) + 6, A.w - 8, 100 * S - 12, 604, 9)} pathLength="1" />
     <path class="ink ink--bold" style="--i:1" d={rect(A.x, y(100), A.w, 100 * S, 605, 1.2)} pathLength="1" />
     <text class="ink-text ink-fade" style="--i:2" x={A.x + A.w / 2} y={y(100) - 12} font-size="26" text-anchor="middle">100</text>
     <text class="ink-text ink-fade" style="--i:2" x={A.x + A.w / 2} y={Y0 + 30} font-size="23" text-anchor="middle">Before</text>
-    <text class="ink-sans ink-fade" style="--i:2" x={A.x + A.w / 2} y={Y0 + 52} font-size="15" text-anchor="middle" fill="#57524c">every item gets</text>
-    <text class="ink-sans ink-fade" style="--i:2" x={A.x + A.w / 2} y={Y0 + 70} font-size="15" text-anchor="middle" fill="#57524c">manual review</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:2" x={A.x + A.w / 2} y={Y0 + 52} font-size="15" text-anchor="middle">every item gets</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:2" x={A.x + A.w / 2} y={Y0 + 70} font-size="15" text-anchor="middle">manual review</text>
 
     <!-- bar B: projected, hatched, 20–30 range -->
     <g clip-path="url(#rr-proj-clip)">
@@ -48,8 +48,8 @@ const callout = arrow([[420, 104], [440, 150], [420, 196], [384, 216]], 611, 10)
     <path class="ink ink--accent ink--dash" style="--i:5" d={`${line(B.x, y(30), B.x + B.w, y(30), 607, 0.6)} ${line(B.x, y(30), B.x, y(20), 608, 0.4)} ${line(B.x + B.w, y(30), B.x + B.w, y(20), 609, 0.4)}`} />
     <text class="ink-text ink-text--accent ink-fade" style="--i:5" x={B.x + B.w / 2} y={y(30) - 12} font-size="26" text-anchor="middle">~20–30</text>
     <text class="ink-text ink-fade" style="--i:5" x={B.x + B.w / 2} y={Y0 + 30} font-size="23" text-anchor="middle">Reliable answers</text>
-    <text class="ink-sans ink-fade" style="--i:5" x={B.x + B.w / 2} y={Y0 + 52} font-size="15" text-anchor="middle" fill="#57524c">(projected,</text>
-    <text class="ink-sans ink-fade" style="--i:5" x={B.x + B.w / 2} y={Y0 + 70} font-size="15" text-anchor="middle" fill="#57524c">not measured)</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:5" x={B.x + B.w / 2} y={Y0 + 52} font-size="15" text-anchor="middle">(projected,</text>
+    <text class="ink-sans ink-fade fill-soft" style="--i:5" x={B.x + B.w / 2} y={Y0 + 70} font-size="15" text-anchor="middle">not measured)</text>
 
     <!-- the claim -->
     <text class="ink-text ink-text--accent ink-fade" style="--i:6" x="214" y="52" font-size="31">~70–80% fewer</text>

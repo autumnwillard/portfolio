@@ -73,7 +73,7 @@ const cards = featured.slice(0, 3);
     z-index: -1;
     opacity: 0;
     pointer-events: none;
-    box-shadow: 0 3px 6px -2px rgb(60 50 40 / 0.12), 0 16px 22px -12px rgb(60 50 40 / 0.36);
+    box-shadow: 0 3px 6px -2px rgb(var(--shadow) / 0.12), 0 16px 22px -12px rgb(var(--shadow) / 0.36);
   }
   .tcard:nth-child(2) { margin-top: 1.5rem; }
   .tcard:nth-child(3) { margin-top: 0.5rem; }
@@ -82,7 +82,7 @@ const cards = featured.slice(0, 3);
   .tcard__link { color: var(--ink); }
   .tcard__link::after { content: ''; position: absolute; inset: 0; z-index: 1; }
   .tcard__link:focus-visible { outline: none; }
-  .tcard:has(.tcard__link:focus-visible) { outline: 2.5px dashed var(--accent-ink); outline-offset: 6px; }
+  .tcard:has(.tcard__link:focus-visible) { outline: 2.5px dashed var(--focus-ring); outline-offset: 6px; }
   .tcard__blurb { font-size: 1rem; line-height: var(--card-pitch); }
   .tcard__stamp { height: var(--card-pitch); display: flex; align-items: center; }
   .tcard__num { margin-top: 0 !important; font-weight: 800; line-height: var(--card-pitch); padding-left: 1.4rem; position: relative; }
