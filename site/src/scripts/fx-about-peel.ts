@@ -49,7 +49,34 @@ export function initPeel(root: HTMLElement): () => void {
   const under = document.createElement('div');
   under.className = 'peel-under';
   under.setAttribute('aria-hidden', 'true');
-  under.innerHTML = '<span class="r">hi!</span><span class="l">oh, hello</span>';
+  under.innerHTML = '<span class="r"></span><span class="l"></span>';
+  const countEl = under.querySelector<HTMLElement>('.r')!;
+  const noteEl = under.querySelector<HTMLElement>('.l')!;
+  // Left corner: a new short hello on every lift (never the same twice in a row).
+  // Right corner: how many times this visitor has lifted the photo, kept in their browser.
+  // Keep notes to 10 characters or fewer: that's what a small pull shows on a phone.
+  let lifts = 0;
+  try { lifts = Number(localStorage.getItem('peel-lifts')) || 0; } catch {}
+  const NOTES = ['oh, hi!', 'peek-a-boo', 'found me!', 'hey you', 'caught ya', 'hiya!', 'boo!', 'psst', 'busted', 'well hi', 'ope, hi', 'howdy!'];
+  const AGAIN = ['you again?', 'hi again', 'still me'];
+  let note = '';
+  const nextNote = () => {
+    const pool = lifts === 0 ? ['oh, hi!'] : [...NOTES, ...AGAIN].filter((t) => t !== note);
+    note = pool[Math.floor(Math.random() * pool.length)];
+    noteEl.textContent = note;
+  };
+  const showCount = (n: number) => { countEl.textContent = n > 99 ? 'lifted lots' : `lifted ${n}×`; };
+  nextNote();
+  // show the number this lift will become, so it never changes while it's on screen
+  showCount(lifts + 1);
+  // one lift per drag, once the corner is pulled far enough to show anything
+  let counted = false;
+  const countLift = () => {
+    if (counted) return;
+    counted = true;
+    lifts += 1;
+    try { localStorage.setItem('peel-lifts', String(lifts)); } catch {}
+  };
   const NS = 'http://www.w3.org/2000/svg';
   const flap = document.createElementNS(NS, 'svg');
   flap.setAttribute('class', 'peel-flap');
@@ -145,11 +172,13 @@ export function initPeel(root: HTMLElement): () => void {
     const D = Math.hypot(c.x - p.x, c.y - p.y);
     if (D < 0.8) {
       photo.style.clipPath = '';
+      drift.style.removeProperty('--peel-clip');
       flap.style.visibility = 'hidden';
       root.classList.remove('is-peeling');
       return;
     }
     root.classList.add('is-peeling');
+    if (mode === 'drag' && D > Math.min(W, H) * 0.08) countLift();
     const n = { x: (c.x - p.x) / D, y: (c.y - p.y) / D }; // from the tip toward the corner's home
     // stiff card: one smooth roll. The radius grows with the pull, but stays small enough
     // that most of the lifted corner lies flat on top (a big roll reads as a tube).
@@ -160,7 +189,9 @@ export function initPeel(root: HTMLElement): () => void {
     const sOf = (X: Pt) => dot({ x: X.x - L0.x, y: X.y - L0.y }, n);
     const rect: Pt[] = [{ x: 0, y: 0 }, { x: W, y: 0 }, { x: W, y: H }, { x: 0, y: H }];
     const e = 60;
-    photo.style.clipPath = poly(clipHalf([{ x: -e, y: -e }, { x: W + e, y: -e }, { x: W + e, y: H + e }, { x: -e, y: H + e }], sOf));
+    const keep = poly(clipHalf([{ x: -e, y: -e }, { x: W + e, y: -e }, { x: W + e, y: H + e }, { x: -e, y: H + e }], sOf));
+    photo.style.clipPath = keep;
+    drift.style.setProperty('--peel-clip', keep);
     const lifted = clipHalf(rect, (X) => -sOf(X)); // s >= 0
     const band = (a: number, b: number) => clipHalf(clipHalf(lifted, (X) => a - sOf(X)), (X) => sOf(X) - b);
     const move = (pts: Pt[], f: (s: number) => number) =>
@@ -272,6 +303,8 @@ export function initPeel(root: HTMLElement): () => void {
       W = drift.offsetWidth;
       H = drift.offsetHeight;
       mode = 'drag';
+      if (counted) { nextNote(); showCount(lifts + 1); }
+      counted = false;
       dragId = e.pointerId;
       g.setPointerCapture(e.pointerId);
       root.classList.add('is-dragging');
@@ -314,6 +347,7 @@ export function initPeel(root: HTMLElement): () => void {
     flap.remove();
     grips.forEach((g) => g.remove());
     photo.style.clipPath = '';
+    drift.style.removeProperty('--peel-clip');
     root.classList.remove('is-live', 'is-dragging', 'is-peeling');
   };
 }

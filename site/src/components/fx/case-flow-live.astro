@@ -6,8 +6,8 @@
 // (same lib/ink seeds), so the arrows the tickets ride are the arrows you see.
 //
 //  kind="risk"     wraps RiskReviewFlow (release-risk-review)
-//  kind="routing"  wraps ReviewRoutingBeforeAfter (ai-review-routing). The "Proposed" side
-//                  never shipped; the bar under the figure says it's an illustration.
+//  kind="routing"  wraps ReviewRoutingBeforeAfter (ai-review-routing). The "Proposed" side is
+//                  labeled as proposed; the bar under the figure says it's an illustration.
 //
 // Decorative (aria-hidden): the wrapped diagram keeps its own accessible label. With JS off
 // or reduced motion, nothing here shows. A Pause button stops it (WCAG 2.2.2), and it
@@ -201,7 +201,7 @@ if (kind === 'risk') {
   variants = [wide, narrow];
 }
 const note = kind === 'routing'
-  ? 'The little pages are items going through review. It’s an illustration, not real data, and the proposed side never shipped.'
+  ? 'The little pages are items going through review. It’s an illustration, not real data.'
   : 'The little slips are tickets going through the review. It’s an illustration, not real release data.';
 ---
 <div class:list={['fx-flow', `fx-flow--${kind}`]} data-fx-flow>
