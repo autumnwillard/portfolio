@@ -152,7 +152,7 @@ These rules hold for every page:
 
 ## Tech
 
-- **Stack:** Astro 7.3.5 (exact pins for every dependency), static output, deployed to Cloudflare Pages (`dev` → dev.autumnwillard.com, `master` → autumnwillard.com). The site lives in `site/`. Case studies are Markdown/MDX content (a content collection) rendered through shared layouts and components (sticky note, index card, taped image, highlight, status badge, metric, callout).
+- **Stack:** Astro 7.3.5 (exact pins for every dependency), static output, deployed to Cloudflare Workers as static assets, one Worker per branch (`dev` → `portfolio` → dev.autumnwillard.com; `master` → `portfolio-production` → autumnwillard.com and www; see `site/wrangler.jsonc`). Old-site URLs redirect via `site/public/_redirects`. The site lives in `site/`. Case studies are Markdown/MDX content (a content collection) rendered through shared layouts and components (sticky note, index card, taped image, highlight, status badge, metric, callout).
 - Keep JavaScript light. Animations should be CSS-first, with small islands only where needed (tab transitions). No jQuery.
 - Design tokens (colors, fonts, spacing, paper textures) live in one place as CSS custom properties.
 - Performance budget: Lighthouse ≥ 95 for performance and accessibility; fonts subset with `font-display: swap`; textures as small tiled images or CSS/SVG.

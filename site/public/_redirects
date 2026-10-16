@@ -1,0 +1,12 @@
+# Old site (plain HTML pages) → the new pages, so old links and bookmarks still work.
+/index.html               /                                 301
+/request-automation.html  /work/expedite-intake/            301
+/abandoned-records.html   /work/lab-review-system/          301
+/ui-improvements.html     /work/lab-review-system/          301
+/knowledge-base.html      /work/lab-review-system/          301
+/hire-purpose.html        /side-projects/#hirepurpose       301
+/room-reserve.html        /side-projects/#room-reserve      301
+/graphic-design.html      /side-projects/#design            301
+/taniti-island.html       /side-projects/                   301
+/nav.html                 /                                 301
+/footer.html              /                                 301
