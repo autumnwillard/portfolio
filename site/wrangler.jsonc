@@ -1,0 +1,13 @@
+// Cloudflare Workers (static assets only): serves the Astro build in dist/.
+// The dashboard's deploy command passes --name, so one config works for both the
+// dev Worker (dev.autumnwillard.com) and, later, the production one.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "autumnwillard-portfolio",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  }
+}
