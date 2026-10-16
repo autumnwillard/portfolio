@@ -170,7 +170,7 @@ Plan of record lives in `.notes/portfolio-brief.md`; the brief wins over this su
   5. Expedite request intake (compact)
   Supporting work and a Tech Handoff strategy card appear as short cards.
 - **Side Projects:** HirePurpose, Room Reserve (labeled as a capstone), this site, a small strip of design work.
-- **About** (home, `/`): the intro ("Hi there! I'm Autumn", "Product manager. Hands-on builder.") and taped-in portrait; a short list of work (one line per case study, each linking to its case-study page, plus a "See all" link to `/work/`); who I am and how I think, how I work, AI principles, a little personality (NWA; hiking, the outdoors, time with her kids, reading). No timeline or job history; never name her city.
+- **About** (home, `/`): a quiet hero: the title "Product manager. Hands-on builder.", one line ("I figure out what's actually broken and fix it."), one "See the work" button and the taped-in portrait (no greeting, no sticky note, no second CTA); a short list of work (one line per case study, each linking to its case-study page, plus a "See all" link to `/work/`); who I am and how I think, how I work, AI principles, a little personality (NWA; hiking, the outdoors, time with her kids, reading). No timeline or job history; never name her city.
 - **Contact:** simple and direct.
 - Retired: Taniti Island, Graphic Design page, dollar figures in the hero, tool-tag lists, old flat illustrations, unused assets.
 

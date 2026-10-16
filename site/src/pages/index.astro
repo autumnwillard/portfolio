@@ -24,17 +24,13 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
     <!-- Hero -->
     <section class="hero" aria-labelledby="hero-h">
       <div class="hero__text">
-        <p class="hero__hi">Hi there! I’m Autumn.</p>
         <h1 id="hero-h">Product manager. <span class="hero__h-2">Hands-on builder.</span></h1>
         <svg class="hero__swoosh draw" viewBox="0 0 420 18" preserveAspectRatio="none" aria-hidden="true" focusable="false">
           <path class="ink ink--accent" d={swoosh(4, 11, 410, 33, 4.5)} pathLength="1" />
         </svg>
-        <p class="hero__lede">I find the problem behind the complaint, then build the fix, or the case for it.</p>
-        <p>I translate between the two vastly different languages of business logic and technical implementation, so quality products get out the door without anyone wanting to kill each other.</p>
-        <p class="hero__now"><strong>Right now:</strong> I own the product and releases for a B2B SaaS document management platform built by four engineering teams.</p>
+        <p class="hero__lede">I figure out what’s actually broken and fix it.</p>
         <div class="btn-row">
           <Button variant="primary" href="/work/">See the work →</Button>
-          <Button href="/autumn-willard-resume.pdf">Résumé (PDF)</Button>
         </div>
       </div>
       <div class="hero__art">
@@ -50,9 +46,6 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
           loading="eager"
           fetchpriority="high"
         />
-        <StickyNote tilt={-3} color="yellow" class="hero__note">
-          I also read the code and query the database before I write the spec. Engineers get fewer “wait, what did you mean?” moments from me.
-        </StickyNote>
       </div>
     </section>
 
@@ -148,26 +141,19 @@ const heroSrcset = '/images/hero-640.jpg 640w, /images/hero-960.jpg 960w, /image
     display: grid;
     grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.9fr);
     gap: var(--s3) var(--s4);
-    align-items: start;
+    align-items: center;
     padding: var(--s3) 0 var(--s4) var(--margin-col);
   }
-  .hero__hi { font-family: var(--font-hand); font-size: var(--step-2); color: var(--accent-ink); margin-bottom: 0.3rem; transform: rotate(-1.5deg); transform-origin: left; }
   .hero h1 { margin-bottom: 0.1rem; }
   .hero__h-2 { display: block; }
   .hero__swoosh { width: min(24rem, 90%); height: 16px; overflow: visible; margin-bottom: var(--s2); }
   .hero__swoosh .ink { stroke-width: 4; }
   .hero__lede { font-size: var(--step-1); font-weight: 700; line-height: 1.45; }
-  .hero__now { color: var(--ink-soft); }
-  .hero__now strong { color: var(--ink); }
   .hero__art { position: relative; padding-top: var(--s2); max-width: 420px; }
-  .hero__art :global(.hero__note) { --note-size: 15.5rem; margin: -3rem 0 0 -2.75rem; position: relative; z-index: 2; }
 
   @media (max-width: 760px) {
     .hero { grid-template-columns: 1fr; padding-left: 0; padding-top: var(--s1); gap: var(--s1); }
-    .hero__art { order: -1; display: grid; grid-template-columns: 48% 1fr; gap: var(--s1); align-items: center; padding-top: 0.75rem; max-width: none; }
-    .hero__art :global(.hero__note) { --note-size: 100%; margin: 0.25rem 0 0 -0.6rem; padding: 1.3rem 0.8rem 0.8rem; }
-    .hero__art :global(.hero__note .note__text) { font-size: 1.04rem; line-height: 1.2; }
-    .hero__hi { font-size: 1.5rem; }
+    .hero__art { order: -1; padding-top: 0.75rem; max-width: min(15rem, 62%); }
   }
   @media (max-width: 400px) {
     .hero h1 { font-size: 2.45rem; }
