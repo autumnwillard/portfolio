@@ -63,7 +63,7 @@ const { title, description, active } = Astro.props;
 
 <style>
   main:focus { outline: none; }
-  .sheet { min-height: 100vh; max-width: 1360px; margin-inline: auto; }
+  .sheet { min-height: 100vh; max-width: 1360px; margin-inline: auto; overflow-x: clip; }
   /* Wide screens: the sheet lies on the desk, with soft edges at the sides. */
   @media (min-width: 1400px) {
     .sheet { box-shadow: var(--sheet-edge); }
