@@ -230,7 +230,7 @@ document.addEventListener('astro:before-swap', (e) => {
 });
 
 /**
- * The marker circle around the active tab slides to the new tab above the turning
+ * The wavy underline under the active tab slides to the new tab above the turning
  * page, but only when the tabs are on screen before and after. Scrolled down (or
  * coming back to a scrolled spot), it would fly in from off screen, so it just turns
  * with the page instead.
