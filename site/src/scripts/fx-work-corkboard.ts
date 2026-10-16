@@ -153,7 +153,7 @@ function init() {
   };
 
   /* ---------- grabbing ---------- */
-  let active: { n: Note; id: number; sx: number; sy: number; ox: number; oy: number; dragged: boolean } | null = null;
+  let active: { n: Note; id: number; sx: number; sy: number; ox: number; oy: number; dragged: boolean; touch: boolean } | null = null;
   let suppressClick = false;
 
   const sample = (n: Note, e: PointerEvent) => {
@@ -168,7 +168,16 @@ function init() {
     const dx = e.clientX - active.sx, dy = e.clientY - active.sy;
     if (!active.dragged) {
       if (Math.hypot(dx, dy) < 6) return;
+      // touch: only a sideways swipe grabs a note; anything more vertical is the page scrolling
+      if (active.touch && Math.abs(dy) > Math.abs(dx)) {
+        window.removeEventListener('pointermove', onMove);
+        window.removeEventListener('pointerup', onUp);
+        window.removeEventListener('pointercancel', onUp);
+        active = null;
+        return;
+      }
       active.dragged = true;
+      board.classList.add('was-dragged');
       n.held = true;
       n.flying = 0;
       n.el.classList.add('is-held');
@@ -216,7 +225,7 @@ function init() {
     on(n.el, 'pointerdown', (e: PointerEvent) => {
       if (active || !e.isPrimary || e.button !== 0) return;
       suppressClick = false;
-      active = { n, id: e.pointerId, sx: e.clientX, sy: e.clientY, ox: n.x, oy: n.y, dragged: false };
+      active = { n, id: e.pointerId, sx: e.clientX, sy: e.clientY, ox: n.x, oy: n.y, dragged: false, touch: e.pointerType === 'touch' };
       n.samples = [];
       sample(n, e);
       window.addEventListener('pointermove', onMove, { passive: false });
@@ -234,9 +243,10 @@ function init() {
   on(window, 'resize', () => { if (raf || active) measure(); });
 
   /* ---------- slap-in ---------- */
+  let lastSlap = notes.length - 1;
   const slap = (n: Note, i: number) => {
     const DUR = 560;
-    const delay = 120 + i * 190;
+    const delay = 60 + i * 160;
     const side = i % 2 ? 1 : -1;
     // come in big, but never so big it pokes past the screen edge (phones)
     const box = n.el.getBoundingClientRect();
@@ -283,15 +293,23 @@ function init() {
     );
     anims.push(a);
     a.finished.then(() => svg.remove(), () => svg.remove());
-    if (i === notes.length - 1) timers.push(window.setTimeout(() => board.classList.add('is-settled'), 450));
+    if (i === lastSlap) timers.push(window.setTimeout(() => board.classList.add('is-settled'), 450));
   };
 
   const io = new IntersectionObserver(
     ([entry]) => {
       io.disconnect();
       board.classList.add('is-live');
-      if (entry.isIntersecting && entry.boundingClientRect.top < innerHeight * 0.85) notes.forEach(slap);
-      else board.classList.add('is-settled');
+      let seen = false;
+      try { seen = sessionStorage.getItem('fx-cork-slap') === '1'; } catch {}
+      // Slap in only the notes you can see, the first time this visit. Notes below the
+      // fold (phones) and later visits: they're simply already on the board.
+      const inView = notes.filter((n) => n.el.getBoundingClientRect().top < innerHeight * 0.92);
+      if (!seen && entry.isIntersecting && inView.length) {
+        try { sessionStorage.setItem('fx-cork-slap', '1'); } catch {}
+        lastSlap = inView.length - 1;
+        inView.forEach((n, i) => slap(n, i));
+      } else board.classList.add('is-settled');
     },
     { threshold: 0 },
   );

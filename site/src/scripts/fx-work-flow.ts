@@ -34,6 +34,7 @@ class Layer {
   nextEmit = 0;
   emitted = 0;
   anims: Animation[] = [];
+  draining = false; // finish what's moving, start nothing new
 
   constructor(svg: SVGSVGElement) {
     this.svg = svg;
@@ -118,7 +119,7 @@ class Layer {
   tick(dt: number) {
     this.clock += dt;
     const { plan } = this;
-    if (this.clock >= this.nextEmit) {
+    if (!this.draining && this.clock >= this.nextEmit) {
       this.nextEmit = this.clock + plan.emit;
       plan.lanes.forEach((lane) => this.spawn(this.pick(lane).steps));
       this.emitted++;
@@ -195,6 +196,7 @@ class Layer {
     this.items.forEach((it) => this.release(it));
     this.items = [];
     this.events = [];
+    this.nextEmit = this.clock;
   }
 }
 
@@ -218,10 +220,26 @@ function setup(root: HTMLElement) {
   let last = 0;
   let readyTimer = 0;
 
+  // A few rounds is enough to get the idea; after that it would only pull the eye away
+  // from the text. It stops by itself (the button then says Play) and plays again on request.
+  const RUN_MS = 16000;
+  let ran = 0;
   const loop = (now: number) => {
-    const dt = Math.min(48, now - last);
+    const real = now - last;
+    const dt = Math.min(48, real);
     last = now;
     for (const l of live) if (l.shown()) l.tick(dt);
+    ran += Math.min(real, 250); // wall-clock time on screen (slow frames still count)
+    if (ran >= RUN_MS) {
+      // stop sending new items in, let the ones on the arrows arrive, then rest
+      live.forEach((l) => (l.draining = true));
+      if (live.every((l) => !l.shown() || l.items.length === 0)) {
+        raf = 0;
+        live.forEach((l) => (l.events = [])); // the last box's coral flash finishes on its own
+        setPaused(true);
+        return;
+      }
+    }
     raf = requestAnimationFrame(loop);
   };
   const sync = () => {
@@ -252,12 +270,17 @@ function setup(root: HTMLElement) {
   const onVis = () => sync();
   document.addEventListener('visibilitychange', onVis);
 
-  const onToggle = () => {
-    paused = !paused;
-    btn!.setAttribute('aria-pressed', String(paused));
+  function setPaused(p: boolean) {
+    paused = p;
+    if (!p) {
+      ran = 0;
+      live.forEach((l) => (l.draining = false));
+    }
+    btn?.setAttribute('aria-pressed', String(paused));
     if (label) label.textContent = paused ? 'Play' : 'Pause';
     sync();
-  };
+  }
+  const onToggle = () => setPaused(!paused);
   btn?.addEventListener('click', onToggle);
 
   // crossing the wide/narrow breakpoint swaps drawings: start the new one clean

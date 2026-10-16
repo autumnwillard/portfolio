@@ -131,15 +131,20 @@ const { before, after, width, height, caption } = Astro.props;
     const ro = new ResizeObserver(() => { W = stage.clientWidth || 1; paint(); });
     ro.observe(stage);
 
-    // the first time it scrolls into view, the old page rolls back to show the new one
+    // the first time it scrolls into view (once a visit), the old page rolls back to show
+    // the new one: that sweep is what tells you the fold moves. Later visits start mid-way.
     let io: IntersectionObserver | null = null;
+    let swept = false;
+    try { swept = sessionStorage.getItem('fx-fold-sweep') === '1'; } catch {}
     if (reduce.matches) paint();
+    else if (swept) { x = target = 0.42; paint(); }
     else {
       x = target = 0.985;
       paint();
       io = new IntersectionObserver(([en]) => {
         if (!en.isIntersecting) return;
         io?.disconnect();
+        try { sessionStorage.setItem('fx-fold-sweep', '1'); } catch {}
         window.setTimeout(() => { if (!dragging) go(0.42); }, 250);
       }, { threshold: 0.55 });
       io.observe(stage);

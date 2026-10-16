@@ -341,8 +341,8 @@ const downArrow = (s: number) => { const a = arrow([[14, 2], [8, 16], [16, 30], 
   }
   .index-grid .index-card, .index-card--lead { isolation: isolate; }
   @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
-    .index-grid .index-card, .index-card--lead { transition: transform 300ms var(--ease-spring, ease-out); }
-    .index-grid .index-card::after, .index-card--lead::after { transition: opacity 300ms ease; }
+    .index-grid .index-card, .index-card--lead { transition: transform var(--lift-time) var(--ease-lift); }
+    .index-grid .index-card::after, .index-card--lead::after { transition: opacity var(--lift-time) ease; }
     .index-grid .index-card:hover, .index-card--lead:hover { transform: translateY(-4px) rotate(calc(var(--card-tilt, 0deg) * -1.6)); }
     .index-grid .index-card:hover::after, .index-card--lead:hover::after { opacity: 1; }
   }

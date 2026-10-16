@@ -209,7 +209,7 @@ mark.hl {
 }
 /* Hover/focus: the note lifts a little further and turns a hair; its shadow grows. */
 @media (prefers-reduced-motion: no-preference) {
-  .sticky.sticky { transition: transform 220ms ease, --lift 220ms ease; }
+  .sticky.sticky { transition: transform var(--lift-time) var(--ease-lift), --lift var(--lift-time) var(--ease-lift); }
   .sticky.sticky:hover,
   .sticky.sticky:focus-within {
     --lift: calc(var(--lift-at-rest, 1) + 0.6);
@@ -260,6 +260,65 @@ mark.hl {
   padding: 1.1rem 1.3rem 1.2rem;
   box-shadow: var(--paper-lift);
   border-radius: 2px;
+}
+
+/* Dark (blueprint): index cards are drawn on the blueprint rather than taped-on paper.
+   A lighter-blue card with a crisp pale edge, pale ruled lines, white ink and a coral
+   header rule, lifted off the page by a navy shadow. The theme switch (an index-card tab)
+   matches. Same selectors twice: the OS-dark one and the explicit Dark choice. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) :is(.index-card, .theme-switch) {
+    --card: var(--bp-card);
+    --card-line: var(--bp-card-line);
+    --ink: var(--bp-card-ink);
+    --ink-soft: var(--bp-card-ink-soft);
+    --ink-faint: var(--bp-card-ink-faint);
+    --rule: var(--bp-card-rule);
+    --accent: var(--bp-card-accent);
+    --accent-ink: var(--bp-card-accent-ink);
+    --squiggle: var(--bp-card-squiggle);
+    --squiggle-strong: var(--bp-card-squiggle-strong);
+    --bullet-arrow: var(--bp-card-bullet);
+    background-color: var(--bp-card);
+    outline: 1.5px solid var(--bp-card-edge);
+    outline-offset: -1.5px;
+    box-shadow: 0 1px 2px rgb(var(--shadow) / 0.35), 0 14px 26px -12px rgb(var(--shadow) / 0.7);
+  }
+  :root:not([data-theme="light"]) .index-card {
+    background-image:
+      linear-gradient(transparent calc(var(--card-head, 3.4rem) - 2px), var(--bp-card-head) calc(var(--card-head, 3.4rem) - 2px), var(--bp-card-head) var(--card-head, 3.4rem), transparent var(--card-head, 3.4rem)),
+      repeating-linear-gradient(transparent 0 calc(var(--card-pitch) - 1px), var(--card-line) calc(var(--card-pitch) - 1px) var(--card-pitch));
+  }
+  :root:not([data-theme="light"]) .index-card.index-card h4 { border-bottom-color: var(--bp-card-head); }
+  :root:not([data-theme="light"]) .theme-switch {
+    background-image: linear-gradient(transparent 3px, var(--bp-card-head) 3px, var(--bp-card-head) 4.5px, transparent 4.5px);
+  }
+}
+:root[data-theme="dark"] :is(.index-card, .theme-switch) {
+  --card: var(--bp-card);
+  --card-line: var(--bp-card-line);
+  --ink: var(--bp-card-ink);
+  --ink-soft: var(--bp-card-ink-soft);
+  --ink-faint: var(--bp-card-ink-faint);
+  --rule: var(--bp-card-rule);
+  --accent: var(--bp-card-accent);
+  --accent-ink: var(--bp-card-accent-ink);
+  --squiggle: var(--bp-card-squiggle);
+  --squiggle-strong: var(--bp-card-squiggle-strong);
+  --bullet-arrow: var(--bp-card-bullet);
+  background-color: var(--bp-card);
+  outline: 1.5px solid var(--bp-card-edge);
+  outline-offset: -1.5px;
+  box-shadow: 0 1px 2px rgb(var(--shadow) / 0.35), 0 14px 26px -12px rgb(var(--shadow) / 0.7);
+}
+:root[data-theme="dark"] .index-card {
+  background-image:
+    linear-gradient(transparent calc(var(--card-head, 3.4rem) - 2px), var(--bp-card-head) calc(var(--card-head, 3.4rem) - 2px), var(--bp-card-head) var(--card-head, 3.4rem), transparent var(--card-head, 3.4rem)),
+    repeating-linear-gradient(transparent 0 calc(var(--card-pitch) - 1px), var(--card-line) calc(var(--card-pitch) - 1px) var(--card-pitch));
+}
+:root[data-theme="dark"] .index-card.index-card h4 { border-bottom-color: var(--bp-card-head); }
+:root[data-theme="dark"] .theme-switch {
+  background-image: linear-gradient(transparent 3px, var(--bp-card-head) 3px, var(--bp-card-head) 4.5px, transparent 4.5px);
 }
 
 /* ---------- Layout ---------- */

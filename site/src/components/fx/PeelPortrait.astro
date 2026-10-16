@@ -1,9 +1,10 @@
 ---
 // Wraps the taped-in hero portrait so its loose bottom corners can be grabbed and
-// peeled up off the page. The fold is real geometry: the photo is clipped along the
-// fold line and the cut-off corner is mirrored across it as the back of the print,
-// casting a shadow. Let go and it springs back down.
-// Mouse: hover a bottom corner to lift it, drag to peel. Touch: drag from a corner.
+// peeled up off the page. It behaves like a photo print (stiff, glossy card): the corner
+// rolls up in one smooth curl with a plain off-white back, a shine along the roll and a
+// shadow that's sharp where it leaves the page. Let go and it snaps back down.
+// Only on purpose: grab a bottom corner (grab cursor) and drag. Plain hover never moves the
+// corner, and nothing peels by itself.
 // Without JS (or with reduced motion and no drag) it is just the taped photo.
 ---
 <div class="peel" data-peel>
@@ -26,24 +27,24 @@
 
 <style>
   .peel { position: relative; }
-  /* on this one photo, the peel replaces the hover tilt */
-  .peel.is-live :global(.taped__photo) { transform: none !important; }
-  .peel.is-live :global(.taped__photo)::after { display: none; }
+  /* Hover lifts the print like every taped photo. While a corner is curled up the print is
+     flat on the page except for that corner, so the lift waits. */
+  .peel.is-peeling :global(.taped__photo) { transform: none !important; }
+  /* the lifted corner: SVG drawn in the print's own pixel box (fx-about-peel.ts) */
   .peel :global(.peel-flap) {
     position: absolute;
     inset: 0;
+    width: 100%;
+    height: 100%;
     z-index: 1;
+    overflow: visible;
     pointer-events: none;
-    filter: drop-shadow(0 7px 9px rgb(var(--shadow, 60 50 40) / 0.38))
-      drop-shadow(0 1px 1px rgb(var(--shadow, 60 50 40) / 0.24));
     visibility: hidden;
   }
-  .peel :global(.peel-flap__face) {
-    position: absolute;
-    inset: 0;
-    transform-origin: 0 0;
-    background: var(--card, var(--paper-scrap));
-  }
+  .peel :global(.peel-shade-soft) { fill: rgb(var(--shadow, 60 50 40) / 0.3); }
+  .peel :global(.peel-shade-tight) { fill: rgb(var(--shadow, 60 50 40) / 0.42); }
+  /* looking into the curl: the photo's own side, in the roll's shadow */
+  .peel :global(.peel-mouth) { fill: color-mix(in srgb, rgb(var(--shadow, 60 50 40)) 38%, var(--card, #fff)); }
   .peel :global(.peel-under) {
     position: absolute;
     inset: 0;
@@ -66,6 +67,8 @@
     touch-action: none;
     cursor: grab;
   }
+  /* touch: a smaller corner, so a scroll that happens to start on the photo still scrolls */
+  @media (pointer: coarse) { .peel :global(.peel-grip) { width: 52px; bottom: -10px; } }
   .peel :global(.peel-grip.r) { right: -14px; }
   .peel :global(.peel-grip.l) { left: -14px; }
   .peel.is-dragging, .peel.is-dragging :global(.peel-grip) { cursor: grabbing; }

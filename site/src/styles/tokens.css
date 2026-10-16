@@ -145,6 +145,10 @@
 
   /* Motion */
   --ease-pen: cubic-bezier(0.55, 0.05, 0.25, 1);
+  /* Paper lifting off the page on hover/focus (taped photo, index cards, sticky notes):
+     one speed and curve for all of it, so every loose piece of paper feels the same. */
+  --lift-time: 240ms;
+  --ease-lift: cubic-bezier(0.2, 0.7, 0.3, 1);
   --draw-time: 1100ms;
   /* Click → page turn is one gesture: the flag is pulled up (--pull-time) and the page
      starts to turn right then, carrying the lifted flag over with it (PULL_MS in
@@ -210,6 +214,22 @@
 
     --card: #e9e5dc;
     --card-line: rgb(84 130 176 / 0.24);
+    /* Index cards are the exception: drawn on the blueprint as lighter-blue callouts with
+       pale ruled lines, white text and a coral header rule (global.css maps these in).
+       On #214c78: ink 8.3:1, ink-soft 6.4:1, accent-ink 5.3:1. */
+    --bp-card: #214c78;
+    --bp-card-line: rgb(200 222 255 / 0.18);
+    --bp-card-edge: rgb(200 222 255 / 0.42);
+    --bp-card-head: rgb(255 138 112 / 0.85);
+    --bp-card-ink: #f4f8fc;
+    --bp-card-ink-soft: #cddcee;
+    --bp-card-ink-faint: #86a6c9;
+    --bp-card-rule: #4f75a1;
+    --bp-card-accent: #ff8a70;
+    --bp-card-accent-ink: #ffb8a6;
+    --bp-card-squiggle: var(--squiggle);
+    --bp-card-squiggle-strong: var(--squiggle-strong);
+    --bp-card-bullet: var(--bullet-arrow);
     --rule-blue: rgb(170 200 235 / 0.3);
     --paper-ink-faint: #8f887e;
     --paper-rule: #c8c2b6;
@@ -277,6 +297,20 @@
 
   --card: #e9e5dc;
   --card-line: rgb(84 130 176 / 0.24);
+  /* blueprint index cards: see the matching block above */
+  --bp-card: #214c78;
+  --bp-card-line: rgb(200 222 255 / 0.18);
+  --bp-card-edge: rgb(200 222 255 / 0.42);
+  --bp-card-head: rgb(255 138 112 / 0.85);
+  --bp-card-ink: #f4f8fc;
+  --bp-card-ink-soft: #cddcee;
+  --bp-card-ink-faint: #86a6c9;
+  --bp-card-rule: #4f75a1;
+  --bp-card-accent: #ff8a70;
+  --bp-card-accent-ink: #ffb8a6;
+  --bp-card-squiggle: var(--squiggle);
+  --bp-card-squiggle-strong: var(--squiggle-strong);
+  --bp-card-bullet: var(--bullet-arrow);
   --rule-blue: rgb(170 200 235 / 0.3);
   --paper-ink-faint: #8f887e;
   --paper-rule: #c8c2b6;

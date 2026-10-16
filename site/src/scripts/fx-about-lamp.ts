@@ -37,18 +37,18 @@ float fibers(vec2 p, float ang, float w) {
   float r = 1.0 - abs(vnoise(q) * 2.0 - 1.0);
   return pow(r, 22.0);
 }
+// Drawing paper, not cloth: fine tooth and a few faint fibres. (Strong long fibres plus
+// big cockle waves, lit by a moving light, read as crumpled fabric.)
 float height(vec2 p) {
-  float h = fibers(p, 0.35, 2.6) * 0.8
-          + fibers(p + 31.7, 1.45, 3.4) * 0.7
-          + fibers(p - 57.1, 2.55, 2.2) * 0.6;
+  float h = fibers(p, 0.35, 2.6) * 0.3
+          + fibers(p + 31.7, 1.45, 3.4) * 0.25;
   h += vnoise(p * 0.7) * 0.22 + vnoise(p * 1.6) * 0.12; // tooth
-  h += vnoise(p * 0.011) * 4.0;                          // cockle
   return h;
 }
 void main() {
   vec2 p = gl_FragCoord.xy;
   float h0 = height(p);
-  vec3 n = normalize(vec3(-(height(p + vec2(1.0, 0.0)) - h0) * 1.1, -(height(p + vec2(0.0, 1.0)) - h0) * 1.1, 1.0));
+  vec3 n = normalize(vec3(-(height(p + vec2(1.0, 0.0)) - h0) * 0.7, -(height(p + vec2(0.0, 1.0)) - h0) * 0.7, 1.0));
   gl_FragColor = vec4(n.xy * 0.5 + 0.5, 0.0, 1.0);
 }`;
 
@@ -99,6 +99,14 @@ export function initDeskLamp(canvas: HTMLCanvasElement): () => void {
     const opts = { alpha: true, premultipliedAlpha: true, antialias: false, depth: false, stencil: false, powerPreference: 'low-power' } as const;
     const gl = (canvas.getContext('webgl2', opts) || canvas.getContext('webgl', opts)) as WebGLRenderingContext | null;
     if (!gl) return;
+    // Software rendering (SwiftShader, llvmpipe, Microsoft Basic Render) bakes the paper on
+    // the CPU: a long, janky task for a barely-there effect. Leave the paper alone there.
+    const dbg = gl.getExtension('WEBGL_debug_renderer_info');
+    const renderer = String(dbg ? gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER));
+    if (/swiftshader|llvmpipe|softpipe|software|basic render/i.test(renderer)) {
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      return;
+    }
 
     const sh = (type: number, src: string) => {
       const x = gl.createShader(type)!;
@@ -200,7 +208,12 @@ export function initDeskLamp(canvas: HTMLCanvasElement): () => void {
     let last = 0;
     let rect: DOMRect | null = null;
 
-    const FLICKER: [number, number][] = [[0, 0], [70, 0.75], [130, 0.12], [210, 0.9], [260, 0.45], [330, 0.95], [700, 1]];
+    // A desk lamp clicking on: one quick catch, then steady. (Six stutters read as a
+    // failing fluorescent tube, not a lamp.) Only the first time this visit; after that the
+    // light just fades up with the canvas.
+    const FLICKER: [number, number][] = [[0, 0], [60, 0.85], [120, 0.5], [320, 1]];
+    let clicked = false;
+    try { clicked = sessionStorage.getItem('fx-lamp-on') === '1'; } catch {}
     const flicker = (ms: number) => {
       for (let i = 1; i < FLICKER.length; i++) {
         const [t1, v1] = FLICKER[i];
@@ -238,7 +251,7 @@ export function initDeskLamp(canvas: HTMLCanvasElement): () => void {
       if (flickerT0 >= 0) {
         const ms = now - flickerT0;
         power = flicker(ms);
-        if (ms > 700) flickerT0 = -1;
+        if (ms > 320) flickerT0 = -1;
         else busy = true;
       }
       draw();
@@ -314,7 +327,11 @@ export function initDeskLamp(canvas: HTMLCanvasElement): () => void {
       if (visible && !switchedOn) {
         switchedOn = true;
         canvas.classList.add('is-on');
-        flickerT0 = performance.now();
+        if (clicked) power = 1;
+        else {
+          flickerT0 = performance.now();
+          try { sessionStorage.setItem('fx-lamp-on', '1'); } catch {}
+        }
       }
       kick();
     });

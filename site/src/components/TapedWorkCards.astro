@@ -90,8 +90,8 @@ const cards = featured.slice(0, 3);
   .tcards__all { margin-top: var(--s3); }
   /* Hover (mouse) and keyboard focus: the tape stays, the card's free edge lifts under it */
   @media (prefers-reduced-motion: no-preference) {
-    .tcard__paper { transition: transform 240ms cubic-bezier(0.2, 0.7, 0.3, 1); }
-    .tcard::before { transition: opacity 240ms ease; }
+    .tcard__paper { transition: transform var(--lift-time) var(--ease-lift); }
+    .tcard::before { transition: opacity var(--lift-time) ease; }
     .tcard:focus-within .tcard__paper { transform: perspective(900px) rotateX(3deg) rotateY(var(--lean)); }
     .tcard:focus-within::before { opacity: 1; }
   }

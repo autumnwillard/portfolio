@@ -18,7 +18,8 @@ function bleed(svg: SVGSVGElement, still: boolean, anims: Animation[]) {
   g.setAttribute('aria-hidden', 'true');
   const base = parseFloat(getComputedStyle(strokes[0]).strokeWidth) || 3;
   // the arrows and the underline sit in different coordinate spaces; size the halo to the stroke
-  const spread = base * 5;
+  // kept tight: a wider halo reads as a neon glow rather than ink soaking in
+  const spread = base * 3.6;
 
   strokes.forEach((src, i) => {
     const order = parseFloat(getComputedStyle(src).getPropertyValue('--i')) || 0;
@@ -30,7 +31,7 @@ function bleed(svg: SVGSVGElement, still: boolean, anims: Animation[]) {
     g.appendChild(p);
     if (still) {
       p.style.strokeWidth = `${spread}px`;
-      p.style.opacity = '0.26';
+      p.style.opacity = '0.22';
       p.style.strokeDashoffset = '0';
     } else {
       settle(anims[anims.push(
@@ -38,7 +39,7 @@ function bleed(svg: SVGSVGElement, still: boolean, anims: Animation[]) {
           [
             { strokeDashoffset: 1, strokeWidth: `${base * 1.2}px`, opacity: 0.55 },
             { strokeDashoffset: 0, strokeWidth: `${base * 2.4}px`, opacity: 0.42, offset: 0.4 },
-            { strokeDashoffset: 0, strokeWidth: `${spread}px`, opacity: 0.26 },
+            { strokeDashoffset: 0, strokeWidth: `${spread}px`, opacity: 0.22 },
           ],
           { duration: 2600, delay, easing: 'cubic-bezier(0.25, 0.6, 0.3, 1)', fill: 'both' },
         ),

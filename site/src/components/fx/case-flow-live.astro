@@ -10,7 +10,8 @@
 //                  never shipped; the bar under the figure says it's an illustration.
 //
 // Decorative (aria-hidden): the wrapped diagram keeps its own accessible label. With JS off
-// or reduced motion, nothing here shows. A Pause button stops it (WCAG 2.2.2).
+// or reduced motion, nothing here shows. A Pause button stops it (WCAG 2.2.2), and it
+// stops by itself after a few rounds (fx-work-flow.ts), so it never runs beside the text forever.
 import { rect, arrow } from '../../lib/ink';
 
 interface Props { kind: 'risk' | 'routing' }
@@ -200,8 +201,8 @@ if (kind === 'risk') {
   variants = [wide, narrow];
 }
 const note = kind === 'routing'
-  ? 'Moving sketch: how items would flow. An illustration, not data. The proposed side never shipped.'
-  : 'Moving sketch: how tickets flow through the review. An illustration, not real release data.';
+  ? 'The little pages are items going through review. It’s an illustration, not real data, and the proposed side never shipped.'
+  : 'The little slips are tickets going through the review. It’s an illustration, not real release data.';
 ---
 <div class:list={['fx-flow', `fx-flow--${kind}`]} data-fx-flow>
   <div class="fx-flow__stage">
