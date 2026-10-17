@@ -82,7 +82,7 @@ This is non-negotiable. A hiring manager who catches one inflated number stops t
 
 - **Only use numbers that trace to a source in `.notes/`.** Quote them exactly. If a number isn't in a source, don't invent it; flag it for Autumn.
 - **Label estimates and projections.** Projected impact says "projected" or "estimated," with the method in a sentence or footnote.
-- **The AI review-routing project was approved but never shipped** (build was starting when Autumn left INL in Dec 2025). Never imply it launched or produced measured results. Show a clear status label such as "Approved · in build when I left."
+- **The AI review-routing project was approved but had not shipped when Autumn left** (build was starting when she left INL in Dec 2025; it may have shipped since, so never say it "never shipped"). Never imply it launched or produced measured results. Show a clear status label such as "Approved · in build when I left."
 - **Request automation savings (decided):** use **$175K+**, matching Autumn's resume. Basis: salary × time saved for researchers and reviewers (reviewers lost time to back-and-forth chasing missing info; both groups are highly paid). Volume: 828 responses as of Feb 2025, 1,000+ by Dec 2025 (est.). The old page's inputs ($80K admin, 2,400 h) understated the basis; don't reuse them. Homepage/cards: "1,000+ requests". Case-study page: "$175K+ in staff time saved (est.)" with the basis in a sentence. See `.notes/sources/lab-facts.md`.
 - **Resume as a source:** `.notes/sources/resume.txt` is a valid source for numbers and roles.
 - **AI review routing estimate:** "$1M+ annually (projected)", matching the resume.
