@@ -6,21 +6,21 @@ so_what: "The lab’s top complaint was slow reviews. I traced it to screening a
 card_blurb: "Slow reviews were the lab’s top complaint. The real cause was a screening form nobody could trust: every item got two reviews by default, and a third hinged on answers that were often wrong. I designed the lab’s first AI review product to answer it, and got it approved for build."
 card_metrics:
   - "~70–80% fewer manual reviews (projected)"
-  - "95% accuracy gate before anyone relies on it"
+  - "95% gate before anyone relies on it, with no wrong “no”s allowed"
 status: "Approved · in build when I left"
 glance:
   role: "Product Manager. My initiative from idea to approved build."
   team: "Researchers submitting work and the three reviewing teams (export control, classification and a scientific subject-area review) at Idaho National Laboratory, a U.S. Department of Energy national lab"
   timeframe: "2025"
   status: "Approved · in build when I left"
-  numbers: "~70–80% fewer manual reviews (projected) · $1M+ annually in reviewer time (projected) · a 95% accuracy gate (a design decision, not a result)"
+  numbers: "~70–80% fewer manual reviews (projected) · $1M+ annually in reviewer time (projected) · a 95% gate with no wrong “no”s (a design decision, not a result)"
 metrics:
   - value: "~70–80%"
     label: "fewer manual reviews (projected)"
   - value: "$1M+"
     label: "annually in reviewer time (projected)"
   - value: "95%"
-    label: "accuracy gate (a design decision, not a result)"
+    label: "agreement with reviewers, and no wrong “no”s (a design decision, not a result)"
 description: "How Autumn Willard traced slow reviews at INL to unreliable screening answers and got the lab’s first AI review product approved for build."
 next:
   title: "AI Toolkit"
@@ -65,21 +65,21 @@ The third review shows how bad the answers were, because they failed both ways. 
 ## Constraints
 
 - **Regulated, sensitive content.** A wrong routing decision isn't a bug report. It's a compliance problem.
-- **Nothing could leave the lab.** The model was the lab's call, not mine: a version of ChatGPT hosted on the lab's own servers.
+- **Nothing could leave the lab.** The model was the lab's call, not mine: an OpenAI GPT model running in the lab's own private cloud tenant, so nothing left the lab's control.
 - **Trust comes first.** If reviewers don't trust a tool, they double-check everything it does, and it saves nobody any time.
 
 <InkArrow from="cause" to="fix" seed={9} flip />
 
 ## What I did
 
-**I went after the input, not the reviewers.** I proposed the lab's first AI review product: an AI agent that reads the uploaded document and answers the screening questions itself. It would be grounded in the lab's internal classification guidelines, external export-control regulations and historical review data from the system. Its answers would feed routing, so each item would go only to the reviews it actually needs. Reviewers would keep the judgment calls and stop seeing items that never needed them.
+**I went after the input, not the reviewers.** I proposed the lab's first AI review product: an AI model that reads the uploaded document and answers the screening questions itself. I'd teach it the way you'd teach a new compliance analyst: the same guidelines and regulations, plus the senior analysts' reasoning written down step by step. I planned to have them walk me through how they reviewed several documents, and to mine their comments on past records. Its answers would feed routing, so each item would go only to the reviews it actually needs. Reviewers would keep the judgment calls and stop seeing items that never needed them.
 
 **I wrote the evaluation plan, and it's deliberately slow.** The plan has three phases:
 
 <ol class="ink-steps">
-  <li><strong>Shadow.</strong> Run the AI alongside the existing process and compare its answers to what reviewers actually decided.</li>
-  <li><strong>Rely.</strong> Use it for routing only once accuracy reaches <Highlight>95% or better</Highlight>. That bar was really about the "no"s. A confident wrong "no" would let sensitive information skip a review it needed.</li>
-  <li><strong>Maintain.</strong> Keep it current as guidelines and regulations change.</li>
+  <li><strong>Shadow.</strong> First it has to get a set of sample items right. Then it runs alongside the existing process, and we compare its answers to what reviewers actually decided. The third review was harder to shadow, since items that got a "no" never reached a reviewer, so that reviewer would spot-check from day one.</li>
+  <li><strong>Rely.</strong> Use it for routing only once it agrees with reviewers <Highlight>95% of the time or better</Highlight> and hasn't given a single wrong "no". The 5% it gets wrong have to be wrong in the safe direction: a "yes" that sends something to a reviewer who didn't need to see it. A wrong "no" would let sensitive information skip a review it needed.</li>
+  <li><strong>Maintain.</strong> The AI logs every answer and its reasoning. Each week, reviewers double-check a few random records from that log, which is how we'd catch a bad or missing rule after we stop checking everything. After three months with no rule corrections, the check drops to monthly. And the rules get updated as guidelines and regulations change.</li>
 </ol>
 
 <figure class="figure-wide">
@@ -88,7 +88,7 @@ The third review shows how bad the answers were, because they failed both ways. 
 
 *Tradeoff:* a faster launch would have shown value sooner. I chose slow on purpose, because in compliance one bad miss can sink trust in the whole idea.
 
-**When it's unsure, it answers "yes,"** before the 95% gate and after it. "Yes" is the conservative answer: it sends the item to a person.
+**When it can't tell, it answers "yes,"** before the 95% gate and after it. It's told to work only from the rules and data it's given, not to guess, and "can't tell" has its own rules: missing document text, an error reading the file, that kind of thing. "Yes" is the conservative answer: it sends the item to a person.
 
 *Tradeoff:* all the savings come from correctly spotting the "no"s, so every unsure "yes" eats into them. I'd rather give up some savings than ask reviewers to trust a guess.
 
@@ -100,7 +100,7 @@ I also wrote the UI specs and the business case that got executives to back a mu
 
 The project was approved a few months before I left INL in December 2025. The build was just starting. ==It had not shipped when I left==, so there are no measured results here, only projections:
 
-- **~70–80% fewer manual reviews (projected).** Estimated from reviewer comments flagging wrong screening answers.
+- **~70–80% fewer manual reviews (projected).** Estimated from reviewer comments flagging wrong screening answers. That's the ceiling, if the answers were reliable. Every "can't tell" that becomes a "yes" brings it down.
 - **$1M+ annually (projected) in reviewer time.** Method: sample reviewer salaries × average review time × how often unreliable flags caused an unnecessary review.
 - **Faster turnaround for submitters,** which was the #1 complaint in the survey. Also projected, not measured.
 
@@ -119,7 +119,7 @@ The routing project got noticed. Through it, the head of the compliance departme
 
 I met with the leadership of each team (Supply Chain Risk Management, Export Control and the Privacy Program), then wrote up where each one stood, what hurt and where AI could actually help.
 
-One example from Privacy: the team was trying to go through every tool used at the lab and identify which ones held personally identifiable information (PII). It was largely manual and had made hardly any progress. The roadmap proposed training AI to spot PII using the same criteria the privacy team used themselves, then automatically adding each tool to their system along with how much PII it holds. The HR system, for example, would get flagged as holding more PII than the review system.
+One example from Privacy: the team was trying to go through every tool used at the lab and identify which ones held personally identifiable information (PII). It was largely manual and had made hardly any progress. The roadmap proposed an AI that checks each tool for PII using the privacy team's own criteria and rules, then automatically adding each tool to their system along with how much PII it holds. The HR system, for example, would get flagged as holding more PII than the review system.
 
 That's a proposal, not a result. I don't know what came of it after I left.
 

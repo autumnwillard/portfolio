@@ -5,7 +5,7 @@ import InkSvg from '../InkSvg.astro';
 import { rect, arrow, line, loop } from '../../lib/ink';
 
 const label =
-  'Flow: when the release branch is cut, the review finds every ticket in it, applies Autumn’s rules and sorts each ticket into an action (revert, cherry-pick, tag, untag or no action, or “unsure” when the AI can’t tell), each with a reason. A product owner makes the call, and the differences between the AI’s suggestions and the team’s decisions feed back into the rules.';
+  'Flow: when the release branch is cut, the review finds every ticket in it, applies Autumn’s rules and sorts each ticket into an action (revert, cherry-pick, tag, untag or no action, or “unsure” when the rules don’t settle it), each with a reason. A product owner makes the call, and the differences between the AI’s suggestions and the team’s decisions feed back into the rules.';
 
 const buckets = ['Revert', 'Cherry-pick', 'Tag', 'Untag', 'No action', 'Unsure'];
 

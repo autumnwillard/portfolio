@@ -5,7 +5,7 @@ import InkSvg from '../InkSvg.astro';
 import { line, arrow, rect } from '../../lib/ink';
 
 const label =
-  'In one release, the triage workflow reviewed 114 completed items, filtered out backend-only and test-automation work, and recommended 16 for acceptance testing. It was tested against a no-AI baseline before the team relied on it.';
+  'In one release, the triage workflow reviewed 114 completed items, filtered out backend-only and test-automation work, and recommended 16 for acceptance testing. Before the team relied on it, its picks were compared item by item with Autumn’s own triage of the same releases.';
 
 /* funnel outline: rim, two sides, spout */
 const funnel = (cx: number, top: number, rw: number, neck: number, nw: number, spout: number, s: number) => ({
@@ -46,7 +46,7 @@ const nD = arrow([[190, 278], [192, 296], [190, 316]], 828, 9);
       <path class="ink ink--faint" style="--i:7" d={rect(0, 0, 160, 130, 809, 0.6)} pathLength="1" />
       <text class="ink-text ink-fade" style="--i:7" x="14" y="40" font-size="21">tested against</text>
       <text class="ink-text ink-fade" style="--i:7" x="14" y="68" font-size="21">a no-AI</text>
-      <text class="ink-text ink-fade" style="--i:7" x="14" y="96" font-size="21">baseline first</text>
+      <text class="ink-text ink-fade" style="--i:7" x="14" y="96" font-size="21">checked vs. my picks</text>
     </g>
   </InkSvg>
 
@@ -73,7 +73,7 @@ const nD = arrow([[190, 278], [192, 296], [190, 316]], 828, 9);
       <rect class="ink-fade fill-sticky-yellow" style="--i:7" x="0" y="0" width="220" height="86" />
       <path class="ink ink--faint" style="--i:7" d={rect(0, 0, 220, 86, 829, 0.6)} pathLength="1" />
       <text class="ink-text ink-fade" style="--i:7" x="16" y="36" font-size="21">tested against a</text>
-      <text class="ink-text ink-fade" style="--i:7" x="16" y="64" font-size="21">no-AI baseline first</text>
+      <text class="ink-text ink-fade" style="--i:7" x="16" y="64" font-size="21">checked against my own picks first</text>
     </g>
   </InkSvg>
 </div>

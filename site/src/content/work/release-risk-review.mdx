@@ -72,11 +72,11 @@ I only saw the pattern because I went looking. I started tracking our off-cycle 
   <CaseFlowLive kind="risk"><RiskReviewFlow /></CaseFlowLive>
 </figure>
 
-The actions are concrete: revert, cherry-pick, tag, untag or no action. Claude gets one extra option, "unsure," that people don't: if it can't tell, it has to say so, and a person picks a real action.
+The actions are concrete: revert, cherry-pick, tag, untag or no action. Claude gets one extra option, "unsure," that people don't. When the rules don't settle it, it's told to say "unsure" instead of guessing, and a person picks a real action.
 
 Two tradeoffs I made on purpose:
 
-- **My rules, not the model's gut.** The AI applies rules I wrote instead of deciding on its own what counts as risky. Writing and maintaining rules is more work up front. In exchange, when a recommendation looks wrong, the note tells me why, and I can fix the rule.
+- **My rules, not the model's gut.** I wrote down what counts as risky, and the AI applies those rules. Most are concrete checks against the code and the tracker. For example, if a ticket's change was reverted on the branch, it's out, unless a newer change put it back. The AI can still misread a rule, which is one reason a person reviews every call. Writing rules is more work up front. In exchange, when a recommendation looks wrong, the note tells me which rule to fix.
 - **Recommend, don't act.** The review suggests. A person decides. That's slower than letting it revert things automatically, and I'm fine with slower.
 
 **Then my manager asked a question I couldn't answer.** What was our escaped defect rate? Nobody tracked it. So I built the tracking: a defect escape dashboard that compares bugs caught in pre-release testing with bugs that reached customers. It's the product's first per-release quality metric.
@@ -91,14 +91,14 @@ Then I went wider. I studied ~200 defects across ~2,100 code changes, sorted the
 The best time to start tracking a metric is before your manager asks for it. The second-best time is right after.
 </StickyNote>
 
-**Closing the loop (October 2026).** The output is now a spreadsheet with a summary page, so the other product owners can work in it with me. Claude's recommendations and notes sit in their own columns, separate from the team's decisions and notes. So far it's mostly been me: over the last two releases I agreed with roughly 5 out of 6 of Claude's calls (my estimate). The team's decisions start feeding the loop next release. After a few releases, I'll use the differences to fix the rules. Every time the team disagrees with the AI, that's a hint about which rule is wrong.
+**Closing the loop (October 2026).** The output is now a spreadsheet with a summary page, so the other product owners can work in it with me. Claude's recommendations and notes sit in their own columns, separate from the team's decisions and notes. So far it's mostly been me: over the last two releases I agreed with roughly 5 out of 6 of Claude's calls (my estimate). I wrote the rules, so I'm not the most neutral grader, which is why the team's decisions start feeding the loop next release. The disagreements so far have been useful in different ways. In one release of 200+ tickets, Claude said to leave a ticket alone that ended up being reverted, because the reason lived in a meeting, not in a rule. A few others it marked to tag were really branch-management work, so I added a rule for those. Not every disagreement means a rule is wrong. Sometimes the AI just didn't have the context.
 
 <figure>
   <ClaudeVsTeam />
 </figure>
 
 <StickyNote tilt={1.6} color="blue" size="sm">
-I built a spreadsheet so I could grade a robot's homework.
+I built a spreadsheet so we could grade a robot's homework.
 </StickyNote>
 
 <InkArrow from="fix" to="result" seed={14} />
@@ -112,6 +112,7 @@ I built a spreadsheet so I could grade a robot's homework.
 
 - **Severe defects fell ~85%,** measured from when I started in December 2025 to around September 2026.
 - **Off-cycle hotfix releases dropped from 4+ per week to 0–1** over the same period.
+- **Release review went from a full day to about 1–2 hours** of my time, and it keeps shrinking as I tune the rules.
 
 "Severe" has a specific meaning here: a defect that breaks the product's core function badly enough to trigger a SEV call, where people stay on the line until a fix is out. Those calls are expensive, and nobody misses them.
 
