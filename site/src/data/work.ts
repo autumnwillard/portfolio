@@ -28,7 +28,7 @@ export const featured: FeaturedCard[] = [
     hook: 'Everything gets reviewed twice. Does it need to?',
     blurb: "Slow reviews were the lab’s top complaint. The real cause was a screening form nobody could trust: every item got two reviews by default, and a third hinged on answers that were often wrong. I designed the lab’s first AI review product to answer it, and got it approved for build.",
     badge: 'Approved · in build when I left',
-    numbers: ['~70–80% fewer manual reviews (projected)', '95% accuracy gate before anyone relies on it'],
+    numbers: ['~70–80% fewer manual reviews (projected)', '95% gate before anyone relies on it, with no wrong “no”s allowed'],
     strip: '~70–80% fewer manual reviews (projected)',
     href: '/work/ai-review-routing/',
     thumb: 'routing',
@@ -67,7 +67,7 @@ export const featured: FeaturedCard[] = [
 
 export const pattern = [
   { said: '“Another hotfix this week?”', wrong: 'Nobody had a clear picture of what was going into each release, or what risk each ticket carried.', bet: 'Track it. Then an AI review that runs on my rules, with people making the calls.', link: 'Release Risk Review →', href: '/work/release-risk-review/' },
-  { said: '“Reviews take forever.” (the #1 complaint in a lab-wide survey)', wrong: 'Screening answers were too unreliable to use, so every item got two reviews by default, and the third was hit or miss.', bet: 'An AI that answers the screening questions, trusted only after it clears a 95% accuracy gate.', link: 'AI Review Routing →', href: '/work/ai-review-routing/' },
+  { said: '“Reviews take forever.” (the #1 complaint in a lab-wide survey)', wrong: 'Screening answers were too unreliable to use, so every item got two reviews by default, and the third was hit or miss.', bet: 'An AI that answers the screening questions, trusted only after it agrees with reviewers 95% of the time and never gets a “no” wrong.', link: 'AI Review Routing →', href: '/work/ai-review-routing/' },
   { said: '“Which team has room?”', wrong: 'The answer lived in hundreds of tickets. My first fix, a spreadsheet, needed four manual data pulls every refresh.', bet: 'Read the sources people already keep up to date instead of adding a new one.', link: 'AI Toolkit →', href: '/work/ai-toolkit/' },
   { said: '“My record was submitted, right?”', wrong: 'A hidden button and a “New” status that looked like success.', bet: 'Three small UI changes, not a redesign.', link: 'Lab Review System →', href: '/work/lab-review-system/' },
   { said: '“Can you expedite this?” (by email, missing key details)', wrong: 'No standard intake and no tracking for urgent work.', bet: 'Structured intake with automated routing.', link: 'Expedite Request Intake →', href: '/work/expedite-intake/' },
@@ -84,7 +84,7 @@ export const analyses: MoreCard[] = [
 
 export const tools: MoreCard[] = [
   { hook: "What’s actually stuck?", tag: 'Internal product · current role', body: "A blocker map that groups every flagged item by what’s blocking it (another task, a product decision or an outside vendor) and highlights flags that have gone stale.", extra: true },
-  { hook: 'Which number is right?', tag: 'Internal product · current role', body: 'Status numbers kept drifting between the leadership slide, the wiki and the tracking sheet. Now one workflow updates the slide and the wiki from the sheet, then checks that all three agree. Used across 5 initiatives.', extra: true },
+  { hook: 'Which number is right?', tag: 'Internal product · current role', body: 'Status numbers kept drifting between the leadership slide, the wiki and the tracking sheet. Now one workflow updates the slide and the wiki from the sheet, then checks that all three agree. It covers all 7–10 initiatives we have going at a time.', extra: true },
   { hook: 'Never the person who built it.', tag: 'Internal product · current role', body: "Picking who presented at sprint demos wasn’t consistently fair. Now a workflow picks the work worth demoing and rotates presenters. The team sees it as fair.", extra: true },
   { hook: 'Gut feel, now with weights.', tag: 'Hiring · current role', body: 'Interview panels needed a consistent way to score candidates. I built a weighted rubric, plus scenario questions drawn from the skills that matter most, so every panelist scores against the same yardstick.', extra: true },
 ];

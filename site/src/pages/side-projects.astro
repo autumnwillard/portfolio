@@ -36,7 +36,7 @@ const webp = (base: string) => [{ type: 'image/webp', srcset: `/images/${base}.w
       <div class="section-body">
         <h2 id="site-h">This site is a side project. Meta, I know.</h2>
         <p class="proj__meta"><StatusBadge status="Personal project · built with AI" size="sm" /> <span>About 3 days · Claude Code</span></p>
-        <p class="proj__tag">I ran this rebuild like a product: rules first, three design options, about eight review rounds and every number checked. AI wrote the code and drew the pictures. I made every call.</p>
+        <p class="proj__tag">I ran this rebuild like a product: rules first, three design options, about eight review rounds and every number checked. AI wrote the code and drew the pictures. I made the calls that mattered, and checked the rest.</p>
 
         <FoldCompare
           width={960}
@@ -67,12 +67,12 @@ const webp = (base: string) => [{ type: 'image/webp', srcset: `/images/${base}.w
 
         <h3 class="sub-h">How I ran it</h3>
         <ol class="ink-steps">
-          <li><strong>Rules before code.</strong> Before any page, I had AI write a rulebook (voice, real numbers only, what’s confidential, the look) that every agent read first.</li>
+          <li><strong>Rules before code.</strong> Before any page, I had AI write a rulebook (an <code>AGENTS.md</code> file: voice, real numbers only, what’s confidential, the look) that every agent loaded before doing anything.</li>
           <li><strong>Discovery, then decisions.</strong> An agent audited my old site and notes and came back with about 60 questions only I could answer. AI drafted the copy from my answers.</li>
-          <li><strong>Options, not opinions.</strong> Three agents built three design directions in parallel. I picked one and ran about eight rounds of feedback on it.</li>
+          <li><strong>Options, not opinions.</strong> Three agents built three design directions in parallel, each in its own git worktree so they couldn’t step on each other. I picked one and ran about eight rounds of feedback on it.</li>
           <li><strong>When feedback is hard to put into words, build a tool.</strong> I had AI build a slider playground for buttons and an approval page for 112 copy edits, which is now a skill I reuse.</li>
           <li><strong>Research before taste calls.</strong> For the page turn, an agent researched what makes a click feel good and filmed a prototype frame by frame before I said yes.</li>
-          <li><strong>Check everything.</strong> Every number traces to a source, and every page scores 100 on Lighthouse’s accessibility check.</li>
+          <li><strong>Check everything.</strong> A separate review pass checked every number against its source, and every page scores 100 on Lighthouse’s accessibility check.</li>
         </ol>
         <StickyNote tilt={-1.6} color="blue" class="site__note">
           Working with AI felt a lot like working with a fast, eager engineering team. Clear constraints, short feedback loops and one person who owns the decisions. That was me.

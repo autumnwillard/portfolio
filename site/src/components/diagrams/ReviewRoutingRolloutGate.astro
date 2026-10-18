@@ -6,7 +6,7 @@ import InkSvg from '../InkSvg.astro';
 import { rect, arrow, line, loop } from '../../lib/ink';
 
 const label =
-  'The rollout plan: run the AI in shadow mode against reviewer decisions, rely on it only after it reaches 95% accuracy, then maintain it. Low-confidence items always go to a human. The build was just starting when Autumn left.';
+  'The rollout plan: run the AI in shadow mode against reviewer decisions, rely on it only after it agrees with reviewers at least 95% of the time with no wrong “no”s, then keep spot-checking it. Anything it can’t tell goes to a human. The build was just starting when Autumn left.';
 
 /* a little gate: two posts, a striped boom, and the 95% circled on it */
 const gate = (cx: number, top: number, w: number, h: number, seed: number) => ({
@@ -44,7 +44,7 @@ const n3 = arrow([[190, 446], [192, 460], [190, 474]], 524, 9);
     <path class="ink" style="--i:3" d={w1.shaft + ' ' + w1.head} pathLength="1" />
 
     <!-- the gate -->
-    <text class="ink-text ink-text--accent ink-fade" style="--i:4" x="482" y="88" font-size="22" text-anchor="middle">95% accuracy gate</text>
+    <text class="ink-text ink-text--accent ink-fade" style="--i:4" x="482" y="88" font-size="22" text-anchor="middle">95% gate · no wrong “no”s</text>
     <path class="ink ink--bold" style="--i:4" d={g.posts} pathLength="1" />
     <path class="ink" style="--i:4.5" d={g.feet} pathLength="1" />
     <path class="ink" style="--i:5" d={g.boom} pathLength="1" />
@@ -82,7 +82,7 @@ const n3 = arrow([[190, 446], [192, 460], [190, 474]], 524, 9);
     <text class="ink-sans ink-fade" style="--i:2" x="32" y="177" font-size="14.5">reviewer decisions</text>
     <path class="ink" style="--i:3" d={n1.shaft + ' ' + n1.head} pathLength="1" />
 
-    <text class="ink-text ink-text--accent ink-fade" style="--i:4" x="190" y="250" font-size="21" text-anchor="middle">95% accuracy gate</text>
+    <text class="ink-text ink-text--accent ink-fade" style="--i:4" x="190" y="250" font-size="21" text-anchor="middle">95% gate · no wrong “no”s</text>
     <path class="ink ink--bold" style="--i:4" d={ng.posts} pathLength="1" />
     <path class="ink" style="--i:4.5" d={ng.feet} pathLength="1" />
     <path class="ink" style="--i:5" d={ng.boom} pathLength="1" />
