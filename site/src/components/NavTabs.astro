@@ -44,6 +44,8 @@ const { active } = Astro.props;
     text-decoration: none;
     white-space: nowrap;
     rotate: var(--rot);
+    /* no browser tap box: it covers the tape while the page turns (the press squish below is the feedback) */
+    -webkit-tap-highlight-color: transparent;
     transition: color 150ms ease, rotate 150ms ease, transform 150ms ease;
   }
   /* the tape itself: a translucent strip with torn ends, behind the label */
@@ -51,9 +53,8 @@ const { active } = Astro.props;
     content: '';
     position: absolute;
     inset: 0.2rem 0;
-    z-index: -1;
+    z-index: 0;
     background-color: var(--washi-base);
-    mix-blend-mode: var(--washi-blend);
     clip-path: polygon(1% 0, 99% 2%, 97% 22%, 100% 46%, 97% 70%, 99.5% 100%, 0.5% 98%, 3% 76%, 0 52%, 3% 28%);
     box-shadow: 0 1px 2px rgb(var(--shadow) / 0.1);
     opacity: var(--tab-tape-rest);
@@ -64,7 +65,10 @@ const { active } = Astro.props;
   .tab--check::before { --washi-base: rgb(178 210 178 / 0.85); background-image: linear-gradient(rgb(90 130 90 / 0.2) 1px, transparent 1px), linear-gradient(90deg, rgb(90 130 90 / 0.2) 1px, transparent 1px); background-size: 6px 6px; }
   .tab--plain::before { --washi-base: rgb(214 194 152 / 0.8); background-image: repeating-linear-gradient(90deg, transparent 0 6px, rgb(255 255 255 / 0.14) 6px 7px); }
 
-  .tab__label { position: relative; }
+  /* the label (and its underline) sit above the tape. No negative z-index or blend mode on the
+     tape: Android Chromium (Brave, Chrome) can drop it from the paint, and on the tab's own
+     isolated layer the multiply blend changed nothing you could see anyway. */
+  .tab__label { position: relative; z-index: 1; }
   .tab:hover { color: var(--tab-ink-active); rotate: calc(var(--rot) * 0.4); }
   .tab:hover::before { opacity: 0.85; }
   /* pressed: a quick squish, so the click registers before the page turns */
